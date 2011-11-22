@@ -1,0 +1,14 @@
+{
+    "name": "Ulabox/gearman-bundle",
+    "description": "Adds gearman support",
+    "keywords": ["gearman"],
+    "type": "symfony-bundle",
+    "license": "Apache",
+    "authors": [
+        {
+            "name": "Marc Morera",
+            "email": "marc@ulabox.com"
+        }
+    ],
+    "target-dir": "Ulabox/GearmanBundle"
+}
