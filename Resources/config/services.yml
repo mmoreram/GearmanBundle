@@ -1,0 +1,17 @@
+parameters:
+    gearman.execute.job.class:  Ulabox\GearmanBundle\Service\GearmanExecute
+    gearman.settings.class:     Ulabox\GearmanBundle\Service\GearmanSettings
+    gearman.class:              Ulabox\GearmanBundle\Service\Gearman
+services:
+    gearman: 
+        class: %gearman.class%
+        calls:
+          - [setContainer,  [@service_container]]
+    gearman.settings: 
+        class: %gearman.settings.class%
+        calls:
+          - [setContainer,  [@service_container]]
+    gearman.execute.job: 
+        class: %gearman.execute.job.class%
+        calls:
+          - [setContainer,  [@service_container]]
