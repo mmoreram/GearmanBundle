@@ -1,10 +1,10 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Module;
+namespace Mmoreramerino\GearmanBundle\Module;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Mmoreramerino\GearmanBundle\Sevices\GearmanSettings;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Ulabox\GearmanBundle\Sevices\GearmanSettings;
 
 /**
  * Gearman Base Bundle

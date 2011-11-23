@@ -1,11 +1,11 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Module;
+namespace Mmoreramerino\GearmanBundle\Module;
 
-use Ulabox\GearmanBundle\Driver\Gearman\Work;
-use Ulabox\GearmanBundle\Module\JobCollection;
-use Ulabox\GearmanBundle\Module\JobClass as Job;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Mmoreramerino\GearmanBundle\Driver\Gearman\Work;
+use Mmoreramerino\GearmanBundle\Module\JobCollection;
+use Mmoreramerino\GearmanBundle\Module\JobClass as Job;
 
 /**
  * Worker class
@@ -67,7 +67,7 @@ class WorkerClass
             $reflMethod = new \ReflectionMethod($method->class, $method->name);
             $methodAnnotations = $reader->getMethodAnnotations($reflMethod);
             foreach ($methodAnnotations as $annot) {
-                if ($annot instanceof \Ulabox\GearmanBundle\Driver\Gearman\Job) {
+                if ($annot instanceof \Mmoreramerino\GearmanBundle\Driver\Gearman\Job) {
                     $this->jobCollection->add(new Job($annot, $reflMethod, $classAnnotation, $this->callableName, $settings));
                 }
             }

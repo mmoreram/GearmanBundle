@@ -1,8 +1,8 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Module;
+namespace Mmoreramerino\GearmanBundle\Module;
 
-use Ulabox\GearmanBundle\Module\JobClass as Job;
+use Mmoreramerino\GearmanBundle\Module\JobClass as Job;
 
 /**
  * Job Collection class

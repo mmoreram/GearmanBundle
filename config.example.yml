@@ -4,7 +4,7 @@ bundles:
   # Name of bundle
   GearmanBundle:
     # Namespace to be found
-    namespace: Ulabox\GearmanBundle
+    namespace: Mmoreramerino\GearmanBundle
     # Bundle search can be enabled or disabled
     active: true
 

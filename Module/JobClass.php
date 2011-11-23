@@ -1,10 +1,10 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Module;
+namespace Mmoreramerino\GearmanBundle\Module;
 
-use Ulabox\GearmanBundle\Driver\Gearman\Job;
-use Ulabox\GearmanBundle\Driver\Gearman\Work;
-use Ulabox\GearmanBundle\Exceptions\SettingValueMissingException;
+use Mmoreramerino\GearmanBundle\Driver\Gearman\Job;
+use Mmoreramerino\GearmanBundle\Driver\Gearman\Work;
+use Mmoreramerino\GearmanBundle\Exceptions\SettingValueMissingException;
 
 /**
  * Job class

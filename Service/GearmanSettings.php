@@ -1,11 +1,11 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Service;
+namespace Mmoreramerino\GearmanBundle\Service;
 
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Ulabox\GearmanBundle\Exceptions\SettingsNotLoadedException;
-use Ulabox\GearmanBundle\Exceptions\NoSettingsFileExistsException;
+use Mmoreramerino\GearmanBundle\Exceptions\SettingsNotLoadedException;
+use Mmoreramerino\GearmanBundle\Exceptions\NoSettingsFileExistsException;
 
 /**
  * Class GearmanSettings

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Service;
+namespace Mmoreramerino\GearmanBundle\Service;
 
 /**
  * Interface of how a Gearman class should be implemented

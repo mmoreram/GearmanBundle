@@ -1,8 +1,8 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Module;
+namespace Mmoreramerino\GearmanBundle\Module;
 
-use Ulabox\GearmanBundle\Module\WorkerClass as Worker;
+use Mmoreramerino\GearmanBundle\Module\WorkerClass as Worker;
 
 /**
  * WorkerCollection class

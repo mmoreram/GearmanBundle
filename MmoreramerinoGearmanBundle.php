@@ -1,15 +1,15 @@
 <?php
 
-namespace Ulabox\GearmanBundle;
+namespace Mmoreramerino\GearmanBundle;
 
 use Symfony\Component\Config\FileLocator;
-use Ulabox\GearmanBundle\Module\GearmanBaseBundle;
-use Ulabox\GearmanBundle\Module\WorksDirectoryLoader;
-use Ulabox\GearmanBundle\Module\WorkerClass as Worker;
-use Ulabox\GearmanBundle\Module\WorkerCollection;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Ulabox\GearmanBundle\Module\GearmanCache as Cache;
+use Mmoreramerino\GearmanBundle\Module\WorkerCollection;
+use Mmoreramerino\GearmanBundle\Module\GearmanBaseBundle;
+use Mmoreramerino\GearmanBundle\Module\WorksDirectoryLoader;
+use Mmoreramerino\GearmanBundle\Module\WorkerClass as Worker;
+use Mmoreramerino\GearmanBundle\Module\GearmanCache as Cache;
 use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
 
 /**
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
  *
  * @author Marc Morera <marc@ulabox.com>
  */
-class UlaboxGearmanBundle extends GearmanBaseBundle
+class MmoreramerinoGearmanBundle extends GearmanBaseBundle
 {
     /**
      * Boots the Bundle.
@@ -45,7 +45,7 @@ class UlaboxGearmanBundle extends GearmanBaseBundle
             }
             $reader = new AnnotationReader();
             AnnotationRegistry::registerFile(__DIR__ . "/Driver/Gearman/GearmanAnnotations.php");
-            $reader->setDefaultAnnotationNamespace('Ulabox\GearmanBundle\Driver\\');
+            $reader->setDefaultAnnotationNamespace('Mmoreramerino\GearmanBundle\Driver\\');
             $workerCollection = new WorkerCollection;
             $bundles = $this->container->get('kernel')->getBundles();
             foreach ($bundles as $bundle) {
@@ -62,7 +62,7 @@ class UlaboxGearmanBundle extends GearmanBaseBundle
 
                     foreach ($classAnnotations as $annot) {
 
-                        if ($annot instanceof \Ulabox\GearmanBundle\Driver\Gearman\Work) {
+                        if ($annot instanceof \Mmoreramerino\GearmanBundle\Driver\Gearman\Work) {
                             $workerCollection->add(New Worker($annot, $reflClass, $reader, $this->getSettings()));
                         }
                     }

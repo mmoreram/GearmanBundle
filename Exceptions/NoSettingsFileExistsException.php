@@ -1,6 +1,6 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Exceptions;
+namespace Mmoreramerino\GearmanBundle\Exceptions;
 
 /**
  * GearmanBundle can't find settings into specified path Exception

@@ -1,2 +1,2 @@
-* Set parameters on config.yml instead using gearman.yml
+* Set parameters on config.yml instead using gearman.yml (dependence injection)
 * Testings

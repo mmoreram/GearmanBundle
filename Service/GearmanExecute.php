@@ -1,8 +1,8 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Service;
+namespace Mmoreramerino\GearmanBundle\Service;
 
-use Ulabox\GearmanBundle\Service\GearmanService;
+use Mmoreramerino\GearmanBundle\Service\GearmanService;
 
 /**
  * Gearman execute methods. All Worker methods

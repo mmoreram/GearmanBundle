@@ -1,5 +1,5 @@
 {
-    "name": "Ulabox/gearman-bundle",
+    "name": "Mmoreramerino/gearman-bundle",
     "description": "Adds gearman support",
     "keywords": ["gearman"],
     "type": "symfony-bundle",
@@ -10,5 +10,5 @@
             "email": "marc@ulabox.com"
         }
     ],
-    "target-dir": "Ulabox/GearmanBundle"
+    "target-dir": "Mmoreramerino/GearmanBundle"
 }

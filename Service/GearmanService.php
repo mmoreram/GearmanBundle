@@ -1,9 +1,9 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Service;
+namespace Mmoreramerino\GearmanBundle\Service;
 
-use Ulabox\GearmanBundle\Module\GearmanCache as Cache;
-use Ulabox\GearmanBundle\Exceptions\JobDoesNotExistException;
+use Mmoreramerino\GearmanBundle\Module\GearmanCache as Cache;
+use Mmoreramerino\GearmanBundle\Exceptions\JobDoesNotExistException;
 
 /**
  * Gearman execute methods. All Worker methods

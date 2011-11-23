@@ -1,6 +1,6 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Module;
+namespace Mmoreramerino\GearmanBundle\Module;
 
 /**
  * Gearman cache class

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Driver\Gearman;
+namespace Mmoreramerino\GearmanBundle\Driver\Gearman;
 
 use Doctrine\Common\Annotations\Annotation;
 

@@ -1,7 +1,7 @@
 parameters:
-    gearman.execute.job.class:  Ulabox\GearmanBundle\Service\GearmanExecute
-    gearman.settings.class:     Ulabox\GearmanBundle\Service\GearmanSettings
-    gearman.class:              Ulabox\GearmanBundle\Service\Gearman
+    gearman.execute.job.class:  Mmoreramerino\GearmanBundle\Service\GearmanExecute
+    gearman.settings.class:     Mmoreramerino\GearmanBundle\Service\GearmanSettings
+    gearman.class:              Mmoreramerino\GearmanBundle\Service\Gearman
 services:
     gearman: 
         class: %gearman.class%

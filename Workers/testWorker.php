@@ -1,6 +1,6 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Workers;
+namespace Mmoreramerino\GearmanBundle\Workers;
 
 /**
  * @Gearman\Work(description="Worker test description")

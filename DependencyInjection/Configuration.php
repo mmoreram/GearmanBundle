@@ -1,6 +1,6 @@
 <?php
 
-namespace Ulabox\GearmanBundle\DependencyInjection;
+namespace Mmoreramerino\GearmanBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

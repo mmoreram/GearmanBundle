@@ -1,6 +1,6 @@
 <?php
 
-namespace Ulabox\GearmanBundle\Exceptions;
+namespace Mmoreramerino\GearmanBundle\Exceptions;
 
 /**
  * GearmanBundle has not already load settings file Exception
