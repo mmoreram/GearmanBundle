@@ -3,23 +3,23 @@
 namespace Mmoreramerino\GearmanBundle\Exceptions;
 
 /**
- * GearmanBundle can't find job specified as Gearman format Exception
+ * GearmanBundle setting is not well formatted
  *
  * @author Marc Morera <marc@ulabox.com>
  */
-class JobDoesNotExistException extends \Exception
+class SettingValueBadFormatException extends \Exception
 {
 
     /**
      * Construct method for Exception
      *
-     * @param string     $job      Job name to be shown in Exception
+     * @param string     $value    Setting value bad formatted
      * @param integer    $code     Code of exception
      * @param \Exception $previous Previos Exception
      */
-    public function __construct($job, $code = 0, \Exception $previous = null)
+    public function __construct($value, $code = 0, \Exception $previous = null)
     {
-        $message = 'GearmanBundle can\'t find job with name ' . $job . PHP_EOL;
+        $message = 'GearmanBundle setting "' . $value . '" is not well formatted' . PHP_EOL;
         parent::__construct($message, $code, $previous);
     }
 }

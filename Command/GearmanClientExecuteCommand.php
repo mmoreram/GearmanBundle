@@ -10,11 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
- * Gearman Job List Command class
+ * Gearman Client Execute Command class
  *
  * @author Marc Morera <marc@ulabox.com>
  */
-class GearmanJobListCommand extends ContainerAwareCommand
+class GearmanClientExecuteCommand extends ContainerAwareCommand
 {
     /**
      * Console Command configuration
@@ -22,8 +22,9 @@ class GearmanJobListCommand extends ContainerAwareCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('gearman:job:list')
-             ->setDescription('List all Gearman Jobs');
+        $this->setName('gearman:client:execute')
+             ->setDescription('Test')
+             ->addArgument('job', InputArgument::REQUIRED, 'job to execute');
     }
 
     /**
@@ -38,17 +39,7 @@ class GearmanJobListCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $workers = $this->getContainer()->get('gearman')->getWorkers();
-
-        if (is_array($workers)) {
-
-            foreach ($workers as $worker) {
-                $output->writeln('<info>    @'.$worker['className'].'</info>');
-
-                foreach ($worker['jobs'] as $job) {
-                    $output->writeln('<comment>      # '.$job['realCallableName'].'</comment>');
-                }
-            }
-        }
+        $job = $input->getArgument('job');
+        $this->getContainer()->get('gearman')->doJob($job);
     }
 }

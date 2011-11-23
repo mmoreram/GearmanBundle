@@ -24,7 +24,8 @@ class JobCollection
      * Adds into $workerJobs a Job instance
      * Return self object
      *
-     * @param Job $workJob
+     * @param Job $workJob Class to add into array
+     *
      * @return JobCollection
      */
     public function add(Job $workJob)
@@ -43,11 +44,11 @@ class JobCollection
     {
         return $this->workerJobs;
     }
-    
+
     /**
      * Retrieve all jobs loaded previously in cache format
      *
-     * @return array 
+     * @return array
      */
     public function __toCache()
     {
@@ -55,7 +56,7 @@ class JobCollection
         foreach ($this->getJobs() as $job) {
             $jobs[] = $job->__toCache();
         }
-        
+
         return $jobs;
     }
 }

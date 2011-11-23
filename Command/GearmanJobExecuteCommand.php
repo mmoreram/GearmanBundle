@@ -9,6 +9,11 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
+/**
+ * Gearman Job Execute Command class
+ *
+ * @author Marc Morera <marc@ulabox.com>
+ */
 class GearmanJobExecuteCommand extends ContainerAwareCommand
 {
     /**
@@ -19,8 +24,7 @@ class GearmanJobExecuteCommand extends ContainerAwareCommand
         parent::configure();
         $this->setName('gearman:job:execute')
              ->setDescription('Execute one job of worker')
-             ->addArgument('job', InputArgument::REQUIRED, 'Job to execute')
-                ;
+             ->addArgument('job', InputArgument::REQUIRED, 'job to execute');
     }
 
     /**
@@ -39,7 +43,7 @@ class GearmanJobExecuteCommand extends ContainerAwareCommand
         if (!$input->getOption('no-interaction') && !$dialog->askConfirmation($output, '<question>This will execute asked worker?</question>', 'y')) {
             return;
         }
-        
+
         $job = $input->getArgument('job');
         $this->getContainer()->get('gearman.execute.job')->executeJob($job);
     }

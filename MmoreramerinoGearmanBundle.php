@@ -7,10 +7,11 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Mmoreramerino\GearmanBundle\Module\WorkerCollection;
 use Mmoreramerino\GearmanBundle\Module\GearmanBaseBundle;
-use Mmoreramerino\GearmanBundle\Module\WorksDirectoryLoader;
+use Mmoreramerino\GearmanBundle\Module\WorkerDirectoryLoader;
 use Mmoreramerino\GearmanBundle\Module\WorkerClass as Worker;
-use Mmoreramerino\GearmanBundle\Module\GearmanCache as Cache;
+use Mmoreramerino\GearmanBundle\Service\GearmanCache as Cache;
 use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
+use Mmoreramerino\GearmanBundle\Exceptions\GearmanNotInstalledException;
 
 /**
  * Gearman Bundle
@@ -26,16 +27,13 @@ class MmoreramerinoGearmanBundle extends GearmanBaseBundle
      *
      * @api
      */
-    function boot(){
+    public function boot()
+    {
+        if (!in_array('gearman', get_loaded_extensions())) {
+            throw new GearmanNotInstalledException;
+        }
 
-        
-        $rootDir = $this->container->get('kernel')->getRootDir();
-        $cachedir = $rootDir . '/cache/'.$this->container->get('kernel')->getEnvironment().'/Gearman/';
-
-        $gearmanCache = new Cache($cachedir);
-
-        $settingsPath = $rootDir . '/config/gearman_'.$this->container->get('kernel')->getEnvironment().'.yml';
-        $this->loadSettings($settingsPath);
+        $gearmanCache = $this->container->get('gearman.cache');
         $existsCache = $gearmanCache->existsCacheFile();
 
         if (in_array($this->container->get('kernel')->getEnvironment(), array('dev', 'test')) || !$existsCache) {
@@ -48,12 +46,14 @@ class MmoreramerinoGearmanBundle extends GearmanBaseBundle
             $reader->setDefaultAnnotationNamespace('Mmoreramerino\GearmanBundle\Driver\\');
             $workerCollection = new WorkerCollection;
             $bundles = $this->container->get('kernel')->getBundles();
+            
             foreach ($bundles as $bundle) {
+                
                 if (!\in_array($bundle->getNamespace(), $this->getParseableBundles())) {
                     continue;
                 }
 
-                $filesLoader = new WorksDirectoryLoader(new FileLocator('.'));
+                $filesLoader = new WorkerDirectoryLoader(new FileLocator('.'));
                 $files = $filesLoader->load($bundle->getPath());
 
                 foreach ($files as $file) {
@@ -63,7 +63,7 @@ class MmoreramerinoGearmanBundle extends GearmanBaseBundle
                     foreach ($classAnnotations as $annot) {
 
                         if ($annot instanceof \Mmoreramerino\GearmanBundle\Driver\Gearman\Work) {
-                            $workerCollection->add(New Worker($annot, $reflClass, $reader, $this->getSettings()));
+                            $workerCollection->add(new Worker($annot, $reflClass, $reader, $this->getSettings()));
                         }
                     }
                 }

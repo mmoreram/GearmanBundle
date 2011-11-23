@@ -9,7 +9,7 @@ use Mmoreramerino\GearmanBundle\Module\JobClass as Job;
 
 /**
  * Worker class
- * 
+ *
  * @author Marc Morera <marc@ulabox.com>
  */
 class WorkerClass
@@ -20,49 +20,48 @@ class WorkerClass
      * @var JobCollection
      */
     private $jobCollection;
-    
-    
+
     /**
-     * Callable name for this job
-     * If is setted on annotations, this value will be used
-     *  otherwise, natural method name will be used.
+     * Callable name for this job. 
+     * If is setted on annotations, this value will be used. 
+     * Otherwise, natural method name will be used.
      *
      * @var string
      */
     private $callableName;
-    
+
     /**
      * Namespace of Work class
      *
      * @var string
      */
     private $namespace;
-    
+
     /**
      * Retrieves all jobs available from worker
      *
-     * @param Work $classAnnotation
-     * @param \ReflectionClass $reflectionClass
-     * @param AnnotationReader $reader
-     * @param array $settings 
+     * @param Work             $classAnnotation ClassAnnotation class
+     * @param \ReflectionClass $reflectionClass Reflexion class
+     * @param AnnotationReader $reader          ReaderAnnotation class
+     * @param array            $settings        Settings array
      */
     public function __construct( Work $classAnnotation, \ReflectionClass $reflectionClass, AnnotationReader $reader, array $settings)
     {
         $this->namespace = $reflectionClass->getNamespaceName();
-        
+
         $this->callableName =   (null !== $classAnnotation->name) ?
                                 $classAnnotation->name :
                                 $this->namespace;
-        
+
         $this->description =    (null !== $classAnnotation->description) ?
                                 $classAnnotation->description :
                                 'No description is defined';
-        
+
         $this->fileName = $reflectionClass->getFileName();
         $this->className = $reflectionClass->getName();
-        
+
         $this->jobCollection = new JobCollection;
-        
+
         foreach ($reflectionClass->getMethods() as $method) {
             $reflMethod = new \ReflectionMethod($method->class, $method->name);
             $methodAnnotations = $reader->getMethodAnnotations($reflMethod);
@@ -73,7 +72,7 @@ class WorkerClass
             }
         }
     }
-    
+
     /**
      * Retrieve all Worker data in cache format
      *
@@ -89,10 +88,10 @@ class WorkerClass
             'description'   =>  $this->description,
             'jobs'          =>  array(),
         );
-        
+
         $dump['jobs'] = $this->jobCollection->__toCache();
-        
+
         return $dump;
     }
-    
+
 }

@@ -7,19 +7,19 @@ namespace Mmoreramerino\GearmanBundle\Exceptions;
  *
  * @author Marc Morera <marc@ulabox.com>
  */
-class JobDoesNotExistException extends \Exception
+class GearmanNotInstalledException extends \Exception
 {
 
     /**
      * Construct method for Exception
      *
-     * @param string     $job      Job name to be shown in Exception
+     * @param string     $message  Message of exception
      * @param integer    $code     Code of exception
      * @param \Exception $previous Previos Exception
      */
-    public function __construct($job, $code = 0, \Exception $previous = null)
+    public function __construct($message='', $code = 0, \Exception $previous = null)
     {
-        $message = 'GearmanBundle can\'t find job with name ' . $job . PHP_EOL;
+        $message = 'GearmanBundle can\'t find "Gearman php extension". Be sure is actived. If is not installed yet, you can install it using PECL ( sudo pecl install gearman )' . PHP_EOL;
         parent::__construct($message, $code, $previous);
     }
 }

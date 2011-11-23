@@ -9,6 +9,11 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
+/**
+ * Gearman Job Describe Command class
+ *
+ * @author Marc Morera <marc@ulabox.com>
+ */
 class GearmanJobDescribeCommand extends ContainerAwareCommand
 {
     /**
@@ -19,8 +24,7 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
         parent::configure();
         $this->setName('gearman:job:describe')
              ->setDescription('Describe given job')
-             ->addArgument('job', InputArgument::REQUIRED, 'job to execute')
-                ;
+             ->addArgument('job', InputArgument::REQUIRED, 'job to execute');
     }
 
     /**
@@ -45,7 +49,7 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
         $output->writeln('<info>    @Worker-jobsnumber : '.count($worker['jobs']).'</info>');
         $output->writeln('<info>    @Worker\description :</info>');
         $output->writeln('');
-        $output->writeln('<comment>    '.$worker['description'].'</comment>');
+        $output->writeln('<comment>        '.$worker['description'].'</comment>');
         $output->writeln('');
         $job = $worker['job'];
         $output->writeln('<info>    @job\methodName : '.$job['methodName'].'</info>');
@@ -53,13 +57,13 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
         $output->writeln('<info>    @job\iterations : '.$job['iter'].'</info>');
         $output->writeln('<info>    @job\servers :</info>');
         $output->writeln('');
-        foreach ($job['servers'] as $server) {
-            $output->writeln('<comment>    '.$server.'</comment>');
+        foreach ($job['servers'] as $name => $server) {
+            $output->writeln('<comment>        '.$name.' - '.$server.'</comment>');
         }
         $output->writeln('');
         $output->writeln('<info>    @job\description :</info>');
         $output->writeln('');
-        $output->writeln('<comment>    '.$job['description'].'</comment>');
+        $output->writeln('<comment>        '.$job['description'].'</comment>');
         $output->writeln('');
     }
 }
