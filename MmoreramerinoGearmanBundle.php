@@ -32,11 +32,10 @@ class MmoreramerinoGearmanBundle extends GearmanBaseBundle
         if (!in_array('gearman', get_loaded_extensions())) {
             throw new GearmanNotInstalledException;
         }
-
         $gearmanCache = $this->container->get('gearman.cache');
         $existsCache = $gearmanCache->existsCacheFile();
 
-        if (in_array($this->container->get('kernel')->getEnvironment(), array('dev', 'test')) || !$existsCache) {
+        if (in_array($this->container->get('kernel')->getEnvironment(), array('back_dev', 'back_test')) || !$existsCache) {
 
             if ($existsCache) {
                 $gearmanCache->emptyCache();
@@ -52,7 +51,6 @@ class MmoreramerinoGearmanBundle extends GearmanBaseBundle
                 if (!\in_array($bundle->getNamespace(), $this->getParseableBundles())) {
                     continue;
                 }
-
                 $filesLoader = new WorkerDirectoryLoader(new FileLocator('.'));
                 $files = $filesLoader->load($bundle->getPath());
 

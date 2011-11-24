@@ -39,6 +39,14 @@ final class Work extends Annotation
      * @var mixed
      */
     public $servers = null;
+    
+    /**
+     * Service typeof Class. If it's defined, object will be instanced throught service dependence injection.
+     * Otherwise, class will be instance with new() method
+     * 
+     * @var string
+     */
+    public $service = null;
 }
 
 /** @Annotation */

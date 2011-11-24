@@ -46,7 +46,15 @@ class GearmanExecute extends GearmanService
         } else {
             $gmworker->addServer();
         }
-        $gmworker->addFunction($job['realCallableName'], array(new $worker['className'], $job['methodName']));
+        
+        
+        if (null !== $worker['service']) {
+            $objInstance = $this->container->get($worker['service']);
+        } else {
+            $objInstance = new $worker['className'];
+        }
+        
+        $gmworker->addFunction($job['realCallableName'], array($objInstance, $job['methodName']));
 
         $iter = isset($job['iter']) ? (int) ($job['iter']) : 0;
         $shouldStop = ($iter > 0) ? true : false;

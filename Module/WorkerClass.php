@@ -59,6 +59,7 @@ class WorkerClass
 
         $this->fileName = $reflectionClass->getFileName();
         $this->className = $reflectionClass->getName();
+        $this->service = $classAnnotation->service;
 
         $this->jobCollection = new JobCollection;
 
@@ -86,6 +87,7 @@ class WorkerClass
             'fileName'      =>  $this->fileName,
             'callableName'  =>  $this->callableName,
             'description'   =>  $this->description,
+            'service'       =>  $this->service,
             'jobs'          =>  array(),
         );
 

@@ -12,6 +12,14 @@ use Mmoreramerino\GearmanBundle\Service\GearmanInterface;
  */
 class Gearman extends GearmanService implements GearmanInterface
 {
+    
+    /**
+     * Server variable to define in what server must connect to
+     *
+     * @var array
+     */
+    public $server = null;
+    
     /**
      * If workers are not loaded, they're loaded and returned.
      * Otherwise, they are simply returned
@@ -152,8 +160,26 @@ class Gearman extends GearmanService implements GearmanInterface
     private function doEnqueue(Array $worker, $params='', $method='do')
     {
         $gmclient= new \GearmanClient();
-        $gmclient->addServer();
+        
+        if (null === $this->server || !is_array($this->server)) {
+            $gmclient->addServer();
+        } else {
+            $gmclient->addServer($this->server[0], $this->server[1]);
+        }
 
         return $gmclient->$method($worker['job']['realCallableName'], serialize($params));
+    }
+    
+    /**
+     *
+     * @param type $servername Server name (must be ip)
+     * @param type $port       Port of server. By default 4730
+     * 
+     * @return Gearman Returns self object
+     */
+    public function setServer($servername, $port = 4730)
+    {
+        $this->server = array($servername, $port);
+        return $this;
     }
 }
