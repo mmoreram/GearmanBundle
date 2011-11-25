@@ -45,9 +45,9 @@ class MmoreramerinoGearmanBundle extends GearmanBaseBundle
             $reader->setDefaultAnnotationNamespace('Mmoreramerino\GearmanBundle\Driver\\');
             $workerCollection = new WorkerCollection;
             $bundles = $this->container->get('kernel')->getBundles();
-            
+
             foreach ($bundles as $bundle) {
-                
+
                 if (!\in_array($bundle->getNamespace(), $this->getParseableBundles())) {
                     continue;
                 }
