@@ -1,13 +1,13 @@
 parameters:
     config.path:                /config/Gearman/
   
-    gearman.class:              Mmoreramerino\GearmanBundle\Service\Gearman
+    gearman.client.class:              Mmoreramerino\GearmanBundle\Service\GearmanClient
     gearman.cache.class:        Mmoreramerino\GearmanBundle\Service\GearmanCache
     gearman.execute.job.class:  Mmoreramerino\GearmanBundle\Service\GearmanExecute
     gearman.settings.class:     Mmoreramerino\GearmanBundle\Service\GearmanSettings
 services:
     gearman: 
-        class: %gearman.class%
+        class: %gearman.client.class%
         calls:
           - [setContainer,  [@service_container]]
     gearman.settings: 

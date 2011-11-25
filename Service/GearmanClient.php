@@ -10,7 +10,7 @@ use Mmoreramerino\GearmanBundle\Service\GearmanInterface;
  *
  * @author Marc Morera <marc@ulabox.com>
  */
-class Gearman extends GearmanService implements GearmanInterface
+class GearmanClient extends GearmanService implements GearmanInterface
 {
 
     /**
