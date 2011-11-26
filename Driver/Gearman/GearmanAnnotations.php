@@ -31,7 +31,7 @@ final class Work extends Annotation
      *
      * @var integer
      */
-    public $iter = null;
+    public $iterations = null;
 
     /**
      * Servers assigned for all jobs of this work to be executed
@@ -71,7 +71,7 @@ final class Job extends Annotation
      *
      * @var integer
      */
-    public $iter = null;
+    public $iterations = null;
 
     /**
      * Servers assigned for this job to be executed

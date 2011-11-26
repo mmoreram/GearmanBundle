@@ -27,4 +27,4 @@ defaults:
   
   # Default number of executions before job dies.
   # If annotations defined, will be overwritten
-  iter: 150
+  iterations: 150
