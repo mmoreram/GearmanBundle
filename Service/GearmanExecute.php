@@ -34,7 +34,6 @@ class GearmanExecute extends GearmanService
     private function callJob(Array $worker)
     {
         $gmworker= new \GearmanWorker();
-        $settings = $this->getSettings();
         $job = $worker['job'];
 
         if (is_array($job['servers'])) {
