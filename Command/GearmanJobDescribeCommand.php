@@ -54,7 +54,7 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
         $job = $worker['job'];
         $output->writeln('<info>    @job\methodName : '.$job['methodName'].'</info>');
         $output->writeln('<info>    @job\callableName : '.$job['realCallableName'].'</info>');
-        $output->writeln('<info>    @job\iterations : '.$job['iter'].'</info>');
+        $output->writeln('<info>    @job\iterations : '.$job['iterations'].'</info>');
         $output->writeln('<info>    @job\servers :</info>');
         $output->writeln('');
         foreach ($job['servers'] as $name => $server) {

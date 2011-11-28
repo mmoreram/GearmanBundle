@@ -49,24 +49,24 @@ class JobClass
         $this->methodName   =   $method->getName();
 
         $this->realCallableName = str_replace('\\', '', $callableNameClass.'~'.$this->callableName);
-        $this->description  =    (null !== $method->getDocComment()) ?
+        $this->description  =    (null !== $methodAnnotation->description) ?
                                     $methodAnnotation->description :
                                     'No description is defined';
 
-        if (null !== $settings['defaults']['iter']) {
-            $iter = (int) ($settings['defaults']['iter']);
+        if (null !== $settings['defaults']['iterations']) {
+            $iter = (int) ($settings['defaults']['iterations']);
 
-            if (null !== $classAnnotation->iter) {
-                $iter = (int) ($classAnnotation->iter);
+            if (null !== $classAnnotation->iterations) {
+                $iter = (int) ($classAnnotation->iterations);
             }
 
-            if (null !== $methodAnnotation->iter) {
-                $iter = (int) ($methodAnnotation->iter);
+            if (null !== $methodAnnotation->iterations) {
+                $iter = (int) ($methodAnnotation->iterations);
             }
         } else {
-            throw new SettingValueMissingException('defaults/iter');
+            throw new SettingValueMissingException('defaults/iterations');
         }
-        $this->iter = $iter;
+        $this->iterations = $iter;
 
         /**
          * Servers definition for job
@@ -117,7 +117,7 @@ class JobClass
             'methodName'            =>  $this->methodName,
             'realCallableName'      =>  $this->realCallableName,
             'description'           =>  $this->description,
-            'iter'                  =>  $this->iter,
+            'iterations'			=>  $this->iterations,
             'servers'               =>  $this->servers,
         );
     }

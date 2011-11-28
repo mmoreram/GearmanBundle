@@ -11,7 +11,7 @@ class testWorker
      * 
      * @param \GearmanJob $job Object with job parameters
      *
-     * @Gearman\Job(iter=3, name="test", description="This is a description")     *
+     * @Gearman\Job(iterations=3, name="test", description="This is a description")     *
      */
     public function testA(\GearmanJob $job)
     {

@@ -56,8 +56,8 @@ class GearmanExecute extends GearmanService
 
         $gmworker->addFunction($job['realCallableName'], array($objInstance, $job['methodName']));
 
-        $iter = isset($job['iter']) ? (int) ($job['iter']) : 0;
-        $shouldStop = ($iter > 0) ? true : false;
+        $iterations = isset($job['iterations']) ? (int) ($job['iterations']) : 0;
+        $shouldStop = ($iterations > 0) ? true : false;
 
         while ($gmworker->work()) {
 
@@ -66,8 +66,8 @@ class GearmanExecute extends GearmanService
             }
 
             if ($shouldStop) {
-                $iter--;
-                if ($iter <= 0) {
+                $iterations--;
+                if ($iterations <= 0) {
                     break;
                 }
             }
