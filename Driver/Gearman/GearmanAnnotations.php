@@ -13,7 +13,7 @@ use Doctrine\Common\Annotations\Annotation;
 final class Work extends Annotation
 {
     /**
-     * Number of iterations specified for all jobs inside Work
+     * Name of worker
      *
      * @var integer
      */
