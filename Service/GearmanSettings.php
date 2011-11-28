@@ -45,16 +45,24 @@ class GearmanSettings extends ContainerAware
      */
     public function loadSettings()
     {
-        $settingsPath = $this->getFilePath();
-
-        if (!file_exists($settingsPath)) {
-            throw new NoSettingsFileExistsException($settingsPath);
+        if (!$this->existsSettings()) {
+            throw new NoSettingsFileExistsException($this->getFilePath());
         }
 
         $yaml = new Parser();
-        $this->settings = $yaml->parse(file_get_contents($settingsPath));
+        $this->settings = $yaml->parse(file_get_contents($this->getFilePath()));
 
         return $this->settings;
+    }
+
+    /**
+     * Return if exists settings file
+     *
+     * @return boolean
+     */
+    public function existsSettings()
+    {
+        return file_exists($this->getFilePath());
     }
 
     /**

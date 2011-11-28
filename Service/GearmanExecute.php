@@ -36,15 +36,7 @@ class GearmanExecute extends GearmanService
         $gmworker= new \GearmanWorker();
         $job = $worker['job'];
 
-        if (is_array($job['servers'])) {
-
-            foreach ($job['servers'] as $server) {
-                list($addr, $port) = explode(':', $server, 2);
-                $gmworker->addServer($addr, $port);
-            }
-        } else {
-            $gmworker->addServer();
-        }
+        $this->addServers($gmworker, $job);
 
 
         if (null !== $worker['service']) {
@@ -70,6 +62,26 @@ class GearmanExecute extends GearmanService
                     break;
                 }
             }
+        }
+    }
+
+    /**
+     * Adds into worker all defined Servers.
+     * If any is defined, performs default method
+     *
+     * @param \GearmanWorker $gmworker Worker to perform configuration
+     * @param array          $job      Job to check properties
+     */
+    private function addServers(\GearmanWorker $gmworker, Array $job)
+    {
+        if (is_array($job['servers'])) {
+
+            foreach ($job['servers'] as $server) {
+                list($addr, $port) = explode(':', $server, 2);
+                $gmworker->addServer($addr, $port);
+            }
+        } else {
+            $gmworker->addServer();
         }
     }
 }

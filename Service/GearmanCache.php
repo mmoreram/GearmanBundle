@@ -102,12 +102,11 @@ class GearmanCache extends ContainerAware
      * Save data into cache
      * Returns self object
      *
-     * @return GearmanCache
+     * @return boolean Return if saved
      */
     public function save()
     {
-        file_put_contents($this->cachedir . $this->cachefile, $this->data);
-        return $this;
+        return file_put_contents($this->cachedir . $this->cachefile, $this->data);
     }
 
     /**
@@ -146,7 +145,7 @@ class GearmanCache extends ContainerAware
     {
         if (null === $this->cachedir) {
             $rootDir = $this->container->get('kernel')->getRootDir();
-            $this->cachedir = $rootDir . '/cache/'.$this->container->get('kernel')->getEnvironment().'/Gearman/';
+            $this->cachedir = $rootDir . '/cache/'.$this->container->get('kernel')->getEnvironment().'/gearman/';
         }
 
         return $this->cachedir;
