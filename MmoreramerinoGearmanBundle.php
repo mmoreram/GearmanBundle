@@ -35,7 +35,11 @@ class MmoreramerinoGearmanBundle extends GearmanBaseBundle
         $gearmanCache = $this->container->get('gearman.cache');
         $existsCache = $gearmanCache->existsCacheFile();
 
-        if (in_array($this->container->get('kernel')->getEnvironment(), array('back_dev', 'back_test')) || !$existsCache) {
+        $environmentsCacheClear = array(
+            'back_dev', 'back_test', 'dev', 'test',
+        );
+
+        if (in_array($this->container->get('kernel')->getEnvironment(), $environmentsCacheClear) || !$existsCache) {
 
             if ($existsCache) {
                 $gearmanCache->emptyCache();

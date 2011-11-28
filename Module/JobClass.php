@@ -49,7 +49,7 @@ class JobClass
         $this->methodName   =   $method->getName();
 
         $this->realCallableName = str_replace('\\', '', $callableNameClass.'~'.$this->callableName);
-        $this->description  =    (null !== $method->getDocComment()) ?
+        $this->description  =    (null !== $methodAnnotation->description) ?
                                     $methodAnnotation->description :
                                     'No description is defined';
 
@@ -64,7 +64,7 @@ class JobClass
                 $iter = (int) ($methodAnnotation->iterations);
             }
         } else {
-            throw new SettingValueMissingException('defaults/iter');
+            throw new SettingValueMissingException('defaults/iterations');
         }
         $this->iterations = $iter;
 
