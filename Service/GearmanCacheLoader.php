@@ -37,6 +37,13 @@ class GearmanCacheLoader extends ContainerAware
     private $bundles = null;
 
     /**
+     * Ignored namespaces
+     *
+     * @var Array
+     */
+    private $ignored = null;
+
+    /**
      * This method load all data and saves all annotations into cache.
      * Also, it load all settings from Yaml file format
      *
@@ -53,7 +60,6 @@ class GearmanCacheLoader extends ContainerAware
         $bundles = $this->container->get('kernel')->getBundles();
 
         foreach ($bundles as $bundle) {
-
             if (!\in_array($bundle->getNamespace(), $this->getParseableBundles())) {
                 continue;
             }
@@ -61,6 +67,11 @@ class GearmanCacheLoader extends ContainerAware
             $files = $filesLoader->load($bundle->getPath());
 
             foreach ($files as $file) {
+
+                if ($this->isIgnore($file['class'])) {
+                    continue;
+                }
+
                 $reflClass = new \ReflectionClass($file['class']);
                 $classAnnotations = $reader->getClassAnnotations($reflClass);
 
@@ -99,6 +110,13 @@ class GearmanCacheLoader extends ContainerAware
                     if ('' !== $properties['namespace']) {
                         $this->bundles[] = $properties['namespace'];
                     }
+
+                    if (isset($properties['ignore'])) {
+                        $ignored = (array) $properties['ignore'];
+                        while ($ignored) {
+                            $this->ignored[] = $properties['namespace'] . '\\' . array_shift($ignored);
+                        }
+                    }
                 }
             }
         }
@@ -126,5 +144,27 @@ class GearmanCacheLoader extends ContainerAware
     {
         $this->settings = $this->container->get('gearman.settings')->loadSettings();
         return $this->settings;
+    }
+
+    /**
+     * Checks the class it belongs to the ignored
+     *
+     * @param string $class Class name
+     *
+     * @return boolean
+     */
+    public function isIgnore($class)
+    {
+        if (null === $this->ignored) {
+            return false;
+        }
+
+        foreach ($this->ignored as $ns) {
+            if (strstr($class, $ns) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
