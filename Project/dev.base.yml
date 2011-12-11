@@ -18,12 +18,14 @@ defaults:
   #     doLow
   #     doLowBackground
   method: do
-  
+
   # Server list by default workers and clients will connect
   # Server name must contain port
   # If annotations defined, will be overwritten
   servers:
-    - 127.0.0.1:4730
+    localhost:
+      hostname: 127.0.0.1
+      port: 4730
   
   # Default number of executions before job dies.
   # If annotations defined, will be overwritten
