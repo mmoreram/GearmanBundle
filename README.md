@@ -1,4 +1,4 @@
 README
 ======
 
-All documentation is available at http://mmoreramerino.github.com/
+All documentation is available at http://mmoreramerino.github.com/GearmanBundle
