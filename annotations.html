@@ -1,0 +1,81 @@
+<html>
+    <head><style type="text/css">.wp_syntax{-moz-border-radius:8px;-webkit-border-radius:8px;-o-border-radius:8px;-ms-border-radius:8px;-khtml-border-radius:8px;border-radius:8px;background-color:#232125;border:1px solid #666666;color:#100;overflow:auto;overflow-x:auto;overflow-y:hidden;width:100%;margin:1em auto;padding:1em;}.wp_syntax table{border-collapse:collapse;}.wp_syntax div,.wp_syntax td{vertical-align:top;padding:2px 4px;}.wp_syntax .line_numbers{background-color:#DEF;color:gray;overflow:visible;text-align:right;}.wp_syntax .code{background-color:#232125 !important;}.wp_syntax pre{color:#ccc;font-family:Consolas, Lucida Console, Monaco, monospace;background-color:#232125;clear:none;float:none;font-size:15px;line-height:1.333;overflow:visible;white-space:nowrap;width:auto;margin:0;padding:0;}.de1{color:#ddd;}.de2{color:#bbb;}.kw1{color:#FF8400;background-color:#222;}.kw2{color:#FF8400;font-weight:400;background-color:#222;}.kw3{color:#fd6;background-color:#222;}.kw4{color:#F83;font-weight:400;}.co0{color:#6d6;font-style:italic;}.co2{color:#8d8;font-style:italic;}.co3{color:#9d9;font-style:italic;}.coMULTI{color:#bdb;font-style:italic;}.es0{color:#e3e;}.es_h{color:#909;}.sy0{color:#E0882F;}.sy1{color:#aff;background-color:#039;}.nu0{color:#e66;}.nu8{color:#cc6;}.nu12{color:#6cc;}.nu19{color:#c6c;}.me1{color:#FFF;font-weight:400;}.me2{color:#ccb;}.re0{color:#fff;font-weight:400;}.re1{color:#ccc;font-weight:700;}a{text-decoration:none;}.diff .kw1{color:#aaa;font-style:italic;}.diff .re0{color:#408;}.diff .re1{color:#f33;}.diff .re2{color:#00b000;}.diff .re3{color:#f96;}.diff .re4{color:#9f9;}.diff .re5{color:#01d;}.diff .re6{color:#96f;}.diff .re7{color:#f66;}.diff .re8{color:#5f5;}.diff .re9{color:#882;}.one-column #page{max-width:none;}.wp_syntax td{border-width:0;}.entry-content .wp_syntax table,.wp_syntax .comment-content table{border-bottom:none !important;margin:0;}.co1,.co4{color:#B729D9;font-style:italic;}.st0,.st_h{color:#56DB3A;}.br0,.re2,.re3,.re4,.re5,.re6,.re7,.re8,.re9{color:#fff;}.c1{margin-bottom:15px;display:block;font-style:italic;color:#B729D9;}pre{border:none;}</style></head>
+    <body>
+        <div style="width:850px; margin:0 auto; position:relative">
+	        <h1>Annotations</h1>
+	        <p>This Bundle allows you to configure whatever as a Job. It provides you an easy way to execute it with, for example, Supervisor and provides you a very easy way of calling in Symfony2 environment.</p>
+			<p>Job annotations overwrite <strong>always</strong> work annotations, and work annotations <strong>always</strong> overwrite environment settings</p>
+	        <div class="wp_syntax">
+	        	<div class="code">
+	        		<pre class="php">
+	        			<span class="kw2">namespace</span> Mmoreramerino\GearmanBundle\Workers<span class="sy0">;</span>
+						<br /><br />
+						<span class="co4">/** @Gearman\Work(iterations=3, description="Worker test description",defaultMethod="do") */</span><br />
+						<span class="kw2">class</span> testWorker<br />
+						<span class="br0">{</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">/**<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;* Test method to run as a job<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;* @param \GearmanJob $job Object with job parameters<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;* @return boolean<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;* @Gearman\Job(iterations=3, name="test", description="This is a description")<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;*/</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">public</span> <span class="kw2">function</span> testA<span class="br0">(</span>\GearmanJob $job<span class="br0">)</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">{</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw1">echo</span> <span class="st_h">'Job testA done!'</span><span class="sy0"> . </span><span class="kw1">PHP_EOL</span><span class="sy0">;</span><br /><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw1">return true</span><span class="sy0">;</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">}</span><br /><br />
+
+
+						    &nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">/**<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;* Test method to run as a job<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;* @param \GearmanJob $job Object with job parameters<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;* @return boolean<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;* @Gearman\Job(defaultMethod="doLowBackground")<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;*/</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">public</span> <span class="kw2">function</span> testA<span class="br0">(</span>\GearmanJob $job<span class="br0">)</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">{</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw1">echo</span> <span class="st_h">'Job testB done!'</span><span class="sy0"> . </span><span class="kw1">PHP_EOL</span><span class="sy0">;</span><br /><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw1">return true</span><span class="sy0">;</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">}</span><br />
+						<span class="br0">}</span><br />
+					</pre>
+				</div>
+			</div>
+			<div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+						<span class="co4">Work annotations</span>
+						<ul>
+							<li><span class="kw2">name</span> : Name of work. You can associate a group of jobs with some keyword</li>
+							<li><span class="kw2">description</span> : Short description about all jobs inside</li>
+							<li><span class="kw2">iterations</span> : You can overwrite iterations of all jobs inside</li>
+							<li><span class="kw2">service</span> : You can use even a service. Must specify callable service name</li>
+							<li><span class="kw2">defaultMethod</span> : You can define witch method will be used as default in all jobs</li>
+						</ul>
+					</pre>
+				</div>
+			</div>
+			<div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+						<span class="co4">Job annotations</span>
+						<ul>
+							<li><span class="kw2">name</span> : Name of job. You will use it to call job</li>
+							<li><span class="kw2">description</span> : Short description about this job. Important field</li>
+							<li><span class="kw2">iterations</span> : You can overwrite iterations of this job.</li>
+							<li><span class="kw2">servers</span> : array containing servers providers will connect to offer this job</li>
+							<li><span class="kw2">defaultMethod</span> : You can define witch method will be used as default in this job</li>
+						</ul>
+					</pre>
+				</div>
+			</div>
+			<p><a href="index.html">Index</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="settings.html">prev : Settings</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="subscribing-worker-jobs.html">next : Subscribing Worker Jobs</a></p>
+       	</div>
+    </body>
+</head>

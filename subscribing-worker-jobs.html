@@ -1,0 +1,37 @@
+<html>
+    <head><style type="text/css">.wp_syntax{-moz-border-radius:8px;-webkit-border-radius:8px;-o-border-radius:8px;-ms-border-radius:8px;-khtml-border-radius:8px;border-radius:8px;background-color:#232125;border:1px solid #666666;color:#100;overflow:auto;overflow-x:auto;overflow-y:hidden;width:100%;margin:1em auto;padding:1em;}.wp_syntax table{border-collapse:collapse;}.wp_syntax div,.wp_syntax td{vertical-align:top;padding:2px 4px;}.wp_syntax .line_numbers{background-color:#DEF;color:gray;overflow:visible;text-align:right;}.wp_syntax .code{background-color:#232125 !important;}.wp_syntax pre{color:#ccc;font-family:Consolas, Lucida Console, Monaco, monospace;background-color:#232125;clear:none;float:none;font-size:15px;line-height:1.333;overflow:visible;white-space:nowrap;width:auto;margin:0;padding:0;}.de1{color:#ddd;}.de2{color:#bbb;}.kw1{color:#FF8400;background-color:#222;}.kw2{color:#FF8400;font-weight:400;background-color:#222;}.kw3{color:#fd6;background-color:#222;}.kw4{color:#F83;font-weight:400;}.co0{color:#6d6;font-style:italic;}.co2{color:#8d8;font-style:italic;}.co3{color:#9d9;font-style:italic;}.coMULTI{color:#bdb;font-style:italic;}.es0{color:#e3e;}.es_h{color:#909;}.sy0{color:#E0882F;}.sy1{color:#aff;background-color:#039;}.nu0{color:#e66;}.nu8{color:#cc6;}.nu12{color:#6cc;}.nu19{color:#c6c;}.me1{color:#FFF;font-weight:400;}.me2{color:#ccb;}.re0{color:#fff;font-weight:400;}.re1{color:#ccc;font-weight:700;}a{text-decoration:none;}.diff .kw1{color:#aaa;font-style:italic;}.diff .re0{color:#408;}.diff .re1{color:#f33;}.diff .re2{color:#00b000;}.diff .re3{color:#f96;}.diff .re4{color:#9f9;}.diff .re5{color:#01d;}.diff .re6{color:#96f;}.diff .re7{color:#f66;}.diff .re8{color:#5f5;}.diff .re9{color:#882;}.one-column #page{max-width:none;}.wp_syntax td{border-width:0;}.entry-content .wp_syntax table,.wp_syntax .comment-content table{border-bottom:none !important;margin:0;}.co1,.co4{color:#B729D9;font-style:italic;}.st0,.st_h{color:#56DB3A;}.br0,.re2,.re3,.re4,.re5,.re6,.re7,.re8,.re9{color:#fff;}.c1{margin-bottom:15px;display:block;font-style:italic;color:#B729D9;}pre{border:none;}</style></head>
+    <body>
+        <div style="width:850px; margin:0 auto; position:relative">
+	        <h1>Subscribing worker Jobs</h1>
+	        <p>Once you have setted all workers and jobs, you have a way of execute one job, allowing clients to use them.</p>
+	        <p>GearmanBundle  let you know all about available jobs</p>
+	        <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:job:list</span>
+                    </pre>
+                </div>
+            </div>
+            <p>Also you can describe one specific job by using his callable name</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:job:describe JobName</span>
+                    </pre>
+                </div>
+            </div>
+            <p>Finally you can subscribe one Job using GearmanBundle. First you will see Job description and then Job will be available for clients</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:job:execute JobName</span>
+                    </pre>
+                </div>
+            </div>
+            <p>Remember that one job setting is called iterations. When job is used more than $iterations times, Job subscription will be killed, so you will have to alive it again. Thus you can empty memory periodically.</p>
+            <p>You can use <a target="_blank" href="http://supervisord.org/">Supervisor</a> to keep alive all process and to reactivate one killed process</p>
+
+            <p><a href="index.html">Index</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="settings.html">prev : Annotations</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="requesting-client-jobs.html">next : Requesting Client Jobs</a></p>
+	    </div>
+	</body>
+</html>

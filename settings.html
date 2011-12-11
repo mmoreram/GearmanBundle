@@ -1,0 +1,47 @@
+<html>
+    <head><style type="text/css">.wp_syntax{-moz-border-radius:8px;-webkit-border-radius:8px;-o-border-radius:8px;-ms-border-radius:8px;-khtml-border-radius:8px;border-radius:8px;background-color:#232125;border:1px solid #666666;color:#100;overflow:auto;overflow-x:auto;overflow-y:hidden;width:100%;margin:1em auto;padding:1em;}.wp_syntax table{border-collapse:collapse;}.wp_syntax div,.wp_syntax td{vertical-align:top;padding:2px 4px;}.wp_syntax .line_numbers{background-color:#DEF;color:gray;overflow:visible;text-align:right;}.wp_syntax .code{background-color:#232125 !important;}.wp_syntax pre{color:#ccc;font-family:Consolas, Lucida Console, Monaco, monospace;background-color:#232125;clear:none;float:none;font-size:15px;line-height:1.333;overflow:visible;white-space:nowrap;width:auto;margin:0;padding:0;}.de1{color:#ddd;}.de2{color:#bbb;}.kw1{color:#FF8400;background-color:#222;}.kw2{color:#FF8400;font-weight:400;background-color:#222;}.kw3{color:#fd6;background-color:#222;}.kw4{color:#F83;font-weight:400;}.co0{color:#6d6;font-style:italic;}.co2{color:#8d8;font-style:italic;}.co3{color:#9d9;font-style:italic;}.coMULTI{color:#bdb;font-style:italic;}.es0{color:#e3e;}.es_h{color:#909;}.sy0{color:#E0882F;}.sy1{color:#aff;background-color:#039;}.nu0{color:#e66;}.nu8{color:#cc6;}.nu12{color:#6cc;}.nu19{color:#c6c;}.me1{color:#FFF;font-weight:400;}.me2{color:#ccb;}.re0{color:#fff;font-weight:400;}.re1{color:#ccc;font-weight:700;}a{text-decoration:none;}.diff .kw1{color:#aaa;font-style:italic;}.diff .re0{color:#408;}.diff .re1{color:#f33;}.diff .re2{color:#00b000;}.diff .re3{color:#f96;}.diff .re4{color:#9f9;}.diff .re5{color:#01d;}.diff .re6{color:#96f;}.diff .re7{color:#f66;}.diff .re8{color:#5f5;}.diff .re9{color:#882;}.one-column #page{max-width:none;}.wp_syntax td{border-width:0;}.entry-content .wp_syntax table,.wp_syntax .comment-content table{border-bottom:none !important;margin:0;}.co1,.co4{color:#B729D9;font-style:italic;}.st0,.st_h{color:#56DB3A;}.br0,.re2,.re3,.re4,.re5,.re6,.re7,.re8,.re9{color:#fff;}.c1{margin-bottom:15px;display:block;font-style:italic;color:#B729D9;}pre{border:none;}</style></head>
+    <body>
+        <div style="width:850px; margin:0 auto; position:relative">
+	        <h1>Settings</h1>
+	        <p>The only settings you must check when installing GearmanBundle is to set settings file on your environment. By default, settings path is <strong>/config/gearman/{environment}.yml</strong>, but you can configure it acceding at dependence injection parameters.</p>
+	        <p>You can find an example of development config file in <strong>/Project/dev.base.yml</strong></p>
+	        <div class="wp_syntax">
+	            <div class="code">
+	                <pre class="php">
+			        	<span class="kw2"># Bundles gearman will parse searching annotations</span><br />
+						bundles:<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># Name of bundle</span><br />
+					  		&nbsp;&nbsp;&nbsp;&nbsp;GearmanBundle:<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># Namespace to be found</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;namespace: Mmoreramerino\GearmanBundle<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># Bundle search can be enabled or disabled</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;active: true<br /><br />
+
+						<span class="kw2"># default values</span><br />
+						defaults:<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># default method related with all jobs</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">#     do</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">#     doBackground</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">#     doHigh</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">#     doHighBackground</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">#     doLow</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">#     doLowBackground</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;method: do<br /><br />
+
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># Server list by default workers and clients will connect</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># Server must contain hostname and port</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># If annotations defined, will be overwritten</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;servers:<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;localhost:<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hostname: 127.0.0.1<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port: 4730<br /><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># Default number of executions before job dies.</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># If annotations defined, will be overwritten</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;iterations: 150<br />
+					</pre>
+				</div>
+			</div>
+			<p><a href="index.html">Index</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="installation.html">prev : Installation</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="annotations.html">next : Annotations</a></p>
+       	</div>
+    </body>
+</head>
