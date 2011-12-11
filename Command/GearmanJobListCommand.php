@@ -39,15 +39,18 @@ class GearmanJobListCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $workers = $this->getContainer()->get('gearman')->getWorkers();
-
+        $it = 1;
         if (is_array($workers)) {
 
             foreach ($workers as $worker) {
                 $output->writeln('<info>    @'.$worker['className'].'</info>');
-
+                $output->writeln('<info></info>');
                 foreach ($worker['jobs'] as $job) {
-                    $output->writeln('<comment>      # '.$job['realCallableName'].'</comment>');
+                    $output->writeln('<comment>      - #'.$it++.'</comment>');
+                    $output->writeln('<comment>          name: '.$job['methodName'].'</comment>');
+                    $output->writeln('<comment>          callablename:</comment><info> '.$job['realCallableName'].'</info>');
                 }
+                $output->writeln('');
             }
         }
     }

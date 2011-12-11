@@ -2,7 +2,7 @@
 
 namespace Mmoreramerino\GearmanBundle\Workers;
 
-/** @Gearman\Work(description="Worker test description") */
+/** @Gearman\Work(description="Worker test description", defaultMethod="doBackground") */
 class testWorker
 {
 
@@ -13,7 +13,7 @@ class testWorker
      *
      * @return boolean
      *
-     * @Gearman\Job(iterations=3, name="test", description="This is a description")     *
+     * @Gearman\Job(iterations=3, name="test", description="This is a description", defaultMethod="doHighBackground")     *
      */
     public function testA(\GearmanJob $job)
     {

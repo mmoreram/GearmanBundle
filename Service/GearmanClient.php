@@ -4,6 +4,7 @@ namespace Mmoreramerino\GearmanBundle\Service;
 
 use Mmoreramerino\GearmanBundle\Service\GearmanService;
 use Mmoreramerino\GearmanBundle\Service\GearmanInterface;
+use Mmoreramerino\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
 
 /**
  * Implementation of GearmanInterface
@@ -33,6 +34,29 @@ class GearmanClient extends GearmanService implements GearmanInterface
          */
         return $this->setWorkers();
     }
+
+    /**
+     * Runs a single task and returns some result, depending of method called.
+     * Method called depends of default callable method setted on gearman settings
+     *  or overwritted on work or job annotations
+     *
+     * @param string $name   A GearmanBundle registered function the worker is to execute
+     * @param Mixed  $params Parameters to send to job
+     *
+     * @return mixed result depending of method called.
+     */
+     public function callJob($name, $params = array())
+     {
+        $worker = $this->getWorker($name);
+        $methodCallable = $worker['job']['defaultMethod'] . 'Job';
+
+        if (!method_exists($this, $methodCallable)) {
+            throw new NoCallableGearmanMethodException($methodCallable);
+        }
+
+        return $this->$methodCallable($name, $params);
+     }
+
 
 
     /**

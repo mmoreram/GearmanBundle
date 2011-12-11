@@ -41,29 +41,6 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
     {
         $job = $input->getArgument('job');
         $worker = $this->getContainer()->get('gearman')->getWorker($job);
-
-        $output->writeln('');
-        $output->writeln('<info>    @Worker\className : '.$worker['className'].'</info>');
-        $output->writeln('<info>    @Worker\fileName : '.$worker['fileName'].'</info>');
-        $output->writeln('<info>    @Worker\namespace : '.$worker['namespace'].'</info>');
-        $output->writeln('<info>    @Worker-jobsnumber : '.count($worker['jobs']).'</info>');
-        $output->writeln('<info>    @Worker\description :</info>');
-        $output->writeln('');
-        $output->writeln('<comment>        '.$worker['description'].'</comment>');
-        $output->writeln('');
-        $job = $worker['job'];
-        $output->writeln('<info>    @job\methodName : '.$job['methodName'].'</info>');
-        $output->writeln('<info>    @job\callableName : '.$job['realCallableName'].'</info>');
-        $output->writeln('<info>    @job\iterations : '.$job['iterations'].'</info>');
-        $output->writeln('<info>    @job\servers :</info>');
-        $output->writeln('');
-        foreach ($job['servers'] as $name => $server) {
-            $output->writeln('<comment>        '.$name.' - '.$server.'</comment>');
-        }
-        $output->writeln('');
-        $output->writeln('<info>    @job\description :</info>');
-        $output->writeln('');
-        $output->writeln('<comment>        '.$job['description'].'</comment>');
-        $output->writeln('');
+        $this->getContainer()->get('gearman.describer')->describeJob($output, $worker);
     }
 }

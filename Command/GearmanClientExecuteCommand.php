@@ -40,6 +40,6 @@ class GearmanClientExecuteCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $job = $input->getArgument('job');
-        $this->getContainer()->get('gearman')->doJob($job);
+        $this->getContainer()->get('gearman')->callJob($job);
     }
 }

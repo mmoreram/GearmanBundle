@@ -6,6 +6,7 @@ parameters:
     gearman.cache.loader.class: Mmoreramerino\GearmanBundle\Service\GearmanCacheLoader
     gearman.execute.job.class:  Mmoreramerino\GearmanBundle\Service\GearmanExecute
     gearman.settings.class:     Mmoreramerino\GearmanBundle\Service\GearmanSettings
+    gearman.describer.class:     Mmoreramerino\GearmanBundle\Service\GearmanDescriber
 services:
     gearman:
         class: %gearman.client.class%
@@ -27,5 +28,9 @@ services:
           - [setContainer,  [@service_container]]
     gearman.execute.job:
         class: %gearman.execute.job.class%
+        calls:
+          - [setContainer,  [@service_container]]
+    gearman.describer:
+        class: %gearman.describer.class%
         calls:
           - [setContainer,  [@service_container]]

@@ -4,6 +4,7 @@ namespace Mmoreramerino\GearmanBundle\Module;
 
 use Mmoreramerino\GearmanBundle\Driver\Gearman\Job;
 use Mmoreramerino\GearmanBundle\Driver\Gearman\Work;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Mmoreramerino\GearmanBundle\Exceptions\SettingValueMissingException;
 use Mmoreramerino\GearmanBundle\Exceptions\SettingValueBadFormatException;
 
@@ -12,7 +13,7 @@ use Mmoreramerino\GearmanBundle\Exceptions\SettingValueBadFormatException;
  *
  * @author Marc Morera <marc@ulabox.com>
  */
-class JobClass
+class JobClass extends ContainerAware
 {
     /**
      * Callable name for this job
@@ -68,6 +69,23 @@ class JobClass
         }
         $this->iterations = $iter;
 
+
+        if (null !== $settings['defaults']['method']) {
+            $defaultMethod = ($settings['defaults']['method']);
+
+            if (null !== $classAnnotation->defaultMethod) {
+                $defaultMethod = ($classAnnotation->defaultMethod);
+            }
+
+            if (null !== $methodAnnotation->defaultMethod) {
+                $defaultMethod = ($methodAnnotation->defaultMethod);
+            }
+        } else {
+            throw new SettingValueMissingException('defaults/method');
+        }
+
+        $this->defaultMethod = $defaultMethod;
+
         /**
          * Servers definition for job
          */
@@ -119,6 +137,7 @@ class JobClass
             'description'           =>  $this->description,
             'iterations'			=>  $this->iterations,
             'servers'               =>  $this->servers,
+            'defaultMethod'         =>  $this->defaultMethod,
         );
     }
 }

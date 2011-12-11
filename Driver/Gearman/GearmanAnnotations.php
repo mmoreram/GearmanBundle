@@ -41,6 +41,13 @@ final class Work extends Annotation
     public $servers = null;
 
     /**
+     * Default method to call for all jobs inside this work
+     *
+     * @var string
+     */
+    public $defaultMethod = null;
+
+    /**
      * Service typeof Class. If it's defined, object will be instanced throught service dependence injection.
      * Otherwise, class will be instance with new() method
      *
@@ -79,4 +86,11 @@ final class Job extends Annotation
      * @var mixed
      */
     public $servers = null;
+
+    /**
+     * Default method to call for this job
+     *
+     * @var string
+     */
+    public $defaultMethod = null;
 }
