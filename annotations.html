@@ -75,6 +75,51 @@
 					</pre>
 				</div>
 			</div>
+			<h1>Services</h1>
+			<p>Sometimes we define classes and methods, for example, extending ContainerAware. We must define these objects into our dependence injection config file as a service, adding construct methods. Well, we can also use them as a Job by defining the "service" annotation with the service name as value</p>
+
+			<div class="wp_syntax">
+	            <div class="code">
+	                <pre class="php">
+			        	<span class="kw2"># /Resources/config/services.yml</span><br />
+						bundles:<br />
+					  		&nbsp;&nbsp;&nbsp;&nbsp;Services:<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myServiceName:<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class: Mmoreramerino\MyBundle\Service\MyService<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calls:<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [setContainer,  [@service_container]]<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [anotherMethod,  []]<br />
+					</pre>
+				</div>
+			</div>
+			<p>In this case we cannot only define our method as a job, we have to tell GearmanBundle that this needs dependence injection and we must tell him how he can call this method. So the way is:</p>
+			<div class="wp_syntax">
+	        	<div class="code">
+	        		<pre class="php">
+	        			<span class="kw2">namespace</span> Mmoreramerino\GearmanBundle\Workers<span class="sy0">;</span>
+						<br /><br />
+						<span class="co4">/** @Gearman\Work(<strong>service="myServiceName"</strong>) */</span><br />
+						<span class="kw2">class</span> testWorker<br />
+						<span class="br0">{</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">/**<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;* Test method to run as a job<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;* @param \GearmanJob $job Object with job parameters<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;* @return boolean<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;* @Gearman\Job()<br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;*/</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">public</span> <span class="kw2">function</span> testA<span class="br0">(</span>\GearmanJob $job<span class="br0">)</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">{</span><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw1">echo</span> <span class="st_h">'Job testB done!'</span><span class="sy0"> . </span><span class="kw1">PHP_EOL</span><span class="sy0">;</span><br /><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw1">return true</span><span class="sy0">;</span><br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">}</span><br />
+						<span class="br0">}</span><br />
+					</pre>
+				</div>
+			</div>
+			<p>All annotations are available as the first case</p>
 			<p><a href="index.html">Index</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="settings.html">prev : Settings</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="subscribing-worker-jobs.html">next : Subscribing Worker Jobs</a></p>
        	</div>
     </body>
