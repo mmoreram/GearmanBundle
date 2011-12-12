@@ -1,1 +1,13 @@
-* Testings
+On this realase
+
+* Testings.
+* Worker execution with all jobs inside.
+* Description of job and worker with supervisord information and more.
+* Check documentation.
+
+
+* Close stable realase and add Tag.
+
+On next realase
+
+* Implement more features like tasks, status and more.
