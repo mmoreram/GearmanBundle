@@ -10,11 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
- * Gearman Job List Command class
+ * Gearman Job Execute Command class
  *
  * @author Marc Morera <marc@ulabox.com>
  */
-class GearmanJobListCommand extends ContainerAwareCommand
+class GearmanWorkerExecuteCommand extends ContainerAwareCommand
 {
     /**
      * Console Command configuration
@@ -22,8 +22,9 @@ class GearmanJobListCommand extends ContainerAwareCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('gearman:job:list')
-             ->setDescription('List all Gearman Jobs');
+        $this->setName('gearman:worker:execute')
+             ->setDescription('Execute one worker with all contained Jobs')
+             ->addArgument('worker', InputArgument::REQUIRED, 'work to execute');
     }
 
     /**
@@ -38,20 +39,16 @@ class GearmanJobListCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $workers = $this->getContainer()->get('gearman')->getWorkers();
-        $it = 1;
-        if (is_array($workers)) {
-
-            foreach ($workers as $worker) {
-                $output->writeln('<info>    @'.$worker['className'].'</info>');
-                $output->writeln('<info></info>');
-                foreach ($worker['jobs'] as $job) {
-                    $output->writeln('<comment>      - #'.$it++.'</comment>');
-                    $output->writeln('<comment>          name: '.$job['methodName'].'</comment>');
-                    $output->writeln('<comment>          callablename:</comment><info> '.$job['realCallableName'].'</info>');
-                }
-                $output->writeln('');
-            }
+        $dialog = $this->getHelperSet()->get('dialog');
+        if (!$input->getOption('no-interaction') && !$dialog->askConfirmation($output, '<question>This will execute asked worker?</question>', 'y')) {
+            return;
         }
+        $output->writeln('<info>loading...</info>');
+
+        $worker = $input->getArgument('worker');
+        $workerStruct = $this->getContainer()->get('gearman')->getWorker($worker);
+        $this->getContainer()->get('gearman.describer')->describeWorker($output, $workerStruct, true);
+        $output->writeln('<info>loaded. Ctrl+C to break</info>');
+        $this->getContainer()->get('gearman.execute')->executeWorker($worker);
     }
 }

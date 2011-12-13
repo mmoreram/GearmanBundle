@@ -10,11 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
- * Gearman Job Execute Command class
+ * Gearman Job Describe Command class
  *
  * @author Marc Morera <marc@ulabox.com>
  */
-class GearmanJobExecuteCommand extends ContainerAwareCommand
+class GearmanWorkerDescribeCommand extends ContainerAwareCommand
 {
     /**
      * Console Command configuration
@@ -22,9 +22,9 @@ class GearmanJobExecuteCommand extends ContainerAwareCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('gearman:job:execute')
-             ->setDescription('Execute one job of worker')
-             ->addArgument('job', InputArgument::REQUIRED, 'job to execute');
+        $this->setName('gearman:worker:describe')
+             ->setDescription('Describe given worker')
+             ->addArgument('worker', InputArgument::REQUIRED, 'worker to describe');
     }
 
     /**
@@ -39,16 +39,8 @@ class GearmanJobExecuteCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getHelperSet()->get('dialog');
-        if (!$input->getOption('no-interaction') && !$dialog->askConfirmation($output, '<question>This will execute asked worker?</question>', 'y')) {
-            return;
-        }
-        $output->writeln('<info>loading...</info>');
-
-        $job = $input->getArgument('job');
-        $worker = $this->getContainer()->get('gearman')->getWorker($job);
-        $this->getContainer()->get('gearman.describer')->describeJob($output, $worker);
-        $output->writeln('<info>loaded. Ctrl+C to break</info>');
-        $this->getContainer()->get('gearman.execute.job')->executeJob($job);
+        $worker = $input->getArgument('worker');
+        $worker = $this->getContainer()->get('gearman')->getWorker($worker);
+        $this->getContainer()->get('gearman.describer')->describeWorker($output, $worker);
     }
 }

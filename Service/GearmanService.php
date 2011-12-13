@@ -4,6 +4,7 @@ namespace Mmoreramerino\GearmanBundle\Service;
 
 use Mmoreramerino\GearmanBundle\Service\GearmanCache as Cache;
 use Mmoreramerino\GearmanBundle\Exceptions\JobDoesNotExistException;
+use Mmoreramerino\GearmanBundle\Exceptions\WorkerDoesNotExistException;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -52,10 +53,10 @@ class GearmanService extends GearmanSettings
      * If is not found, throws JobDoesNotExistException Exception
      *
      * @param string $jobName Name of job
-     * 
+     *
      * @return Array
      */
-    public function getWorker($jobName)
+    public function getJob($jobName)
     {
         $this->setWorkers();
 
@@ -71,5 +72,26 @@ class GearmanService extends GearmanSettings
         }
 
         throw new JobDoesNotExistException($jobName);
+    }
+
+    /**
+     * Return worker with $workerName as name and all its jobs
+     * If is not found, throws WorkerDoesNotExistException Exception
+     *
+     * @param string $workerName Name of worker
+     *
+     * @return Array
+     */
+    public function getWorker($workerName)
+    {
+        $this->setWorkers();
+
+        foreach ($this->workers as $worker) {
+            if ($workerName === $worker['callableName']) {
+                return $worker;
+            }
+        }
+
+        throw new WorkerDoesNotExistException($workerName);
     }
 }

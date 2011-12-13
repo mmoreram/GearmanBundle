@@ -19,7 +19,7 @@ class GearmanExecute extends GearmanService
      */
     public function executeJob($jobName)
     {
-        $worker = $this->getWorker($jobName);
+        $worker = $this->getJob($jobName);
 
         if (false !== $worker) {
             $this->callJob($worker);
@@ -34,9 +34,20 @@ class GearmanExecute extends GearmanService
     private function callJob(Array $worker)
     {
         $gmworker= new \GearmanWorker();
-        $job = $worker['job'];
+        if (isset($worker['job'])) {
 
-        $this->addServers($gmworker, $job);
+            $jobs = array($worker['job']);
+            $iterations = isset($worker['job']['iterations']) ? (int) ($worker['job']['iterations']) : 0;
+            $this->addServers($gmworker, $worker['job']['servers']);
+
+        } else {
+
+            $jobs = $worker['jobs'];
+            $iterations = isset($worker['iterations']) ? (int) ($worker['iterations']) : 0;
+            $this->addServers($gmworker, $worker['servers']);
+        }
+
+
 
 
         if (null !== $worker['service']) {
@@ -45,9 +56,10 @@ class GearmanExecute extends GearmanService
             $objInstance = new $worker['className'];
         }
 
-        $gmworker->addFunction($job['realCallableName'], array($objInstance, $job['methodName']));
+        foreach ($jobs as $job) {
+            $gmworker->addFunction($job['realCallableName'], array($objInstance, $job['methodName']));
+        }
 
-        $iterations = isset($job['iterations']) ? (int) ($job['iterations']) : 0;
         $shouldStop = ($iterations > 0) ? true : false;
 
         while ($gmworker->work()) {
@@ -70,18 +82,32 @@ class GearmanExecute extends GearmanService
      * If any is defined, performs default method
      *
      * @param \GearmanWorker $gmworker Worker to perform configuration
-     * @param array          $job      Job to check properties
+     * @param array          $servers  Servers array
      */
-    private function addServers(\GearmanWorker $gmworker, Array $job)
+    private function addServers(\GearmanWorker $gmworker, Array $servers)
     {
-        if (is_array($job['servers'])) {
+        if (!empty($servers)) {
 
-            foreach ($job['servers'] as $server) {
+            foreach ($servers as $server) {
                 list($addr, $port) = explode(':', $server, 2);
                 $gmworker->addServer($addr, $port);
             }
         } else {
             $gmworker->addServer();
+        }
+    }
+
+    /**
+     * Executes a worker given a workerName subscribing all his jobs inside and given settings and annotations of worker and jobs
+     *
+     * @param string $workerName Name of worker to be executed
+     */
+    public function executeWorker($workerName)
+    {
+        $worker = $this->getWorker($workerName);
+
+        if (false !== $worker) {
+            $this->callJob($worker);
         }
     }
 }

@@ -47,7 +47,7 @@ class GearmanClient extends GearmanService implements GearmanInterface
      */
      public function callJob($name, $params = array())
      {
-        $worker = $this->getWorker($name);
+        $worker = $this->getJob($name);
         $methodCallable = $worker['job']['defaultMethod'] . 'Job';
 
         if (!method_exists($this, $methodCallable)) {
@@ -160,7 +160,7 @@ class GearmanClient extends GearmanService implements GearmanInterface
      */
     private function enqueue($jobName, $params, $method)
     {
-        $worker = $this->getWorker($jobName);
+        $worker = $this->getJob($jobName);
         if (false !== $worker) {
             return $this->doEnqueue($worker, $params, $method);
         }

@@ -24,7 +24,7 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
         parent::configure();
         $this->setName('gearman:job:describe')
              ->setDescription('Describe given job')
-             ->addArgument('job', InputArgument::REQUIRED, 'job to execute');
+             ->addArgument('job', InputArgument::REQUIRED, 'job to describe');
     }
 
     /**
@@ -40,7 +40,7 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $job = $input->getArgument('job');
-        $worker = $this->getContainer()->get('gearman')->getWorker($job);
-        $this->getContainer()->get('gearman.describer')->describeJob($output, $worker);
+        $job = $this->getContainer()->get('gearman')->getJob($job);
+        $this->getContainer()->get('gearman.describer')->describeJob($output, $job);
     }
 }
