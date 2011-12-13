@@ -11,7 +11,7 @@ use Mmoreramerino\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
  *
  * @author Marc Morera <marc@ulabox.com>
  */
-class GearmanClient extends GearmanService implements GearmanInterface
+class GearmanClient extends GearmanService
 {
 
     /**
@@ -58,6 +58,21 @@ class GearmanClient extends GearmanService implements GearmanInterface
      }
 
 
+    /**
+     * Runs a single task and returns a string representation of the result.
+     * It is up to the GearmanClient and GearmanWorker to agree on the format of the result.
+     * The GearmanClient::do() method is deprecated as of pecl/gearman 1.0.0. Use GearmanClient::doNormal().
+     *
+     * @param string $name   A GearmanBundle registered function the worker is to execute
+     * @param Mixed  $params Parameters to send to job
+     *
+     * @return string A string representing the results of running a task.
+     * @depracated
+     */
+    public function doJob($name, $params = array())
+    {
+        return $this->doNormalJob($name, $params);
+    }
 
     /**
      * Runs a single task and returns a string representation of the result.
@@ -68,9 +83,9 @@ class GearmanClient extends GearmanService implements GearmanInterface
      *
      * @return string A string representing the results of running a task.
      */
-    public function doJob($name, $params = array())
+    public function doNormalJob($name, $params = array())
     {
-        return $this->enqueue($name, $params, 'do');
+        return $this->enqueue($name, $params, 'doNormal');
     }
 
 

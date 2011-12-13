@@ -10,11 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
- * Gearman Worker Execute Command class
+ * Gearman Job Execute Command class
  *
  * @author Marc Morera <marc@ulabox.com>
  */
-class GearmanWorkerExecuteCommand extends ContainerAwareCommand
+class GearmanJobExecuteCommand extends ContainerAwareCommand
 {
     /**
      * Console Command configuration
@@ -22,9 +22,9 @@ class GearmanWorkerExecuteCommand extends ContainerAwareCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('gearman:worker:execute')
-             ->setDescription('Execute one worker with all contained Jobs')
-             ->addArgument('worker', InputArgument::REQUIRED, 'work to execute');
+        $this->setName('gearman:job:execute')
+             ->setDescription('Execute one single job')
+             ->addArgument('job', InputArgument::REQUIRED, 'job to execute');
     }
 
     /**
@@ -40,15 +40,15 @@ class GearmanWorkerExecuteCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dialog = $this->getHelperSet()->get('dialog');
-        if (!$input->getOption('no-interaction') && !$dialog->askConfirmation($output, '<question>This will execute asked worker with all its jobs?</question>', 'y')) {
+        if (!$input->getOption('no-interaction') && !$dialog->askConfirmation($output, '<question>This will execute asked job?</question>', 'y')) {
             return;
         }
         $output->writeln('<info>loading...</info>');
 
-        $worker = $input->getArgument('worker');
-        $workerStruct = $this->getContainer()->get('gearman')->getWorker($worker);
-        $this->getContainer()->get('gearman.describer')->describeWorker($output, $workerStruct, true);
+        $job = $input->getArgument('job');
+        $jobStruct = $this->getContainer()->get('gearman')->getJob($job);
+        $this->getContainer()->get('gearman.describer')->describeJob($output, $jobStruct, true);
         $output->writeln('<info>loaded. Ctrl+C to break</info>');
-        $this->getContainer()->get('gearman.execute')->executeWorker($worker);
+        $this->getContainer()->get('gearman.execute')->executeJob($job);
     }
 }

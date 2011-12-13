@@ -63,7 +63,11 @@ class WorkerClass
         $this->className = $reflectionClass->getName();
         $this->service = $classAnnotation->service;
 
-        if (null !== $settings['defaults']['iterations']) {
+        if (!isset($settings['defaults'])) {
+            throw new SettingValueMissingException('defaults');
+        }
+
+        if (isset($settings['defaults']['iterations']) && null !== $settings['defaults']['iterations']) {
             $iter = (int) ($settings['defaults']['iterations']);
 
             if (null !== $classAnnotation->iterations) {
@@ -78,7 +82,7 @@ class WorkerClass
          * Servers definition for worker
          */
         $servers = array();
-        if (null !== $settings['defaults']['servers']) {
+        if (isset($settings['defaults']['servers']) && null !== $settings['defaults']['servers']) {
             if (is_array($settings['defaults']['servers'])) {
 
                 foreach ($settings['defaults']['servers'] as $name => $server) {

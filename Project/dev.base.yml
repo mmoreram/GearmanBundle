@@ -26,7 +26,7 @@ defaults:
     localhost:
       hostname: 127.0.0.1
       port: 4730
-  
+
   # Default number of executions before job dies.
   # If annotations defined, will be overwritten
   iterations: 150

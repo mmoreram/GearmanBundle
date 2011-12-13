@@ -6,15 +6,22 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputDefinition;
+use Mmoreramerino\GearmanBundle\Service\GearmanCache;
 use Symfony\Component\Console\Output\OutputInterface;
+use Mmoreramerino\GearmanBundle\Service\GearmanSettings;
+use Mmoreramerino\GearmanBundle\Module\GearmanBaseBundle;
+use Mmoreramerino\GearmanBundle\Service\GearmanCacheLoader;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Mmoreramerino\GearmanBundle\Exceptions\GearmanNotInstalledException;
+use Mmoreramerino\GearmanBundle\Exceptions\NoSettingsFileExistsException;
+
 
 /**
- * Gearman Worker Execute Command class
+ * Warm ups all cache data
  *
  * @author Marc Morera <marc@ulabox.com>
  */
-class GearmanWorkerExecuteCommand extends ContainerAwareCommand
+class GearmanCacheClearCommand extends ContainerAwareCommand
 {
     /**
      * Console Command configuration
@@ -22,9 +29,9 @@ class GearmanWorkerExecuteCommand extends ContainerAwareCommand
     protected function configure()
     {
         parent::configure();
-        $this->setName('gearman:worker:execute')
-             ->setDescription('Execute one worker with all contained Jobs')
-             ->addArgument('worker', InputArgument::REQUIRED, 'work to execute');
+        $this   ->setName('gearman:cache:clear')
+                ->setAliases(array('cache:gearman:clear'))
+                ->setDescription('Clears gearman cache data on current environment');
     }
 
     /**
@@ -39,16 +46,8 @@ class GearmanWorkerExecuteCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getHelperSet()->get('dialog');
-        if (!$input->getOption('no-interaction') && !$dialog->askConfirmation($output, '<question>This will execute asked worker with all its jobs?</question>', 'y')) {
-            return;
-        }
-        $output->writeln('<info>loading...</info>');
-
-        $worker = $input->getArgument('worker');
-        $workerStruct = $this->getContainer()->get('gearman')->getWorker($worker);
-        $this->getContainer()->get('gearman.describer')->describeWorker($output, $workerStruct, true);
-        $output->writeln('<info>loaded. Ctrl+C to break</info>');
-        $this->getContainer()->get('gearman.execute')->executeWorker($worker);
+        $output->writeln('Clearing the cache for the ' . $this->getContainer()->get('kernel')->getEnvironment() . ' environment');
+        $gearmanCache = $this->getContainer()->get('gearman.cache');
+        $gearmanCache->emptyCache();
     }
 }

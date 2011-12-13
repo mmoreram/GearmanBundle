@@ -54,7 +54,11 @@ class JobClass extends ContainerAware
                                     $methodAnnotation->description :
                                     'No description is defined';
 
-        if (null !== $settings['defaults']['iterations']) {
+        if (!isset($settings['defaults'])) {
+            throw new SettingValueMissingException('defaults');
+        }
+
+        if (isset($settings['defaults']['iterations']) && null !== $settings['defaults']['iterations']) {
             $iter = (int) ($settings['defaults']['iterations']);
 
             if (null !== $classAnnotation->iterations) {
@@ -70,7 +74,7 @@ class JobClass extends ContainerAware
         $this->iterations = $iter;
 
 
-        if (null !== $settings['defaults']['method']) {
+        if (isset($settings['defaults']['method']) && null !== $settings['defaults']['method']) {
             $defaultMethod = ($settings['defaults']['method']);
 
             if (null !== $classAnnotation->defaultMethod) {
@@ -90,7 +94,7 @@ class JobClass extends ContainerAware
          * Servers definition for job
          */
         $servers = array();
-        if (null !== $settings['defaults']['servers']) {
+        if (isset($settings['defaults']['servers']) && null !== $settings['defaults']['servers']) {
             if (is_array($settings['defaults']['servers'])) {
 
                 foreach ($settings['defaults']['servers'] as $name => $server) {
