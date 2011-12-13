@@ -3,8 +3,8 @@
     <body>
         <div style="width:850px; margin:0 auto; position:relative">
             <h1>Installing GearmanBundle</h1>
-            <p>You have two options to install it in Symfony2 framework: using vendors or by repository. Both options are based on the same basics, but one requires a little more configuration.</p>
-            <p>On the one hand we can set ourselves the repository as follows</p>
+            <p>You have two options to install GearmanBundle in Symfony2 framework: using vendors or by project clone. Both options are based on the same basics, but one requires a little more configuration.</p>
+            <p>On one hand, we can set ourselves the repository as follows</p>
             <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">
@@ -13,7 +13,7 @@
                     </pre>
                 </div>
             </div>
-            <p>Moreover, you can include this repository in the list of vendors and reinstall again. You must edit your deps file in your project root</p>
+            <p>On the other hand, you can include this repository on the list of vendors and reinstall it again. You must edit your "deps" file in your project root</p>
             <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">
@@ -24,7 +24,7 @@
                     </pre>
                 </div>
             </div>
-            <p>When you have registered the bundle and you're in your project, you just need to instantiate your bundle and add a line in the autoload.</p>
+            <p>When you have registered the bundle and you're in your project, you just need to instantiate your bundle and to add a line in the autoload.</p>
             <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">
@@ -43,7 +43,7 @@
                     </pre>
                 </div>
             </div>
-            <p>You also need to update autoload file, to be symfony2 able to find gearman bundle.
+            <p>You also need to update autoload file, to make symfony2 able to find GearmanBundle.
             <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">
@@ -61,7 +61,7 @@
                     </pre>
                 </div>
             </div>
-            <p>Once it's all done, you can check if GearmanBundle is already installed by checking app/console checking command</p>
+            <p>Once all this is done, you can check if GearmanBundle is already installed by running check command</p>
             <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">

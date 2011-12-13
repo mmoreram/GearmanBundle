@@ -4,32 +4,50 @@
         <div style="width:850px; margin:0 auto; position:relative">
 	        <h1>Subscribing worker Jobs</h1>
 	        <p>Once you have setted all workers and jobs, you have a way of execute one job, allowing clients to use them.</p>
-	        <p>GearmanBundle  let you know all about available jobs</p>
+	        <p>GearmanBundle let you know all about available workers and their jobs.</p>
 	        <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">
-                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:job:list</span>
+                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:worker:list</span>
                     </pre>
                 </div>
             </div>
-            <p>Also you can describe one specific job by using his callable name</p>
+            <p>Also you can describe one specific worker by using his callable name ( you can find this value on describe command ) ...</p>
             <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">
-                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:job:describe JobName</span>
+                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:worker:describe workerCallableName</span>
                     </pre>
                 </div>
             </div>
-            <p>Finally you can subscribe one Job using GearmanBundle. First you will see Job description and then Job will be available for clients</p>
+            <p>... or describe one specific job inside a worker. GearmanBundle also will provide you worker information.</p>
             <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">
-                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:job:execute JobName</span>
+                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:job:describe JobCallableName</span>
                     </pre>
                 </div>
             </div>
+
+            <p>Once you know about workers and jobs, you can subscribe all jobs inside one worker executing worker with GearmanBundle. On description you will find also Supervisord information to execute it. Iterations and servers information is defined by settings or, overwritting them, worker annotations. Iterations refers to the sum of all scripts, if not 0.</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:worker:describe workerCallableName</span>
+                    </pre>
+                </div>
+            </div>
+            <p>Finally you can subscribe one single job, by creatting one temporary worker just for one job instance. Iterations and the servers will be picked to worker which they belong, or overwriting them, from their Job annotations. You can check this information by describing the job.</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:job:execute JobCallableName</span>
+                    </pre>
+                </div>
+            </div>
+
             <p>Remember that one job setting is called iterations. When job is used more than $iterations times, Job subscription will be killed, so you will have to alive it again. Thus you can empty memory periodically.</p>
-            <p>You can use <a target="_blank" href="http://supervisord.org/">Supervisor</a> to keep alive all process and to reactivate one killed process</p>
+            <p>You can use <a target="_blank" href="http://supervisord.org/">Supervisor</a> to keep alive all process and to reactivate one killed process.</p>
 
             <p><a href="index.html">Index</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="settings.html">prev : Annotations</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="requesting-client-jobs.html">next : Requesting Client Jobs</a></p>
 	    </div>
