@@ -41,6 +41,23 @@
 					</pre>
 				</div>
 			</div>
+			<h1>Cache</h1>
+			<p>GearmanBundle saves all information on cache in all environments except development. You can force cache to clear or to warmup with thwo built commands.</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:cache:clear</span>
+                    </pre>
+                </div>
+            </div>
+            <p>Warmup rebuilds cache with all workers and jobs updated. Remember to run it in every production deployment</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:cache:warmup</span>
+                    </pre>
+                </div>
+            </div>
 			<p><a href="index.html">Index</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="installation.html">prev : Installation</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="annotations.html">next : Annotations</a></p>
        	</div>
     </body>
