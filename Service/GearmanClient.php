@@ -71,7 +71,7 @@ class GearmanClient extends GearmanService
      */
     public function doJob($name, $params = array())
     {
-        return $this->doNormalJob($name, $params);
+        return $this->enqueue($name, $params, 'do');
     }
 
     /**
