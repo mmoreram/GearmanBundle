@@ -3,8 +3,8 @@
     <body>
         <div style="width:850px; margin:0 auto; position:relative">
 	        <h1>Annotations</h1>
-	        <p>This Bundle allows you to configure whatever as a Job. It provides you an easy way to execute it with, for example, Supervisor and provides you a very easy way of calling in Symfony2 environment.</p>
-			<p>Job annotations overwrite <strong>always</strong> work annotations, and work annotations <strong>always</strong> overwrite environment settings</p>
+	        <p>This Bundle allows you to configure whatever as a Job. It provides you an easy way to execute it with Supervisor, for example. Moreover, it let you call client methods in Symfony2 environment in a really simple and practical way.</p>
+			<p>Job annotations <strong>always</strong> overwrite work annotations, and work annotations <strong>always</strong> overwrite environment settings</p>
 	        <div class="wp_syntax">
 	        	<div class="code">
 	        		<pre class="php">
@@ -76,7 +76,7 @@
 				</div>
 			</div>
 			<h1>Services</h1>
-			<p>Sometimes we define classes and methods, for example, extending ContainerAware. We must define these objects into our dependence injection config file as a service, adding construct methods. Well, we can also use them as a Job by defining the "service" annotation with the service name as value</p>
+			<p>Sometimes we define classes and methods, for instance, extending ContainerAware. We must define these objects in our dependence injection config file as a service adding construct methods. Furthermore, we can also use them as a Job just defining the "service" annotation with the service name as value</p>
 
 			<div class="wp_syntax">
 	            <div class="code">
@@ -92,7 +92,7 @@
 					</pre>
 				</div>
 			</div>
-			<p>In this case we cannot only define our method as a job, we have to tell GearmanBundle that this needs dependence injection and we must tell him how he can call this method. So the way is:</p>
+			<p>In this case we cannot only define our method as a job, we have to tell GearmanBundle that this needs dependence injection and we must let it know how it can call this method. We can do it this way:</p>
 			<div class="wp_syntax">
 	        	<div class="code">
 	        		<pre class="php">
@@ -119,7 +119,7 @@
 					</pre>
 				</div>
 			</div>
-			<p>All annotations are available as the first case</p>
+			<p>All annotations are available as well as in the first case.</p>
 			<p><a href="index.html">Index</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="settings.html">prev : Settings</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="subscribing-worker-jobs.html">next : Subscribing Worker Jobs</a></p>
        	</div>
     </body>
