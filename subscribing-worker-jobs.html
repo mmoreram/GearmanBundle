@@ -3,7 +3,7 @@
     <body>
         <div style="width:850px; margin:0 auto; position:relative">
 	        <h1>Subscribing worker Jobs</h1>
-	        <p>Once you have setted all workers and jobs, you have a way of execute one job, allowing clients to use them.</p>
+	        <p>Once you have set all workers and jobs, you will have a way to execute one job, allowing clients to use them.</p>
 	        <p>GearmanBundle let you know all about available workers and their jobs.</p>
 	        <div class="wp_syntax">
                 <div class="code">
@@ -12,7 +12,7 @@
                     </pre>
                 </div>
             </div>
-            <p>Also you can describe one specific worker by using his callable name ( you can find this value on describe command ) ...</p>
+            <p>You can also describe one specific worker by using its callable name ( you can find this value on 'describe' command ) ...</p>
             <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">
@@ -20,7 +20,7 @@
                     </pre>
                 </div>
             </div>
-            <p>... or describe one specific job inside a worker. GearmanBundle also will provide you worker information.</p>
+            <p>... or describe one specific job inside a worker. GearmanBundle will provide you all worker information, as well.</p>
             <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">
@@ -29,7 +29,7 @@
                 </div>
             </div>
 
-            <p>Once you know about workers and jobs, you can subscribe all jobs inside one worker executing worker with GearmanBundle. On description you will find also Supervisord information to execute it. Iterations and servers information is defined by settings or, overwritting them, worker annotations. Iterations refers to the sum of all scripts, if not 0.</p>
+            <p>Once you know about the workers and the jobs, you can subscribe all the jobs inside one worker executing that worker with GearmanBundle. In the description you will also find Supervisord information to execute it. Iterations and servers information is defined by settings or, overwritting them, worker annotations. Iterations refers to the additions of all scripts, if not 0.</p>
             <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">
@@ -37,7 +37,7 @@
                     </pre>
                 </div>
             </div>
-            <p>Finally you can subscribe one single job, by creatting one temporary worker just for one job instance. Iterations and the servers will be picked to worker which they belong, or overwriting them, from their Job annotations. You can check this information by describing the job.</p>
+            <p>Finally, you can subscribe one single job by creating one temporary worker just for one job instance. The iterations and the servers will be picked to the worker they belong, or overwriting them, to their Job annotations. You can check this information by describing the job.</p>
             <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">
@@ -46,8 +46,8 @@
                 </div>
             </div>
 
-            <p>Remember that one job setting is called iterations. When job is used more than $iterations times, Job subscription will be killed, so you will have to alive it again. Thus you can empty memory periodically.</p>
-            <p>You can use <a target="_blank" href="http://supervisord.org/">Supervisor</a> to keep alive all process and to reactivate one killed process.</p>
+            <p>When job is used more than $iterations times, Job subscription srcipt will be killed, so you will have to alive it again. For this reason, it is advisable to empty the memory periodically.</p>
+            <p>You can use <a target="_blank" href="http://supervisord.org/">Supervisor</a> to keep alive all the process and to reactivate one killed process.</p>
 
             <p><a href="index.html">Index</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="settings.html">prev : Annotations</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="requesting-client-jobs.html">next : Requesting Client Jobs</a></p>
 	    </div>
