@@ -42,15 +42,16 @@
                         <span class="co4">/**<br />
                         &nbsp;* We do a simple call of a Job named "MmoreramerinoGearmanBundleWorkers~testB"<br />
                         &nbsp;*/</span><br /><br />
-                        <span class="br0">$gearman</span><span class="sy0">-&gt;</span>addTask(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~testB'</span>)<br />
+                        <span class="br0">$gearman</span><span class="sy0">-&gt;</span>addTask(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~test'</span>)<br />
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">-&gt;</span>addLowTask(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~testB'</span>)<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">-&gt;</span>addHighTask(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~testB'</span>)<span class="sy0">;</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">-&gt;</span>addHighBackgroundTask(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~testB'</span>)<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">-&gt;</span>runTasks()<span class="sy0">;</span><br />
 
                         </span>
                     </pre>
                 </div>
             </div>
-            <p>Right now only few utilities are available</p>
+            <p>Right now only few utilities are available. Be carefull of having enough active workers to do all tasks in parallel. Otherwise script will stay waiting for non-resolved task.</p>
             <div class="wp_syntax">
                 <div class="code">
                     <pre class="php">
@@ -61,13 +62,11 @@
                             <li><span class="kw2">addTaskBackground</span> : Add a background task to be run in parallel</li>
                             <li><span class="kw2">addTaskHighBackground</span> : Add a high priority background task to be run in parallel</li>
                             <li><span class="kw2">addTaskLowBackground</span> : Add a low priority background task to be run in parallel</li>
-                            <li><span class="kw2">callTask</span> : Adds a task with default method<ul><li>Defined in settings, work annotations or job annotations</ul></li></li>
                             <li><span class="kw2">runTasks</span> : Run a list of tasks in parallel</li>
                         </ul>
                     </pre>
                 </div>
             </div>
-            <p>By reading <a href="http://gearman.org/">Gearman documentation</a> you can check the method's returning data</p>
             <p><a href="index.html">Index</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="subscribing-worker-jobs.html">prev : Subscribing Worker Jobs</p>
         </div>
     </body>
