@@ -10,7 +10,8 @@
                         <span class="co4">/**<br />
                         &nbsp;* We do a simple call of a Job named "MmoreramerinoGearmanBundleWorkers~testB"<br />
                         &nbsp;*/</span><br /><br />
-                        <span class="br0">$this<span class="sy0">-&gt;</span>getContainer()<span class="sy0">-&gt;</span>get(<span class="st_h">'gearman'</span>)<span class="sy0">-&gt;</span>doJob('MmoreramerinoGearmanBundleWorkers~testB')<span class="sy0">;</span></span>
+                        <span class="br0">$gearman</span>&nbsp;<span class="sy0">=</span>&nbsp;<span class="br0">$this<span class="sy0">-&gt;</span>getContainer()<span class="sy0">-&gt;</span>get(<span class="st_h">'gearman'</span>)<span class="sy0"><span class="sy0">;</span><br />
+                        <span class="br0">$gearman</span>-&gt;</span>doJob(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~testB'</span>)<span class="sy0">;</span></span>
                     </pre>
                 </div>
             </div>
@@ -27,6 +28,41 @@
                             <li><span class="kw2">doHighBackgroundJob</span> : Call the job without waitting for result on High Preference.<ul><li>It recieves a job handle for submitted job</ul></li></li>
                             <li><span class="kw2">doLowBackgroundJob</span> : Call the job without waitting for result on Low Preference.<ul><li>It recieves a job handle for submitted job</ul></li></li>
                             <li><span class="kw2">callJob</span> : Call the job with default method<ul><li>Defined in settings, work annotations or job annotations</ul></li></li>
+                        </ul>
+                    </pre>
+                </div>
+            </div>
+            <p>By reading <a href="http://gearman.org/">Gearman documentation</a> you can check the method returning data</p>
+
+            <h1>Tasks</h1>
+            <p>You can also call tasks and run them all</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="co4">/**<br />
+                        &nbsp;* We do a simple call of a Job named "MmoreramerinoGearmanBundleWorkers~testB"<br />
+                        &nbsp;*/</span><br /><br />
+                        <span class="br0">$gearman</span><span class="sy0">-&gt;</span>addTask(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~testB'</span>)<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">-&gt;</span>addLowTask(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~testB'</span>)<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">-&gt;</span>addHighTask(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~testB'</span>)<span class="sy0">;</span><br />
+
+                        </span>
+                    </pre>
+                </div>
+            </div>
+            <p>Right now only few utilities are available</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <ul>
+                            <li><span class="kw2">addTask</span> : Adds a task to be run in parallel with other tasks</li>
+                            <li><span class="kw2">addTaskHigh</span> : Add a high priority task to run in parallel</li>
+                            <li><span class="kw2">addTaskLow</span> : Add a low priority task to run in parallel</li>
+                            <li><span class="kw2">addTaskBackground</span> : Add a background task to be run in parallel</li>
+                            <li><span class="kw2">addTaskHighBackground</span> : Add a high priority background task to be run in parallel</li>
+                            <li><span class="kw2">addTaskLowBackground</span> : Add a low priority background task to be run in parallel</li>
+                            <li><span class="kw2">callTask</span> : Adds a task with default method<ul><li>Defined in settings, work annotations or job annotations</ul></li></li>
+                            <li><span class="kw2">runTasks</span> : Run a list of tasks in parallel</li>
                         </ul>
                     </pre>
                 </div>
