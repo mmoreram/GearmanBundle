@@ -24,7 +24,8 @@ class GearmanWorkerExecuteCommand extends ContainerAwareCommand
         parent::configure();
         $this->setName('gearman:worker:execute')
              ->setDescription('Execute one worker with all contained Jobs')
-             ->addArgument('worker', InputArgument::REQUIRED, 'work to execute');
+             ->addArgument('worker', InputArgument::REQUIRED, 'work to execute')
+             ->addOption('no-description', null, InputOption::VALUE_NONE, 'Don\'t print worker description');
     }
 
     /**
@@ -43,12 +44,16 @@ class GearmanWorkerExecuteCommand extends ContainerAwareCommand
         if (!$input->getOption('no-interaction') && !$dialog->askConfirmation($output, '<question>This will execute asked worker with all its jobs?</question>', 'y')) {
             return;
         }
-        $output->writeln('<info>loading...</info>');
+        $output->writeln(sprintf('<info>[%s] loading...</info>', date('Y-m-d H:i:s')));
 
         $worker = $input->getArgument('worker');
         $workerStruct = $this->getContainer()->get('gearman')->getWorker($worker);
-        $this->getContainer()->get('gearman.describer')->describeWorker($output, $workerStruct, true);
-        $output->writeln('<info>loaded. Ctrl+C to break</info>');
+
+        if (!$input->getOption('no-description')) {
+            $this->getContainer()->get('gearman.describer')->describeWorker($output, $workerStruct, true);
+        }
+
+        $output->writeln(sprintf('<info>[%s] loaded. Ctrl+C to break</info>', date('Y-m-d H:i:s')));
         $this->getContainer()->get('gearman.execute')->executeWorker($worker);
     }
 }

@@ -24,7 +24,8 @@ class GearmanJobExecuteCommand extends ContainerAwareCommand
         parent::configure();
         $this->setName('gearman:job:execute')
              ->setDescription('Execute one single job')
-             ->addArgument('job', InputArgument::REQUIRED, 'job to execute');
+             ->addArgument('job', InputArgument::REQUIRED, 'job to execute')
+            ->addOption('no-description', null, InputOption::VALUE_NONE, 'Don\'t print job description');
     }
 
     /**
@@ -43,12 +44,16 @@ class GearmanJobExecuteCommand extends ContainerAwareCommand
         if (!$input->getOption('no-interaction') && !$dialog->askConfirmation($output, '<question>This will execute asked job?</question>', 'y')) {
             return;
         }
-        $output->writeln('<info>loading...</info>');
+        $output->writeln(sprintf('<info>[%s] loading...</info>', date('Y-m-d H:i:s')));
 
         $job = $input->getArgument('job');
         $jobStruct = $this->getContainer()->get('gearman')->getJob($job);
-        $this->getContainer()->get('gearman.describer')->describeJob($output, $jobStruct, true);
-        $output->writeln('<info>loaded. Ctrl+C to break</info>');
+
+        if (!$input->getOption('no-description')) {
+            $this->getContainer()->get('gearman.describer')->describeJob($output, $jobStruct, true);
+        }
+
+        $output->writeln(sprintf('<info>[%s] loaded. Ctrl+C to break</info>', date('Y-m-d H:i:s')));
         $this->getContainer()->get('gearman.execute')->executeJob($job);
     }
 }
