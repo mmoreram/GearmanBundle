@@ -25,7 +25,7 @@ class GearmanJobExecuteCommand extends ContainerAwareCommand
         $this->setName('gearman:job:execute')
              ->setDescription('Execute one single job')
              ->addArgument('job', InputArgument::REQUIRED, 'job to execute')
-            ->addOption('no-description', null, InputOption::VALUE_NONE, 'Don\'t print job description');
+             ->addOption('no-description', null, InputOption::VALUE_NONE, 'Don\'t print job description');
     }
 
     /**
