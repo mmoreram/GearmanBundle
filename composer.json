@@ -2,13 +2,25 @@
     "name": "Mmoreramerino/gearman-bundle",
     "description": "Adds gearman support",
     "keywords": ["gearman"],
+    "homepage": "http://mmoreramerino.github.com/GearmanBundle/",
     "type": "symfony-bundle",
     "license": "Apache",
     "authors": [
         {
             "name": "Marc Morera",
             "email": "marc@ulabox.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https://github.com/mmoreramerino/GearmanBundle/contributors"
         }
     ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": "2.0.*"
+    },
+    "autoload": {
+        "psr-0": { "Mmoreramerino\\GearmanBundle": "" }
+    },
     "target-dir": "Mmoreramerino/GearmanBundle"
 }
