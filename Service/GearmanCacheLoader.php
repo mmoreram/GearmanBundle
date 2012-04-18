@@ -53,12 +53,22 @@ class GearmanCacheLoader extends ContainerAware
      */
     public function load(GearmanCache $cache)
     {
-        $reader = new AnnotationReader();
-        AnnotationRegistry::registerFile(__DIR__ . "/../Driver/Gearman/GearmanAnnotations.php");
-        $reader->setDefaultAnnotationNamespace('Mmoreramerino\GearmanBundle\Driver\\');
+        if (version_compare(\Doctrine\Common\Version::VERSION, '2.2.0-DEV', '>=')) {
+            // Register the ORM Annotations in the AnnotationRegistry
+            AnnotationRegistry::registerFile(__DIR__ . "/../Driver/Gearman/GearmanAnnotations.php");
+
+            $reader = new \Doctrine\Common\Annotations\SimpleAnnotationReader();
+            $reader->addNamespace('Mmoreramerino\GearmanBundle\Driver');
+        } else {
+            // Register the ORM Annotations in the AnnotationRegistry
+            AnnotationRegistry::registerFile(__DIR__ . "/../Driver/Gearman/GearmanAnnotations.php");
+
+            $reader = new AnnotationReader();
+            $reader->setDefaultAnnotationNamespace('Mmoreramerino\GearmanBundle\Driver\\');
+        }
+
         $workerCollection = new WorkerCollection;
         $bundles = $this->container->get('kernel')->getBundles();
-
         foreach ($bundles as $bundle) {
             if (!\in_array($bundle->getNamespace(), $this->getParseableBundles())) {
                 continue;

@@ -2,7 +2,7 @@
 
 namespace Mmoreramerino\GearmanBundle\Module;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Mmoreramerino\GearmanBundle\Driver\Gearman\Work;
 use Mmoreramerino\GearmanBundle\Module\JobCollection;
 use Mmoreramerino\GearmanBundle\Module\JobClass as Job;
@@ -44,20 +44,20 @@ class WorkerClass
      *
      * @param Work             $classAnnotation ClassAnnotation class
      * @param \ReflectionClass $reflectionClass Reflexion class
-     * @param AnnotationReader $reader          ReaderAnnotation class
+     * @param Reader           $reader          ReaderAnnotation class
      * @param array            $settings        Settings array
      */
-    public function __construct( Work $classAnnotation, \ReflectionClass $reflectionClass, AnnotationReader $reader, array $settings)
+    public function __construct(Work $classAnnotation, \ReflectionClass $reflectionClass, Reader $reader, array $settings)
     {
         $this->namespace = $reflectionClass->getNamespaceName();
 
         $this->callableName =   str_replace('\\', '', ((null !== $classAnnotation->name) ?
-                                ($this->namespace .'\\' .$classAnnotation->name) :
-                                $reflectionClass->getName()));
+            ($this->namespace .'\\' .$classAnnotation->name) :
+            $reflectionClass->getName()));
 
         $this->description =    (null !== $classAnnotation->description) ?
-                                $classAnnotation->description :
-                                'No description is defined';
+            $classAnnotation->description :
+            'No description is defined';
 
         $this->fileName = $reflectionClass->getFileName();
         $this->className = $reflectionClass->getName();
