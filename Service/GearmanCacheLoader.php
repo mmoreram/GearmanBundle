@@ -55,7 +55,6 @@ class GearmanCacheLoader extends ContainerAware
     {
         $reader = new AnnotationReader();
         AnnotationRegistry::registerFile(__DIR__ . "/../Driver/Gearman/GearmanAnnotations.php");
-        $reader->setDefaultAnnotationNamespace('Mmoreramerino\GearmanBundle\Driver\\');
         $workerCollection = new WorkerCollection;
         $bundles = $this->container->get('kernel')->getBundles();
 
