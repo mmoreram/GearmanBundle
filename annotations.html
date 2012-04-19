@@ -10,6 +10,8 @@
 	        		<pre class="php">
 	        			<span class="kw2">namespace</span> Mmoreramerino\GearmanBundle\Workers<span class="sy0">;</span>
 						<br /><br />
+						<span class="kw2">use</span> Mmoreramerino\GearmanBundle\Driver\Gearman<span class="sy0">;</span>
+						<br /><br />
 						<span class="co4">/** @Gearman\Work(iterations=3, description="Worker test description",defaultMethod="do") */</span><br />
 						<span class="kw2">class</span> testWorker<br />
 						<span class="br0">{</span><br />
