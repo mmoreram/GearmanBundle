@@ -115,18 +115,21 @@ class GearmanCacheLoader extends ContainerAware
         if (null === $this->bundles) {
             $this->bundles = array();
 
-            foreach ($this->settings['bundles'] as $properties) {
+            if (isset($this->settings['bundles']) && is_array($this->settings['bundles']) && !empty($this->settings['bundles'])) {
 
-                if ( isset($properties['active']) && (true === $properties['active']) ) {
+                foreach ($this->settings['bundles'] as $properties) {
 
-                    if ('' !== $properties['namespace']) {
-                        $this->bundles[] = $properties['namespace'];
-                    }
+                    if ( isset($properties['active']) && (true === $properties['active']) ) {
 
-                    if (isset($properties['ignore'])) {
-                        $ignored = (array) $properties['ignore'];
-                        while ($ignored) {
-                            $this->ignored[] = $properties['namespace'] . '\\' . array_shift($ignored);
+                        if ('' !== $properties['namespace']) {
+                            $this->bundles[] = $properties['namespace'];
+                        }
+
+                        if (isset($properties['ignore'])) {
+                            $ignored = (array) $properties['ignore'];
+                            while ($ignored) {
+                                $this->ignored[] = $properties['namespace'] . '\\' . array_shift($ignored);
+                            }
                         }
                     }
                 }

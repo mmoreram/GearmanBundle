@@ -2,6 +2,8 @@
 
 namespace Mmoreramerino\GearmanBundle\Workers;
 
+use Mmoreramerino\GearmanBundle\Driver\Gearman;
+
 /** @Gearman\Work(description="Worker test description", defaultMethod="doBackground") */
 class testWorker
 {
