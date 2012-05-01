@@ -20,9 +20,21 @@
                 <div class="code">
                     <pre class="php">
                         <span class="c1">%/deps</span>
-                        <span class="kw2">[AsseticBundle]</span><br />
+                        <span class="kw2">[GearmanBundle]</span><br />
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">git=http://github.com/mmoreramerino/GearmanBundle.git</span><br />
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">target=/bundles/Mmoreramerino/GearmanBundle</span>
+                    </pre>
+                </div>
+            </div>
+            <p>You can specify the Gearman branch. By default, development branch is set, but you can specify the stable release by setting master branch</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="c1">%/deps</span>
+                        <span class="kw2">[GearmanBundle]</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">git=http://github.com/mmoreramerino/GearmanBundle.git</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">target=/bundles/Mmoreramerino/GearmanBundle</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">version=refs/remotes/origin/master</span><br />
                     </pre>
                 </div>
             </div>
@@ -52,13 +64,13 @@
                         <span class="c1">%/app/autoload.php</span>
                         <span class="kw2">&lt;?php</span><br /><br />
                         <span class="re0">$loader</span><span class="sy0">-></span><span class="re0">registerNamespaces</span><span class="br0">(</span><span class="kw3">array</span><span class="br0">(</span><br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="st_h">'Sensio'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">=&gt;</span> <span class="kw3">__DIR__</span> <span class="sy0">.</span> <span class="st_h">'/../vendor/bundles'</span><span class="sy0">,</span><br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="st_h">'JMS'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">=&gt;</span> <span class="kw3">__DIR__</span> <span class="sy0">.</span> <span class="st_h">'/../vendor/bundles'</span><span class="sy0">,</span><br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="st_h">'Doctrine\\Common'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">=&gt;</span> <span class="kw3">__DIR__</span> <span class="sy0">.</span> <span class="st_h">'/../vendor/doctrine-common/lib'</span><span class="sy0">,</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="st_h">'Sensio'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">=&gt;</span> <span class="kw3">__DIR__</span> <span class="sy0">.</span> <span class="st_h">'/../vendor/bundles'</span><span class="sy0">,</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="st_h">'JMS'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">=&gt;</span> <span class="kw3">__DIR__</span> <span class="sy0">.</span> <span class="st_h">'/../vendor/bundles'</span><span class="sy0">,</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="st_h">'Doctrine\\Common'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">=&gt;</span> <span class="kw3">__DIR__</span> <span class="sy0">.</span> <span class="st_h">'/../vendor/doctrine-common/lib'</span><span class="sy0">,</span><br />
                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">/**</span><br />
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">*&nbsp;Your namespaces</span><br />
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">*/</span><br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="st_h">'Mmoreramerino'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">=&gt;</span> <span class="kw3">__DIR__</span> <span class="sy0">.</span> <span class="st_h">'/../vendor/bundles'</span><span class="sy0">,</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="st_h">'Mmoreramerino'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">=&gt;</span> <span class="kw3">__DIR__</span> <span class="sy0">.</span> <span class="st_h">'/../vendor/bundles/Mmoreramerino/GearmanBundle/lib'</span><span class="sy0">,</span><br />
                         <span class="br0">))</span><span class="sy0">;</span>
                     </pre>
                 </div>
