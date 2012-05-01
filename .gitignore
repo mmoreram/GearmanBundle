@@ -1,4 +1,5 @@
-/.settings/
+.settings
 .buildpath
 .project
-Resources/Sandbox/
+project
+lib/GearmanBundle/Resources/Sandbox

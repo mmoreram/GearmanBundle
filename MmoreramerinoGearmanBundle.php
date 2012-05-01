@@ -11,7 +11,7 @@ use Mmoreramerino\GearmanBundle\Exceptions\GearmanNotInstalledException;
 /**
  * Gearman Bundle
  *
- * @author Marc Morera <marc@ulabox.com>
+ * @author Marc Morera <yuhu@mmoreram.com>
  */
 class MmoreramerinoGearmanBundle extends GearmanBaseBundle
 {
@@ -25,8 +25,10 @@ class MmoreramerinoGearmanBundle extends GearmanBaseBundle
     public function boot()
     {
         if (!in_array('gearman', get_loaded_extensions())) {
+
             throw new GearmanNotInstalledException;
         }
+
         $gearmanCache = $this->container->get('gearman.cache');
         $existsCache = $gearmanCache->existsCacheFile();
 
@@ -37,8 +39,10 @@ class MmoreramerinoGearmanBundle extends GearmanBaseBundle
         if (in_array($this->container->get('kernel')->getEnvironment(), $cacheclearEnvs) || !$existsCache) {
 
             if ($existsCache) {
+
                 $gearmanCache->emptyCache();
             }
+
             $gearmanCacheLoader = $this->container->get('gearman.cache.loader');
             $gearmanCacheLoader->load($gearmanCache);
         }
