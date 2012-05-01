@@ -1,5 +1,5 @@
 .settings
 .buildpath
 .project
-project
+project/report/*
 lib/GearmanBundle/Resources/Sandbox

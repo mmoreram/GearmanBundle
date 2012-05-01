@@ -1,0 +1,32 @@
+
+# Bundles gearman will parse searching annotations
+bundles:
+  # Name of bundle
+  GearmanBundle:
+    # Namespace to be found
+    namespace: Mmoreramerino\GearmanBundle
+    # Bundle search can be enabled or disabled
+    active: true
+
+# default values
+defaults:
+  # default method.
+  #     do
+  #     doBackground
+  #     doHigh
+  #     doHighBackground
+  #     doLow
+  #     doLowBackground
+  method: do
+
+  # Server list by default workers and clients will connect
+  # Server name must contain port
+  # If annotations defined, will be overwritten
+  servers:
+    localhost:
+      hostname: 127.0.0.1
+      port: 4730
+
+  # Default number of executions before job dies.
+  # If annotations defined, will be overwritten
+  iterations: 150
