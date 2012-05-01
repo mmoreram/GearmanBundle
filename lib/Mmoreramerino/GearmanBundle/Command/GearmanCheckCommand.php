@@ -55,7 +55,5 @@ class GearmanCheckCommand extends ContainerAwareCommand
         }
 
         $output->writeln('<comment>Gearman is succesfuly installed</comment>');
-
-        $this->getContainer()->get('gearman')->doNormalJob('MmoreramerinoGearmanBundleWorkerstestWorker~testB');
     }
 }
