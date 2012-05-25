@@ -47,13 +47,13 @@ class GearmanExecute extends GearmanService
             $this->addServers($gmworker, $worker['servers']);
         }
 
-
-
-
         if (null !== $worker['service']) {
             $objInstance = $this->container->get($worker['service']);
         } else {
             $objInstance = new $worker['className'];
+            if ($objInstance instanceof \Symfony\Component\DependencyInjection\ContainerAwareInterface) {
+                $objInstance->setContainer($this->container);
+            }
         }
 
         foreach ($jobs as $job) {
