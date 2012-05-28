@@ -19,15 +19,12 @@ use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
  */
 class GearmanCacheLoader extends ContainerAware
 {
-
-
     /**
      * Settings defined into settings file
      *
      * @var Array
      */
     private $settings = null;
-
 
     /**
      * Bundles available to perform search setted in bundles.yml file
@@ -41,7 +38,7 @@ class GearmanCacheLoader extends ContainerAware
      *
      * @var Array
      */
-    private $ignored = null;
+    private $exclude = array();
 
     /**
      * This method load all data and saves all annotations into cache.
@@ -71,19 +68,23 @@ class GearmanCacheLoader extends ContainerAware
 
         $workerCollection = new WorkerCollection;
         $bundles = $this->container->get('kernel')->getBundles();
+        $parseableBundles = $this->getParseableBundles();
         foreach ($bundles as $bundle) {
-            if (!\in_array($bundle->getNamespace(), $this->getParseableBundles())) {
+
+            $namespace = $bundle->getNamespace();
+            if (!\array_key_exists($namespace, $parseableBundles)) {
                 continue;
             }
+            $bundleSettings = $parseableBundles[$namespace];
+
             $filesLoader = new WorkerDirectoryLoader(new FileLocator('.'));
+
             $files = $filesLoader->load($bundle->getPath());
-
+            $includes = (isset($bundleSettings['include'])) ? (array) $bundleSettings['include'] : array();
             foreach ($files as $file) {
-
-                if ($this->isIgnore($file['class'])) {
+                if ($this->isIgnore($file['class'], $includes)) {
                     continue;
                 }
-
                 $reflClass = new \ReflectionClass($file['class']);
                 $classAnnotations = $reader->getClassAnnotations($reflClass);
 
@@ -118,17 +119,23 @@ class GearmanCacheLoader extends ContainerAware
             if (isset($this->settings['bundles']) && is_array($this->settings['bundles']) && !empty($this->settings['bundles'])) {
 
                 foreach ($this->settings['bundles'] as $properties) {
-
                     if ( isset($properties['active']) && (true === $properties['active']) ) {
-
                         if ('' !== $properties['namespace']) {
-                            $this->bundles[] = $properties['namespace'];
+                            $bundle = array();
+                            $namespace = $properties['namespace'];
+                            if (isset($properties['include']) && '' !== $properties['include']) {
+                                foreach ((array) $properties['include'] as $include) {
+                                    $bundle['include'][] =  $properties['namespace'] . '\\' . $include;
+                                }
+
+                            }
+                            $this->bundles[$namespace] = $bundle;
                         }
 
-                        if (isset($properties['ignore'])) {
-                            $ignored = (array) $properties['ignore'];
+                        if (isset($properties['exclude'])) {
+                            $ignored = (array) $properties['exclude'];
                             while ($ignored) {
-                                $this->ignored[] = $properties['namespace'] . '\\' . array_shift($ignored);
+                                $this->exclude[] = $properties['namespace'] . '\\' . array_shift($ignored);
                             }
                         }
                     }
@@ -138,7 +145,6 @@ class GearmanCacheLoader extends ContainerAware
 
         return $this->bundles;
     }
-
 
     /**
      * Return Gearman settings
@@ -165,17 +171,30 @@ class GearmanCacheLoader extends ContainerAware
     /**
      * Checks the class it belongs to the ignored
      *
-     * @param string $class Class name
+     * @param string $class    Class name
+     * @param array  $includes Includes
      *
      * @return boolean
      */
-    public function isIgnore($class)
+    private function isIgnore($class, $includes = array())
     {
-        if (null === $this->ignored) {
+        $found = false;
+        foreach ($includes as $include) {
+            if (0 === strpos($class, $include)) {
+                $found = true;
+                break;
+            }
+        }
+
+        if ($found && null === $this->exclude) {
             return false;
         }
 
-        foreach ($this->ignored as $ns) {
+        if (count($includes) > 0 && !$found) {
+            return true;
+        }
+
+        foreach ($this->exclude as $ns) {
             if (strstr($class, $ns) !== false) {
                 return true;
             }

@@ -133,7 +133,7 @@ class GearmanClient extends GearmanService
      *
      * @return GearmanClient Returns self object
      */
-    private function assignServers(\GearmanClient $gearmanClient)
+    public function assignServers(\GearmanClient $gearmanClient)
     {
         if (null === $this->server || !is_array($this->server)) {
 
