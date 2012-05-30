@@ -1,12 +1,11 @@
 parameters:
     config.path:                /config/gearman/
-
     gearman.client.class:       Mmoreramerino\GearmanBundle\Service\GearmanClient
     gearman.cache.class:        Mmoreramerino\GearmanBundle\Service\GearmanCache
     gearman.cache.loader.class: Mmoreramerino\GearmanBundle\Service\GearmanCacheLoader
-    gearman.execute.class:  Mmoreramerino\GearmanBundle\Service\GearmanExecute
+    gearman.execute.class:      Mmoreramerino\GearmanBundle\Service\GearmanExecute
     gearman.settings.class:     Mmoreramerino\GearmanBundle\Service\GearmanSettings
-    gearman.describer.class:     Mmoreramerino\GearmanBundle\Service\GearmanDescriber
+    gearman.describer.class:    Mmoreramerino\GearmanBundle\Service\GearmanDescriber
 services:
     gearman:
         class: %gearman.client.class%
