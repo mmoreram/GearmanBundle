@@ -41,8 +41,6 @@ class GearmanClient extends GearmanService
     /**
      * Construct method.
      * Performs all init actions, like initialize tasks structure
-     *
-     * @param \Monolog\Logger $log
      */
     public function __construct()
     {
