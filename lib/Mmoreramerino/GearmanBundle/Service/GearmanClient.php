@@ -3,7 +3,6 @@
 namespace Mmoreramerino\GearmanBundle\Service;
 
 use Mmoreramerino\GearmanBundle\Service\GearmanService;
-use Mmoreramerino\GearmanBundle\Service\GearmanInterface;
 use Mmoreramerino\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
 
 /**
@@ -13,16 +12,6 @@ use Mmoreramerino\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
  */
 class GearmanClient extends GearmanService
 {
-
-    /**
-     * Construct method.
-     * Performs all init actions, like initialize tasks structure
-     */
-    public function __construct()
-    {
-        $this->resetTaskStructure();
-    }
-
     /**
      * Server variable to define in what server must connect to
      *
@@ -31,10 +20,29 @@ class GearmanClient extends GearmanService
     public $server = null;
 
     /**
+     * GearmanClient object
+     * 
+     * @var \GearmanClient
+     */
+    private $client = null;
+
+    /**
+     * Construct method.
+     * Performs all init actions, like initialize the GearmanClient object and tasks structure
+     * 
+     * @return GearmanClient
+     */
+    public function __construct()
+    {
+        $this->client = new \GearmanClient();
+        $this->resetTaskStructure();
+    }
+
+    /**
      * If workers are not loaded, they're loaded and returned.
      * Otherwise, they are simply returned
      *
-     * @return Array Workers array getted from cache and saved
+     * @return Array Workers array returned from cache and saved
      */
     public function getWorkers()
     {
@@ -48,7 +56,7 @@ class GearmanClient extends GearmanService
     /**
      * Runs a single task and returns some result, depending of method called.
      * Method called depends of default callable method setted on gearman settings
-     *  or overwritted on work or job annotations
+     *  or overwritten on work or job annotations
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
      * @param Mixed  $params Parameters to send to job
@@ -105,10 +113,9 @@ class GearmanClient extends GearmanService
      */
     private function doEnqueue(Array $worker, $params = '', $method = 'do', $unique = null)
     {
-        $gmclient = new \GearmanClient();
-        $this->assignServers($gmclient);
+        $this->assignServers();
 
-        return $gmclient->$method($worker['job']['realCallableName'], serialize($params), $unique);
+        return $this->client->$method($worker['job']['realCallableName'], serialize($params), $unique);
     }
 
     /**
@@ -129,18 +136,16 @@ class GearmanClient extends GearmanService
     /**
      * Given a GearmanClient, set all included servers
      *
-     * @param GearmanClient $gearmanClient Object to include servers
-     *
      * @return GearmanClient Returns self object
      */
-    private function assignServers(\GearmanClient $gearmanClient)
+    private function assignServers()
     {
         if (null === $this->server || !is_array($this->server)) {
 
-            $gearmanClient->addServer();
+            $this->client->addServer();
         } else {
 
-            $gearmanClient->addServer($this->server[0], $this->server[1]);
+            $this->client->addServer($this->server[0], $this->server[1]);
         }
 
         return $this;
@@ -474,18 +479,41 @@ class GearmanClient extends GearmanService
     public function runTasks()
     {
         $taskStructure = $this->taskStructure;
-        $gearmanClient = new \GearmanClient();
-        $this->assignServers($gearmanClient);
+        $this->assignServers();
 
         foreach ($taskStructure['tasks'] as $task) {
             $type = $task['method'];
             $jobName = $task['name'];
             $worker = $this->getJob($jobName);
             if (false !== $worker) {
-                $gearmanClient->$type($worker['job']['realCallableName'], serialize($type['params']), $type['context'], $type['unique']);
+                $this->client->$type($worker['job']['realCallableName'], serialize($type['params']), $type['context'], $type['unique']);
             }
         }
 
-        return $gearmanClient->runTasks();
+        return $this->client->runTasks();
+    }
+
+    /**
+     * Sets the GearmanClient object
+     * 
+     * @param \GearmanClient $client
+     *
+     * @return GearmanClient Return this object
+     */
+    public function setClient(\GearmanClient $client)
+    {
+        $this->client = $client;
+        
+        return $this;
+    }
+
+    /**
+     * Returns the GearmanClient object
+     * 
+     * @return \GearmanClient
+     */
+    public function getClient()
+    {
+        return $this->client;
     }
 }
