@@ -26,6 +26,7 @@ class GearmanCacheLoader extends ContainerAware
      */
     private $settings = null;
 
+
     /**
      * Bundles available to perform search setted in bundles.yml file
      *
@@ -76,7 +77,6 @@ class GearmanCacheLoader extends ContainerAware
                 continue;
             }
             $bundleSettings = $parseableBundles[$namespace];
-
             $filesLoader = new WorkerDirectoryLoader(new FileLocator('.'));
 
             $files = $filesLoader->load($bundle->getPath());
@@ -85,13 +85,16 @@ class GearmanCacheLoader extends ContainerAware
                 if ($this->isIgnore($file['class'], $includes)) {
                     continue;
                 }
+
                 $reflClass = new \ReflectionClass($file['class']);
                 $classAnnotations = $reader->getClassAnnotations($reflClass);
 
                 foreach ($classAnnotations as $annot) {
 
                     if ($annot instanceof \Mmoreramerino\GearmanBundle\Driver\Gearman\Work) {
-                        $workerCollection->add(new Worker($annot, $reflClass, $reader, $this->getSettings()));
+                        $workerCollection->add(
+                            new Worker($annot, $reflClass, $reader, $this->getSettings(), $bundleSettings)
+                        );
                     }
                 }
             }
@@ -117,26 +120,27 @@ class GearmanCacheLoader extends ContainerAware
             $this->bundles = array();
 
             if (isset($this->settings['bundles']) && is_array($this->settings['bundles']) && !empty($this->settings['bundles'])) {
-
-                foreach ($this->settings['bundles'] as $properties) {
-                    if ( isset($properties['active']) && (true === $properties['active']) ) {
-                        if ('' !== $properties['namespace']) {
-                            $bundle = array();
-                            $namespace = $properties['namespace'];
-                            if (isset($properties['include']) && '' !== $properties['include']) {
-                                foreach ((array) $properties['include'] as $include) {
-                                    $bundle['include'][] =  $properties['namespace'] . '\\' . $include;
-                                }
-
-                            }
-                            $this->bundles[$namespace] = $bundle;
+                foreach ($this->settings['bundles'] as $bundleName => $bundle) {
+                    if (isset($properties['active']) && (!$properties['active'])) {
+                        continue;
+                    }
+                    $settings = array();
+                    $namespace = (isset($bundle['namespace'])) ? $bundle['namespace'] : $bundleName;
+                    if (isset($bundle['include'])) {
+                        if (!is_array($bundle['include'])) {
+                            $bundle['include'] = array($bundle['include']);
                         }
+                        foreach ($bundle['include'] as $key => $value) {
+                            $bundle['include'][$key] = $namespace . '\\' . $value;
+                        }
+                    }
 
-                        if (isset($properties['exclude'])) {
-                            $ignored = (array) $properties['exclude'];
-                            while ($ignored) {
-                                $this->exclude[] = $properties['namespace'] . '\\' . array_shift($ignored);
-                            }
+                    $this->bundles[$namespace] = $bundle;
+
+                    if (isset($bundle['exclude'])) {
+                        $exclude = (array) $bundle['exclude'];
+                        while ($exclude) {
+                            $this->exclude[] = $namespace . '\\' . array_shift($ignored);
                         }
                     }
                 }
@@ -145,6 +149,7 @@ class GearmanCacheLoader extends ContainerAware
 
         return $this->bundles;
     }
+
 
     /**
      * Return Gearman settings
