@@ -45,7 +45,11 @@ class WorkerClass
      * @param Work             $classAnnotation ClassAnnotation class
      * @param \ReflectionClass $reflectionClass Reflexion class
      * @param Reader           $reader          ReaderAnnotation class
-     * @param array            $settings        Settings array
+     * @param array            $settings        GearmanBundle Settings array
+     * @param $bundleSettings  $bundleSettings  Scanned Bundle Settings array
+     *
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\SettingValueBadFormatException
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\SettingValueMissingException
      */
     public function __construct(Work $classAnnotation, \ReflectionClass $reflectionClass,
                                 Reader $reader, array $settings, $bundleSettings)
