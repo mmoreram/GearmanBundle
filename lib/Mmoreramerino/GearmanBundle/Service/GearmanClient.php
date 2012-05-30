@@ -85,6 +85,7 @@ class GearmanClient extends GearmanService
      * @param string $name   A GearmanBundle registered function the worker is to execute
      * @param Mixed  $params Parameters to send to job
      *
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\NoCallableGearmanMethodException
      * @return mixed result depending of method called.
      */
     public function callJob($name, $params = array())
@@ -145,9 +146,9 @@ class GearmanClient extends GearmanService
      * Set server of gearman
      *
      * @param type $servername Server name (must be ip)
-     * @param type $port       Port of server. By default 4730
+     * @param int  $port       Port of server. By default 4730
      *
-     * @return GearmanClient Returns self object
+     * @return \Mmoreramerino\GearmanBundle\Service\GearmanClient Returns self object
      */
     public function setServer($servername, $port = 4730)
     {
@@ -176,36 +177,34 @@ class GearmanClient extends GearmanService
 
     /**
      * Assign callbacks
-     *
-     * @param \GearmanClient $gearmanClient
      */
-    public function assignCallbacks(\GearmanClient $gearmanClient)
+    public function assignCallbacks()
     {
         foreach ($this->callbacks as $name => $callback) {
             switch ($name) {
                 case self::CALLBACK_CREATE:
-                    $gearmanClient->setCreatedCallback($callback);
+                    $this->client->setCreatedCallback($callback);
                     break;
                 case self::CALLBACK_DATA:
-                    $gearmanClient->setDataCallback($callback);
+                    $this->client->setDataCallback($callback);
                     break;
                 case self::CALLBACK_STATUS:
-                    $gearmanClient->setStatusCallback($callback);
+                    $this->client->setStatusCallback($callback);
                     break;
                 case self::CALLBACK_COMPLETE:
-                    $gearmanClient->setCompleteCallback($callback);
+                    $this->client->setCompleteCallback($callback);
                     break;
                 case self::CALLBACK_FAIL:
-                    $gearmanClient->setFailCallback($callback);
+                    $this->client->setFailCallback($callback);
                     break;
                 case self::CALLBACK_WARNING:
-                    $gearmanClient->setWarningCallback($callback);
+                    $this->client->setWarningCallback($callback);
                     break;
                 case self::CALLBACK_WORKLOAD:
-                    $gearmanClient->setWorkloadCallback($callback);
+                    $this->client->setWorkloadCallback($callback);
                     break;
                 case self::CALLBACK_EXCEPTION:
-                    $gearmanClient->setExceptionCallback($callback);
+                    $this->client->setExceptionCallback($callback);
                     break;
                 default:
             }
@@ -359,7 +358,7 @@ class GearmanClient extends GearmanService
     /**
      * Reset all tasks structure. Remove all set values
      *
-     * @return true;
+     * @return boolean True
      */
     public function resetTaskStructure()
     {
@@ -530,7 +529,7 @@ class GearmanClient extends GearmanService
      * or GearmanClient::addTaskLowBackground(), this call starts running the tasks in parallel.
      * Note that enough workers need to be available for the tasks to all run in parallel
      *
-     * @return true
+     * @return boolean True
      */
     public function runTasks()
     {
