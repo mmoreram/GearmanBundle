@@ -28,6 +28,32 @@ class GearmanClient extends GearmanService
     private $client = null;
 
     /**
+     * task structure to store all about called tasks
+     *
+     * @var $taskStructure
+     */
+    public $taskStructure = null;
+
+    /**
+     * Callbacks for Gearman Client
+     *
+     * @var array
+     */
+    protected $callbacks = array();
+
+    /**
+     * Available callbacks for \GearmanClient
+     */
+    const CALLBACK_CREATE    = 'create';
+    const CALLBACK_DATA      = 'data';
+    const CALLBACK_STATUS    = 'status';
+    const CALLBACK_COMPLETE  = 'complete';
+    const CALLBACK_FAIL      = 'fail';
+    const CALLBACK_WARNING   = 'warning';
+    const CALLBACK_WORKLOAD  = 'workload';
+    const CALLBACK_EXCEPTION = 'exception';
+
+    /**
      * Construct method.
      * Performs all init actions, like initialize the GearmanClient object and tasks structure
      *
@@ -36,6 +62,7 @@ class GearmanClient extends GearmanService
     public function __construct()
     {
         $this->client = new \GearmanClient();
+        $this->resetCallbacks();
         $this->resetTaskStructure();
     }
 
@@ -47,10 +74,6 @@ class GearmanClient extends GearmanService
      */
     public function getWorkers()
     {
-        /**
-         * Always will be an Array
-         */
-
         return $this->setWorkers();
     }
 
@@ -64,8 +87,8 @@ class GearmanClient extends GearmanService
      *
      * @return mixed result depending of method called.
      */
-     public function callJob($name, $params = array())
-     {
+    public function callJob($name, $params = array())
+    {
         $worker = $this->getJob($name);
         $methodCallable = $worker['job']['defaultMethod'] . 'Job';
 
@@ -74,7 +97,7 @@ class GearmanClient extends GearmanService
         }
 
         return $this->$methodCallable($name, $params);
-     }
+    }
 
 
     /**
@@ -149,6 +172,44 @@ class GearmanClient extends GearmanService
         }
 
         return $this;
+    }
+
+    /**
+     * Assign callbacks
+     *
+     * @param \GearmanClient $gearmanClient
+     */
+    public function assignCallbacks(\GearmanClient $gearmanClient)
+    {
+        foreach ($this->callbacks as $name => $callback) {
+            switch ($name) {
+                case self::CALLBACK_CREATE:
+                    $gearmanClient->setCreatedCallback($callback);
+                    break;
+                case self::CALLBACK_DATA:
+                    $gearmanClient->setDataCallback($callback);
+                    break;
+                case self::CALLBACK_STATUS:
+                    $gearmanClient->setStatusCallback($callback);
+                    break;
+                case self::CALLBACK_COMPLETE:
+                    $gearmanClient->setCompleteCallback($callback);
+                    break;
+                case self::CALLBACK_FAIL:
+                    $gearmanClient->setFailCallback($callback);
+                    break;
+                case self::CALLBACK_WARNING:
+                    $gearmanClient->setWarningCallback($callback);
+                    break;
+                case self::CALLBACK_WORKLOAD:
+                    $gearmanClient->setWorkloadCallback($callback);
+                    break;
+                case self::CALLBACK_EXCEPTION:
+                    $gearmanClient->setExceptionCallback($callback);
+                    break;
+                default:
+            }
+        }
     }
 
     /**
@@ -288,16 +349,12 @@ class GearmanClient extends GearmanService
 
 
     /**
-     * Task methods
+     * Reset Default Callbacks
      */
-
-    /**
-     * task structure to store all about called tasks
-     *
-     * @var $taskStructure
-     */
-    public $taskStructure = null;
-
+    public function resetCallbacks()
+    {
+        $this->callbacks = array();
+    }
 
     /**
      * Reset all tasks structure. Remove all set values
@@ -446,7 +503,7 @@ class GearmanClient extends GearmanService
             'context'   =>  $context,
             'unique'    =>  $unique,
             'method'    =>  $method
-            );
+        );
         $this->addTaskToStructure($task);
 
         return $this;
@@ -479,6 +536,7 @@ class GearmanClient extends GearmanService
     {
         $taskStructure = $this->taskStructure;
         $this->assignServers();
+        $this->assignCallbacks();
 
         foreach ($taskStructure['tasks'] as $task) {
             $type = $task['method'];
