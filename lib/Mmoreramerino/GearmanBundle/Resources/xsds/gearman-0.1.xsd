@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema xmlns="http://mmoreramerino.github.com/schema/dic/gearman.xsd"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://mmoreramerino.github.com/schema/dic/gearman.xsd"
+            elementFormDefault="qualified">
+
+    <xsd:element name="config" type="config" />
+
+    <xsd:complexType name="config">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="server" type="server"/>
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="server">
+        <xsd:attribute name="host" type="xsd:string" />
+        <xsd:attribute name="port" type="xsd:integer" />
+    </xsd:complexType>
+
+</xsd:schema>

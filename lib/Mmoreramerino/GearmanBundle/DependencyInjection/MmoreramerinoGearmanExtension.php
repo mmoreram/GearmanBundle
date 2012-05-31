@@ -32,4 +32,14 @@ class MmoreramerinoGearmanExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
+
+    /**
+     * Returns the namespace to be used for this extension (XML namespace).
+     *
+     * @return string The XML namespace
+     */
+    public function getNamespace()
+    {
+        return 'http://mmoreramerino.github.com/schema/dic/gearman.xsd';
+    }
 }

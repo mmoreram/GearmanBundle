@@ -171,7 +171,6 @@ class GearmanClient extends GearmanService
 
             $this->client->addServer($this->server[0], $this->server[1]);
         }
-
         return $this;
     }
 

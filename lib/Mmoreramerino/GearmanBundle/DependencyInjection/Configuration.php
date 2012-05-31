@@ -20,8 +20,16 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('mmoreramerino_gearman');
+        $rootNode = $treeBuilder
+            ->root('gearman')
+            ->children()
+                ->arrayNode('server')
+                    ->useAttributeAsKey('hostname')->prototype('scalar')->defaultValue('localhost')->end()
+                    ->useAttributeAsKey('port')->prototype('scalar')->defaultValue('4730')->end()
+                ->end()
+            ->end();
 
         return $treeBuilder;
     }
+
 }
