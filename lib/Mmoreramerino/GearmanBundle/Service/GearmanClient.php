@@ -4,6 +4,7 @@ namespace Mmoreramerino\GearmanBundle\Service;
 
 use Mmoreramerino\GearmanBundle\Service\GearmanService;
 use Mmoreramerino\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Implementation of GearmanInterface
@@ -64,14 +65,17 @@ class GearmanClient extends GearmanService
      * Construct method.
      * Performs all init actions, like initialize the GearmanClient object and tasks structure
      *
+     * @param \Symfony\Component\DependencyInjection\Container $container Container
+     *
      * @return GearmanClient
      */
-    public function __construct()
+    public function __construct(Container $container )
     {
         $this->client = new \GearmanClient();
         $this->resetCallbacks();
         $this->resetTaskStructure();
 
+        $this->setContainer($container);
         $this->clientConfig = $this->container->getParameter('gearman.config.client');
 
         if (isset($this->clientConfig['server'])) {
