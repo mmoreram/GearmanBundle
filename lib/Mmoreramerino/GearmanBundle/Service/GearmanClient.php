@@ -28,6 +28,13 @@ class GearmanClient extends GearmanService
     private $client = null;
 
     /**
+     * Gearman Client config
+     *
+     * @var array
+     */
+    private $clientConfig = null;
+
+    /**
      * task structure to store all about called tasks
      *
      * @var $taskStructure
@@ -64,6 +71,16 @@ class GearmanClient extends GearmanService
         $this->client = new \GearmanClient();
         $this->resetCallbacks();
         $this->resetTaskStructure();
+
+        $this->clientConfig = $this->container->getParameter('gearman.config.client');
+
+        if (isset($this->clientConfig['server'])) {
+            $clientConfig = $this->clientConfig['server'];
+            $hostname = (isset($clientConfig['hostname'])) ? (string) $clientConfig['hostname'] : 'localhost';
+            $port     = (isset($clientConfig['port'])) ? (string) $clientConfig['port'] : '4730';
+            $this->setServer($hostname, $port);
+        }
+
     }
 
     /**

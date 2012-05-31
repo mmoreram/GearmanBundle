@@ -17,17 +17,19 @@ class MmoreramerinoGearmanExtension extends Extension
     /**
      * Loads a specific configuration.
      *
-     * @param array            $config    An array of configuration values
+     * @param array            $configs   An array of configuration values
      * @param ContainerBuilder $container A ContainerBuilder instance
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
      *
      * @api
      */
-    public function load(array $config, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $config);
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter('gearman.config.client', $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
@@ -41,5 +43,10 @@ class MmoreramerinoGearmanExtension extends Extension
     public function getNamespace()
     {
         return 'http://mmoreramerino.github.com/schema/dic/gearman.xsd';
+    }
+
+    public function getXsdValidationBasePath()
+    {
+        return __DIR__.'/../Resources/xsds/';
     }
 }
