@@ -12,7 +12,6 @@ use Mmoreramerino\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
  */
 class GearmanClient extends GearmanService
 {
-
     /**
      * Server variable to define in what server must connect to
      *
@@ -64,14 +63,15 @@ class GearmanClient extends GearmanService
      * Construct method.
      * Performs all init actions, like initialize the GearmanClient object and tasks structure
      *
-     * @return GearmanClient
+     * @param \Symfony\Component\DependencyInjection\Container $container Container
      */
-    public function __construct()
+    public function  __construct($container)
     {
         $this->client = new \GearmanClient();
         $this->resetCallbacks();
         $this->resetTaskStructure();
 
+        $this->setContainer($container);
         $this->clientConfig = $this->container->getParameter('gearman.config.client');
 
         if (isset($this->clientConfig['server'])) {
@@ -80,7 +80,6 @@ class GearmanClient extends GearmanService
             $port     = (isset($clientConfig['port'])) ? (string) $clientConfig['port'] : '4730';
             $this->setServer($hostname, $port);
         }
-
     }
 
     /**
@@ -156,7 +155,13 @@ class GearmanClient extends GearmanService
     private function doEnqueue(Array $worker, $params = '', $method = 'do', $unique = null)
     {
         $this->assignServers();
-        return $this->client->$method($worker['job']['realCallableName'], serialize($params), $unique);
+        $this->assignCallbacks();
+        $jobName =  $this->client->$method($worker['job']['realCallableName'], serialize($params), $unique);
+        $rc = $this->client->returnCode();
+        if ($rc != GEARMAN_SUCCESS) {
+            throw new \Exception("Gearman client encountered unexpected return code for job {$jobName}", $rc);
+        }
+        return $jobName;
     }
 
     /**
@@ -225,6 +230,7 @@ class GearmanClient extends GearmanService
                 default:
             }
         }
+
     }
 
     /**
@@ -258,7 +264,6 @@ class GearmanClient extends GearmanService
      */
     public function doJob($name, $params = array(), $unique = null)
     {
-
         return $this->enqueue($name, $params, 'do', $unique);
     }
 
@@ -559,6 +564,10 @@ class GearmanClient extends GearmanService
             $worker = $this->getJob($jobName);
             if (false !== $worker) {
                 $this->client->$type($worker['job']['realCallableName'], serialize($type['params']), $type['context'], $type['unique']);
+                $rc = $this->client->returnCode();
+                if ($rc != GEARMAN_SUCCESS) {
+                    throw new \Exception("Gearman client encountered unexpected return code for job {$jobName}", $rc);
+                }
             }
         }
 

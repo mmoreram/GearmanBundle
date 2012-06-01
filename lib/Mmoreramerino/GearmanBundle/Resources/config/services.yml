@@ -9,8 +9,7 @@ parameters:
 services:
     gearman:
         class: %gearman.client.class%
-        calls:
-          - [setContainer,  [@service_container]]
+        arguments: [@service_container]]
     gearman.settings:
         class: %gearman.settings.class%
         calls:
