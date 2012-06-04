@@ -50,14 +50,14 @@ class GearmanClient extends GearmanService
     /**
      * Available callbacks for \GearmanClient
      */
-    const CALLBACK_CREATE    = 'create';
-    const CALLBACK_DATA      = 'data';
-    const CALLBACK_STATUS    = 'status';
-    const CALLBACK_COMPLETE  = 'complete';
-    const CALLBACK_FAIL      = 'fail';
-    const CALLBACK_WARNING   = 'warning';
-    const CALLBACK_WORKLOAD  = 'workload';
-    const CALLBACK_EXCEPTION = 'exception';
+    const CALLBACK_TASK_CREATE    = 'create';
+    const CALLBACK_TASK_DATA      = 'data';
+    const CALLBACK_TASK_STATUS    = 'status';
+    const CALLBACK_TASK_COMPLETE  = 'complete';
+    const CALLBACK_TASK_FAIL      = 'fail';
+    const CALLBACK_TASK_WARNING   = 'warning';
+    const CALLBACK_TASK_WORKLOAD  = 'workload';
+    const CALLBACK_TASK_EXCEPTION = 'exception';
 
     /**
      * Construct method.
@@ -68,7 +68,7 @@ class GearmanClient extends GearmanService
     public function  __construct($container)
     {
         $this->client = new \GearmanClient();
-        $this->resetCallbacks();
+        $this->resetTaskCallbacks();
         $this->resetTaskStructure();
 
         $this->setContainer($container);
@@ -155,11 +155,13 @@ class GearmanClient extends GearmanService
     private function doEnqueue(Array $worker, $params = '', $method = 'do', $unique = null)
     {
         $this->assignServers();
-        $this->assignCallbacks();
         $jobName =  $this->client->$method($worker['job']['realCallableName'], serialize($params), $unique);
         $rc = $this->client->returnCode();
         if ($rc != GEARMAN_SUCCESS) {
-            throw new \Exception("Gearman client encountered unexpected return code for job {$jobName}", $rc);
+            throw new \Exception(
+                "Gearman client encountered unexpected return code for job {$jobName}: " .
+                $this->client->error(), $rc
+            );
         }
         return $jobName;
     }
@@ -199,32 +201,32 @@ class GearmanClient extends GearmanService
     /**
      * Assign callbacks
      */
-    public function assignCallbacks()
+    public function assignTaskCallbacks()
     {
         foreach ($this->callbacks as $name => $callback) {
             switch ($name) {
-                case self::CALLBACK_CREATE:
+                case self::CALLBACK_TASK_CREATE:
                     $this->client->setCreatedCallback($callback);
                     break;
-                case self::CALLBACK_DATA:
+                case self::CALLBACK_TASK_DATA:
                     $this->client->setDataCallback($callback);
                     break;
-                case self::CALLBACK_STATUS:
+                case self::CALLBACK_TASK_STATUS:
                     $this->client->setStatusCallback($callback);
                     break;
-                case self::CALLBACK_COMPLETE:
+                case self::CALLBACK_TASK_COMPLETE:
                     $this->client->setCompleteCallback($callback);
                     break;
-                case self::CALLBACK_FAIL:
+                case self::CALLBACK_TASK_FAIL:
                     $this->client->setFailCallback($callback);
                     break;
-                case self::CALLBACK_WARNING:
+                case self::CALLBACK_TASK_WARNING:
                     $this->client->setWarningCallback($callback);
                     break;
-                case self::CALLBACK_WORKLOAD:
+                case self::CALLBACK_TASK_WORKLOAD:
                     $this->client->setWorkloadCallback($callback);
                     break;
-                case self::CALLBACK_EXCEPTION:
+                case self::CALLBACK_TASK_EXCEPTION:
                     $this->client->setExceptionCallback($callback);
                     break;
                 default:
@@ -371,7 +373,7 @@ class GearmanClient extends GearmanService
     /**
      * Reset Default Callbacks
      */
-    public function resetCallbacks()
+    public function resetTaskCallbacks()
     {
         $this->callbacks = array();
     }
@@ -556,17 +558,21 @@ class GearmanClient extends GearmanService
     {
         $taskStructure = $this->taskStructure;
         $this->assignServers();
-        $this->assignCallbacks();
+        $this->assignTaskCallbacks();
 
         foreach ($taskStructure['tasks'] as $task) {
             $type = $task['method'];
             $jobName = $task['name'];
             $worker = $this->getJob($jobName);
             if (false !== $worker) {
-                $this->client->$type($worker['job']['realCallableName'], serialize($type['params']), $type['context'], $type['unique']);
+                $this->client->$type($worker['job']['realCallableName'], serialize($task['params']), $task['context'], $task['unique']);
                 $rc = $this->client->returnCode();
+
                 if ($rc != GEARMAN_SUCCESS) {
-                    throw new \Exception("Gearman client encountered unexpected return code for job {$jobName}", $rc);
+                    throw new \Exception(
+                        "Gearman client encountered unexpected return code for job {$jobName}: " .
+                        $this->client->error(), $rc
+                    );
                 }
             }
         }
