@@ -6,6 +6,8 @@ use Mmoreramerino\GearmanBundle\Service\GearmanCache as Cache;
 use Mmoreramerino\GearmanBundle\Exceptions\JobDoesNotExistException;
 use Mmoreramerino\GearmanBundle\Exceptions\WorkerDoesNotExistException;
 
+use Symfony\Component\DependencyInjection;
+
 /**
  * Gearman execute methods. All Worker methods
  *
@@ -13,7 +15,6 @@ use Mmoreramerino\GearmanBundle\Exceptions\WorkerDoesNotExistException;
  */
 class GearmanService extends GearmanSettings
 {
-
     /**
      * All workers
      *
@@ -41,10 +42,6 @@ class GearmanService extends GearmanSettings
             $gearmanCache = $this->container->get('gearman.cache');
             $this->workers = $gearmanCache->get();
         }
-
-        /**
-         * Always will be an Array
-         */
 
         return $this->workers;
     }
@@ -82,6 +79,7 @@ class GearmanService extends GearmanSettings
      *
      * @param string $workerName Name of worker
      *
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\WorkerDoesNotExistException
      * @return Array
      */
     public function getWorker($workerName)
