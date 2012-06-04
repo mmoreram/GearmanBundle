@@ -81,4 +81,5 @@ class GearmanSettings extends ContainerAware
 
         return $this->filepath;
     }
+
 }
