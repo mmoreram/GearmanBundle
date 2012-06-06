@@ -48,18 +48,6 @@ class GearmanClient extends GearmanService
     protected $callbacks = array();
 
     /**
-     * Available callbacks for \GearmanClient
-     */
-    const CALLBACK_TASK_CREATE    = 'create';
-    const CALLBACK_TASK_DATA      = 'data';
-    const CALLBACK_TASK_STATUS    = 'status';
-    const CALLBACK_TASK_COMPLETE  = 'complete';
-    const CALLBACK_TASK_FAIL      = 'fail';
-    const CALLBACK_TASK_WARNING   = 'warning';
-    const CALLBACK_TASK_WORKLOAD  = 'workload';
-    const CALLBACK_TASK_EXCEPTION = 'exception';
-
-    /**
      * Construct method.
      * Performs all init actions, like initialize the GearmanClient object and tasks structure
      *
@@ -68,7 +56,6 @@ class GearmanClient extends GearmanService
     public function  __construct($container)
     {
         $this->client = new \GearmanClient();
-        $this->resetTaskCallbacks();
         $this->resetTaskStructure();
 
         $this->setContainer($container);
@@ -369,14 +356,6 @@ class GearmanClient extends GearmanService
         return $this->enqueue($name, $params, 'doLowBackground', $unique);
     }
 
-
-    /**
-     * Reset Default Callbacks
-     */
-    public function resetTaskCallbacks()
-    {
-        $this->callbacks = array();
-    }
 
     /**
      * Reset all tasks structure. Remove all set values
