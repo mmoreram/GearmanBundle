@@ -148,8 +148,7 @@ class GearmanCache extends ContainerAware
     public function getPath()
     {
         if (null === $this->cachedir) {
-            $rootDir = $this->container->get('kernel')->getRootDir();
-            $this->cachedir = $rootDir . '/cache/'.$this->container->get('kernel')->getEnvironment().'/gearman/';
+            $this->cachedir = $this->container->get('kernel')->getCacheDir().'/gearman/';
         }
 
         return $this->cachedir;
