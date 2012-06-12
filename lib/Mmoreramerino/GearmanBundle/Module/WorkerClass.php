@@ -45,14 +45,28 @@ class WorkerClass
      * @param Work             $classAnnotation ClassAnnotation class
      * @param \ReflectionClass $reflectionClass Reflexion class
      * @param Reader           $reader          ReaderAnnotation class
-     * @param array            $settings        Settings array
+     * @param array            $settings        GearmanBundle Settings array
+     * @param $bundleSettings  $bundleSettings  Scanned Bundle Settings array
+     *
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\SettingValueBadFormatException
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\SettingValueMissingException
      */
-    public function __construct(Work $classAnnotation, \ReflectionClass $reflectionClass, Reader $reader, array $settings)
+    public function __construct(Work $classAnnotation, \ReflectionClass $reflectionClass,
+                                Reader $reader, array $settings, $bundleSettings)
     {
+        if (!isset($settings['defaults'])) {
+            throw new SettingValueMissingException('defaults');
+        }
+
         $this->namespace = $reflectionClass->getNamespaceName();
 
-        $this->callableName =   str_replace('\\', '', ((null !== $classAnnotation->name) ?
-            ($this->namespace .'\\' .$classAnnotation->name) :
+        $callablePrefix = $this->callableName . '\\';
+        if (isset($bundleSettings['prefix'])) {
+            $callablePrefix = $bundleSettings['prefix'];
+        }
+
+        $this->callableName = str_replace('\\', '', ((null !== $classAnnotation->name) ?
+            ($callablePrefix . $classAnnotation->name) :
             $reflectionClass->getName()));
 
         $this->description =    (null !== $classAnnotation->description) ?
@@ -63,9 +77,6 @@ class WorkerClass
         $this->className = $reflectionClass->getName();
         $this->service = $classAnnotation->service;
 
-        if (!isset($settings['defaults'])) {
-            throw new SettingValueMissingException('defaults');
-        }
 
         if (isset($settings['defaults']['iterations']) && null !== $settings['defaults']['iterations']) {
             $iter = (int) ($settings['defaults']['iterations']);

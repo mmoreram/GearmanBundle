@@ -3,7 +3,6 @@
 namespace Mmoreramerino\GearmanBundle\Service;
 
 use Mmoreramerino\GearmanBundle\Service\GearmanService;
-use Mmoreramerino\GearmanBundle\Service\GearmanInterface;
 use Mmoreramerino\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
 
 /**
@@ -13,16 +12,6 @@ use Mmoreramerino\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
  */
 class GearmanClient extends GearmanService
 {
-
-    /**
-     * Construct method.
-     * Performs all init actions, like initialize tasks structure
-     */
-    public function __construct()
-    {
-        $this->resetTaskStructure();
-    }
-
     /**
      * Server variable to define in what server must connect to
      *
@@ -31,32 +20,79 @@ class GearmanClient extends GearmanService
     public $server = null;
 
     /**
+     * GearmanClient object
+     *
+     * @var \GearmanClient
+     */
+    private $client = null;
+
+    /**
+     * Gearman Client config
+     *
+     * @var array
+     */
+    private $clientConfig = null;
+
+    /**
+     * task structure to store all about called tasks
+     *
+     * @var $taskStructure
+     */
+    public $taskStructure = null;
+
+    /**
+     * Callbacks for Gearman Client
+     *
+     * @var array
+     */
+    protected $callbacks = array();
+
+    /**
+     * Construct method.
+     * Performs all init actions, like initialize the GearmanClient object and tasks structure
+     *
+     * @param \Symfony\Component\DependencyInjection\Container $container Container
+     */
+    public function  __construct($container)
+    {
+        $this->client = new \GearmanClient();
+        $this->resetTaskStructure();
+
+        $this->setContainer($container);
+        $this->clientConfig = $this->container->getParameter('gearman.config.client');
+
+        if (isset($this->clientConfig['server'])) {
+            $clientConfig = $this->clientConfig['server'];
+            $hostname = (isset($clientConfig['hostname'])) ? (string) $clientConfig['hostname'] : 'localhost';
+            $port     = (isset($clientConfig['port'])) ? (string) $clientConfig['port'] : '4730';
+            $this->setServer($hostname, $port);
+        }
+    }
+
+    /**
      * If workers are not loaded, they're loaded and returned.
      * Otherwise, they are simply returned
      *
-     * @return Array Workers array getted from cache and saved
+     * @return Array Workers array returned from cache and saved
      */
     public function getWorkers()
     {
-        /**
-         * Always will be an Array
-         */
-
         return $this->setWorkers();
     }
 
     /**
      * Runs a single task and returns some result, depending of method called.
      * Method called depends of default callable method setted on gearman settings
-     *  or overwritted on work or job annotations
+     * or overwritten on work or job annotations
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
      * @param Mixed  $params Parameters to send to job
      *
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\NoCallableGearmanMethodException
      * @return mixed result depending of method called.
      */
-     public function callJob($name, $params = array())
-     {
+    public function callJob($name, $params = array())
+    {
         $worker = $this->getJob($name);
         $methodCallable = $worker['job']['defaultMethod'] . 'Job';
 
@@ -65,7 +101,7 @@ class GearmanClient extends GearmanService
         }
 
         return $this->$methodCallable($name, $params);
-     }
+    }
 
 
     /**
@@ -105,19 +141,25 @@ class GearmanClient extends GearmanService
      */
     private function doEnqueue(Array $worker, $params = '', $method = 'do', $unique = null)
     {
-        $gmclient = new \GearmanClient();
-        $this->assignServers($gmclient);
-
-        return $gmclient->$method($worker['job']['realCallableName'], serialize($params), $unique);
+        $this->assignServers();
+        $jobName =  $this->client->$method($worker['job']['realCallableName'], serialize($params), $unique);
+        $rc = $this->client->returnCode();
+        if ($rc != GEARMAN_SUCCESS) {
+            throw new \Exception(
+                "Gearman client encountered unexpected return code for job {$jobName}: " .
+                $this->client->error(), $rc
+            );
+        }
+        return $jobName;
     }
 
     /**
      * Set server of gearman
      *
      * @param type $servername Server name (must be ip)
-     * @param type $port       Port of server. By default 4730
+     * @param int  $port       Port of server. By default 4730
      *
-     * @return GearmanClient Returns self object
+     * @return \Mmoreramerino\GearmanBundle\Service\GearmanClient Returns self object
      */
     public function setServer($servername, $port = 4730)
     {
@@ -129,21 +171,55 @@ class GearmanClient extends GearmanService
     /**
      * Given a GearmanClient, set all included servers
      *
-     * @param GearmanClient $gearmanClient Object to include servers
-     *
      * @return GearmanClient Returns self object
      */
-    private function assignServers(\GearmanClient $gearmanClient)
+    private function assignServers()
     {
         if (null === $this->server || !is_array($this->server)) {
 
-            $gearmanClient->addServer();
+            $this->client->addServer();
         } else {
 
-            $gearmanClient->addServer($this->server[0], $this->server[1]);
+            $this->client->addServer($this->server[0], $this->server[1]);
+        }
+        return $this;
+    }
+
+    /**
+     * Assign callbacks
+     */
+    public function assignTaskCallbacks()
+    {
+        foreach ($this->callbacks as $name => $callback) {
+            switch ($name) {
+                case self::CALLBACK_TASK_CREATE:
+                    $this->client->setCreatedCallback($callback);
+                    break;
+                case self::CALLBACK_TASK_DATA:
+                    $this->client->setDataCallback($callback);
+                    break;
+                case self::CALLBACK_TASK_STATUS:
+                    $this->client->setStatusCallback($callback);
+                    break;
+                case self::CALLBACK_TASK_COMPLETE:
+                    $this->client->setCompleteCallback($callback);
+                    break;
+                case self::CALLBACK_TASK_FAIL:
+                    $this->client->setFailCallback($callback);
+                    break;
+                case self::CALLBACK_TASK_WARNING:
+                    $this->client->setWarningCallback($callback);
+                    break;
+                case self::CALLBACK_TASK_WORKLOAD:
+                    $this->client->setWorkloadCallback($callback);
+                    break;
+                case self::CALLBACK_TASK_EXCEPTION:
+                    $this->client->setExceptionCallback($callback);
+                    break;
+                default:
+            }
         }
 
-        return $this;
     }
 
     /**
@@ -177,7 +253,6 @@ class GearmanClient extends GearmanService
      */
     public function doJob($name, $params = array(), $unique = null)
     {
-
         return $this->enqueue($name, $params, 'do', $unique);
     }
 
@@ -283,21 +358,9 @@ class GearmanClient extends GearmanService
 
 
     /**
-     * Task methods
-     */
-
-    /**
-     * task structure to store all about called tasks
-     *
-     * @var $taskStructure
-     */
-    public $taskStructure = null;
-
-
-    /**
      * Reset all tasks structure. Remove all set values
      *
-     * @return true;
+     * @return boolean True
      */
     public function resetTaskStructure()
     {
@@ -307,7 +370,6 @@ class GearmanClient extends GearmanService
 
         return true;
     }
-
 
     /**
      * Adds a task to be run in parallel with other tasks.
@@ -441,8 +503,8 @@ class GearmanClient extends GearmanService
             'params'    =>  $params,
             'context'   =>  $context,
             'unique'    =>  $unique,
-            'method'    =>  $method,
-            );
+            'method'    =>  $method
+        );
         $this->addTaskToStructure($task);
 
         return $this;
@@ -469,23 +531,55 @@ class GearmanClient extends GearmanService
      * or GearmanClient::addTaskLowBackground(), this call starts running the tasks in parallel.
      * Note that enough workers need to be available for the tasks to all run in parallel
      *
-     * @return true
+     * @return boolean True
      */
     public function runTasks()
     {
         $taskStructure = $this->taskStructure;
-        $gearmanClient = new \GearmanClient();
-        $this->assignServers($gearmanClient);
+        $this->assignServers();
+        $this->assignTaskCallbacks();
 
         foreach ($taskStructure['tasks'] as $task) {
             $type = $task['method'];
             $jobName = $task['name'];
             $worker = $this->getJob($jobName);
             if (false !== $worker) {
-                $gearmanClient->$type($worker['job']['realCallableName'], serialize($type['params']), $type['context'], $type['unique']);
+                $this->client->$type($worker['job']['realCallableName'], serialize($task['params']), $task['context'], $task['unique']);
+                $rc = $this->client->returnCode();
+
+                if ($rc != GEARMAN_SUCCESS) {
+                    throw new \Exception(
+                        "Gearman client encountered unexpected return code for job {$jobName}: " .
+                        $this->client->error(), $rc
+                    );
+                }
             }
         }
 
-        return $gearmanClient->runTasks();
+        return $this->client->runTasks();
+    }
+
+    /**
+     * Sets the GearmanClient object
+     *
+     * @param \GearmanClient $client
+     *
+     * @return GearmanClient Return this object
+     */
+    public function setClient(\GearmanClient $client)
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * Returns the GearmanClient object
+     *
+     * @return \GearmanClient
+     */
+    public function getClient()
+    {
+        return $this->client;
     }
 }

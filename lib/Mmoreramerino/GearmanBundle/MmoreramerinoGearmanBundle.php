@@ -25,24 +25,21 @@ class MmoreramerinoGearmanBundle extends GearmanBaseBundle
     public function boot()
     {
         if (!in_array('gearman', get_loaded_extensions())) {
-
             throw new GearmanNotInstalledException;
         }
 
         $gearmanCache = $this->container->get('gearman.cache');
-        $existsCache = $gearmanCache->existsCacheFile();
+        $existsCache  = $gearmanCache->existsCacheFile();
 
         $cacheclearEnvs = array(
-            'back_dev', 'back_test', 'dev', 'test',
+            'back_dev', 'back_test', 'dev', 'test', 'dev_test'
         );
 
         if (in_array($this->container->get('kernel')->getEnvironment(), $cacheclearEnvs) || !$existsCache) {
 
             if ($existsCache) {
-
                 $gearmanCache->emptyCache();
             }
-
             $gearmanCacheLoader = $this->container->get('gearman.cache.loader');
             $gearmanCacheLoader->load($gearmanCache);
         }

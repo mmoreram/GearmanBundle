@@ -2,7 +2,10 @@
 
 namespace Mmoreramerino\GearmanBundle\Service;
 
-use Mmoreramerino\GearmanBundle\Service\GearmanService;
+use Mmoreramerino\GearmanBundle\Service\GearmanService,
+    Mmoreramerino\GearmanBundle\Workers\WorkerInterface;
+
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -11,6 +14,19 @@ use Mmoreramerino\GearmanBundle\Service\GearmanService;
  */
 class GearmanExecute extends GearmanService
 {
+    /**
+     * Save original exception handler
+     *
+     * @var $symfonyExceptionHandler Object
+     */
+    protected $symfonyExceptionHandler;
+
+    /**
+     * Save original error handler
+     *
+     * @var $symfonyExceptionHandler Object
+     */
+    protected $symfonyErrorHandler;
 
     /**
      * Executes a job given a jobName and given settings and annotations of job
@@ -51,9 +67,10 @@ class GearmanExecute extends GearmanService
             $objInstance = $this->container->get($worker['service']);
         } else {
             $objInstance = new $worker['className'];
-            if ($objInstance instanceof \Symfony\Component\DependencyInjection\ContainerAwareInterface) {
-                $objInstance->setContainer($this->container);
-            }
+        }
+
+        if ($objInstance instanceof ContainerAwareInterface && $this->container) {
+            $objInstance->setContainer($this->container);
         }
 
         foreach ($jobs as $job) {
@@ -61,20 +78,35 @@ class GearmanExecute extends GearmanService
         }
 
         $shouldStop = ($iterations > 0) ? true : false;
-
-        while ($gmworker->work()) {
-
-            if ($gmworker->returnCode() != GEARMAN_SUCCESS) {
-                break;
+        try {
+            if ($objInstance instanceof WorkerInterface) {
+                $this->registerExecutionHandlers($objInstance);
             }
+            while ($gmworker->work()) {
 
-            if ($shouldStop) {
-                $iterations--;
-                if ($iterations <= 0) {
+                if ($gmworker->returnCode() != GEARMAN_SUCCESS) {
                     break;
                 }
+
+                if ($shouldStop) {
+                    $iterations--;
+                    if ($iterations <= 0) {
+                        break;
+                    }
+                }
             }
+        } catch (\Exception $e) {
+            if ($objInstance instanceof WorkerInterface) {
+                $objInstance->exceptionHandler($e);
+                $this->unregisterExecutionHandlers($objInstance);
+            }
+            throw $e;
         }
+
+        if ($objInstance instanceof WorkerInterface) {
+            $this->unregisterExecutionHandlers($objInstance);
+        }
+
     }
 
     /**
@@ -95,6 +127,26 @@ class GearmanExecute extends GearmanService
         } else {
             $gmworker->addServer();
         }
+    }
+
+    /**
+     * Register execution handlers
+     *
+     * @param $instance Instance of Worker Class
+     */
+    private function registerExecutionHandlers($instance)
+    {
+        $this->symfonyExceptionHandler = set_exception_handler(array($instance, 'exceptionHandler'));
+        $this->symfonyErrorHandler     = set_error_handler(array($instance, 'errorHandler'));
+    }
+
+    /**
+     * Unregister execution handlers
+     */
+    private function unregisterExecutionHandlers()
+    {
+        set_exception_handler($this->symfonyExceptionHandler);
+        set_error_handler($this->symfonyErrorHandler);
     }
 
     /**

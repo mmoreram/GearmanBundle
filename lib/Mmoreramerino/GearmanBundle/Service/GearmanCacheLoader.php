@@ -19,8 +19,6 @@ use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
  */
 class GearmanCacheLoader extends ContainerAware
 {
-
-
     /**
      * Settings defined into settings file
      *
@@ -41,7 +39,7 @@ class GearmanCacheLoader extends ContainerAware
      *
      * @var Array
      */
-    private $ignored = null;
+    private $exclude = array();
 
     /**
      * This method load all data and saves all annotations into cache.
@@ -71,16 +69,20 @@ class GearmanCacheLoader extends ContainerAware
 
         $workerCollection = new WorkerCollection;
         $bundles = $this->container->get('kernel')->getBundles();
+        $parseableBundles = $this->getParseableBundles();
         foreach ($bundles as $bundle) {
-            if (!\in_array($bundle->getNamespace(), $this->getParseableBundles())) {
+
+            $namespace = $bundle->getNamespace();
+            if (!\array_key_exists($namespace, $parseableBundles)) {
                 continue;
             }
+            $bundleSettings = $parseableBundles[$namespace];
             $filesLoader = new WorkerDirectoryLoader(new FileLocator('.'));
+
             $files = $filesLoader->load($bundle->getPath());
-
+            $includes = (isset($bundleSettings['include'])) ? (array) $bundleSettings['include'] : array();
             foreach ($files as $file) {
-
-                if ($this->isIgnore($file['class'])) {
+                if ($this->isIgnore($file['class'], $includes)) {
                     continue;
                 }
 
@@ -90,7 +92,9 @@ class GearmanCacheLoader extends ContainerAware
                 foreach ($classAnnotations as $annot) {
 
                     if ($annot instanceof \Mmoreramerino\GearmanBundle\Driver\Gearman\Work) {
-                        $workerCollection->add(new Worker($annot, $reflClass, $reader, $this->getSettings()));
+                        $workerCollection->add(
+                            new Worker($annot, $reflClass, $reader, $this->getSettings(), $bundleSettings)
+                        );
                     }
                 }
             }
@@ -116,20 +120,27 @@ class GearmanCacheLoader extends ContainerAware
             $this->bundles = array();
 
             if (isset($this->settings['bundles']) && is_array($this->settings['bundles']) && !empty($this->settings['bundles'])) {
-
-                foreach ($this->settings['bundles'] as $properties) {
-
-                    if ( isset($properties['active']) && (true === $properties['active']) ) {
-
-                        if ('' !== $properties['namespace']) {
-                            $this->bundles[] = $properties['namespace'];
+                foreach ($this->settings['bundles'] as $bundleName => $bundle) {
+                    if (isset($properties['active']) && (!$properties['active'])) {
+                        continue;
+                    }
+                    $settings = array();
+                    $namespace = (isset($bundle['namespace'])) ? $bundle['namespace'] : $bundleName;
+                    if (isset($bundle['include'])) {
+                        if (!is_array($bundle['include'])) {
+                            $bundle['include'] = array($bundle['include']);
                         }
+                        foreach ($bundle['include'] as $key => $value) {
+                            $bundle['include'][$key] = $namespace . '\\' . $value;
+                        }
+                    }
 
-                        if (isset($properties['ignore'])) {
-                            $ignored = (array) $properties['ignore'];
-                            while ($ignored) {
-                                $this->ignored[] = $properties['namespace'] . '\\' . array_shift($ignored);
-                            }
+                    $this->bundles[$namespace] = $bundle;
+
+                    if (isset($bundle['exclude'])) {
+                        $exclude = (array) $bundle['exclude'];
+                        while ($exclude) {
+                            $this->exclude[] = $namespace . '\\' . array_shift($ignored);
                         }
                     }
                 }
@@ -165,17 +176,30 @@ class GearmanCacheLoader extends ContainerAware
     /**
      * Checks the class it belongs to the ignored
      *
-     * @param string $class Class name
+     * @param string $class    Class name
+     * @param array  $includes Includes
      *
      * @return boolean
      */
-    public function isIgnore($class)
+    private function isIgnore($class, $includes = array())
     {
-        if (null === $this->ignored) {
+        $found = false;
+        foreach ($includes as $include) {
+            if (0 === strpos($class, $include)) {
+                $found = true;
+                break;
+            }
+        }
+
+        if ($found && null === $this->exclude) {
             return false;
         }
 
-        foreach ($this->ignored as $ns) {
+        if (count($includes) > 0 && !$found) {
+            return true;
+        }
+
+        foreach ($this->exclude as $ns) {
             if (strstr($class, $ns) !== false) {
                 return true;
             }
