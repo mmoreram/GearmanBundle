@@ -76,7 +76,7 @@ class GearmanSettings extends ContainerAware
     {
         if (null === $this->filepath) {
             $rootDir = $this->container->get('kernel')->getRootDir();
-            $this->filepath = $rootDir . $this->container->getParameter('config.path') . $this->container->get('kernel')->getEnvironment().'.yml';
+            $this->filepath = $this->container->getParameter('gearman.config.path');
         }
 
         return $this->filepath;
