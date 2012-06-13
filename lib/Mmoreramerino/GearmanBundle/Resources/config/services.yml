@@ -1,5 +1,5 @@
 parameters:
-    config.path:                /config/gearman/
+    gearman.config.path:        %kernel.root_dir%/config/gearman/%kernel.environment%.yml
 
     gearman.client.class:       Mmoreramerino\GearmanBundle\Service\GearmanClient
     gearman.cache.class:        Mmoreramerino\GearmanBundle\Service\GearmanCache
