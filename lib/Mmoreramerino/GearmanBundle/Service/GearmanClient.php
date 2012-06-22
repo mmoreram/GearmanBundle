@@ -41,13 +41,6 @@ class GearmanClient extends GearmanService
     public $taskStructure = null;
 
     /**
-     * Callbacks for Gearman Client
-     *
-     * @var array
-     */
-    protected $callbacks = array();
-
-    /**
      * Construct method.
      * Performs all init actions, like initialize the GearmanClient object and tasks structure
      *
@@ -183,43 +176,6 @@ class GearmanClient extends GearmanService
             $this->client->addServer($this->server[0], $this->server[1]);
         }
         return $this;
-    }
-
-    /**
-     * Assign callbacks
-     */
-    public function assignTaskCallbacks()
-    {
-        foreach ($this->callbacks as $name => $callback) {
-            switch ($name) {
-                case self::CALLBACK_TASK_CREATE:
-                    $this->client->setCreatedCallback($callback);
-                    break;
-                case self::CALLBACK_TASK_DATA:
-                    $this->client->setDataCallback($callback);
-                    break;
-                case self::CALLBACK_TASK_STATUS:
-                    $this->client->setStatusCallback($callback);
-                    break;
-                case self::CALLBACK_TASK_COMPLETE:
-                    $this->client->setCompleteCallback($callback);
-                    break;
-                case self::CALLBACK_TASK_FAIL:
-                    $this->client->setFailCallback($callback);
-                    break;
-                case self::CALLBACK_TASK_WARNING:
-                    $this->client->setWarningCallback($callback);
-                    break;
-                case self::CALLBACK_TASK_WORKLOAD:
-                    $this->client->setWorkloadCallback($callback);
-                    break;
-                case self::CALLBACK_TASK_EXCEPTION:
-                    $this->client->setExceptionCallback($callback);
-                    break;
-                default:
-            }
-        }
-
     }
 
     /**
@@ -537,7 +493,6 @@ class GearmanClient extends GearmanService
     {
         $taskStructure = $this->taskStructure;
         $this->assignServers();
-        $this->assignTaskCallbacks();
 
         foreach ($taskStructure['tasks'] as $task) {
             $type = $task['method'];
