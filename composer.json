@@ -1,6 +1,6 @@
 {
     "name": "mmoreramerino/gearman-bundle",
-    "description": "Adds gearman support",
+    "description": "Adds gearman support to your Symfony2 project",
     "keywords": ["gearman"],
     "homepage": "http://mmoreramerino.github.com/GearmanBundle/",
     "type": "symfony-bundle",
