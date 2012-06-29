@@ -1,0 +1,686 @@
+<html>
+    <head><style type="text/css">
+
+    body {
+        font-size:13px;
+        color: #626262;
+        font: 1em Georgia,"Times New Roman",serif;
+    }
+
+    a {
+        color:#626262;
+    }
+    a:hover {
+        text-decoration:underline;
+    }
+
+    ul, li, a {
+        text-decoration:none;
+        list-style:disc outside none;
+    }
+
+    h1 {
+        color:#006F9F;
+        font-size:2em;
+        padding:20px 0 15px;
+    }
+
+    h2 {
+        font:1.4em Georgia,"Times New Roman",serif;
+        color:#006F9F;
+        padding:15px 0 10px;
+        margin-bottom:5px;
+    }
+
+    .block {
+
+        margin-left:15px;
+    }
+
+
+
+
+
+    .wp_syntax{-moz-border-radius:8px;-webkit-border-radius:8px;-o-border-radius:8px;-ms-border-radius:8px;-khtml-border-radius:8px;border-radius:8px;background-color:#232125;border:1px solid #666666;color:#100;overflow:auto;overflow-x:auto;overflow-y:hidden;width:100%;margin:1em auto;padding:1em;}.wp_syntax table{border-collapse:collapse;}.wp_syntax div,.wp_syntax td{vertical-align:top;padding:2px 4px;}.wp_syntax .line_numbers{background-color:#DEF;color:gray;overflow:visible;text-align:right;}.wp_syntax .code{background-color:#232125 !important;}.wp_syntax pre{color:#ccc;font-family:Georgia,"Times New Roman",serif;background-color:#232125;clear:none;float:none;font-size:15px;line-height:1.333;overflow:visible;white-space:nowrap;width:auto;margin:0;padding:0;}.de1{color:#ddd;}.de2{color:#bbb;}.kw1{color:#FF8400;}.kw2{color:#FF8400;font-weight:400;}.kw3{color:#fd6;}.kw4{color:#F83;font-weight:400;}.co0{color:#6d6;font-style:italic;}.co2{color:#8d8;font-style:italic;}.co3{color:#9d9;font-style:italic;}.coMULTI{color:#bdb;font-style:italic;}.es0{color:#e3e;}.es_h{color:#909;}.sy0{color:#E0882F;}.sy1{color:#aff;background-color:#039;}.nu0{color:#e66;}.nu8{color:#cc6;}.nu12{color:#6cc;}.nu19{color:#c6c;}.me1{color:#FFF;font-weight:400;}.me2{color:#ccb;}.re0{color:#fff;font-weight:400;}.re1{color:#ccc;font-weight:700;}a{text-decoration:none;}.diff .kw1{color:#aaa;font-style:italic;}.diff .re0{color:#408;}.diff .re1{color:#f33;}.diff .re2{color:#00b000;}.diff .re3{color:#f96;}.diff .re4{color:#9f9;}.diff .re5{color:#01d;}.diff .re6{color:#96f;}.diff .re7{color:#f66;}.diff .re8{color:#5f5;}.diff .re9{color:#882;}.one-column #page{max-width:none;}.wp_syntax td{border-width:0;}.entry-content .wp_syntax table,.wp_syntax .comment-content table{border-bottom:none !important;margin:0;}.co1,.co4{color:#FFAA00;font-style:italic;}.st0,.st_h{color:#EEEEEE;}.br0,.re2,.re3,.re4,.re5,.re6,.re7,.re8,.re9{color:#fff;}.mm0{font-size:12px;margin-bottom:15px;display:block;}pre{border:none;}</style></head>
+
+
+
+
+
+    <body>
+    	<a href="https://github.com/mmoreramerino/GearmanBundle"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub"></a>
+
+
+    <div style="width:850px; margin:0 auto; position:relative">
+    <img src="gearmanbundle-logo.png" style="float:right"/>
+    <h1>GearmanBundle</h1>
+
+    <ul>
+        <li><a target="_blank" href="https://github.com/mmoreramerino/GearmanBundle">GearmanBundle Github page</a> / <a href="https://github.com/mmoreramerino/GearmanBundle"><strong>Fork me!</strong></a></li>
+        <li><a target="_blank" href="http://knpbundles.com/mmoreramerino/GearmanBundle">GearmanBundle KnpBundles Page</a></li>
+        <li><a target="_blank" href="https://twitter.com/#!/mmoreram">Author <strong>(@mmoreram)</strong></a></li>
+    </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2>Branches</h2>
+    <div class="block">
+
+        <h3><a href="https://github.com/mmoreramerino/GearmanBundle/tree/v1.0">v1.0</a></h3>
+        <ul>
+            <li>Refactoring of code</li>
+            <li>Adapted for composer.json</li>
+            <li>Automatic setContainer called method for Jobs extending ContainerAware</li>
+            <li>Changed gearman config placement. Using standard config.yml file under "gearman" namespace</li>
+        </ul>
+
+        <h3><a href="https://github.com/mmoreramerino/GearmanBundle/tree/master">master</a></h3>
+        <ul>
+            <li>Last stable release of GearmanBundle</li>
+        </ul>
+
+        <h3><a href="https://github.com/mmoreramerino/GearmanBundle/tree/development">development</a></h3>
+        <ul>
+            <li>Continuous development branch</li>
+            <li>All pull request will need to be done under development branch</li>
+        </ul>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2>Installation</h2>
+    <div class="block">
+
+        <h3>With deps file</h3>
+        <div class="block">
+
+            <p>Include this repository on the list of vendors and reinstall it again. You must edit your "deps" file in your project root</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="c1">%/deps</span>
+                        <span class="kw2">[GearmanBundle]</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">git=http://github.com/mmoreramerino/GearmanBundle.git</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">target=/bundles/Mmoreramerino/GearmanBundle</span>
+                    </pre>
+                </div>
+            </div>
+            <p>You can specify the Gearman branch. By default, development branch is set, but you can specify the stable release by setting master branch</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="c1">%/deps</span>
+                        <span class="kw2">[GearmanBundle]</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">git=http://github.com/mmoreramerino/GearmanBundle.git</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">target=/bundles/Mmoreramerino/GearmanBundle</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">version=refs/remotes/origin/master</span><br />
+                    </pre>
+                </div>
+            </div>
+            <p>You also need to update autoload file, to make Symfony2 able to find GearmanBundle.
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="c1">%/app/autoload.php</span>
+                        <span class="kw2">&lt;?php</span><br /><br />
+                        <span class="re0">$loader</span><span class="sy0">-></span><span class="re0">registerNamespaces</span><span class="br0">(</span><span class="kw3">array</span><span class="br0">(</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="st_h">'Sensio'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">=&gt;</span> <span class="kw3">__DIR__</span> <span class="sy0">.</span> <span class="st_h">'/../vendor/bundles'</span><span class="sy0">,</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="st_h">'JMS'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">=&gt;</span> <span class="kw3">__DIR__</span> <span class="sy0">.</span> <span class="st_h">'/../vendor/bundles'</span><span class="sy0">,</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="st_h">'Doctrine\\Common'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">=&gt;</span> <span class="kw3">__DIR__</span> <span class="sy0">.</span> <span class="st_h">'/../vendor/doctrine-common/lib'</span><span class="sy0">,</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">/**</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">*&nbsp;Your namespaces</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">*/</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="st_h">'Mmoreramerino'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">=&gt;</span> <span class="kw3">__DIR__</span> <span class="sy0">.</span> <span class="st_h">'/../vendor/bundles/Mmoreramerino/GearmanBundle/lib'</span><span class="sy0">,</span><br />
+                        <span class="br0">))</span><span class="sy0">;</span>
+                    </pre>
+                </div>
+            </div>
+
+        </div>
+        <h3>Composer system</h3>
+
+
+
+
+        <h3>... and then</h3>
+        <div class="block">
+
+
+            <p>When you have registered the bundle and you're in your project, you just need to instantiate it.</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="c1">%/app/AppKernel.php</span>
+                        <span class="kw2">&lt;?php</span><br /><br />
+                        <span class="re0">$bundles</span> <span class="sy0">=</span> <span class="kw3">array</span><span class="br0">(</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">new</span> Symfony\Bundle\FrameworkBundle\FrameworkBundle()<span class="sy0">,</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">new</span> Symfony\Bundle\TwigBundle\TwigBundle()<span class="sy0">,</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">new</span> Symfony\Bundle\MonologBundle\MonologBundle()<span class="sy0">,</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">new</span> Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle()<span class="sy0">,</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">/**</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">*&nbsp;Your bundles</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">*/</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">new</span> Mmoreramerino\GearmanBundle\MmoreramerinoGearmanBundle()<span class="sy0">,</span><br />
+                        <span class="br0">)</span><span class="sy0">;</span>
+                    </pre>
+                </div>
+            </div>
+            <p>Once all this is done, you can check if GearmanBundle is already installed by running check command</p>
+            <div class="wp_syntax">
+                <div class="code">
+                    <pre class="php">
+                        <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:check</span>
+                    </pre>
+                </div>
+            </div>
+
+        </div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2>Settings</h2>
+    <div class="block">
+
+        <p>The only settings you must check when installing GearmanBundle is to set settings file on your environment. By default, settings path is <strong>/config/gearman/{environment}.yml</strong>, but you can configure it acceding at dependence injection parameters.</p>
+        <p>You can find an example of development config file in <strong>/Project/dev.base.yml</strong></p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="kw2"># Bundles gearman will parse searching annotations</span><br />
+                    bundles:<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># Name of bundle</span><br />
+                          &nbsp;&nbsp;&nbsp;&nbsp;GearmanBundle:<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># Namespace to be found</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;namespace: Mmoreramerino\GearmanBundle<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># Bundle search can be enabled or disabled</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;active: true<br /><br />
+
+                    <span class="kw2"># default values</span><br />
+                    defaults:<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># default method related with all jobs</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">#     do</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">#     doBackground</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">#     doHigh</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">#     doHighBackground</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">#     doLow</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">#     doLowBackground</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;method: do<br /><br />
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># Server list by default workers and clients will connect</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># Server must contain hostname and port</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># If annotations defined, will be overwritten</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;servers:<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;localhost:<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hostname: 127.0.0.1<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port: 4730<br /><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># Default number of executions before job dies.</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2"># If annotations defined, will be overwritten</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;iterations: 150<br />
+                </pre>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2>Cache</h2>
+    <div class="block">
+        <p>GearmanBundle saves all the information in cache of all environments except development. You can force cache to clear or to warmup with two built commands.</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:cache:clear</span>
+                </pre>
+            </div>
+        </div>
+        <p>Warmup rebuilds cache with all workers and jobs updated. Remember to run it in every production deployment</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:cache:warmup</span>
+                </pre>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2>Annotations</h2>
+    <div class="block">
+        <p>This Bundle allows you to configure whatever as a Job. It provides you an easy way to execute it with Supervisor, for example. Moreover, it let you call client methods in Symfony2 environment in a really simple and practical way.</p>
+        <p>Job annotations <strong>always</strong> overwrite work annotations, and work annotations <strong>always</strong> overwrite environment settings</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="kw2">namespace</span> Mmoreramerino\GearmanBundle\Workers<span class="sy0">;</span>
+                    <br /><br />
+                    <span class="kw2">use</span> Mmoreramerino\GearmanBundle\Driver\Gearman<span class="sy0">;</span>
+                    <br /><br />
+                    <span class="co4">/** @Gearman\Work(iterations=3, description="Worker test description",defaultMethod="do") */</span><br />
+                    <span class="kw2">class</span> testWorker<br />
+                    <span class="br0">{</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">/**<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;* Test method to run as a job<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;* @param \GearmanJob $job Object with job parameters<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;* @return boolean<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;* @Gearman\Job(iterations=3, name="test", description="This is a description")<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;*/</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">public</span> <span class="kw2">function</span> testA<span class="br0">(</span>\GearmanJob $job<span class="br0">)</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">{</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw1">echo</span> <span class="st_h">'Job testA done!'</span><span class="sy0"> . </span><span class="kw1">PHP_EOL</span><span class="sy0">;</span><br /><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw1">return true</span><span class="sy0">;</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">}</span><br /><br />
+
+
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">/**<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;* Test method to run as a job<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;* @param \GearmanJob $job Object with job parameters<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;* @return boolean<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;* @Gearman\Job(defaultMethod="doLowBackground")<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;*/</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">public</span> <span class="kw2">function</span> testA<span class="br0">(</span>\GearmanJob $job<span class="br0">)</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">{</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw1">echo</span> <span class="st_h">'Job testB done!'</span><span class="sy0"> . </span><span class="kw1">PHP_EOL</span><span class="sy0">;</span><br /><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw1">return true</span><span class="sy0">;</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">}</span><br />
+                    <span class="br0">}</span><br />
+                </pre>
+            </div>
+        </div>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="co4">Work annotations</span>
+                    <ul>
+                        <li><span class="kw2">name</span> : Name of work. You can associate a group of jobs with some keyword</li>
+                        <li><span class="kw2">description</span> : Short description about all jobs inside</li>
+                        <li><span class="kw2">iterations</span> : You can overwrite iterations of all jobs inside</li>
+                        <li><span class="kw2">service</span> : You can use even a service. Must specify callable service name</li>
+                        <li><span class="kw2">defaultMethod</span> : You can define witch method will be used as default in all jobs</li>
+                    </ul>
+                </pre>
+            </div>
+        </div>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="co4">Job annotations</span>
+                    <ul>
+                        <li><span class="kw2">name</span> : Name of job. You will use it to call job</li>
+                        <li><span class="kw2">description</span> : Short description about this job. Important field</li>
+                        <li><span class="kw2">iterations</span> : You can overwrite iterations of this job.</li>
+                        <li><span class="kw2">servers</span> : array containing servers providers will connect to offer this job</li>
+                        <li><span class="kw2">defaultMethod</span> : You can define witch method will be used as default in this job</li>
+                    </ul>
+                </pre>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2>Services</h2>
+    <div class="block">
+        <p>Sometimes we define classes and methods, for instance, extending ContainerAware. We must define these objects in our dependence injection config file as a service adding construct methods. Furthermore, we can also use them as a Job just defining the "service" annotation with the service name as value</p>
+
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="kw2"># /Resources/config/services.yml</span><br />
+                    bundles:<br />
+                          &nbsp;&nbsp;&nbsp;&nbsp;Services:<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myServiceName:<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class: Mmoreramerino\MyBundle\Service\MyService<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calls:<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [setContainer,  [@service_container]]<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- [anotherMethod,  []]<br />
+                </pre>
+            </div>
+        </div>
+        <p>In this case we cannot only define our method as a job, we have to tell GearmanBundle that this needs dependence injection and we must let it know how it can call this method. We can do it this way:</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="kw2">namespace</span> Mmoreramerino\GearmanBundle\Workers<span class="sy0">;</span>
+                    <br /><br />
+                    <span class="co4">/** @Gearman\Work(<strong>service="myServiceName"</strong>) */</span><br />
+                    <span class="kw2">class</span> testWorker<br />
+                    <span class="br0">{</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="co4">/**<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;* Test method to run as a job<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;* @param \GearmanJob $job Object with job parameters<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;* @return boolean<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;*<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;* @Gearman\Job()<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;*/</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw2">public</span> <span class="kw2">function</span> testA<span class="br0">(</span>\GearmanJob $job<span class="br0">)</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">{</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw1">echo</span> <span class="st_h">'Job testB done!'</span><span class="sy0"> . </span><span class="kw1">PHP_EOL</span><span class="sy0">;</span><br /><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw1">return true</span><span class="sy0">;</span><br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="br0">}</span><br />
+                    <span class="br0">}</span><br />
+                </pre>
+            </div>
+        </div>
+        <p>All annotations are available as well as in the first case.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2>Creating some workers</h2>
+    <div class="block">
+        <p>Once you have set all workers and jobs, you will have a way to execute one job, allowing clients to use them.</p>
+        <p>GearmanBundle let you know all about available workers and their jobs.</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:worker:list</span>
+                </pre>
+            </div>
+        </div>
+        <p>You can also describe one specific worker by using its callable name ( you can find this value on 'describe' command ) ...</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:worker:describe workerCallableName</span>
+                </pre>
+            </div>
+        </div>
+        <p>... or describe one specific job inside a worker. GearmanBundle will provide you all worker information, as well.</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:job:describe JobCallableName</span>
+                </pre>
+            </div>
+        </div>
+
+        <p>Once you know about the workers and the jobs, you can subscribe all the jobs inside one worker executing that worker with GearmanBundle. In the description you will also find Supervisord information to execute it. Iterations and servers information is defined by settings or, overwritting them, worker annotations. Iterations refers to the additions of all scripts, if not 0.</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:worker:describe workerCallableName</span>
+                </pre>
+            </div>
+        </div>
+        <p>Finally, you can subscribe one single job by creating one temporary worker just for one job instance. The iterations and the servers will be picked to the worker they belong, or overwriting them, to their Job annotations. You can check this information by describing the job.</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="br0">~/path/to/your/project<span class="kw2">[master]</span>: php app/console gearman:job:execute JobCallableName</span>
+                </pre>
+            </div>
+        </div>
+
+        <p>When job is used more than $iterations times, Job subscription srcipt will be killed, so you will have to alive it again. For this reason, it is advisable to empty the memory periodically.</p>
+        <p>You can use <a target="_blank" href="http://supervisord.org/">Supervisor</a> to keep alive all the process and to reactivate one killed process.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2>Requesting some jobs</h2>
+    <div class="block">
+        <p>You can request a Job by using the gearman service</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="co4">/**<br />
+                    &nbsp;* We do a simple call of a Job named "MmoreramerinoGearmanBundleWorkers~testB"<br />
+                    &nbsp;*/</span><br /><br />
+                    <span class="br0">$gearman</span>&nbsp;<span class="sy0">=</span>&nbsp;<span class="br0">$this<span class="sy0">-&gt;</span>getContainer()<span class="sy0">-&gt;</span>get(<span class="st_h">'gearman'</span>)<span class="sy0"><span class="sy0">;</span><br />
+                    <span class="br0">$gearman</span>-&gt;</span>doJob(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~testB'</span>)<span class="sy0">;</span></span>
+                </pre>
+            </div>
+        </div>
+
+        <p>Right now only few utilities are available</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <ul>
+                        <li><span class="kw2">doJob</span> : Call the job and wait for the result</li>
+                        <li><span class="kw2">doNormalJob</span> : Call the job and wait for the result ( Only newest gearman versions )</li>
+                        <li><span class="kw2">doHighJob</span> : Call the job and wait for the result on High Preference</li>
+                        <li><span class="kw2">doLowJob</span> : Call the job and wait for the result on Low Preference</li>
+                        <li><span class="kw2">doBackroundJob</span> : Call the job without waiting for the result.<ul><li>It recieves a job handle for the submitted job</ul></li></li>
+                        <li><span class="kw2">doHighBackgroundJob</span> : Call the job without waitting for the result on High Preference.<ul><li>It recieves a job handle for the submitted job</ul></li></li>
+                        <li><span class="kw2">doLowBackgroundJob</span> : Call the job without waitting for the result on Low Preference.<ul><li>It recieves a job handle for the submitted job</ul></li></li>
+                        <li><span class="kw2">callJob</span> : Call the job with default method<ul><li>Defined in settings, work annotations or the job annotations</ul></li></li>
+                    </ul>
+                </pre>
+            </div>
+        </div>
+        <p>By reading <a href="http://gearman.org/">Gearman documentation</a> you can check the method's returning data</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h2>Tasks</h2>
+    <div class="block">
+        <p>You can also call tasks and run them all</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <span class="co4">/**<br />
+                    &nbsp;* We do a simple call of a Job named "MmoreramerinoGearmanBundleWorkers~testB"<br />
+                    &nbsp;*/</span><br /><br />
+                    <span class="br0">$gearman</span><span class="sy0">-&gt;</span>addTask(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~test'</span>)<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">-&gt;</span>addLowTask(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~testB'</span>)<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">-&gt;</span>addHighBackgroundTask(<span class="st_h">'MmoreramerinoGearmanBundleWorkers~testB'</span>)<br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="sy0">-&gt;</span>runTasks()<span class="sy0">;</span><br />
+
+                    </span>
+                </pre>
+            </div>
+        </div>
+        <p>Right now only few utilities are available. Be carefull of having enough active workers to do all tasks in parallel. Otherwise script will stay waiting for non-resolved task.</p>
+        <div class="wp_syntax">
+            <div class="code">
+                <pre class="php">
+                    <ul>
+                        <li><span class="kw2">addTask</span> : Adds a task to be run in parallel with other tasks</li>
+                        <li><span class="kw2">addTaskHigh</span> : Add a high priority task to run in parallel</li>
+                        <li><span class="kw2">addTaskLow</span> : Add a low priority task to run in parallel</li>
+                        <li><span class="kw2">addTaskBackground</span> : Add a background task to be run in parallel</li>
+                        <li><span class="kw2">addTaskHighBackground</span> : Add a high priority background task to be run in parallel</li>
+                        <li><span class="kw2">addTaskLowBackground</span> : Add a low priority background task to be run in parallel</li>
+                        <li><span class="kw2">runTasks</span> : Run a list of tasks in parallel</li>
+                    </ul>
+                </pre>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <h2>Some other ideas</h2>
+        <p>All code is Symfony2 Code formatted, so every pull request must validate phpcs.sh script. Results are placed in Project/Reportings/codesniffer.log. You can follow <a target="_blank" href="https://github.com/opensky/Symfony2-coding-standard">these</a> instructions to install all the software needed and execute the script from the project root.</p>
+        <div class="wp_syntax">
+                    <div class="code">
+                        <pre class="php">
+                sh ./phpcs.sh
+            </pre>
+            </div>
+        </div>
+        <p>Do not hesitate to contact me if you have any question, I'll be glad to answer, revise and improve new features. I hope you enjoy it.</p>
+        </div>
+    </body>
+</html>
