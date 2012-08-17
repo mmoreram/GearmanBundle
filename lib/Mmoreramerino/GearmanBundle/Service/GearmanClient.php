@@ -173,7 +173,7 @@ class GearmanClient extends GearmanService
      * @param string $unique A unique ID used to identify a particular task
      *
      * @return string A string representing the results of running a task.
-     * @depracated
+     * @deprecated
      */
     public function doJob($name, $params = array(), $unique = null)
     {
