@@ -31,23 +31,5 @@ class MmoreramerinoGearmanBundle extends Bundle
 
             throw new GearmanNotInstalledException;
         }
-
-        /** @var Cache $cache  */
-        $cache = $this->container->get(self::CACHE_SERVICE);
-        $existsCache = $cache->contains(self::CACHE_ID);
-
-        $cacheclearEnvs = array(
-            'back_dev', 'back_test', 'dev', 'test',
-        );
-
-        if (in_array($this->container->get('kernel')->getEnvironment(), $cacheclearEnvs) || !$existsCache) {
-            if ($existsCache) {
-                $cache->delete(self::CACHE_ID);
-            }
-
-            /** @var GearmanLoader $gearmanCacheLoader  */
-            $gearmanCacheLoader = $this->container->get('gearman.loader');
-            $gearmanCacheLoader->load($cache);
-        }
     }
 }

@@ -77,10 +77,9 @@ class GearmanExecute extends GearmanService
      * @param \GearmanWorker $gmworker Worker to perform configuration
      * @param array          $servers  Servers array
      */
-    private function addServers(\GearmanWorker $gmworker, Array $servers)
+    private function addServers(\GearmanWorker $gmworker, array $servers)
     {
         if (!empty($servers)) {
-
             foreach ($servers as $server) {
                 list($addr, $port) = explode(':', $server, 2);
                 $gmworker->addServer($addr, $port);

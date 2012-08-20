@@ -6,6 +6,7 @@ use Mmoreramerino\GearmanBundle\MmoreramerinoGearmanBundle;
 use Mmoreramerino\GearmanBundle\Exceptions\JobDoesNotExistException;
 use Mmoreramerino\GearmanBundle\Exceptions\WorkerDoesNotExistException;
 use Mmoreramerino\GearmanBundle\Module\WorkerClass;
+use Doctrine\Common\Cache\Cache;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -23,23 +24,38 @@ class GearmanService extends GearmanSettings
     protected $workers = null;
 
     /**
-     * Retrieve all Workers from cache
+     * Init workers. If they're not loaded yet - init them
      * Return $workers
      *
      * @return WorkerClass[]
      */
-    public function setWorkers()
+    protected function initWorkers()
     {
-        if (!is_array($this->workers)) {
+        if (!$this->workers) {
 
-            $gearmanCache = $this->container->get(MmoreramerinoGearmanBundle::CACHE_SERVICE);
-            $this->workers = $gearmanCache->fetch(MmoreramerinoGearmanBundle::CACHE_ID);
+            /** @var Cache $cache  */
+            $cache = $this->container->get(MmoreramerinoGearmanBundle::CACHE_SERVICE);
+            $existsCache = $cache->contains(MmoreramerinoGearmanBundle::CACHE_ID);
+
+            $cacheclearEnvs = array(
+                'back_dev', 'back_test', 'dev', 'test',
+            );
+
+            if (in_array($this->container->get('kernel')->getEnvironment(), $cacheclearEnvs) || !$existsCache) {
+                if ($existsCache) {
+                    $cache->delete(MmoreramerinoGearmanBundle::CACHE_ID);
+                }
+
+                /** @var GearmanLoader $gearmanCacheLoader  */
+                $gearmanCacheLoader = $this->container->get('gearman.loader');
+                $gearmanCacheLoader->load($cache);
+            }
+            $this->workers = $cache->fetch(MmoreramerinoGearmanBundle::CACHE_ID);
         }
 
         /**
          * Always will be an Array
          */
-
         return $this->workers;
     }
 
@@ -54,7 +70,7 @@ class GearmanService extends GearmanSettings
      */
     public function getJob($jobName)
     {
-        $this->setWorkers();
+        $this->initWorkers();
 
         foreach ($this->workers as $worker) {
             if (is_array($worker->getJobCollection())) {
@@ -82,7 +98,7 @@ class GearmanService extends GearmanSettings
      */
     public function getWorker($workerName)
     {
-        $this->setWorkers();
+        $this->initWorkers();
 
         foreach ($this->workers as $worker) {
             if ($workerName === $worker->getCallableName()) {
@@ -91,5 +107,13 @@ class GearmanService extends GearmanSettings
         }
 
         throw new WorkerDoesNotExistException($workerName);
+    }
+
+    /**
+     * @return WorkerClass[]
+     */
+    public function getWorkers() {
+        $this->initWorkers();
+        return $this->workers;
     }
 }
