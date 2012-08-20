@@ -3,7 +3,6 @@
 namespace Mmoreramerino\GearmanBundle\Service;
 
 use Mmoreramerino\GearmanBundle\Service\GearmanService;
-use Mmoreramerino\GearmanBundle\Service\GearmanInterface;
 use Mmoreramerino\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
 
 /**
@@ -105,17 +104,14 @@ class GearmanClient extends GearmanService
      */
     private function doEnqueue(Array $worker, $params = '', $method = 'do', $unique = null)
     {
-        $gmclient = new \GearmanClient();
-        $this->assignServers($gmclient);
-
-        return $gmclient->$method($worker['job']['realCallableName'], serialize($params), $unique);
+        return $this->gearman->$method($worker['job']['realCallableName'], serialize($params), $unique);
     }
 
     /**
      * Set server of gearman
      *
-     * @param type $servername Server name (must be ip)
-     * @param type $port       Port of server. By default 4730
+     * @param string $servername Server name (must be ip)
+     * @param int $port       Port of server. By default 4730
      *
      * @return GearmanClient Returns self object
      */
@@ -297,7 +293,7 @@ class GearmanClient extends GearmanService
     /**
      * Reset all tasks structure. Remove all set values
      *
-     * @return true;
+     * @return bool
      */
     public function resetTaskStructure()
     {
@@ -469,7 +465,7 @@ class GearmanClient extends GearmanService
      * or GearmanClient::addTaskLowBackground(), this call starts running the tasks in parallel.
      * Note that enough workers need to be available for the tasks to all run in parallel
      *
-     * @return true
+     * @return bool
      */
     public function runTasks()
     {
@@ -485,6 +481,7 @@ class GearmanClient extends GearmanService
                 $gearmanClient->$type($worker['job']['realCallableName'], serialize($task['params']), $task['context'], $task['unique']);
             }
         }
+        $this->resetTaskStructure();
 
         return $gearmanClient->runTasks();
     }
