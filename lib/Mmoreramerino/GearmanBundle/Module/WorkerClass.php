@@ -4,7 +4,6 @@ namespace Mmoreramerino\GearmanBundle\Module;
 
 use Doctrine\Common\Annotations\Reader;
 use Mmoreramerino\GearmanBundle\Driver\Gearman\Work;
-use Mmoreramerino\GearmanBundle\Module\JobCollection;
 use Mmoreramerino\GearmanBundle\Module\JobClass as Job;
 use Mmoreramerino\GearmanBundle\Exceptions\SettingValueMissingException;
 use Mmoreramerino\GearmanBundle\Exceptions\SettingValueBadFormatException;
@@ -19,9 +18,14 @@ class WorkerClass
     /**
      * All jobs inside Worker
      *
-     * @var JobCollection
+     * @var Job[]
      */
     private $jobCollection;
+
+    /**
+     * @var Job
+     */
+    private $job;
 
     /**
      * Callable name for this job.
@@ -40,14 +44,46 @@ class WorkerClass
     private $namespace;
 
     /**
+     * @var string
+     */
+    private $description;
+
+    /**
+     * @var string
+     */
+    private $fileName;
+
+    /**
+     * @var string
+     */
+    private $className;
+
+    /**
+     * @var string
+     */
+    private $service;
+
+    /**
+     * @var array
+     */
+    private $servers;
+
+    /**
+     * @var int
+     */
+    private $iterations;
+
+    /**
      * Retrieves all jobs available from worker
      *
      * @param Work             $classAnnotation ClassAnnotation class
      * @param \ReflectionClass $reflectionClass Reflexion class
      * @param Reader           $reader          ReaderAnnotation class
      * @param array            $settings        Settings array
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\SettingValueBadFormatException
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\SettingValueMissingException
      */
-    public function __construct(Work $classAnnotation, \ReflectionClass $reflectionClass, Reader $reader, array $settings)
+    public function init(Work $classAnnotation, \ReflectionClass $reflectionClass, Reader $reader, array $settings)
     {
         $this->namespace = $reflectionClass->getNamespaceName();
 
@@ -106,41 +142,122 @@ class WorkerClass
         }
         $this->servers = $servers;
 
-        $this->jobCollection = new JobCollection;
+        $this->jobCollection = array();
 
         foreach ($reflectionClass->getMethods() as $method) {
             $reflMethod = new \ReflectionMethod($method->class, $method->name);
             $methodAnnotations = $reader->getMethodAnnotations($reflMethod);
             foreach ($methodAnnotations as $annot) {
                 if ($annot instanceof \Mmoreramerino\GearmanBundle\Driver\Gearman\Job) {
-                    $this->jobCollection->add(new Job($annot, $reflMethod, $classAnnotation, $this->callableName, $settings));
+                    $job = new Job();
+                    $job->init($annot, $reflMethod, $classAnnotation, $this->callableName, $settings);
+                    $this->jobCollection[] = $job;
                 }
             }
         }
     }
 
-    /**
-     * Retrieve all Worker data in cache format
-     *
-     * @return array
-     */
-    public function __toCache()
+    public static function __set_state(array $data)
     {
-        $dump = array(
-            'namespace'     =>  $this->namespace,
-            'className'     =>  $this->className,
-            'fileName'      =>  $this->fileName,
-            'callableName'  =>  $this->callableName,
-            'description'   =>  $this->description,
-            'service'       =>  $this->service,
-            'servers'       =>  $this->servers,
-            'iterations'    =>  $this->iterations,
-            'jobs'          =>  array(),
-        );
+        $worker = new WorkerClass;
+        $worker->namespace     = $data['namespace'];
+        $worker->className     = $data['className'];
+        $worker->fileName      = $data['fileName'];
+        $worker->callableName  = $data['callableName'];
+        $worker->description   = $data['description'];
+        $worker->service       = $data['service'];
+        $worker->servers       = $data['servers'];
+        $worker->iterations    = $data['iterations'];
+        $worker->jobCollection = $data['jobCollection'];
 
-        $dump['jobs'] = $this->jobCollection->__toCache();
-
-        return $dump;
+        return $worker;
     }
 
+    /**
+     * @return string
+     */
+    public function getCallableName()
+    {
+        return $this->callableName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassName()
+    {
+        return $this->className;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIterations()
+    {
+        return $this->iterations;
+    }
+
+    /**
+     * @return Job[]
+     */
+    public function getJobCollection()
+    {
+        return $this->jobCollection;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @return array
+     */
+    public function getServers()
+    {
+        return $this->servers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getService()
+    {
+        return $this->service;
+    }
+
+    /**
+     * @param \Mmoreramerino\GearmanBundle\Module\JobClass $job
+     */
+    public function setJob($job)
+    {
+        $this->job = $job;
+    }
+
+    /**
+     * @return \Mmoreramerino\GearmanBundle\Module\JobClass
+     */
+    public function getJob()
+    {
+        return $this->job;
+    }
 }

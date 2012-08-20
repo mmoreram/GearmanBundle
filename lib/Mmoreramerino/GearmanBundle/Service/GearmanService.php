@@ -2,9 +2,10 @@
 
 namespace Mmoreramerino\GearmanBundle\Service;
 
-use Mmoreramerino\GearmanBundle\Service\GearmanCache as Cache;
+use Mmoreramerino\GearmanBundle\MmoreramerinoGearmanBundle;
 use Mmoreramerino\GearmanBundle\Exceptions\JobDoesNotExistException;
 use Mmoreramerino\GearmanBundle\Exceptions\WorkerDoesNotExistException;
+use Mmoreramerino\GearmanBundle\Module\WorkerClass;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -17,29 +18,22 @@ class GearmanService extends GearmanSettings
     /**
      * All workers
      *
-     * @var type
+     * @var WorkerClass[]
      */
     protected $workers = null;
-
-    /**
-     * All settings
-     *
-     * @var settings
-     */
-    protected $settings = null;
 
     /**
      * Retrieve all Workers from cache
      * Return $workers
      *
-     * @return Array
+     * @return WorkerClass[]
      */
     public function setWorkers()
     {
         if (!is_array($this->workers)) {
 
-            $gearmanCache = $this->container->get('gearman.cache');
-            $this->workers = $gearmanCache->get();
+            $gearmanCache = $this->container->get(MmoreramerinoGearmanBundle::CACHE_SERVICE);
+            $this->workers = $gearmanCache->fetch(MmoreramerinoGearmanBundle::CACHE_ID);
         }
 
         /**
@@ -55,17 +49,18 @@ class GearmanService extends GearmanSettings
      *
      * @param string $jobName Name of job
      *
-     * @return Array
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\JobDoesNotExistException
+     * @return WorkerClass
      */
     public function getJob($jobName)
     {
         $this->setWorkers();
 
         foreach ($this->workers as $worker) {
-            if (is_array($worker['jobs'])) {
-                foreach ($worker['jobs'] as $job) {
-                    if ($jobName === $job['realCallableName']) {
-                        $worker['job'] = $job;
+            if (is_array($worker->getJobCollection())) {
+                foreach ($worker->getJobCollection() as $job) {
+                    if ($jobName === $job->getRealCallableName()) {
+                        $worker->setJob($job);
 
                         return $worker;
                     }
@@ -82,14 +77,15 @@ class GearmanService extends GearmanSettings
      *
      * @param string $workerName Name of worker
      *
-     * @return Array
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\WorkerDoesNotExistException
+     * @return WorkerClass
      */
     public function getWorker($workerName)
     {
         $this->setWorkers();
 
         foreach ($this->workers as $worker) {
-            if ($workerName === $worker['callableName']) {
+            if ($workerName === $worker->getCallableName()) {
                 return $worker;
             }
         }

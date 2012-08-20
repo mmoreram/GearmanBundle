@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Mmoreramerino\GearmanBundle\Module\JobClass;
 
 /**
  * Gearman Job Describe Command class
@@ -40,6 +41,7 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $job = $input->getArgument('job');
+        /** @var JobClass $job  */
         $job = $this->getContainer()->get('gearman')->getJob($job);
         $this->getContainer()->get('gearman.describer')->describeJob($output, $job);
     }
