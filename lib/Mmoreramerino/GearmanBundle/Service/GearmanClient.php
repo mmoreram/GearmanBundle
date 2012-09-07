@@ -31,6 +31,13 @@ class GearmanClient extends GearmanService
     public $server = null;
 
     /**
+     * Whether or not the php GearmanClient servers have been set
+     *
+     * @var boolean
+     */
+    private $serversSet = null;
+
+    /**
      * If workers are not loaded, they're loaded and returned.
      * Otherwise, they are simply returned
      *
@@ -114,14 +121,13 @@ class GearmanClient extends GearmanService
     /**
      * Set server of gearman
      *
-     * @param type $servername Server name (must be ip)
-     * @param type $port       Port of server. By default 4730
+     * @param array $servers server array keyed by hostname=>port
      *
      * @return GearmanClient Returns self object
      */
-    public function setServer($servername, $port = 4730)
+    public function setServer($servers = array())
     {
-        $this->server = array($servername, $port);
+        $this->server = $servers;
 
         return $this;
     }
@@ -135,14 +141,23 @@ class GearmanClient extends GearmanService
      */
     private function assignServers(\GearmanClient $gearmanClient)
     {
-        if (null === $this->server || !is_array($this->server)) {
-
-            $gearmanClient->addServer();
-        } else {
-
-            $gearmanClient->addServer($this->server[0], $this->server[1]);
+        if (empty($this->servers)) {
+            $this->setServer($this->getSettings()['defaults']['servers']);
         }
 
+        if ($this->serversSet) {
+            return $this;
+        }
+
+        if (is_array($this->server)) {
+            foreach ($this->server as $server) {
+                $gearmanClient->addServer($server['hostname'], $server['port']);
+            }
+        } else {
+            $gearmanClient->addServer();
+        }
+
+        $this->serversSet = true;
         return $this;
     }
 
