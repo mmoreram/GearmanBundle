@@ -108,7 +108,15 @@ class GearmanClient extends GearmanService
         $gmclient = new \GearmanClient();
         $this->assignServers($gmclient);
 
-        return $gmclient->$method($worker['job']['realCallableName'], serialize($params), $unique);
+        $params = array(
+            $worker['job']['realCallableName'],
+            serialize($params)
+        );
+        if ($unique !== null) {
+            $params[] = $unique;
+        }
+
+        return call_user_func_array(array($gmclient, $method), $params);
     }
 
     /**
