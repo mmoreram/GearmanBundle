@@ -10,4 +10,4 @@ Info. Some changes for new version of GearmanBundle.
 * Right way to set the autoload line for GearmanBundle is now "/../vendor/bundles/Mmoreramerino/GearmanBundle/lib"
 * Everytime you use gearman annotations, you must specify namespace (use). For more information, http://mmoreramerino.github.com/GearmanBundle/annotations.html
 
-All documentation is available at http://mmoreramerino.github.com/GearmanBundle
+All documentation is available at http://mmoreram.github.com/GearmanBundle
