@@ -29,6 +29,16 @@ class MmoreramGearmanExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $config);
 
+        $container->setParameter(
+            'gearman.bundles',
+            $config['bundles']
+        );
+
+        $container->setParameter(
+            'gearman.defaults',
+            $config['defaults']
+        );
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }

@@ -51,11 +51,11 @@ class JobCollection
      *
      * @return array
      */
-    public function __toCache()
+    public function toCache()
     {
         $jobs = array();
         foreach ($this->getJobs() as $job) {
-            $jobs[] = $job->__toCache();
+            $jobs[] = $job->toCache();
         }
 
         return $jobs;

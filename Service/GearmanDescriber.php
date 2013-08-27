@@ -3,15 +3,35 @@
 namespace Mmoreram\GearmanBundle\Service;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Implementation of GearmanDescriber
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class GearmanDescriber extends ContainerAware
+class GearmanDescriber
 {
+
+
+
+    /**
+     * @var Kernel
+     *
+     * Kernel
+     */
+    private $kernel;
+
+
+    /**
+     * Construct method
+     *
+     * @param Kernel $kernel Kernel
+     */
+    public function __construct(Kernel $kernel)
+    {
+        $this->kernel = $kernel;
+    }
 
     /**
      * Describe Job.
@@ -23,7 +43,8 @@ class GearmanDescriber extends ContainerAware
      */
     public function describeJob(OutputInterface $output, array $worker)
     {
-        $script = $this->container->get('kernel')->getRootDir() . '/console gearman:job:execute';
+
+        $script = $this->kernel->getRootDir() . '/console gearman:job:execute';
 
         $this->describeWorker($output, $worker);
         $job = $worker['job'];

@@ -5,6 +5,7 @@ namespace Mmoreram\GearmanBundle\Service;
 use Mmoreram\GearmanBundle\Service\GearmanService;
 use Mmoreram\GearmanBundle\Service\GearmanInterface;
 use Mmoreram\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
+use GearmanClient;
 
 /**
  * Implementation of GearmanInterface
@@ -15,6 +16,14 @@ class GearmanClient extends GearmanService
 {
 
     /**
+     * Server variable to define in what server must connect to
+     *
+     * @var array
+     */
+    public $server;
+
+
+    /**
      * Construct method.
      * Performs all init actions, like initialize tasks structure
      */
@@ -23,27 +32,6 @@ class GearmanClient extends GearmanService
         $this->resetTaskStructure();
     }
 
-    /**
-     * Server variable to define in what server must connect to
-     *
-     * @var array
-     */
-    public $server = null;
-
-    /**
-     * If workers are not loaded, they're loaded and returned.
-     * Otherwise, they are simply returned
-     *
-     * @return Array Workers array getted from cache and saved
-     */
-    public function getWorkers()
-    {
-        /**
-         * Always will be an Array
-         */
-
-        return $this->setWorkers();
-    }
 
     /**
      * Runs a single task and returns some result, depending of method called.
@@ -89,6 +77,7 @@ class GearmanClient extends GearmanService
         return false;
     }
 
+
     /**
      * Execute a GearmanClient call given a worker, params and a method.
      * If any method is given, it performs a "do" call
@@ -105,11 +94,12 @@ class GearmanClient extends GearmanService
      */
     private function doEnqueue(Array $worker, $params = '', $method = 'do', $unique = null)
     {
-        $gmclient = new \GearmanClient();
+        $gmclient = new GearmanClient();
         $this->assignServers($gmclient);
 
         return $gmclient->$method($worker['job']['realCallableName'], serialize($params), $unique);
     }
+
 
     /**
      * Set server of gearman
@@ -126,6 +116,7 @@ class GearmanClient extends GearmanService
         return $this;
     }
 
+
     /**
      * Given a GearmanClient, set all included servers
      *
@@ -133,7 +124,7 @@ class GearmanClient extends GearmanService
      *
      * @return GearmanClient Returns self object
      */
-    private function assignServers(\GearmanClient $gearmanClient)
+    private function assignServers(GearmanClient $gearmanClient)
     {
         if (null === $this->server || !is_array($this->server)) {
 
@@ -145,6 +136,7 @@ class GearmanClient extends GearmanService
 
         return $this;
     }
+
 
     /**
      * Clear server slot
@@ -180,6 +172,7 @@ class GearmanClient extends GearmanService
 
         return $this->enqueue($name, $params, 'do', $unique);
     }
+
 
     /**
      * Runs a single task and returns a string representation of the result.
@@ -232,6 +225,7 @@ class GearmanClient extends GearmanService
         return $this->enqueue($name, $params, 'doHigh', $unique);
     }
 
+
     /**
      * Runs a high priority task in the background, returning a job handle which can be used to get the status of the running task.
      * High priority tasks take precedence over normal and low priority tasks in the job queue.
@@ -247,6 +241,7 @@ class GearmanClient extends GearmanService
 
         return $this->enqueue($name, $params, 'doHighBackground', $unique);
     }
+
 
     /**
      * Runs a single low priority task and returns a string representation of the result.
@@ -264,6 +259,7 @@ class GearmanClient extends GearmanService
 
         return $this->enqueue($name, $params, 'doLow', $unique);
     }
+
 
     /**
      * Runs a low priority task in the background, returning a job handle which can be used to get the status of the running task.
@@ -474,7 +470,7 @@ class GearmanClient extends GearmanService
     public function runTasks()
     {
         $taskStructure = $this->taskStructure;
-        $gearmanClient = new \GearmanClient();
+        $gearmanClient = new GearmanClient();
         $this->assignServers($gearmanClient);
 
         foreach ($taskStructure['tasks'] as $task) {

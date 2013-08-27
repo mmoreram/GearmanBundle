@@ -20,43 +20,15 @@ class GearmanBundle extends Bundle
      */
     public function boot()
     {
-        $gearmanCache = $this->container->get('gearman.cache');
-        $existsCache = $gearmanCache->existsCacheFile();
+        $gearmanCacheLoader = $this->container->get('gearman.cache.loader');
 
-        if ($this->container->get('kernel')->isDebug() || !$existsCache) {
+        if ($this->container->get('kernel')->isDebug()) {
 
-            if ($existsCache) {
+            $gearmanCacheLoader->reloadCache($gearmanCache);
 
-                $gearmanCache->emptyCache();
-            }
+        } else {
 
-            $gearmanCacheLoader = $this->container->get('gearman.cache.loader');
-            $gearmanCacheLoader->load($gearmanCache);
+            $gearmanCacheLoader->loadCache($gearmanCache);
         }
-    }
-
-
-    /**
-     * Shutdowns the Bundle.
-     *
-     * @api
-     */
-    public function shutdown()
-    {
-
-    }
-
-    /**
-     * Builds the bundle.
-     *
-     * It is only ever called once when the cache is empty.
-     *
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     *
-     * @api
-     */
-    public function build(ContainerBuilder $container)
-    {
-
     }
 }

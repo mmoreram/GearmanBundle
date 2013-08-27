@@ -22,6 +22,51 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('gearman');
 
+        $rootNode
+            ->children()
+                ->arrayNode('bundles')
+                    ->prototype('array')
+                    ->children()
+                        ->scalarNode('namespace')
+                            ->isRequired()
+                            ->cannotBeEmpty()
+                        ->end()
+                        ->scalarNode('active')
+                            ->defaultFalse()
+                        ->end()
+                        ->arrayNode('include')
+                            ->prototype('scalar')->end()
+                        ->end()
+                        ->arrayNode('exclude')
+                            ->prototype('scalar')->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('defaults')
+                    ->children()
+                        ->scalarNode('iterations')
+                            ->defaultValue(150)
+                        ->end()
+                        ->scalarNode('method')
+                            ->defaultValue('do')
+                        ->end()
+                        ->arrayNode('servers')
+                            ->prototype('array')
+                            ->children()
+                                ->scalarNode('hostname')
+                                    ->isRequired()
+                                    ->cannotBeEmpty()
+                                ->end()
+                                ->scalarNode('port')
+                                    ->defaultValue(4730)
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+
         return $treeBuilder;
     }
 }

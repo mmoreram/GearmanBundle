@@ -2,82 +2,63 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Gearman cache class
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class GearmanCache extends ContainerAware
+class GearmanCache
 {
+
+    /**
+     * @var array
+     *
+     * Data loaded from cache
+     */
+    private $data;
+
+
+    /**
+     * @var string
+     *
+     * Cache filename
+     */
+    private $cacheFile;
+
+
+    /**
+     * @var string
+     *
+     * Cachedir
+     */
+    private $cacheDir;
+
+
+    /**
+     * Construct method
+     *
+     * @param string $cacheFilename Cache filename
+     */
+    public function __construct(Kernel $kernel, $cacheFilename)
+    {
+        $this->cacheDir = $kernel->getCacheDir();
+        $this->cacheFile = $this->cacheDir . $cacheFilename;
+    }
+
+
 
     /**
      * loadCache method. While data is not setted, empty array is loaded.
      * Sets dir and checks it
      */
-    public function loadCache()
+    public function load()
     {
-        $this->getPath();
-        $this->checkDir();
-        $this->data = $this->__toCache(array());
-    }
+        if ($this->existsCacheFile()) {
 
-
-    /**
-     * Cache dir to save all Gearman cached files.
-     *
-     * @var string
-     */
-    private $cachedir;
-
-
-    /**
-     * Cache filename
-     *
-     * @var string
-     */
-    private $cachefile = 'gearman.cache.php';
-
-
-    /**
-     * Data loaded and serialized ready for save into cache
-     *
-     * @var string
-     */
-    private $data = '';
-
-
-    /**
-     * Checks is cache dir is created.
-     * Otherwise, it creates it
-     * Returns self object
-     *
-     * @return GearmanCache
-     */
-    public function checkDir()
-    {
-        if (!is_dir($this->cachedir)) {
-            mkdir($this->cachedir, 0777, true);
+            $this->data = return (array) (require($this->cacheFile));
         }
-
-        return $this;
-    }
-
-
-    /**
-     * Remove gearman cache file
-     * Returns self object
-     *
-     * @return GearmanCache
-     */
-    public function emptyCache()
-    {
-        if (is_dir($this->cachedir . $this->cachefile)) {
-            unlink($this->cachedir . $this->cachefile);
-        }
-
-        return $this;
     }
 
 
@@ -88,7 +69,24 @@ class GearmanCache extends ContainerAware
      */
     public function existsCacheFile()
     {
-        return is_file($this->cachedir . $this->cachefile);
+        return is_file($this->cacheFile);
+    }
+
+
+    /**
+     * Remove gearman cache file
+     * Returns self object
+     *
+     * @return GearmanCache
+     */
+    public function empty()
+    {
+        if (is_dir($this->cacheFile)) {
+
+            unlink($this->cacheFile);
+        }
+
+        return $this;
     }
 
 
@@ -100,67 +98,22 @@ class GearmanCache extends ContainerAware
      *
      * @return GearmanCache
      */
-    public function set(Array $array)
+    public function set(Array $data)
     {
-        $this->data = "<?php return unserialize('".serialize($array)."');";
-        file_put_contents($this->cachedir . $this->cachefile, $this->data);
+        $this->data = "<?php return unserialize('" . serialize($data) . "');";
+        file_put_contents($this->cacheFile, $this->data);
 
         return $this;
     }
 
 
     /**
-     * Save data into cache
-     * Returns self object
+     * Get data loaded
      *
-     * @return boolean Return if saved
-     */
-    public function save()
-    {
-        return file_put_contents($this->cachedir . $this->cachefile, $this->data);
-    }
-
-
-    /**
-     * Retrieve cache data if is loaded
-     * if cache does not exist, return false
-     *
-     * @return Array
+     * @return array Data
      */
     public function get()
     {
-        if (is_file($this->cachedir . $this->cachefile)) {
-            return (array) (require($this->cachedir . $this->cachefile));
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Transform Array object into cache saveable string
-     *
-     * @param Array $data Data to set into cache
-     *
-     * @return string
-     */
-    public function __toCache(Array $data)
-    {
-        return "<?php return unserialize('".serialize($data)."');";
-    }
-
-
-    /**
-     * Return cache dir
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        if (null === $this->cachedir) {
-            $this->cachedir = $this->container->get('kernel')->getCacheDir().'/gearman/';
-        }
-
-        return $this->cachedir;
+        return $this->data;
     }
 }

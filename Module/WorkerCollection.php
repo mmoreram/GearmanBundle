@@ -19,6 +19,7 @@ class WorkerCollection
      */
     private $workerClasses = array();
 
+
     /**
      * Adds a Worker into $workerClasses
      * Return self object
@@ -34,16 +35,18 @@ class WorkerCollection
         return $this;
     }
 
+
     /**
      * Retrieve all workers loaded previously in cache format
      *
      * @return array
      */
-    public function __toCache()
+    public function toCache()
     {
         $workersDumped = array();
+
         foreach ($this->workerClasses as $worker) {
-            $workersDumped[] = $worker->__toCache();
+            $workersDumped[] = $worker->toCache();
         }
 
         return $workersDumped;

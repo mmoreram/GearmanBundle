@@ -132,7 +132,7 @@ class JobClass extends ContainerAware
      *
      * @return array
      */
-    public function __toCache()
+    public function toCache()
     {
         return array(
             'callableName'          =>  $this->callableName,

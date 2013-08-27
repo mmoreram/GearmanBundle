@@ -16,12 +16,14 @@ use Mmoreram\GearmanBundle\Exceptions\SettingValueBadFormatException;
  */
 class WorkerClass
 {
+
     /**
      * All jobs inside Worker
      *
      * @var JobCollection
      */
     private $jobCollection;
+
 
     /**
      * Callable name for this job.
@@ -32,12 +34,14 @@ class WorkerClass
      */
     private $callableName;
 
+
     /**
      * Namespace of Work class
      *
      * @var string
      */
     private $namespace;
+
 
     /**
      * Retrieves all jobs available from worker
@@ -119,12 +123,13 @@ class WorkerClass
         }
     }
 
+
     /**
      * Retrieve all Worker data in cache format
      *
      * @return array
      */
-    public function __toCache()
+    public function toCache()
     {
         $dump = array(
             'namespace'     =>  $this->namespace,
@@ -138,7 +143,7 @@ class WorkerClass
             'jobs'          =>  array(),
         );
 
-        $dump['jobs'] = $this->jobCollection->__toCache();
+        $dump['jobs'] = $this->jobCollection->toCache();
 
         return $dump;
     }

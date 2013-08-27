@@ -3,6 +3,8 @@
 namespace Mmoreram\GearmanBundle\Service;
 
 use Mmoreram\GearmanBundle\Service\GearmanService;
+use Symfony\Component\DependencyInjection\Container;
+use ContainerAwareInterface;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -11,6 +13,27 @@ use Mmoreram\GearmanBundle\Service\GearmanService;
  */
 class GearmanExecute extends GearmanService
 {
+
+    /**
+     * @var Container
+     *
+     * Container instance
+     */
+    private $container = $container;
+
+
+    /**
+     * Set container
+     *
+     * @param Container $container Container
+     *
+     * @return GearmanExecute self Object
+     */
+    public function setContainer(Container $container) {
+
+        $this->container = $container;
+    }
+
 
     /**
      * Executes a job given a jobName and given settings and annotations of job
@@ -26,6 +49,7 @@ class GearmanExecute extends GearmanService
         }
     }
 
+
     /**
      * Given a worker, execute GearmanWorker function defined by job.
      *
@@ -34,6 +58,7 @@ class GearmanExecute extends GearmanService
     private function callJob(Array $worker)
     {
         $gmworker= new \GearmanWorker();
+
         if (isset($worker['job'])) {
 
             $jobs = array($worker['job']);
@@ -48,15 +73,20 @@ class GearmanExecute extends GearmanService
         }
 
         if (null !== $worker['service']) {
+
             $objInstance = $this->container->get($worker['service']);
         } else {
+
             $objInstance = new $worker['className'];
-            if ($objInstance instanceof \Symfony\Component\DependencyInjection\ContainerAwareInterface) {
+
+            if ($objInstance instanceof ContainerAwareInterface) {
+
                 $objInstance->setContainer($this->container);
             }
         }
 
         foreach ($jobs as $job) {
+
             $gmworker->addFunction($job['realCallableName'], array($objInstance, $job['methodName']));
         }
 
@@ -69,13 +99,16 @@ class GearmanExecute extends GearmanService
             }
 
             if ($shouldStop) {
+
                 $iterations--;
                 if ($iterations <= 0) {
+
                     break;
                 }
             }
         }
     }
+
 
     /**
      * Adds into worker all defined Servers.
@@ -97,6 +130,7 @@ class GearmanExecute extends GearmanService
         }
     }
 
+
     /**
      * Executes a worker given a workerName subscribing all his jobs inside and given settings and annotations of worker and jobs
      *
@@ -107,6 +141,7 @@ class GearmanExecute extends GearmanService
         $worker = $this->getWorker($workerName);
 
         if (false !== $worker) {
+
             $this->callJob($worker);
         }
     }

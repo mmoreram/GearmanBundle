@@ -3,34 +3,41 @@ parameters:
 
     gearman.client.class:       Mmoreram\GearmanBundle\Service\GearmanClient
     gearman.cache.class:        Mmoreram\GearmanBundle\Service\GearmanCache
+    gearman.cache.filename:         gearman.cache.php
     gearman.cache.loader.class: Mmoreram\GearmanBundle\Service\GearmanCacheLoader
     gearman.execute.class:  Mmoreram\GearmanBundle\Service\GearmanExecute
     gearman.settings.class:     Mmoreram\GearmanBundle\Service\GearmanSettings
     gearman.describer.class:     Mmoreram\GearmanBundle\Service\GearmanDescriber
+
+
+
 services:
     gearman:
         class: %gearman.client.class%
-        calls:
-          - [setContainer,  [@service_container]]
-    gearman.settings:
-        class: %gearman.settings.class%
-        calls:
-          - [setContainer,  [@service_container]]
-          - [loadSettings,  []]
+
     gearman.cache:
         class: %gearman.cache.class%
+        arguments:
+            kernel: @kernel
+            cache.filename: %gearman.cache.filename%
         calls:
-          - [setContainer,  [@service_container]]
-          - [loadCache,  []]
+          - [load,  []]
+
     gearman.cache.loader:
         class: %gearman.cache.loader.class%
+        arguments:
+            gearman.bundles: %gearman.bundles%
+            kernel: @kernel
+            gearman.cache: @gearman.cache
         calls:
-          - [setContainer,  [@service_container]]
+          - [loadNamespacesMap,  []]
+
     gearman.execute:
         class: %gearman.execute.class%
         calls:
-          - [setContainer,  [@service_container]]
+          - [setContainer,  [@service.container]]
+
     gearman.describer:
         class: %gearman.describer.class%
-        calls:
-          - [setContainer,  [@service_container]]
+        arguments:
+            kernel: @kernel

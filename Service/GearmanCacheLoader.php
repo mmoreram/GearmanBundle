@@ -5,59 +5,127 @@ namespace Mmoreram\GearmanBundle\Service;
 use Symfony\Component\Config\FileLocator;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Mmoreram\GearmanBundle\Service\GearmanCache;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
+
 use Mmoreram\GearmanBundle\Module\WorkerCollection;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Mmoreram\GearmanBundle\Module\WorkerDirectoryLoader;
 use Mmoreram\GearmanBundle\Module\WorkerClass as Worker;
-use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
+use Mmoreram\GearmanBundle\Service\GearmanCache as Cache;
+use Mmoreram\GearmanBundle\Driver\Gearman\Work;
+use ReflectionClass;
 
 /**
  * Gearman cache loader class
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class GearmanCacheLoader extends ContainerAware
+class GearmanCacheLoader
 {
 
-
     /**
-     * Settings defined into settings file
+     * Bundles loaded by kernel
      *
      * @var Array
      */
-    private $settings = null;
+    private $kernelBundles;
 
 
     /**
-     * Bundles available to perform search setted in bundles.yml file
+     * Bundles available to perform search
      *
      * @var Array
      */
-    private $bundles = null;
+    private $bundles;
 
 
     /**
+     * @var Array
+     *
+     * bundles to parse on
+     */
+    private $bundlesAccepted = array();
+
+
+    /**
+     * @var Array
+     *
+     * accepted namespaces
+     */
+    private $namespacesAccepted = array();
+
+
+    /**
+     * @var Array
+     *
      * Ignored namespaces
-     *
-     * @var Array
      */
-    private $ignored = null;
+    private $namespacesIgnored = array();
 
 
     /**
-     * This method load all data and saves all annotations into cache.
-     * Also, it load all settings from Yaml file format
+     * @var GearmanCache
      *
-     * @param GearmanCache $cache Cache object to perform saving
-     *
-     * @return boolean Return result of saving result on cache
+     * Gearman Cache
      */
-    public function load(GearmanCache $cache)
+    private $cache;
+
+
+
+    /**
+     * Construct method
+     *
+     * @param array $bundles Bundles
+     */
+    public function __construct(array $bundles, Kernel $kernel, Cache $cache)
+    {
+        $this->kernelBundles = $kernel->getBundles();
+        $this->bundles = $bundles;
+        $this->cache = $cache;
+    }
+
+
+    /**
+     * loads Gearman cache, only if is not loaded yet
+     *
+     * @return GearmanCacheLoader self Object
+     */
+    public function loadCache()
+    {
+        if (!$this->cache->existsCacheFile()) {
+
+            $workerCollection = $this->parseNamespaceMap();
+            $this
+                ->cache
+                ->set($workerCollection->toCache()),
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * Reloads Gearman cache
+     *
+     * @return GearmanCacheLoader self Object
+     */
+    public function reloadCache()
+    {
+        $this->cache->empty();
+
+        return $this->loadCache();
+    }
+
+
+    /**
+     * Perform a parsing inside all namespace map
+     *
+     * @return WorkerCollection collection of all info
+     */
+    private function parseNamespaceMap()
     {
         AnnotationRegistry::registerFile(__DIR__ . "/../Driver/Gearman/Work.php");
         AnnotationRegistry::registerFile(__DIR__ . "/../Driver/Gearman/Job.php");
-
 
         /**
          * Depending on Symfony2 version
@@ -72,12 +140,11 @@ class GearmanCacheLoader extends ContainerAware
             $reader->setDefaultAnnotationNamespace('Mmoreram\GearmanBundle\Driver\\');
         }
 
-
         $workerCollection = new WorkerCollection;
-        $bundles = $this->container->get('kernel')->getBundles();
-        foreach ($bundles as $bundle) {
-            
-            if (!\in_array($bundle->getNamespace(), $this->getParseableBundles())) {
+
+        foreach ($this->kernelBundles as $kernelBundle) {
+
+            if (!in_array($kernelBundle->getNamespace(), $this->bundlesAccepted)) {
 
                 continue;
             }
@@ -87,25 +154,41 @@ class GearmanCacheLoader extends ContainerAware
 
             foreach ($files as $file) {
 
-                if ($this->isIgnore($file['class'])) {
-                    continue;
+                foreach ($this->namespacesIgnored as $namespaceIgnored) {
+
+                    if ($this->isSubNamespace($namespaceIgnored, $file['class'])) {
+
+                        continue 2;
+                    }
                 }
 
-                $reflClass = new \ReflectionClass($file['class']);
-                $classAnnotations = $reader->getClassAnnotations($reflClass);
+                foreach ($this->namespacesAccepted as $namespaceAccepted) {
 
-                foreach ($classAnnotations as $annot) {
+                    if ($this->isSubNamespace($namespaceAccepted, $file['class'])) {
 
-                    if ($annot instanceof \Mmoreram\GearmanBundle\Driver\Gearman\Work) {
-                        $workerCollection->add(new Worker($annot, $reflClass, $reader, $this->getSettings()));
+                        /**
+                         * File is accepted to be parsed
+                         */
+                        $reflClass = new ReflectionClass($file['class']);
+                        $classAnnotations = $reader->getClassAnnotations($reflClass);
+
+                        foreach ($classAnnotations as $annot) {
+
+                            if ($annot instanceof Work) {
+
+                                $workerCollection->add(new Worker($annot, $reflClass, $reader, $this->getSettings()));
+                            }
+                        }
+
+                        continue 2;
                     }
                 }
             }
         }
 
-        return $cache   ->set($workerCollection->__toCache())
-                        ->save();
+        return $workerCollection;
     }
+
 
     /**
      * Return Gearman bundle settings, previously loaded by method load()
@@ -113,82 +196,52 @@ class GearmanCacheLoader extends ContainerAware
      *
      * @return array Bundles that gearman will be able to search annotations
      */
-    public function getParseableBundles()
+    private function loadNamespacesMap()
     {
-        if (null === $this->settings) {
-            $this->loadSettings();
-        }
 
-        if (null === $this->bundles) {
-            $this->bundles = array();
+        foreach ($this->bundles as $bundleSettings) {
 
-            if (isset($this->settings['bundles']) && is_array($this->settings['bundles']) && !empty($this->settings['bundles'])) {
+            $bundleNamespace = $properties['namespace'];
 
-                foreach ($this->settings['bundles'] as $properties) {
+            if ($bundleSettings['active'])) {
 
-                    if ( isset($properties['active']) && (true === $properties['active']) ) {
+                $this->bundlesAccepted[] = $bundleNamespace;
 
-                        if ('' !== $properties['namespace']) {
-                            $this->bundles[] = $properties['namespace'];
-                        }
+                if (!empty($properties['include'])) {
 
-                        if (isset($properties['ignore'])) {
-                            $ignored = (array) $properties['ignore'];
-                            while ($ignored) {
-                                $this->ignored[] = $properties['namespace'] . '\\' . array_shift($ignored);
-                            }
-                        }
+                    foreach ($properties['include'] as $include) {
+
+                        $this->namespaceAccepted[] = $bundleNamespace . '\\' . $include;
                     }
+
+                } else {
+
+                    /**
+                     * If no include is set, include all namespace
+                     */
+                    $this->namespaceAccepted[] = $bundleNamespace;
+
+                }
+
+                foreach ($properties['ignore'] as $ignore) {
+
+                    $this->namespacesIgnored[] = $bundleNamespace . '\\' . $ignore;
                 }
             }
         }
-
-        return $this->bundles;
     }
 
 
     /**
-     * Return Gearman settings
+     * Checks if namespace is subnamespace of another
      *
-     * @return array Settings getted from gearmanSettings service
-     */
-    public function getSettings()
-    {
-        return $this->loadSettings();
-    }
-
-    /**
-     * Get yaml file and load all settings for Gearman engine
-     *
-     * @return array Settings
-     */
-    public function loadSettings()
-    {
-        $this->settings = $this->container->get('gearman.settings')->loadSettings();
-
-        return $this->settings;
-    }
-
-    /**
-     * Checks the class it belongs to the ignored
-     *
-     * @param string $class Class name
+     * @param string $namespace    Parent namespace
+     * @param string $subNamespace Namespace to check
      *
      * @return boolean
      */
-    public function isIgnore($class)
+    private function isSubNamespace($namespace, $subNamespace)
     {
-        if (null === $this->ignored) {
-            return false;
-        }
-
-        foreach ($this->ignored as $ns) {
-            
-            if (strstr($class, $ns) !== false) {
-                return true;
-            }
-        }
-
-        return false;
+        return ( strstr($class, $ns) !== false );
     }
 }

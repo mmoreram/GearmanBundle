@@ -11,7 +11,7 @@ use Mmoreram\GearmanBundle\Exceptions\WorkerDoesNotExistException;
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class GearmanService extends GearmanSettings
+class GearmanService
 {
 
     /**
@@ -19,35 +19,19 @@ class GearmanService extends GearmanSettings
      *
      * @var type
      */
-    protected $workers = null;
+    protected $workers;
+
 
     /**
-     * All settings
+     * Construct method
      *
-     * @var settings
+     * @param array $bundles Bundles
      */
-    protected $settings = null;
-
-    /**
-     * Retrieve all Workers from cache
-     * Return $workers
-     *
-     * @return Array
-     */
-    public function setWorkers()
+    public function __construct(Cache $cache)
     {
-        if (!is_array($this->workers)) {
-
-            $gearmanCache = $this->container->get('gearman.cache');
-            $this->workers = $gearmanCache->get();
-        }
-
-        /**
-         * Always will be an Array
-         */
-
-        return $this->workers;
+        $this->workers = $cache->get();
     }
+
 
     /**
      * Return worker containing a job with $jobName as name
@@ -59,12 +43,14 @@ class GearmanService extends GearmanSettings
      */
     public function getJob($jobName)
     {
-        $this->setWorkers();
-
         foreach ($this->workers as $worker) {
+
             if (is_array($worker['jobs'])) {
+
                 foreach ($worker['jobs'] as $job) {
+
                     if ($jobName === $job['realCallableName']) {
+
                         $worker['job'] = $job;
 
                         return $worker;
@@ -76,6 +62,7 @@ class GearmanService extends GearmanSettings
         throw new JobDoesNotExistException($jobName);
     }
 
+
     /**
      * Return worker with $workerName as name and all its jobs
      * If is not found, throws WorkerDoesNotExistException Exception
@@ -86,10 +73,10 @@ class GearmanService extends GearmanSettings
      */
     public function getWorker($workerName)
     {
-        $this->setWorkers();
-
         foreach ($this->workers as $worker) {
+
             if ($workerName === $worker['callableName']) {
+
                 return $worker;
             }
         }
