@@ -3,17 +3,14 @@
 namespace Mmoreramerino\GearmanBundle\Command;
 
 use Symfony\Component\Console\Input\InputOption;
+use Mmoreramerino\GearmanBundle\MmoreramerinoGearmanBundle;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputDefinition;
-use Mmoreramerino\GearmanBundle\Service\GearmanCache;
 use Symfony\Component\Console\Output\OutputInterface;
-use Mmoreramerino\GearmanBundle\Service\GearmanSettings;
-use Mmoreramerino\GearmanBundle\Module\GearmanBaseBundle;
-use Mmoreramerino\GearmanBundle\Service\GearmanCacheLoader;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Mmoreramerino\GearmanBundle\Exceptions\GearmanNotInstalledException;
-use Mmoreramerino\GearmanBundle\Exceptions\NoSettingsFileExistsException;
+use Doctrine\Common\Cache\Cache;
+use Mmoreramerino\GearmanBundle\Service\GearmanLoader;
 
 
 /**
@@ -47,9 +44,11 @@ class GearmanCacheWarmupCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('Warming up the cache for the ' . $this->getContainer()->get('kernel')->getEnvironment() . ' environment');
-        $gearmanCache = $this->getContainer()->get('gearman.cache');
-        $gearmanCache->emptyCache();
-        $gearmanCacheLoader = $this->getContainer()->get('gearman.cache.loader');
+        /** @var Cache $gearmanCache  */
+        $gearmanCache = $this->getContainer()->get(MmoreramerinoGearmanBundle::CACHE_SERVICE);
+        $gearmanCache->delete(MmoreramerinoGearmanBundle::CACHE_ID);
+        /** @var GearmanLoader $gearmanCacheLoader  */
+        $gearmanCacheLoader = $this->getContainer()->get('gearman.loader');
         $gearmanCacheLoader->load($gearmanCache);
     }
 }

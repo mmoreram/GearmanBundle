@@ -29,7 +29,10 @@ class MmoreramerinoGearmanExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $config);
 
+        $container->setParameter('gearman_servers', $config['defaults']['servers']);
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        $container->setParameter('gearman_settings', $config);
     }
 }

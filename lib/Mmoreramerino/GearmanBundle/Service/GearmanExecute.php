@@ -3,6 +3,7 @@
 namespace Mmoreramerino\GearmanBundle\Service;
 
 use Mmoreramerino\GearmanBundle\Service\GearmanService;
+use Mmoreramerino\GearmanBundle\Module\WorkerClass;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -29,35 +30,27 @@ class GearmanExecute extends GearmanService
     /**
      * Given a worker, execute GearmanWorker function defined by job.
      *
-     * @param array $worker Worker definition
+     * @param WorkerClass $worker Worker definition
      */
-    private function callJob(Array $worker)
+    private function callJob(WorkerClass $worker)
     {
         $gmworker= new \GearmanWorker();
-        if (isset($worker['job'])) {
+        $jobs = $worker->getJobCollection();
+        $iterations = (int) $worker->getIterations() ?: 0;
+        $this->addServers($gmworker, $worker->getServers());
 
-            $jobs = array($worker['job']);
-            $iterations = isset($worker['job']['iterations']) ? (int) ($worker['job']['iterations']) : 0;
-            $this->addServers($gmworker, $worker['job']['servers']);
-
+        if (null !== $worker->getService()) {
+            $objInstance = $this->container->get($worker->getService());
         } else {
-
-            $jobs = $worker['jobs'];
-            $iterations = isset($worker['iterations']) ? (int) ($worker['iterations']) : 0;
-            $this->addServers($gmworker, $worker['servers']);
-        }
-
-        if (null !== $worker['service']) {
-            $objInstance = $this->container->get($worker['service']);
-        } else {
-            $objInstance = new $worker['className'];
+            $className = $worker->getClassName();
+            $objInstance = new $className;
             if ($objInstance instanceof \Symfony\Component\DependencyInjection\ContainerAwareInterface) {
                 $objInstance->setContainer($this->container);
             }
         }
 
         foreach ($jobs as $job) {
-            $gmworker->addFunction($job['realCallableName'], array($objInstance, $job['methodName']));
+            $gmworker->addFunction($job->getRealCallableName(), array($objInstance, $job->getMethodName()));
         }
 
         $shouldStop = ($iterations > 0) ? true : false;
@@ -84,10 +77,9 @@ class GearmanExecute extends GearmanService
      * @param \GearmanWorker $gmworker Worker to perform configuration
      * @param array          $servers  Servers array
      */
-    private function addServers(\GearmanWorker $gmworker, Array $servers)
+    private function addServers(\GearmanWorker $gmworker, array $servers)
     {
         if (!empty($servers)) {
-
             foreach ($servers as $server) {
                 list($addr, $port) = explode(':', $server, 2);
                 $gmworker->addServer($addr, $port);

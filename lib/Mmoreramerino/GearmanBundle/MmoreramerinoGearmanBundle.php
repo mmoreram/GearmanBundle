@@ -3,18 +3,21 @@
 namespace Mmoreramerino\GearmanBundle;
 
 
-use Mmoreramerino\GearmanBundle\Service\GearmanCache;
-use Mmoreramerino\GearmanBundle\Module\GearmanBaseBundle;
-use Mmoreramerino\GearmanBundle\Service\GearmanCacheLoader;
+use Mmoreramerino\GearmanBundle\Service\GearmanLoader;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Mmoreramerino\GearmanBundle\Exceptions\GearmanNotInstalledException;
+use Doctrine\Common\Cache\Cache;
 
 /**
  * Gearman Bundle
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class MmoreramerinoGearmanBundle extends GearmanBaseBundle
+class MmoreramerinoGearmanBundle extends Bundle
 {
+    const CACHE_SERVICE = 'liip_doctrine_cache.ns.mmoreramerino_gearman';
+    const CACHE_ID = 'workers';
+
     /**
      * Boots the Bundle.
      * This method load all data and saves all annotations into cache.
@@ -27,24 +30,6 @@ class MmoreramerinoGearmanBundle extends GearmanBaseBundle
         if (!in_array('gearman', get_loaded_extensions())) {
 
             throw new GearmanNotInstalledException;
-        }
-
-        $gearmanCache = $this->container->get('gearman.cache');
-        $existsCache = $gearmanCache->existsCacheFile();
-
-        $cacheclearEnvs = array(
-            'back_dev', 'back_test', 'dev', 'test',
-        );
-
-        if (in_array($this->container->get('kernel')->getEnvironment(), $cacheclearEnvs) || !$existsCache) {
-
-            if ($existsCache) {
-
-                $gearmanCache->emptyCache();
-            }
-
-            $gearmanCacheLoader = $this->container->get('gearman.cache.loader');
-            $gearmanCacheLoader->load($gearmanCache);
         }
     }
 }

@@ -3,21 +3,21 @@
 namespace Mmoreramerino\GearmanBundle\Service;
 
 use Symfony\Component\Config\FileLocator;
+use Mmoreramerino\GearmanBundle\MmoreramerinoGearmanBundle;
+use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Mmoreramerino\GearmanBundle\Service\GearmanCache;
-use Mmoreramerino\GearmanBundle\Module\WorkerCollection;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Mmoreramerino\GearmanBundle\Module\WorkerDirectoryLoader;
 use Mmoreramerino\GearmanBundle\Module\WorkerClass as Worker;
-use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 /**
- * Gearman cache loader class
+ * Gearman loader class
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class GearmanCacheLoader extends ContainerAware
+class GearmanLoader extends ContainerAware
 {
 
 
@@ -47,11 +47,11 @@ class GearmanCacheLoader extends ContainerAware
      * This method load all data and saves all annotations into cache.
      * Also, it load all settings from Yaml file format
      *
-     * @param GearmanCache $cache Cache object to perform saving
+     * @param Cache $cache Cache object to perform saving
      *
      * @return boolean Return result of saving result on cache
      */
-    public function load(GearmanCache $cache)
+    public function load(Cache $cache)
     {
         if (version_compare(\Doctrine\Common\Version::VERSION, '2.2.0-DEV', '>=')) {
             // Register the ORM Annotations in the AnnotationRegistry
@@ -69,7 +69,8 @@ class GearmanCacheLoader extends ContainerAware
             $reader->setDefaultAnnotationNamespace('Mmoreramerino\GearmanBundle\Driver\\');
         }
 
-        $workerCollection = new WorkerCollection;
+        $workerCollection = array();
+        /** @var BundleInterface[] $bundles */
         $bundles = $this->container->get('kernel')->getBundles();
         foreach ($bundles as $bundle) {
             if (!\in_array($bundle->getNamespace(), $this->getParseableBundles())) {
@@ -88,16 +89,16 @@ class GearmanCacheLoader extends ContainerAware
                 $classAnnotations = $reader->getClassAnnotations($reflClass);
 
                 foreach ($classAnnotations as $annot) {
-
                     if ($annot instanceof \Mmoreramerino\GearmanBundle\Driver\Gearman\Work) {
-                        $workerCollection->add(new Worker($annot, $reflClass, $reader, $this->getSettings()));
+                        $worker = new Worker();
+                        $workerCollection[] = $worker;
+                        $worker->init($annot, $reflClass, $reader, $this->getSettings());
                     }
                 }
             }
         }
 
-        return $cache   ->set($workerCollection->__toCache())
-                        ->save();
+        return $cache->save(MmoreramerinoGearmanBundle::CACHE_ID, $workerCollection);
     }
 
     /**
@@ -157,7 +158,7 @@ class GearmanCacheLoader extends ContainerAware
      */
     public function loadSettings()
     {
-        $this->settings = $this->container->get('gearman.settings')->loadSettings();
+        $this->settings = $this->container->getParameter('gearman_settings');
 
         return $this->settings;
     }

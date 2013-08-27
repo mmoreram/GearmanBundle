@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Mmoreramerino\GearmanBundle\Module\WorkerClass;
 
 /**
  * Gearman Job List Command class
@@ -38,18 +39,18 @@ class GearmanWorkerListCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var WorkerClass[] $workers  */
         $workers = $this->getContainer()->get('gearman')->getWorkers();
-        $it = 1;
         if (is_array($workers)) {
-
+            $it = 1;
             foreach ($workers as $worker) {
-                $output->writeln('<comment>    @Worker:  </comment><info>'.$worker['className'].'</info>');
-                $output->writeln('<comment>    callablename:  </comment><info>'.$worker['callableName'].'</info>');
+                $output->writeln('<comment>    @Worker:  </comment><info>'.$worker->getClassName().'</info>');
+                $output->writeln('<comment>    callablename:  </comment><info>'.$worker->getCallableName().'</info>');
                 $output->writeln('<comment>    Jobs:</comment>');
-                foreach ($worker['jobs'] as $job) {
+                foreach ($worker->getJobCollection() as $job) {
                     $output->writeln('<comment>      - #'.$it++.'</comment>');
-                    $output->writeln('<comment>          name: '.$job['methodName'].'</comment>');
-                    $output->writeln('<comment>          callablename:</comment><info> '.$job['realCallableName'].'</info>');
+                    $output->writeln('<comment>          name: '.$job->getMethodName().'</comment>');
+                    $output->writeln('<comment>          callablename:</comment><info> '.$job->getRealCallableName().'</info>');
                 }
                 $output->writeln('');
             }

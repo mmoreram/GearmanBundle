@@ -2,28 +2,18 @@ parameters:
     gearman.config.path:        %kernel.root_dir%/config/gearman/%kernel.environment%.yml
 
     gearman.client.class:       Mmoreramerino\GearmanBundle\Service\GearmanClient
-    gearman.cache.class:        Mmoreramerino\GearmanBundle\Service\GearmanCache
-    gearman.cache.loader.class: Mmoreramerino\GearmanBundle\Service\GearmanCacheLoader
+    gearman.loader.class: Mmoreramerino\GearmanBundle\Service\GearmanLoader
     gearman.execute.class:  Mmoreramerino\GearmanBundle\Service\GearmanExecute
     gearman.settings.class:     Mmoreramerino\GearmanBundle\Service\GearmanSettings
     gearman.describer.class:     Mmoreramerino\GearmanBundle\Service\GearmanDescriber
 services:
     gearman:
         class: %gearman.client.class%
+        arguments: [%gearman_servers%]
         calls:
           - [setContainer,  [@service_container]]
-    gearman.settings:
-        class: %gearman.settings.class%
-        calls:
-          - [setContainer,  [@service_container]]
-          - [loadSettings,  []]
-    gearman.cache:
-        class: %gearman.cache.class%
-        calls:
-          - [setContainer,  [@service_container]]
-          - [loadCache,  []]
-    gearman.cache.loader:
-        class: %gearman.cache.loader.class%
+    gearman.loader:
+        class: %gearman.loader.class%
         calls:
           - [setContainer,  [@service_container]]
     gearman.execute:

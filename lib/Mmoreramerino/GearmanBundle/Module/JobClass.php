@@ -33,15 +33,41 @@ class JobClass extends ContainerAware
     private $description;
 
     /**
-     * Construct method
-     *
+     * @var string
+     */
+    private $methodName;
+
+    /**
+     * @var string
+     */
+    private $realCallableName;
+
+    /**
+     * @var int
+     */
+    private $iterations;
+
+    /**
+     * @var string
+     */
+    private $defaultMethod;
+
+    /**
+     * @var array
+     */
+    private $servers;
+
+    /**
      * @param Job               $methodAnnotation  MethodAnnotation class
      * @param \ReflectionMethod $method            ReflextionMethod class
      * @param Work              $classAnnotation   Work class
      * @param string            $callableNameClass Callable name class
      * @param array             $settings          Settings structure
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\SettingValueBadFormatException
+     * @throws \Mmoreramerino\GearmanBundle\Exceptions\SettingValueMissingException
+     * @return void
      */
-    public function __construct( Job $methodAnnotation, \ReflectionMethod $method, Work $classAnnotation, $callableNameClass, array $settings)
+    public function init( Job $methodAnnotation, \ReflectionMethod $method, Work $classAnnotation, $callableNameClass, array $settings)
     {
         $this->callableName =   (null !== $methodAnnotation->name) ?
                                     $methodAnnotation->name :
@@ -127,21 +153,73 @@ class JobClass extends ContainerAware
         $this->servers = $servers;
     }
 
+    public static function __set_state(array $data)
+    {
+        $job = new JobClass();
+        $job->callableName = $data['callableName'];
+        $job->methodName = $data['methodName'];
+        $job->realCallableName = $data['realCallableName'];
+        $job->description = $data['description'];
+        $job->iterations = $data['iterations'];
+        $job->servers = $data['servers'];
+        $job->defaultMethod = $data['defaultMethod'];
+
+        return $job;
+    }
+
     /**
-     * Retrieve all Job data in cache format
-     *
+     * @return string
+     */
+    public function getCallableName()
+    {
+        return $this->callableName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultMethod()
+    {
+        return $this->defaultMethod;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIterations()
+    {
+        return $this->iterations;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethodName()
+    {
+        return $this->methodName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRealCallableName()
+    {
+        return $this->realCallableName;
+    }
+
+    /**
      * @return array
      */
-    public function __toCache()
+    public function getServers()
     {
-        return array(
-            'callableName'          =>  $this->callableName,
-            'methodName'            =>  $this->methodName,
-            'realCallableName'      =>  $this->realCallableName,
-            'description'           =>  $this->description,
-            'iterations'			=>  $this->iterations,
-            'servers'               =>  $this->servers,
-            'defaultMethod'         =>  $this->defaultMethod,
-        );
+        return $this->servers;
     }
 }
