@@ -1,5 +1,5 @@
-README
-======
+#Bundle being refactored.
+##30-08-2013 New release
 
 [![Build Status](https://secure.travis-ci.org/mmoreramerino/GearmanBundle.png?branch=development)](http://travis-ci.org/mmoreramerino/GearmanBundle)
 
