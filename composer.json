@@ -1,6 +1,8 @@
 {
     "name": "mmoreram/gearman-bundle",
-    "replace": "mmoreramerino/gearman-bundle",
+    "replace": {
+        "mmoreramerino/gearman-bundle": "dev-master"
+    },
     "description": "Adds gearman support to your Symfony2 project",
     "keywords": ["gearman"],
     "homepage": "https://github.com/mmoreram/GearmanBundle",
