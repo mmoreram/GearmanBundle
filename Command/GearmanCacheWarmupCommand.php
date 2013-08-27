@@ -32,7 +32,7 @@ class GearmanCacheWarmupCommand extends ContainerAwareCommand
         
         $this   ->setName('gearman:cache:warmup')
                 ->setAliases(array('cache:gearman:warmup'))
-                ->setDescription('Warm ups gearman cache data on current environment');
+                ->setDescription('Warms up gearman cache data');
     }
 
     /**
@@ -48,9 +48,11 @@ class GearmanCacheWarmupCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('Warming up the cache for the ' . $this->getContainer()->get('kernel')->getEnvironment() . ' environment');
-        $gearmanCache = $this->getContainer()->get('gearman.cache');
-        $gearmanCache->emptyCache();
-        $gearmanCacheLoader = $this->getContainer()->get('gearman.cache.loader');
-        $gearmanCacheLoader->load($gearmanCache);
+
+        $this
+            ->getContainer()
+            ->get('@gearman.cache.wrapper')
+            ->flush()
+            ->load();
     }
 }

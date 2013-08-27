@@ -2,7 +2,7 @@
 
 namespace Mmoreram\GearmanBundle\Service\Abstracts;
 
-use Mmoreram\GearmanBundle\Service\GearmanCache as Cache;
+use Mmoreram\GearmanBundle\Service\GearmanCacheWrapper;
 use Mmoreram\GearmanBundle\Exceptions\JobDoesNotExistException;
 use Mmoreram\GearmanBundle\Exceptions\WorkerDoesNotExistException;
 
@@ -29,7 +29,7 @@ abstract class AbstractGearmanService
      */
     public function __construct(GearmanCacheWrapper $gearmanCacheWrapper)
     {
-        $this->workers = $gearmanCacheWrapper->getWorkerCollection();
+        $this->workers = $gearmanCacheWrapper->getWorkers();
     }
 
 
@@ -82,5 +82,16 @@ abstract class AbstractGearmanService
         }
 
         throw new WorkerDoesNotExistException($workerName);
+    }
+
+
+    /**
+     * Return array of workers
+     * 
+     * @return array all available workers
+     */
+    public function getWorkers()
+    {
+        return $this->workers;
     }
 }

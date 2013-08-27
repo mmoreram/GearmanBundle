@@ -5,7 +5,6 @@ namespace Mmoreram\GearmanBundle\Service;
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Mmoreram\GearmanBundle\Service\GearmanInterface;
 use Mmoreram\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
-use GearmanClient;
 
 /**
  * Implementation of GearmanInterface
@@ -93,7 +92,7 @@ class GearmanClient extends AbstractGearmanService
      */
     private function doEnqueue(Array $worker, $params = '', $method = 'do', $unique = null)
     {
-        $gmclient = new GearmanClient();
+        $gmclient = new \GearmanClient();
         $this->assignServers($gmclient);
 
         return $gmclient->$method($worker['job']['realCallableName'], serialize($params), $unique);
@@ -123,7 +122,7 @@ class GearmanClient extends AbstractGearmanService
      *
      * @return GearmanClient Returns self object
      */
-    private function assignServers(GearmanClient $gearmanClient)
+    private function assignServers(\GearmanClient $gearmanClient)
     {
         if (empty($this->server)) {
 
@@ -448,7 +447,7 @@ class GearmanClient extends AbstractGearmanService
     public function runTasks()
     {
         $taskStructure = $this->taskStructure;
-        $gearmanClient = new GearmanClient();
+        $gearmanClient = new \GearmanClient();
         $this->assignServers($gearmanClient);
 
         foreach ($this->taskStructure as $task) {

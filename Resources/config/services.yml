@@ -1,33 +1,42 @@
 parameters:
-    gearman.config.path:        %kernel.root_dir%/config/gearman/%kernel.environment%.yml
 
-    gearman.client.class:       Mmoreram\GearmanBundle\Service\GearmanClient
-    gearman.cache.id:           gearman.workers
-    gearman.cache.wrapper.class: Mmoreram\GearmanBundle\Service\GearmanCacheLoader
-    gearman.execute.class:  Mmoreram\GearmanBundle\Service\GearmanExecute
-    gearman.settings.class:     Mmoreram\GearmanBundle\Service\GearmanSettings
-    gearman.describer.class:     Mmoreram\GearmanBundle\Service\GearmanDescriber
+    gearman.client.class:           Mmoreram\GearmanBundle\Service\GearmanClient
+    gearman.cache.id:               gearman.workers
+    gearman.cache.wrapper.class:    Mmoreram\GearmanBundle\Service\GearmanCacheWrapper
+    gearman.execute.class:          Mmoreram\GearmanBundle\Service\GearmanExecute
+    gearman.describer.class:        Mmoreram\GearmanBundle\Service\GearmanDescriber
 
 
 
 services:
-    gearman:
-        class: %gearman.client.class%
 
     gearman.cache.wrapper:
         class: %gearman.cache.wrapper.class%
         arguments:
-            gearman.bundles: %gearman.bundles%
             kernel: @kernel
-            gearman.cache: @liip_doctrine_cache.ns.mmoreram_gearman
+            gearman.cache: @liip_doctrine_cache.ns.gearman
             gearman.cache.id: %gearman.cache.id%
+            gearman.bundles: %gearman.bundles%
+            gearman.servers: %gearman.servers%
+            gearman.default.settings: %gearman.default.settings%
         calls:
-          - [loadNamespacesMap,  []]
+          - [loadNamespaceMap,  []]
+          - [load,  []]
+
+    gearman.abstract.service:
+        abstract:  true
+        arguments:
+            gearman.cache.wrapper: @gearman.cache.wrapper
 
     gearman.execute:
         class: %gearman.execute.class%
+        parent: gearman.abstract.service
         calls:
-          - [setContainer,  [@service.container]]
+          - [setContainer,  [@service_container]]
+
+    gearman:
+        class: %gearman.client.class%
+        parent: gearman.abstract.service
 
     gearman.describer:
         class: %gearman.describer.class%

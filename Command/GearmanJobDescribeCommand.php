@@ -42,6 +42,10 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
     {
         $job = $input->getArgument('job');
         $job = $this->getContainer()->get('gearman')->getJob($job);
-        $this->getContainer()->get('gearman.describer')->describeJob($output, $job);
+        
+        $this
+            ->getContainer()
+            ->get('gearman.describer')
+            ->describeJob($output, $job);
     }
 }

@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
                             ->arrayNode('include')
                                 ->prototype('scalar')->end()
                             ->end()
-                            ->arrayNode('exclude')
+                            ->arrayNode('ignore')
                                 ->prototype('scalar')->end()
                             ->end()
                         ->end()

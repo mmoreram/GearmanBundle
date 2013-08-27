@@ -7,6 +7,7 @@ use Mmoreram\GearmanBundle\Driver\Gearman\Work;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Mmoreram\GearmanBundle\Exceptions\SettingValueMissingException;
 use Mmoreram\GearmanBundle\Exceptions\SettingValueBadFormatException;
+use ReflectionMethod;
 
 /**
  * Job class
@@ -40,7 +41,7 @@ class JobClass extends ContainerAware
      * RealCallable name for this job
      * natural method name will be used.
      */
-    private $callableName;
+    private $realCallableName;
 
 
     /**
@@ -79,12 +80,12 @@ class JobClass extends ContainerAware
      * Construct method
      *
      * @param Job               $methodAnnotation  MethodAnnotation class
-     * @param \ReflectionMethod $method            ReflextionMethod class
+     * @param ReflectionMethod $method            ReflextionMethod class
      * @param Work              $classAnnotation   Work class
      * @param string            $callableNameClass Callable name class
      * @param array             $settings          Settings structure
      */
-    public function __construct( Job $methodAnnotation, \ReflectionMethod $method, $callableNameClass, array $servers, array $defaultSettings)
+    public function __construct( Job $methodAnnotation, ReflectionMethod $method, $callableNameClass, array $servers, array $defaultSettings)
     {
         $this->callableName = is_null($methodAnnotation->name)
                             ? $method->getName()
@@ -103,9 +104,9 @@ class JobClass extends ContainerAware
                             : $methodAnnotation->iterations;
 
 
-        $this->defaultMethod    = is_null($classAnnotation->defaultMethod)
+        $this->defaultMethod    = is_null($methodAnnotation->defaultMethod)
                                 ? $defaultSettings['method']
-                                : $classAnnotation->defaultMethod;
+                                : $methodAnnotation->defaultMethod;
 
         
         /**
@@ -116,14 +117,14 @@ class JobClass extends ContainerAware
         /**
          * If is configured some servers definition in the worker, overwrites
          */
-        if ($classAnnotation->servers) {
+        if ($methodAnnotation->servers) {
 
-            if (is_array($classAnnotation->servers)) {
+            if (is_array($methodAnnotation->servers)) {
 
-                $this->servers = $classAnnotation->servers;
+                $this->servers = $methodAnnotation->servers;
             } else {
 
-                $this->servers = array($classAnnotation->servers);
+                $this->servers = array($methodAnnotation->servers);
             }
         }
     }

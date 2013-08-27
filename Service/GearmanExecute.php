@@ -20,7 +20,7 @@ class GearmanExecute extends AbstractGearmanService
      *
      * Container instance
      */
-    private $container = $container;
+    private $container;
 
 
     /**

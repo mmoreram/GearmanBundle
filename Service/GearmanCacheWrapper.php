@@ -88,13 +88,29 @@ class GearmanCacheWrapper
 
 
     /**
+     * @var array
+     * 
+     * Collection of servers to connect
+     */
+    private $servers;
+
+
+    /**
+     * @var array
+     * 
+     * Default settings defined by user in config.yml
+     */
+    private $defaultSettings;
+
+
+    /**
      * Return workerCollection
      * 
      * @return array all available workers
      */
     public function getWorkers()
     {
-        return $workerCollection;
+        return $this->workerCollection;
     }
 
 
@@ -103,12 +119,14 @@ class GearmanCacheWrapper
      *
      * @param array $bundles Bundles
      */
-    public function __construct(array $bundles, Kernel $kernel, Cache $cache, $cacheId)
+    public function __construct(Kernel $kernel, Cache $cache, $cacheId, array $bundles, array $servers, array $defaultSettings)
     {
         $this->kernelBundles = $kernel->getBundles();
         $this->bundles = $bundles;
         $this->cache = $cache;
         $this->cacheId = $cacheId;
+        $this->servers = $servers;
+        $this->defaultSettings = $defaultSettings;
     }
 
 
@@ -117,12 +135,16 @@ class GearmanCacheWrapper
      *
      * @return GearmanCacheLoader self Object
      */
-    public function loadCache()
+    public function load()
     {
-        if (!$this->cache->contains($this->cacheId)) {
+        if ($this->cache->contains($this->cacheId)) {
+
+            $this->workerCollection = $this->cache->get($this->cacheId);
+
+        } else {
 
             $this->workerCollection = $this->parseNamespaceMap()->toArray();
-            $this->cache->save($this->cacheId, $workerCollection);
+            $this->cache->save($this->cacheId, $this->workerCollection);
         }
 
         return $this;
@@ -130,15 +152,56 @@ class GearmanCacheWrapper
 
 
     /**
-     * Reloads Gearman cache
-     *
+     * flush all cache
+     * 
      * @return GearmanCacheLoader self Object
      */
-    public function reloadCache()
+    public function flush()
     {
         $this->cache->delete($this->cacheId);
 
-        return $this->loadCache();
+        return $this;
+    }
+
+
+    /**
+     * Return Gearman bundle settings, previously loaded by method load()
+     * If settings are not loaded, a SettingsNotLoadedException Exception is thrown
+     *
+     * @return array Bundles that gearman will be able to search annotations
+     */
+    public function loadNamespaceMap()
+    {
+        foreach ($this->bundles as $bundleSettings) {
+
+            $bundleNamespace = $bundleSettings['namespace'];
+
+            if ($bundleSettings['active']) {
+
+                $this->bundlesAccepted[] = $bundleNamespace;
+
+                if (!empty($bundleSettings['include'])) {
+
+                    foreach ($bundleSettings['include'] as $include) {
+
+                        $this->namespacesAccepted[] = $bundleNamespace . '\\' . $include;
+                    }
+
+                } else {
+
+                    /**
+                     * If no include is set, include all namespace
+                     */
+                    $this->namespacesAccepted[] = $bundleNamespace;
+
+                }
+
+                foreach ($bundleSettings['ignore'] as $ignore) {
+
+                    $this->namespacesIgnored[] = $bundleNamespace . '\\' . $ignore;
+                }
+            }
+        }
     }
 
 
@@ -175,7 +238,7 @@ class GearmanCacheWrapper
             }
 
             $filesLoader = new WorkerDirectoryLoader(new FileLocator('.'));
-            $files = $filesLoader->load($bundle->getPath());
+            $files = $filesLoader->load($kernelBundle->getPath());
 
             foreach ($files as $file) {
 
@@ -201,7 +264,8 @@ class GearmanCacheWrapper
 
                             if ($annot instanceof Work) {
 
-                                $workerCollection->add(new Worker($annot, $reflClass, $reader, $this->getSettings()));
+                                $worker = new Worker($annot, $reflClass, $reader, $this->servers, $this->defaultSettings);
+                                $workerCollection->add($worker);
                             }
                         }
 
@@ -216,48 +280,6 @@ class GearmanCacheWrapper
 
 
     /**
-     * Return Gearman bundle settings, previously loaded by method load()
-     * If settings are not loaded, a SettingsNotLoadedException Exception is thrown
-     *
-     * @return array Bundles that gearman will be able to search annotations
-     */
-    private function loadNamespacesMap()
-    {
-
-        foreach ($this->bundles as $bundleSettings) {
-
-            $bundleNamespace = $properties['namespace'];
-
-            if ($bundleSettings['active'])) {
-
-                $this->bundlesAccepted[] = $bundleNamespace;
-
-                if (!empty($properties['include'])) {
-
-                    foreach ($properties['include'] as $include) {
-
-                        $this->namespaceAccepted[] = $bundleNamespace . '\\' . $include;
-                    }
-
-                } else {
-
-                    /**
-                     * If no include is set, include all namespace
-                     */
-                    $this->namespaceAccepted[] = $bundleNamespace;
-
-                }
-
-                foreach ($properties['ignore'] as $ignore) {
-
-                    $this->namespacesIgnored[] = $bundleNamespace . '\\' . $ignore;
-                }
-            }
-        }
-    }
-
-
-    /**
      * Checks if namespace is subnamespace of another
      *
      * @param string $namespace    Parent namespace
@@ -267,6 +289,6 @@ class GearmanCacheWrapper
      */
     private function isSubNamespace($namespace, $subNamespace)
     {
-        return ( strstr($class, $ns) !== false );
+        return ( strpos($subNamespace, $namespace) === 0 );
     }
 }

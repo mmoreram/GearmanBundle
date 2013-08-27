@@ -46,6 +46,7 @@ class GearmanWorkerListCommand extends ContainerAwareCommand
             $it = 1;
 
             foreach ($workers as $worker) {
+                
                 $output->writeln('<comment>    @Worker:  </comment><info>'.$worker['className'].'</info>');
                 $output->writeln('<comment>    callablename:  </comment><info>'.$worker['callableName'].'</info>');
                 $output->writeln('<comment>    Jobs:</comment>');

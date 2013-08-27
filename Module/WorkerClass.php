@@ -125,8 +125,8 @@ class WorkerClass
          * Setting worker callable name
          */
         $this->callableName = is_null($classAnnotation->name)
-                            ? $reflectionClass->getName()))
-                            : $this->namespace .'\\' .$classAnnotation->name);
+                            ? $reflectionClass->getName()
+                            : $this->namespace .'\\' .$classAnnotation->name;
 
         $this->callableName = str_replace('\\', '', $this->callableName);
 
@@ -183,7 +183,7 @@ class WorkerClass
 
                 if ($annot instanceof JobAnnotation) {
 
-                    $job = new Job($annot, $reflMethod, $classAnnotation, $this->callableName, $this->servers, $defaultSettings);
+                    $job = new Job($annot, $reflMethod, $this->callableName, $this->servers, $defaultSettings);
                     $this->jobCollection->add($job);
                 }
             }
