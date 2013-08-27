@@ -1,8 +1,9 @@
 {
-    "name": "mmoreramerino/gearman-bundle",
+    "name": "mmoreram/gearman-bundle",
+    "replace": "mmoreramerino/gearman-bundle",
     "description": "Adds gearman support to your Symfony2 project",
     "keywords": ["gearman"],
-    "homepage": "http://mmoreramerino.github.com/GearmanBundle/",
+    "homepage": "https://github.com/mmoreram/GearmanBundle",
     "type": "symfony-bundle",
     "license": "Apache",
     "authors": [
@@ -12,15 +13,16 @@
         },
         {
             "name": "Symfony Community",
-            "homepage": "https://github.com/mmoreramerino/GearmanBundle/contributors"
+            "homepage": "https://github.com/mmoreram/GearmanBundle/contributors"
         }
     ],
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": ">=2.0"
+        "symfony/framework-bundle": ">=2.0",
+        "ext-gearman": "*",
     },
+    "target-dir": "Mmoreram/GearmanBundle",
     "autoload": {
-        "psr-0": { "Mmoreramerino\\GearmanBundle": "Mmoreramerino/GearmanBundle/lib/" }
-    },
-    "target-dir": "Mmoreramerino/GearmanBundle"
+        "psr-0": { "Mmoreram\\GearmanBundle": "" }
+    }
 }
