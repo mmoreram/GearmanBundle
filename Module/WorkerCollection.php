@@ -41,12 +41,12 @@ class WorkerCollection
      *
      * @return array
      */
-    public function toCache()
+    public function toArray()
     {
         $workersDumped = array();
 
         foreach ($this->workerClasses as $worker) {
-            $workersDumped[] = $worker->toCache();
+            $workersDumped[] = $worker->toArray();
         }
 
         return $workersDumped;

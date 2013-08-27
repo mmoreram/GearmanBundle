@@ -40,8 +40,10 @@ class GearmanWorkerListCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $workers = $this->getContainer()->get('gearman')->getWorkers();
-        $it = 1;
+
         if (is_array($workers)) {
+
+            $it = 1;
 
             foreach ($workers as $worker) {
                 $output->writeln('<comment>    @Worker:  </comment><info>'.$worker['className'].'</info>');

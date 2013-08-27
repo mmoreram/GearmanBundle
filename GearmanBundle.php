@@ -20,7 +20,7 @@ class GearmanBundle extends Bundle
      */
     public function boot()
     {
-        $gearmanCacheLoader = $this->container->get('gearman.cache.loader');
+        $gearmanCacheLoader = $this->container->get('gearman.cache.wrapper');
 
         if ($this->container->get('kernel')->isDebug()) {
 

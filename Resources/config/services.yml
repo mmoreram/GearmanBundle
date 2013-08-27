@@ -2,9 +2,8 @@ parameters:
     gearman.config.path:        %kernel.root_dir%/config/gearman/%kernel.environment%.yml
 
     gearman.client.class:       Mmoreram\GearmanBundle\Service\GearmanClient
-    gearman.cache.class:        Mmoreram\GearmanBundle\Service\GearmanCache
-    gearman.cache.filename:         gearman.cache.php
-    gearman.cache.loader.class: Mmoreram\GearmanBundle\Service\GearmanCacheLoader
+    gearman.cache.id:           gearman.workers
+    gearman.cache.wrapper.class: Mmoreram\GearmanBundle\Service\GearmanCacheLoader
     gearman.execute.class:  Mmoreram\GearmanBundle\Service\GearmanExecute
     gearman.settings.class:     Mmoreram\GearmanBundle\Service\GearmanSettings
     gearman.describer.class:     Mmoreram\GearmanBundle\Service\GearmanDescriber
@@ -15,20 +14,13 @@ services:
     gearman:
         class: %gearman.client.class%
 
-    gearman.cache:
-        class: %gearman.cache.class%
-        arguments:
-            kernel: @kernel
-            cache.filename: %gearman.cache.filename%
-        calls:
-          - [load,  []]
-
-    gearman.cache.loader:
-        class: %gearman.cache.loader.class%
+    gearman.cache.wrapper:
+        class: %gearman.cache.wrapper.class%
         arguments:
             gearman.bundles: %gearman.bundles%
             kernel: @kernel
-            gearman.cache: @gearman.cache
+            gearman.cache: @liip_doctrine_cache.ns.mmoreram_gearman
+            gearman.cache.id: %gearman.cache.id%
         calls:
           - [loadNamespacesMap,  []]
 

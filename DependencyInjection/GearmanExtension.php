@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class MmoreramGearmanExtension extends Extension
+class GearmanExtension extends Extension
 {
     /**
      * Loads a specific configuration.
@@ -35,7 +35,12 @@ class MmoreramGearmanExtension extends Extension
         );
 
         $container->setParameter(
-            'gearman.defaults',
+            'gearman.servers',
+            $config['servers']
+        );
+
+        $container->setParameter(
+            'gearman.params',
             $config['defaults']
         );
 

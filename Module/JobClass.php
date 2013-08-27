@@ -15,22 +15,65 @@ use Mmoreram\GearmanBundle\Exceptions\SettingValueBadFormatException;
  */
 class JobClass extends ContainerAware
 {
+    
     /**
+     * @var string
+     * 
      * Callable name for this job
      * If is setted on annotations, this value will be used
      *  otherwise, natural method name will be used.
-     *
+     */
+    private $callableName;
+    
+
+    /**
      * @var string
+     * 
+     * Method name
+     */
+    private $methodName;
+
+
+    /**
+     * @var string
+     * 
+     * RealCallable name for this job
+     * natural method name will be used.
      */
     private $callableName;
 
 
     /**
-     * Description of Job
-     *
      * @var string
+     * 
+     * Description of Job
      */
     private $description;
+
+
+    /**
+     * @var integer
+     * 
+     * Number of iterations this job will be alive before die
+     */
+    private $iterations;
+
+
+    /**
+     * @var string
+     * 
+     * Default method this job will be call into Gearman client
+     */
+    private $defaultMethod;
+
+
+    /**
+     * @var array
+     * 
+     * Collection of servers to connect
+     */
+    private $servers;
+
 
     /**
      * Construct method
@@ -41,90 +84,48 @@ class JobClass extends ContainerAware
      * @param string            $callableNameClass Callable name class
      * @param array             $settings          Settings structure
      */
-    public function __construct( Job $methodAnnotation, \ReflectionMethod $method, Work $classAnnotation, $callableNameClass, array $settings)
+    public function __construct( Job $methodAnnotation, \ReflectionMethod $method, $callableNameClass, array $servers, array $defaultSettings)
     {
-        $this->callableName =   (null !== $methodAnnotation->name) ?
-                                    $methodAnnotation->name :
-                                    $method->getName();
+        $this->callableName = is_null($methodAnnotation->name)
+                            ? $method->getName()
+                            : $methodAnnotation->name;
 
-        $this->methodName   =   $method->getName();
+        $this->methodName = $method->getName();
 
-        $this->realCallableName = str_replace('\\', '', $callableNameClass.'~'.$this->callableName);
-        $this->description  =    (null !== $methodAnnotation->description) ?
-                                    $methodAnnotation->description :
-                                    'No description is defined';
-
-        if (!isset($settings['defaults'])) {
-            throw new SettingValueMissingException('defaults');
-        }
-
-        if (isset($settings['defaults']['iterations']) && null !== $settings['defaults']['iterations']) {
-            $iter = (int) ($settings['defaults']['iterations']);
-
-            if (null !== $classAnnotation->iterations) {
-                $iter = (int) ($classAnnotation->iterations);
-            }
-
-            if (null !== $methodAnnotation->iterations) {
-                $iter = (int) ($methodAnnotation->iterations);
-            }
-        } else {
-            throw new SettingValueMissingException('defaults/iterations');
-        }
-        $this->iterations = $iter;
+        $this->realCallableName = str_replace('\\', '', $callableNameClass . '~' . $this->callableName);
+        $this->description  = is_null($methodAnnotation->description)
+                            ? 'No description is defined'
+                            : $methodAnnotation->description;
 
 
-        if (isset($settings['defaults']['method']) && null !== $settings['defaults']['method']) {
-            $defaultMethod = ($settings['defaults']['method']);
+        $this->iterations   = is_null($methodAnnotation->iterations)
+                            ? (int) $defaultSettings['iterations']
+                            : $methodAnnotation->iterations;
 
-            if (null !== $classAnnotation->defaultMethod) {
-                $defaultMethod = ($classAnnotation->defaultMethod);
-            }
 
-            if (null !== $methodAnnotation->defaultMethod) {
-                $defaultMethod = ($methodAnnotation->defaultMethod);
-            }
-        } else {
-            throw new SettingValueMissingException('defaults/method');
-        }
+        $this->defaultMethod    = is_null($classAnnotation->defaultMethod)
+                                ? $defaultSettings['method']
+                                : $classAnnotation->defaultMethod;
 
-        $this->defaultMethod = $defaultMethod;
+        
+        /**
+         * By default, this worker takes default servers definition
+         */
+        $this->servers = $servers;
 
         /**
-         * Servers definition for job
+         * If is configured some servers definition in the worker, overwrites
          */
-        $servers = array();
-        if (isset($settings['defaults']['servers']) && null !== $settings['defaults']['servers']) {
-            if (is_array($settings['defaults']['servers'])) {
+        if ($classAnnotation->servers) {
 
-                foreach ($settings['defaults']['servers'] as $name => $server) {
-                    $servername = $server['hostname'].':'.(int) ($server['port']);
-                    $servers[$name] = $servername;
-                }
+            if (is_array($classAnnotation->servers)) {
+
+                $this->servers = $classAnnotation->servers;
             } else {
 
-                throw new SettingValueBadFormatException('servers');
+                $this->servers = array($classAnnotation->servers);
             }
-
-            if (null !== $classAnnotation->servers) {
-                if (is_array($classAnnotation->servers)) {
-                    $servers = $classAnnotation->servers;
-                } else {
-                    $servers = array($classAnnotation->servers);
-                }
-            }
-
-            if (null !== $methodAnnotation->servers) {
-                if (is_array($methodAnnotation->servers)) {
-                    $servers = $methodAnnotation->servers;
-                } else {
-                    $servers = array($methodAnnotation->servers);
-                }
-            }
-        } else {
-            throw new SettingValueMissingException('defaults/servers');
         }
-        $this->servers = $servers;
     }
 
     /**
@@ -132,13 +133,15 @@ class JobClass extends ContainerAware
      *
      * @return array
      */
-    public function toCache()
+    public function toArray()
     {
         return array(
+
             'callableName'          =>  $this->callableName,
             'methodName'            =>  $this->methodName,
             'realCallableName'      =>  $this->realCallableName,
             'description'           =>  $this->description,
+
             'iterations'			=>  $this->iterations,
             'servers'               =>  $this->servers,
             'defaultMethod'         =>  $this->defaultMethod,

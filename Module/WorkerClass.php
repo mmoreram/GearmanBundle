@@ -6,118 +6,185 @@ use Doctrine\Common\Annotations\Reader;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work;
 use Mmoreram\GearmanBundle\Module\JobCollection;
 use Mmoreram\GearmanBundle\Module\JobClass as Job;
-use Mmoreram\GearmanBundle\Exceptions\SettingValueMissingException;
-use Mmoreram\GearmanBundle\Exceptions\SettingValueBadFormatException;
+use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Worker class
+ * 
+ * This class provide all worker definition.
+ * 
+ * * JobCollection - All worker available jobs
+ * * CallableName - Friendly way to call this worker
+ * * Namespace - Worker namespace
+ * * Servers - Servers defined for this worker
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 class WorkerClass
 {
 
+
+
     /**
-     * All jobs inside Worker
-     *
-     * @var JobCollection
+     * @var string
+     * 
+     * Namespace of worker class
      */
-    private $jobCollection;
+    private $namespace;
 
 
     /**
+     * @var string
+     * 
+     * Class name of worker
+     */
+    private $className;
+
+
+    /**
+     * @var string
+     * 
+     * Filename of worker
+     */
+    private $fileName;
+
+
+    /**
+     * @var string
+     * 
      * Callable name for this job.
      * If is setted on annotations, this value will be used.
      * Otherwise, natural method name will be used.
-     *
-     * @var string
      */
     private $callableName;
 
 
     /**
-     * Namespace of Work class
-     *
      * @var string
+     * 
+     * Service alias if this worker is wanted to be built by dependency injection
      */
-    private $namespace;
+    private $service;
+
+
+    /**
+     * @var string
+     * 
+     * Description of Job
+     */
+    private $description;
+
+
+    /**
+     * @var integer
+     * 
+     * Number of iterations this job will be alive before die
+     */
+    private $iterations;
+
+
+    /**
+     * @var string
+     * 
+     * Default method this job will be call into Gearman client
+     */
+    private $defaultMethod;
+
+
+    /**
+     * @var array
+     * 
+     * Collection of servers to connect
+     */
+    private $servers;
+
+
+    /**
+     * @var JobCollection
+     * 
+     * All jobs inside Worker
+     */
+    private $jobCollection;
 
 
     /**
      * Retrieves all jobs available from worker
      *
      * @param Work             $classAnnotation ClassAnnotation class
-     * @param \ReflectionClass $reflectionClass Reflexion class
+     * @param ReflectionClass  $reflectionClass Reflexion class
      * @param Reader           $reader          ReaderAnnotation class
      * @param array            $settings        Settings array
      */
-    public function __construct(Work $classAnnotation, \ReflectionClass $reflectionClass, Reader $reader, array $settings)
+    public function __construct(Work $classAnnotation, ReflectionClass $reflectionClass, Reader $reader, array $servers, array $defaultSettings)
     {
         $this->namespace = $reflectionClass->getNamespaceName();
 
-        $this->callableName =   str_replace('\\', '', ((null !== $classAnnotation->name) ?
-            ($this->namespace .'\\' .$classAnnotation->name) :
-            $reflectionClass->getName()));
+        /**
+         * Setting worker callable name
+         */
+        $this->callableName = is_null($classAnnotation->name)
+                            ? $reflectionClass->getName()))
+                            : $this->namespace .'\\' .$classAnnotation->name);
 
-        $this->description =    (null !== $classAnnotation->description) ?
-            $classAnnotation->description :
-            'No description is defined';
+        $this->callableName = str_replace('\\', '', $this->callableName);
+
+        /**
+         * Setting worker description
+         */
+        $this->description  = is_null($classAnnotation->description)
+                            ? 'No description is defined'
+                            : $classAnnotation->description;
 
         $this->fileName = $reflectionClass->getFileName();
         $this->className = $reflectionClass->getName();
         $this->service = $classAnnotation->service;
 
-        if (!isset($settings['defaults'])) {
-            throw new SettingValueMissingException('defaults');
-        }
+        $this->iterations   = is_null($classAnnotation->iterations)
+                            ? (int) $defaultSettings['iterations']
+                            : $classAnnotation->iterations;
 
-        if (isset($settings['defaults']['iterations']) && null !== $settings['defaults']['iterations']) {
-            $iter = (int) ($settings['defaults']['iterations']);
+        $defaultSettings['iterations'] = $this->iterations;
 
-            if (null !== $classAnnotation->iterations) {
-                $iter = (int) ($classAnnotation->iterations);
-            }
-        } else {
-            throw new SettingValueMissingException('defaults/iterations');
-        }
-        $this->iterations = $iter;
+        $this->defaultMethod    = is_null($classAnnotation->defaultMethod)
+                                ? $defaultSettings['method']
+                                : $classAnnotation->defaultMethod;
+
+        $defaultSettings['method'] = $this->defaultMethod;
 
         /**
-         * Servers definition for worker
+         * By default, this worker takes default servers definition
          */
-        $servers = array();
-        if (isset($settings['defaults']['servers']) && null !== $settings['defaults']['servers']) {
-            if (is_array($settings['defaults']['servers'])) {
+        $this->servers = $servers;
 
-                foreach ($settings['defaults']['servers'] as $name => $server) {
-                    $servername = $server['hostname'].':'.(int) ($server['port']);
-                    $servers[$name] = $servername;
-                }
+        /**
+         * If is configured some servers definition in the worker, overwrites
+         */
+        if ($classAnnotation->servers) {
+
+            if (is_array($classAnnotation->servers)) {
+
+                $this->servers = $classAnnotation->servers;
             } else {
 
-                throw new SettingValueBadFormatException('servers');
+                $this->servers = array($classAnnotation->servers);
             }
-
-            if (null !== $classAnnotation->servers) {
-                if (is_array($classAnnotation->servers)) {
-                    $servers = $classAnnotation->servers;
-                } else {
-                    $servers = array($classAnnotation->servers);
-                }
-            }
-        } else {
-            throw new SettingValueMissingException('defaults/servers');
         }
-        $this->servers = $servers;
 
         $this->jobCollection = new JobCollection;
 
         foreach ($reflectionClass->getMethods() as $method) {
-            $reflMethod = new \ReflectionMethod($method->class, $method->name);
+
+            $reflMethod = new ReflectionMethod($method->class, $method->name);
             $methodAnnotations = $reader->getMethodAnnotations($reflMethod);
+
             foreach ($methodAnnotations as $annot) {
-                if ($annot instanceof \Mmoreram\GearmanBundle\Driver\Gearman\Job) {
-                    $this->jobCollection->add(new Job($annot, $reflMethod, $classAnnotation, $this->callableName, $settings));
+
+                if ($annot instanceof JobAnnotation) {
+
+                    $job = new Job($annot, $reflMethod, $classAnnotation, $this->callableName, $this->servers, $defaultSettings);
+                    $this->jobCollection->add($job);
                 }
             }
         }
@@ -129,9 +196,10 @@ class WorkerClass
      *
      * @return array
      */
-    public function toCache()
+    public function toArray()
     {
-        $dump = array(
+        return array(
+
             'namespace'     =>  $this->namespace,
             'className'     =>  $this->className,
             'fileName'      =>  $this->fileName,
@@ -140,12 +208,8 @@ class WorkerClass
             'service'       =>  $this->service,
             'servers'       =>  $this->servers,
             'iterations'    =>  $this->iterations,
-            'jobs'          =>  array(),
+            'jobs'          =>  $this->jobCollection->toArray(),
         );
-
-        $dump['jobs'] = $this->jobCollection->toCache();
-
-        return $dump;
     }
 
 }

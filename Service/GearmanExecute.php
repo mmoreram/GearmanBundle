@@ -2,16 +2,17 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
-use Mmoreram\GearmanBundle\Service\GearmanService;
+use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Symfony\Component\DependencyInjection\Container;
-use ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use GearmanWorker;
 
 /**
  * Gearman execute methods. All Worker methods
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class GearmanExecute extends GearmanService
+class GearmanExecute extends AbstractGearmanService
 {
 
     /**
@@ -57,19 +58,19 @@ class GearmanExecute extends GearmanService
      */
     private function callJob(Array $worker)
     {
-        $gmworker= new \GearmanWorker();
+        $gearmanWorker= new GearmanWorker();
 
         if (isset($worker['job'])) {
 
             $jobs = array($worker['job']);
             $iterations = isset($worker['job']['iterations']) ? (int) ($worker['job']['iterations']) : 0;
-            $this->addServers($gmworker, $worker['job']['servers']);
+            $this->addServers($gearmanWorker, $worker['job']['servers']);
 
         } else {
 
             $jobs = $worker['jobs'];
             $iterations = isset($worker['iterations']) ? (int) ($worker['iterations']) : 0;
-            $this->addServers($gmworker, $worker['servers']);
+            $this->addServers($gearmanWorker, $worker['servers']);
         }
 
         if (null !== $worker['service']) {
@@ -79,6 +80,12 @@ class GearmanExecute extends GearmanService
 
             $objInstance = new $worker['className'];
 
+            /**
+             * If instance of given object is instanceof ContainerAwareInterface, we inject full container
+             *  by calling container setter.
+             * 
+             * @see https://github.com/mmoreram/gearman-bundle/pull/12
+             */
             if ($objInstance instanceof ContainerAwareInterface) {
 
                 $objInstance->setContainer($this->container);
@@ -87,14 +94,14 @@ class GearmanExecute extends GearmanService
 
         foreach ($jobs as $job) {
 
-            $gmworker->addFunction($job['realCallableName'], array($objInstance, $job['methodName']));
+            $gearmanWorker->addFunction($job['realCallableName'], array($objInstance, $job['methodName']));
         }
 
         $shouldStop = ($iterations > 0) ? true : false;
 
-        while ($gmworker->work()) {
+        while ($gearmanWorker->work()) {
 
-            if ($gmworker->returnCode() != GEARMAN_SUCCESS) {
+            if ($gearmanWorker->returnCode() != GEARMAN_SUCCESS) {
                 break;
             }
 

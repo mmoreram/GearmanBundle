@@ -42,15 +42,19 @@ class GearmanJobExecuteCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dialog = $this->getHelperSet()->get('dialog');
+
         if (!$input->getOption('no-interaction') && !$dialog->askConfirmation($output, '<question>This will execute asked job?</question>', 'y')) {
+
             return;
         }
+
         $output->writeln(sprintf('<info>[%s] loading...</info>', date('Y-m-d H:i:s')));
 
         $job = $input->getArgument('job');
         $jobStruct = $this->getContainer()->get('gearman')->getJob($job);
 
         if (!$input->getOption('no-description')) {
+            
             $this->getContainer()->get('gearman.describer')->describeJob($output, $jobStruct, true);
         }
 

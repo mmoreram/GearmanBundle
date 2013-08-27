@@ -2,7 +2,7 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
-use Mmoreram\GearmanBundle\Service\GearmanService;
+use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Mmoreram\GearmanBundle\Service\GearmanInterface;
 use Mmoreram\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
 use GearmanClient;
@@ -12,7 +12,7 @@ use GearmanClient;
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class GearmanClient extends GearmanService
+class GearmanClient extends AbstractGearmanService
 {
 
     /**
@@ -24,13 +24,12 @@ class GearmanClient extends GearmanService
 
 
     /**
-     * Construct method.
-     * Performs all init actions, like initialize tasks structure
+     * task structure to store all about called tasks
+     *
+     * @var $taskStructure
      */
-    public function __construct()
-    {
-        $this->resetTaskStructure();
-    }
+    public $taskStructure = array();
+
 
 
     /**
@@ -126,7 +125,7 @@ class GearmanClient extends GearmanService
      */
     private function assignServers(GearmanClient $gearmanClient)
     {
-        if (null === $this->server || !is_array($this->server)) {
+        if (empty($this->server)) {
 
             $gearmanClient->addServer();
         } else {
@@ -282,28 +281,6 @@ class GearmanClient extends GearmanService
      * Task methods
      */
 
-    /**
-     * task structure to store all about called tasks
-     *
-     * @var $taskStructure
-     */
-    public $taskStructure = null;
-
-
-    /**
-     * Reset all tasks structure. Remove all set values
-     *
-     * @return true;
-     */
-    public function resetTaskStructure()
-    {
-        $this->taskStructure = array(
-            'tasks'             =>  array(),
-        );
-
-        return true;
-    }
-
 
     /**
      * Adds a task to be run in parallel with other tasks.
@@ -439,6 +416,7 @@ class GearmanClient extends GearmanService
             'unique'    =>  $unique,
             'method'    =>  $method,
             );
+
         $this->addTaskToStructure($task);
 
         return $this;
@@ -453,7 +431,7 @@ class GearmanClient extends GearmanService
      */
     private function addTaskToStructure(array $task)
     {
-        $this->taskStructure['tasks'][] = $task;
+        $this->taskStructure[] = $task;
 
         return $this;
     }
@@ -465,7 +443,7 @@ class GearmanClient extends GearmanService
      * or GearmanClient::addTaskLowBackground(), this call starts running the tasks in parallel.
      * Note that enough workers need to be available for the tasks to all run in parallel
      *
-     * @return true
+     * @return boolean run tasks result
      */
     public function runTasks()
     {
@@ -473,15 +451,33 @@ class GearmanClient extends GearmanService
         $gearmanClient = new GearmanClient();
         $this->assignServers($gearmanClient);
 
-        foreach ($taskStructure['tasks'] as $task) {
+        foreach ($this->taskStructure as $task) {
+
             $type = $task['method'];
             $jobName = $task['name'];
             $worker = $this->getJob($jobName);
+
             if (false !== $worker) {
+
                 $gearmanClient->$type($worker['job']['realCallableName'], serialize($task['params']), $task['context'], $task['unique']);
             }
         }
 
+        $this->resetTaskStructure();
+
         return $gearmanClient->runTasks();
+    }
+
+
+    /**
+     * Reset all tasks structure. Remove all set values
+     *
+     * @return GearmanClient self Object
+     */
+    public function resetTaskStructure()
+    {
+        $this->taskStructure = array();
+
+        return $this;
     }
 }

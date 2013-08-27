@@ -7,11 +7,11 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
+use Doctrine\Common\Cache\Cache;
 
 use Mmoreram\GearmanBundle\Module\WorkerCollection;
 use Mmoreram\GearmanBundle\Module\WorkerDirectoryLoader;
 use Mmoreram\GearmanBundle\Module\WorkerClass as Worker;
-use Mmoreram\GearmanBundle\Service\GearmanCache as Cache;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work;
 use ReflectionClass;
 
@@ -20,7 +20,7 @@ use ReflectionClass;
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class GearmanCacheLoader
+class GearmanCacheWrapper
 {
 
     /**
@@ -71,17 +71,44 @@ class GearmanCacheLoader
     private $cache;
 
 
+    /**
+     * @var string
+     * 
+     * Gearman cache id
+     */
+    private $cacheId;
+
+
+    /**
+     * @var array
+     * 
+     * WorkerCollection with all workers and jobs available
+     */
+    private $workerCollection;
+
+
+    /**
+     * Return workerCollection
+     * 
+     * @return array all available workers
+     */
+    public function getWorkers()
+    {
+        return $workerCollection;
+    }
+
 
     /**
      * Construct method
      *
      * @param array $bundles Bundles
      */
-    public function __construct(array $bundles, Kernel $kernel, Cache $cache)
+    public function __construct(array $bundles, Kernel $kernel, Cache $cache, $cacheId)
     {
         $this->kernelBundles = $kernel->getBundles();
         $this->bundles = $bundles;
         $this->cache = $cache;
+        $this->cacheId = $cacheId;
     }
 
 
@@ -92,12 +119,10 @@ class GearmanCacheLoader
      */
     public function loadCache()
     {
-        if (!$this->cache->existsCacheFile()) {
+        if (!$this->cache->contains($this->cacheId)) {
 
-            $workerCollection = $this->parseNamespaceMap();
-            $this
-                ->cache
-                ->set($workerCollection->toCache()),
+            $this->workerCollection = $this->parseNamespaceMap()->toArray();
+            $this->cache->save($this->cacheId, $workerCollection);
         }
 
         return $this;
@@ -111,7 +136,7 @@ class GearmanCacheLoader
      */
     public function reloadCache()
     {
-        $this->cache->empty();
+        $this->cache->delete($this->cacheId);
 
         return $this->loadCache();
     }

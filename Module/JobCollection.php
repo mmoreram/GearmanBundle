@@ -13,9 +13,9 @@ class JobCollection
 {
 
     /**
-     * All jobs from worker
-     *
      * @var array
+     * 
+     * All jobs from worker
      */
     private $workerJobs = array();
 
@@ -46,16 +46,19 @@ class JobCollection
         return $this->workerJobs;
     }
 
+
     /**
      * Retrieve all jobs loaded previously in cache format
      *
      * @return array
      */
-    public function toCache()
+    public function toArray()
     {
         $jobs = array();
-        foreach ($this->getJobs() as $job) {
-            $jobs[] = $job->toCache();
+
+        foreach ($this->workerJobs as $job) {
+
+            $jobs[] = $job->toArray();
         }
 
         return $jobs;

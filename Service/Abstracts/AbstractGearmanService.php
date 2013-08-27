@@ -1,6 +1,6 @@
 <?php
 
-namespace Mmoreram\GearmanBundle\Service;
+namespace Mmoreram\GearmanBundle\Service\Abstracts;
 
 use Mmoreram\GearmanBundle\Service\GearmanCache as Cache;
 use Mmoreram\GearmanBundle\Exceptions\JobDoesNotExistException;
@@ -11,7 +11,7 @@ use Mmoreram\GearmanBundle\Exceptions\WorkerDoesNotExistException;
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class GearmanService
+abstract class AbstractGearmanService
 {
 
     /**
@@ -25,11 +25,11 @@ class GearmanService
     /**
      * Construct method
      *
-     * @param array $bundles Bundles
+     * @param GearmanCacheWrapper $gearmanCacheWrapper GearmanCacheWrapper
      */
-    public function __construct(Cache $cache)
+    public function __construct(GearmanCacheWrapper $gearmanCacheWrapper)
     {
-        $this->workers = $cache->get();
+        $this->workers = $gearmanCacheWrapper->getWorkerCollection();
     }
 
 
