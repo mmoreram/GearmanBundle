@@ -1,5 +1,5 @@
 {
-    "name": "mmoreramerino/gearman-bundle",
+    "name": "yatego/gearman-bundle",
     "description": "Adds gearman support to your Symfony2 project",
     "keywords": ["gearman"],
     "homepage": "http://mmoreramerino.github.com/GearmanBundle/",
@@ -17,7 +17,8 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": ">=2.0"
+        "symfony/framework-bundle": ">=2.0",
+        "ext-gearman": "*"
     },
     "autoload": {
         "psr-0": { "Mmoreramerino\\GearmanBundle": "Mmoreramerino/GearmanBundle/lib/" }

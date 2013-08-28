@@ -108,7 +108,15 @@ class GearmanClient extends GearmanService
         $gmclient = new \GearmanClient();
         $this->assignServers($gmclient);
 
-        return $gmclient->$method($worker['job']['realCallableName'], serialize($params), $unique);
+        $params = array(
+            $worker['job']['realCallableName'],
+            serialize($params)
+        );
+        if ($unique !== null) {
+            $params[] = $unique;
+        }
+
+        return call_user_func_array(array($gmclient, $method), $params);
     }
 
     /**
@@ -136,8 +144,19 @@ class GearmanClient extends GearmanService
     private function assignServers(\GearmanClient $gearmanClient)
     {
         if (null === $this->server || !is_array($this->server)) {
+            $settings = $this->getSettings();
+            if (isset($settings['defaults']['servers']) && null !== $settings['defaults']['servers']) {
+                if (is_array($settings['defaults']['servers'])) {
+                    foreach ($settings['defaults']['servers'] as $name => $server) {
+                        $gearmanClient->addServer($server['hostname'], (int) $server['port']);
+                    }
+                } else {
+                    $gearmanClient->addServer();
+                }
+            } else {
+                $gearmanClient->addServer();
+            }
 
-            $gearmanClient->addServer();
         } else {
 
             $gearmanClient->addServer($this->server[0], $this->server[1]);
