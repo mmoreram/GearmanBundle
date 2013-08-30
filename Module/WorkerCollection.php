@@ -1,13 +1,18 @@
 <?php
 
+/**
+ * Gearman Bundle for Symfony2
+ * 
+ * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2013
+ */
+
 namespace Mmoreram\GearmanBundle\Module;
 
 use Mmoreram\GearmanBundle\Module\WorkerClass as Worker;
 
 /**
  * WorkerCollection class
- *
- * @author Marc Morera <yuhu@mmoreram.com>
  */
 class WorkerCollection
 {

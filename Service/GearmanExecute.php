@@ -1,11 +1,17 @@
 <?php
 
+/**
+ * Gearman Bundle for Symfony2
+ * 
+ * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2013
+ */
+
 namespace Mmoreram\GearmanBundle\Service;
 
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use GearmanWorker;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -58,7 +64,7 @@ class GearmanExecute extends AbstractGearmanService
      */
     private function callJob(Array $worker)
     {
-        $gearmanWorker= new GearmanWorker();
+        $gearmanWorker = new \GearmanWorker();
 
         if (isset($worker['job'])) {
 
@@ -129,8 +135,8 @@ class GearmanExecute extends AbstractGearmanService
         if (!empty($servers)) {
 
             foreach ($servers as $server) {
-                list($addr, $port) = explode(':', $server, 2);
-                $gmworker->addServer($addr, $port);
+
+                $gmworker->addServer($server['host'], $server['port']);
             }
         } else {
             $gmworker->addServer();

@@ -1,18 +1,23 @@
 <?php
 
+/**
+ * Gearman Bundle for Symfony2
+ * 
+ * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2013
+ */
+
 namespace Mmoreram\GearmanBundle\Module;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Job;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Mmoreram\GearmanBundle\Exceptions\SettingValueMissingException;
-use Mmoreram\GearmanBundle\Exceptions\SettingValueBadFormatException;
 use ReflectionMethod;
 
 /**
  * Job class
- *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * 
+ * This class provide all worker definition.
  */
 class JobClass extends ContainerAware
 {

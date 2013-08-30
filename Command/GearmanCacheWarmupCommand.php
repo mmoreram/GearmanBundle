@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Gearman Bundle for Symfony2
+ * 
+ * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2013
+ */
+
 namespace Mmoreram\GearmanBundle\Command;
 
 use Symfony\Component\Console\Input\InputOption;
@@ -12,8 +19,6 @@ use Mmoreram\GearmanBundle\Service\GearmanSettings;
 use Mmoreram\GearmanBundle\Module\GearmanBaseBundle;
 use Mmoreram\GearmanBundle\Service\GearmanCacheLoader;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Mmoreram\GearmanBundle\Exceptions\GearmanNotInstalledException;
-use Mmoreram\GearmanBundle\Exceptions\NoSettingsFileExistsException;
 
 
 /**

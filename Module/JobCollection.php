@@ -6,8 +6,6 @@ use Mmoreram\GearmanBundle\Module\JobClass as Job;
 
 /**
  * Job Collection class
- *
- * @author Marc Morera <yuhu@mmoreram.com>
  */
 class JobCollection
 {

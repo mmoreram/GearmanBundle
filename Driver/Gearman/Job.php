@@ -1,16 +1,20 @@
 <?php
 
 /**
- * Gearman annotations driver
- *
+ * Gearman Bundle for Symfony2
+ * 
  * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2013
  */
 
 namespace Mmoreram\GearmanBundle\Driver\Gearman;
 
 use Doctrine\Common\Annotations\Annotation;
 
+
 /**
+ * Gearman Job annotation driver
+ * 
  * @Annotation
  */
 final class Job extends Annotation

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Gearman Bundle for Symfony2
+ * 
+ * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2013
+ */
+
 namespace Mmoreram\GearmanBundle\Service;
 
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
@@ -68,6 +75,7 @@ class GearmanClient extends AbstractGearmanService
     private function enqueue($jobName, $params, $method, $unique)
     {
         $worker = $this->getJob($jobName);
+        
         if (false !== $worker) {
             return $this->doEnqueue($worker, $params, $method, $unique);
         }
@@ -95,7 +103,7 @@ class GearmanClient extends AbstractGearmanService
         $gmclient = new \GearmanClient();
         $this->assignServers($gmclient);
 
-        return $gmclient->$method($worker['job']['realCallableName'], serialize($params), $unique);
+        return $gmclient->$method($worker['job']['realCallableName'], $params, $unique);
     }
 
 
@@ -414,7 +422,7 @@ class GearmanClient extends AbstractGearmanService
             'context'   =>  $context,
             'unique'    =>  $unique,
             'method'    =>  $method,
-            );
+        );
 
         $this->addTaskToStructure($task);
 
@@ -451,32 +459,18 @@ class GearmanClient extends AbstractGearmanService
         $this->assignServers($gearmanClient);
 
         foreach ($this->taskStructure as $task) {
-
             $type = $task['method'];
             $jobName = $task['name'];
             $worker = $this->getJob($jobName);
 
             if (false !== $worker) {
 
-                $gearmanClient->$type($worker['job']['realCallableName'], serialize($task['params']), $task['context'], $task['unique']);
+                $gearmanClient->$type($worker['job']['realCallableName'], $task['params'], $task['context'], $task['unique']);
             }
         }
 
-        $this->resetTaskStructure();
-
-        return $gearmanClient->runTasks();
-    }
-
-
-    /**
-     * Reset all tasks structure. Remove all set values
-     *
-     * @return GearmanClient self Object
-     */
-    public function resetTaskStructure()
-    {
         $this->taskStructure = array();
 
-        return $this;
+        return $gearmanClient->runTasks();
     }
 }
