@@ -1,4 +1,4 @@
-![Gearman Bundle](http://mmoreram.github.io/gearman-bundle/gearmanbundle-logo.png)
+![Gearman Bundle](https://raw.github.com/mmoreram/gearman-bundle/master/Resources/public/images/gearman-bundle.png)
 
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/gearman-bundle/badges/quality-score.png?s=1b65ccb8a983546f3ed776ebc33bc0d63d956e93)](https://scrutinizer-ci.com/g/mmoreram/gearman-bundle/)
 
