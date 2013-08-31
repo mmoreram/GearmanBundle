@@ -178,10 +178,19 @@ class WorkerClass
             $reflectionMethod = new ReflectionMethod($method->class, $method->name);
             $methodAnnotations = $reader->getMethodAnnotations($reflectionMethod);
 
+            /**
+             * Every annotation found is parsed
+             */
             foreach ($methodAnnotations as $methodAnnotation) {
 
+                /**
+                 * Annotation is only laoded if is typeof JobAnnotation
+                 */
                 if ($methodAnnotation instanceof JobAnnotation) {
 
+                    /**
+                     * Creates new Job
+                     */
                     $job = new Job($methodAnnotation, $reflectionMethod, $this->callableName, $this->servers, $defaultSettings);
                     $this->jobCollection->add($job);
                 }

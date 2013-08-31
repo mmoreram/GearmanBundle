@@ -12,6 +12,7 @@ namespace Mmoreram\GearmanBundle\Service;
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Object;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -53,6 +54,7 @@ class GearmanExecute extends AbstractGearmanService
         $worker = $this->getJob($jobName);
 
         if (false !== $worker) {
+
             $this->callJob($worker);
         }
     }
@@ -62,10 +64,12 @@ class GearmanExecute extends AbstractGearmanService
      * Given a worker, execute GearmanWorker function defined by job.
      *
      * @param array $worker Worker definition
+     * 
+     * @return GearmanExecute self Object
      */
     private function callJob(Array $worker)
     {
-        $gearmanWorker = new \GearmanWorker();
+        $gearmanWorker = new \GearmanWorker;
 
         if (isset($worker['job'])) {
 
@@ -80,7 +84,22 @@ class GearmanExecute extends AbstractGearmanService
             $this->addServers($gearmanWorker, $worker['servers']);
         }
 
+        $objInstance = $this->createJob($worker);
+        $this->runJob($gearmanWorker, $objInstance, $jobs);
+        
+        return $this;
+    }
 
+
+    /**
+     * Given a worker settings, return Job instance
+     * 
+     * @parma array $worker Worker settings
+     * 
+     * @return Object Job instance
+     */
+    private function createJob(array $worker)
+    {
         /**
          * If service is defined, we must retrieve this class with dependency injection
          * 
@@ -106,6 +125,21 @@ class GearmanExecute extends AbstractGearmanService
             }
         }
 
+        return $objInstance;
+    }
+
+
+    /**
+     * Given a GearmanWorker and an instance of Job, run it
+     * 
+     * @param \GearmanWorker $gearmanWorker Gearman Worker
+     * @param Object         $objInstance   Job instance
+     * @param array          $jobs          Array of jobs to subscribe
+     * 
+     * @return GearmanExecute self Object
+     */
+    private function runJob(\GearmanWorker $gearmanWorker, $objInstance, array $jobs)
+    {
 
         /**
          * Every job defined in worker is added into GearmanWorker
@@ -131,6 +165,7 @@ class GearmanExecute extends AbstractGearmanService
                 break;
             }
         }
+
     }
 
 

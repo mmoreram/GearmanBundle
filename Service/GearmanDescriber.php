@@ -20,8 +20,6 @@ use Symfony\Component\HttpKernel\Kernel;
 class GearmanDescriber
 {
 
-
-
     /**
      * @var Kernel
      *
@@ -50,21 +48,41 @@ class GearmanDescriber
      */
     public function describeJob(OutputInterface $output, array $worker)
     {
-
+        /**
+         * Commandline
+         */
         $script = $this->kernel->getRootDir() . '/console gearman:job:execute';
 
+        /**
+         * A job descriptions contains its worker description
+         */
         $this->describeWorker($output, $worker);
+
         $job = $worker['job'];
         $output->writeln('<info>    @job\methodName : ' . $job['methodName'] . '</info>');
         $output->writeln('<info>    @job\callableName : ' . $job['realCallableName'] . '</info>');
+
+        /**
+         * Also a complete and clean execution path is given , for supervisord
+         */
         $output->writeln('<info>    @job\supervisord : </info><comment>/usr/bin/php ' . $script.' ' . $job['realCallableName'] . ' --no-interaction</comment>');
         $output->writeln('<info>    @job\iterations : ' . $job['iterations'] . '</info>');
         $output->writeln('<info>    @job\defaultMethod : ' . $job['defaultMethod'] . '</info>');
+        
+
+        /**
+         * Printed every server is defined for current job
+         */
+        $output->writeln('');
         $output->writeln('<info>    @job\servers :</info>');
         $output->writeln('');
         foreach ($job['servers'] as $name => $server) {
             $output->writeln('<comment>        ' . $name . ' - ' . $server['host'] . ':' . $server['port'] . '</comment>');
         }
+
+        /**
+         * Description
+         */
         $output->writeln('');
         $output->writeln('<info>    @job\description :</info>');
         $output->writeln('');
@@ -83,6 +101,9 @@ class GearmanDescriber
      */
     public function describeWorker(OutputInterface $output, array $worker, $tinyJobDescription = false)
     {
+        /**
+         * Commandline
+         */
         $script = $this->kernel->getRootDir() . '/console gearman:worker:execute';
 
         $output->writeln('');
@@ -90,11 +111,19 @@ class GearmanDescriber
         $output->writeln('<info>    @Worker\fileName : ' . $worker['fileName'] . '</info>');
         $output->writeln('<info>    @Worker\nameSpace : ' . $worker['namespace'] . '</info>');
         $output->writeln('<info>    @Worker\callableName: ' . $worker['callableName'] . '</info>');
+
+        /**
+         * Also a complete and clean execution path is given , for supervisord
+         */
         $output->writeln('<info>    @Worker\supervisord : </info><comment>/usr/bin/php ' . $script.' ' . $worker['callableName'] . ' --no-interaction</comment>');
 
+        /**
+         * Service value is only explained if defined. Not mandatory
+         */
         if (null !== $worker['service']) {
             $output->writeln('<info>    @Worker\service : ' . $worker['service'] . '</info>');
         }
+
         $output->writeln('<info>    @worker\iterations : ' . $worker['iterations'] . '</info>');
         $output->writeln('<info>    @Worker\#jobs : '.count($worker['jobs']).'</info>');
 
@@ -107,12 +136,19 @@ class GearmanDescriber
             }
         }
 
+        /**
+         * Printed every server is defined for current job
+         */
         $output->writeln('');
         $output->writeln('<info>    @worker\servers :</info>');
         $output->writeln('');
         foreach ($worker['servers'] as $name => $server) {
             $output->writeln('<comment>        #' . $name . ' - ' . $server['host'] . ':' . $server['port'] . '</comment>');
         }
+
+        /**
+         * Description
+         */
         $output->writeln('');
         $output->writeln('<info>    @Worker\description :</info>');
         $output->writeln('');

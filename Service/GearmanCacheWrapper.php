@@ -20,7 +20,7 @@ use Symfony\Component\Finder\Finder;
 use Mmoreram\GearmanBundle\Module\WorkerCollection;
 use Mmoreram\GearmanBundle\Module\WorkerDirectoryLoader;
 use Mmoreram\GearmanBundle\Module\WorkerClass as Worker;
-use Mmoreram\GearmanBundle\Driver\Gearman\Work;
+use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
 use ReflectionClass;
 
 /**
@@ -177,33 +177,37 @@ class GearmanCacheWrapper
      */
     public function loadNamespaceMap()
     {
+        /**
+         * Iteratinc all bundle settings
+         */
         foreach ($this->bundles as $bundleSettings) {
 
+            if (!$bundleSettings['active']) {
+
+                break;
+            }
+
             $bundleNamespace = $bundleSettings['name'];
+            $bundlePath = $this->kernelBundles[$bundleNamespace]->getPath();
 
-            if ($bundleSettings['active']) {
+            if (!empty($bundleSettings['include'])) {
 
-                $bundlePath = $this->kernelBundles[$bundleNamespace]->getPath();
+                foreach ($bundleSettings['include'] as $include) {
 
-                if (!empty($bundleSettings['include'])) {
-
-                    foreach ($bundleSettings['include'] as $include) {
-
-                        $this->paths[] = rtrim(rtrim($bundlePath, '/') . '/' . $include, '/') . '/';
-                    }
-
-                } else {
-
-                    /**
-                     * If no include is set, include all namespace
-                     */
-                    $this->paths[] = rtrim($bundlePath, '/') . '/';
+                    $this->paths[] = rtrim(rtrim($bundlePath, '/') . '/' . $include, '/') . '/';
                 }
 
-                foreach ($bundleSettings['ignore'] as $ignore) {
+            } else {
 
-                    $this->excludedPaths[] = trim($ignore, '/');
-                }
+                /**
+                 * If no include is set, include all namespace
+                 */
+                $this->paths[] = rtrim($bundlePath, '/') . '/';
+            }
+
+            foreach ($bundleSettings['ignore'] as $ignore) {
+
+                $this->excludedPaths[] = trim($ignore, '/');
             }
         }
     }
@@ -240,6 +244,9 @@ class GearmanCacheWrapper
             ->exclude($this->excludedPaths)
             ->in($this->paths);
 
+        /**
+         * Every file found is parsed
+         */
         foreach ($finder as $file) {
 
             /**
@@ -249,10 +256,19 @@ class GearmanCacheWrapper
             $reflClass = new ReflectionClass($classNamespace);
             $classAnnotations = $reader->getClassAnnotations($reflClass);
 
+            /**
+             * Every annotation found is parsed
+             */
             foreach ($classAnnotations as $annot) {
 
-                if ($annot instanceof Work) {
+                /**
+                 * Annotation is only laoded if is typeof WorkAnnotation
+                 */
+                if ($annot instanceof WorkAnnotation) {
 
+                    /**
+                     * Creates new Worker element with all its Job data
+                     */
                     $worker = new Worker($annot, $reflClass, $reader, $this->servers, $this->defaultSettings);
                     $workerCollection->add($worker);
                 }
@@ -277,9 +293,11 @@ class GearmanCacheWrapper
         $namespace = false;
         $tokens = token_get_all(file_get_contents($file));
         for ($i = 0, $count = count($tokens); $i < $count; $i++) {
+            
             $token = $tokens[$i];
 
             if (!is_array($token)) {
+
                 continue;
             }
 
