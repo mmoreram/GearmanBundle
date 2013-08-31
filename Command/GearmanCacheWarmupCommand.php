@@ -34,7 +34,7 @@ class GearmanCacheWarmupCommand extends ContainerAwareCommand
     protected function configure()
     {
         parent::configure();
-        
+
         $this   ->setName('gearman:cache:warmup')
                 ->setAliases(array('cache:gearman:warmup'))
                 ->setDescription('Warms up gearman cache data');

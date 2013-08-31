@@ -29,7 +29,7 @@ class GearmanWorkerDescribeCommand extends ContainerAwareCommand
     protected function configure()
     {
         parent::configure();
-        
+
         $this->setName('gearman:worker:describe')
              ->setDescription('Describe given worker')
              ->addArgument('worker', InputArgument::REQUIRED, 'worker to describe');

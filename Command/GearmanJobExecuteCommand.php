@@ -29,7 +29,7 @@ class GearmanJobExecuteCommand extends ContainerAwareCommand
     protected function configure()
     {
         parent::configure();
-        
+
         $this->setName('gearman:job:execute')
              ->setDescription('Execute one single job')
              ->addArgument('job', InputArgument::REQUIRED, 'job to execute')
@@ -61,7 +61,7 @@ class GearmanJobExecuteCommand extends ContainerAwareCommand
         $jobStruct = $this->getContainer()->get('gearman')->getJob($job);
 
         if (!$input->getOption('no-description')) {
-            
+
             $this->getContainer()->get('gearman.describer')->describeJob($output, $jobStruct, true);
         }
 

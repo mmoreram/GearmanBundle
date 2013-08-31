@@ -15,6 +15,7 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
 use Doctrine\Common\Cache\Cache;
+use Symfony\Component\Finder\Finder;
 
 use Mmoreram\GearmanBundle\Module\WorkerCollection;
 use Mmoreram\GearmanBundle\Module\WorkerDirectoryLoader;
@@ -49,25 +50,17 @@ class GearmanCacheWrapper
     /**
      * @var Array
      *
-     * bundles to parse on
+     * paths to search on
      */
-    private $bundlesAccepted = array();
+    private $paths = array();
 
 
     /**
      * @var Array
      *
-     * accepted namespaces
+     * paths to ignore
      */
-    private $namespacesAccepted = array();
-
-
-    /**
-     * @var Array
-     *
-     * Ignored namespaces
-     */
-    private $namespacesIgnored = array();
+    private $excludedPaths = array();
 
 
     /**
@@ -124,7 +117,12 @@ class GearmanCacheWrapper
     /**
      * Construct method
      *
-     * @param array $bundles Bundles
+     * @param Kernel $kernel          Kernel instance
+     * @param Cache  $cache           Cache
+     * @param string $cacheId         Cache id where to save parsing data
+     * @param array  $bundles         Bundle array where to parse workers, defined on condiguration
+     * @param array  $servers         Server list defined on configuration
+     * @param array  $defaultSettings Default settings defined on configuration
      */
     public function __construct(Kernel $kernel, Cache $cache, $cacheId, array $bundles, array $servers, array $defaultSettings)
     {
@@ -181,17 +179,17 @@ class GearmanCacheWrapper
     {
         foreach ($this->bundles as $bundleSettings) {
 
-            $bundleNamespace = $bundleSettings['namespace'];
+            $bundleNamespace = $bundleSettings['name'];
 
             if ($bundleSettings['active']) {
 
-                $this->bundlesAccepted[] = $bundleNamespace;
+                $bundlePath = $this->kernelBundles[$bundleNamespace]->getPath();
 
                 if (!empty($bundleSettings['include'])) {
 
                     foreach ($bundleSettings['include'] as $include) {
 
-                        $this->namespacesAccepted[] = $bundleNamespace . '\\' . $include;
+                        $this->paths[] = rtrim(rtrim($bundlePath, '/') . '/' . $include, '/') . '/';
                     }
 
                 } else {
@@ -199,13 +197,12 @@ class GearmanCacheWrapper
                     /**
                      * If no include is set, include all namespace
                      */
-                    $this->namespacesAccepted[] = $bundleNamespace;
-
+                    $this->paths[] = rtrim($bundlePath, '/') . '/';
                 }
 
                 foreach ($bundleSettings['ignore'] as $ignore) {
 
-                    $this->namespacesIgnored[] = $bundleNamespace . '\\' . $ignore;
+                    $this->excludedPaths[] = trim($ignore, '/');
                 }
             }
         }
@@ -236,48 +233,28 @@ class GearmanCacheWrapper
         }
 
         $workerCollection = new WorkerCollection;
+        $finder = new Finder();
+        $finder
+            ->files()
+            ->followLinks()
+            ->exclude($this->excludedPaths)
+            ->in($this->paths);
 
-        foreach ($this->kernelBundles as $kernelBundle) {
+        foreach ($finder as $file) {
 
-            if (!in_array($kernelBundle->getNamespace(), $this->bundlesAccepted)) {
+            /**
+             * File is accepted to be parsed
+             */
+            $classNamespace = $this->getFileClassNamespace($file->getRealpath());
+            $reflClass = new ReflectionClass($classNamespace);
+            $classAnnotations = $reader->getClassAnnotations($reflClass);
 
-                continue;
-            }
+            foreach ($classAnnotations as $annot) {
 
-            $filesLoader = new WorkerDirectoryLoader(new FileLocator('.'));
-            $files = $filesLoader->load($kernelBundle->getPath());
+                if ($annot instanceof Work) {
 
-            foreach ($files as $file) {
-
-                foreach ($this->namespacesIgnored as $namespaceIgnored) {
-
-                    if ($this->isSubNamespace($namespaceIgnored, $file['class'])) {
-
-                        continue 2;
-                    }
-                }
-
-                foreach ($this->namespacesAccepted as $namespaceAccepted) {
-
-                    if ($this->isSubNamespace($namespaceAccepted, $file['class'])) {
-
-                        /**
-                         * File is accepted to be parsed
-                         */
-                        $reflClass = new ReflectionClass($file['class']);
-                        $classAnnotations = $reader->getClassAnnotations($reflClass);
-
-                        foreach ($classAnnotations as $annot) {
-
-                            if ($annot instanceof Work) {
-
-                                $worker = new Worker($annot, $reflClass, $reader, $this->servers, $this->defaultSettings);
-                                $workerCollection->add($worker);
-                            }
-                        }
-
-                        continue 2;
-                    }
+                    $worker = new Worker($annot, $reflClass, $reader, $this->servers, $this->defaultSettings);
+                    $workerCollection->add($worker);
                 }
             }
         }
@@ -286,16 +263,47 @@ class GearmanCacheWrapper
     }
 
 
+
     /**
-     * Checks if namespace is subnamespace of another
+     * Returns the full class name for the first class in the file.
      *
-     * @param string $namespace    Parent namespace
-     * @param string $subNamespace Namespace to check
+     * @param string $file A PHP file path
      *
-     * @return boolean
+     * @return string|false Full class name if found, false otherwise
      */
-    private function isSubNamespace($namespace, $subNamespace)
+    protected function getFileClassNamespace($file)
     {
-        return ( strpos($subNamespace, $namespace) === 0 );
+        $class = false;
+        $namespace = false;
+        $tokens = token_get_all(file_get_contents($file));
+        for ($i = 0, $count = count($tokens); $i < $count; $i++) {
+            $token = $tokens[$i];
+
+            if (!is_array($token)) {
+                continue;
+            }
+
+            if (true === $class && T_STRING === $token[0]) {
+                return $namespace.'\\'.$token[1];
+            }
+
+            if (true === $namespace && T_STRING === $token[0]) {
+                $namespace = '';
+                do {
+                    $namespace .= $token[1];
+                    $token = $tokens[++$i];
+                } while ($i < $count && is_array($token) && in_array($token[0], array(T_NS_SEPARATOR, T_STRING)));
+            }
+
+            if (T_CLASS === $token[0]) {
+                $class = true;
+            }
+
+            if (T_NAMESPACE === $token[0]) {
+                $namespace = true;
+            }
+        }
+
+        return false;
     }
 }

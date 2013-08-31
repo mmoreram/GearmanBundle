@@ -29,7 +29,7 @@ class GearmanWorkerExecuteCommand extends ContainerAwareCommand
     protected function configure()
     {
         parent::configure();
-        
+
         $this->setName('gearman:worker:execute')
              ->setDescription('Execute one worker with all contained Jobs')
              ->addArgument('worker', InputArgument::REQUIRED, 'work to execute')
@@ -61,7 +61,7 @@ class GearmanWorkerExecuteCommand extends ContainerAwareCommand
         $workerStruct = $this->getContainer()->get('gearman')->getWorker($worker);
 
         if (!$input->getOption('no-description')) {
-            
+
             $this->getContainer()->get('gearman.describer')->describeWorker($output, $workerStruct, true);
         }
 

@@ -34,7 +34,7 @@ class GearmanCacheClearCommand extends ContainerAwareCommand
     protected function configure()
     {
         parent::configure();
-        
+
         $this   ->setName('gearman:cache:clear')
                 ->setAliases(array('cache:gearman:clear'))
                 ->setDescription('Clears gearman cache data on current environment');

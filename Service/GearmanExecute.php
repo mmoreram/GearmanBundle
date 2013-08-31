@@ -36,7 +36,8 @@ class GearmanExecute extends AbstractGearmanService
      *
      * @return GearmanExecute self Object
      */
-    public function setContainer(Container $container) {
+    public function setContainer(Container $container)
+    {
 
         $this->container = $container;
     }
@@ -69,19 +70,26 @@ class GearmanExecute extends AbstractGearmanService
         if (isset($worker['job'])) {
 
             $jobs = array($worker['job']);
-            $iterations = isset($worker['job']['iterations']) ? (int) ($worker['job']['iterations']) : 0;
+            $iterations = $worker['job']['iterations'];
             $this->addServers($gearmanWorker, $worker['job']['servers']);
 
         } else {
 
             $jobs = $worker['jobs'];
-            $iterations = isset($worker['iterations']) ? (int) ($worker['iterations']) : 0;
+            $iterations = $worker['iterations'];
             $this->addServers($gearmanWorker, $worker['servers']);
         }
 
-        if (null !== $worker['service']) {
+
+        /**
+         * If service is defined, we must retrieve this class with dependency injection
+         * 
+         * Otherwise we just create it with a simple new()
+         */
+        if ($worker['service']) {
 
             $objInstance = $this->container->get($worker['service']);
+
         } else {
 
             $objInstance = new $worker['className'];
@@ -98,26 +106,29 @@ class GearmanExecute extends AbstractGearmanService
             }
         }
 
+
+        /**
+         * Every job defined in worker is added into GearmanWorker
+         */
         foreach ($jobs as $job) {
 
             $gearmanWorker->addFunction($job['realCallableName'], array($objInstance, $job['methodName']));
         }
 
-        $shouldStop = ($iterations > 0) ? true : false;
 
+        /**
+         * Executes GearmanWorker with all jobs defined
+         */
         while ($gearmanWorker->work()) {
 
             if ($gearmanWorker->returnCode() != GEARMAN_SUCCESS) {
+
                 break;
             }
 
-            if ($shouldStop) {
+            if ($iterations-- <= 0) {
 
-                $iterations--;
-                if ($iterations <= 0) {
-
-                    break;
-                }
+                break;
             }
         }
     }

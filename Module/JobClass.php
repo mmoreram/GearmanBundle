@@ -21,7 +21,7 @@ use ReflectionMethod;
  */
 class JobClass extends ContainerAware
 {
-    
+
     /**
      * @var string
      * 
@@ -30,7 +30,7 @@ class JobClass extends ContainerAware
      *  otherwise, natural method name will be used.
      */
     private $callableName;
-    
+
 
     /**
      * @var string
@@ -84,11 +84,11 @@ class JobClass extends ContainerAware
     /**
      * Construct method
      *
-     * @param Job               $methodAnnotation  MethodAnnotation class
+     * @param Job              $methodAnnotation  MethodAnnotation class
      * @param ReflectionMethod $method            ReflextionMethod class
-     * @param Work              $classAnnotation   Work class
-     * @param string            $callableNameClass Callable name class
-     * @param array             $settings          Settings structure
+     * @param string           $callableNameClass Callable name class
+     * @param array            $servers           Array of servers defined for Worker
+     * @param array            $defaultSettings   Default settings for Worker
      */
     public function __construct( Job $methodAnnotation, ReflectionMethod $method, $callableNameClass, array $servers, array $defaultSettings)
     {
@@ -113,24 +113,21 @@ class JobClass extends ContainerAware
                                 ? $defaultSettings['method']
                                 : $methodAnnotation->defaultMethod;
 
-        
+
         /**
-         * By default, this worker takes default servers definition
+         * By default, this job takes default servers defined in its worker
          */
         $this->servers = $servers;
+
 
         /**
          * If is configured some servers definition in the worker, overwrites
          */
         if ($methodAnnotation->servers) {
 
-            if (is_array($methodAnnotation->servers)) {
-
-                $this->servers = $methodAnnotation->servers;
-            } else {
-
-                $this->servers = array($methodAnnotation->servers);
-            }
+            $this->servers  = ( is_array($methodAnnotation->servers) && !isset($methodAnnotation->servers['host']) )
+                            ? $methodAnnotation->servers
+                            : array($methodAnnotation->servers);
         }
     }
 

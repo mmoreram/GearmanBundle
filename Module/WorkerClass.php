@@ -25,8 +25,6 @@ use ReflectionMethod;
 class WorkerClass
 {
 
-
-
     /**
      * @var string
      * 
@@ -112,10 +110,11 @@ class WorkerClass
     /**
      * Retrieves all jobs available from worker
      *
-     * @param Work             $classAnnotation ClassAnnotation class
-     * @param ReflectionClass  $reflectionClass Reflexion class
-     * @param Reader           $reader          ReaderAnnotation class
-     * @param array            $settings        Settings array
+     * @param Work            $classAnnotation ClassAnnotation class
+     * @param ReflectionClass $reflectionClass Reflexion class
+     * @param Reader          $reader          ReaderAnnotation class
+     * @param array           $servers         Array of servers defined for Worker
+     * @param array           $defaultSettings Default settings for Worker
      */
     public function __construct(Work $classAnnotation, ReflectionClass $reflectionClass, Reader $reader, array $servers, array $defaultSettings)
     {
@@ -163,27 +162,27 @@ class WorkerClass
          */
         if ($classAnnotation->servers) {
 
-            if (is_array($classAnnotation->servers)) {
-
-                $this->servers = $classAnnotation->servers;
-            } else {
-
-                $this->servers = array($classAnnotation->servers);
-            }
+            $this->servers  = ( is_array($classAnnotation->servers) && !isset($classAnnotation->servers['host']) )
+                            ? $classAnnotation->servers
+                            : array($classAnnotation->servers);
         }
 
         $this->jobCollection = new JobCollection;
 
+
+        /**
+         * For each defined method, we parse it
+         */
         foreach ($reflectionClass->getMethods() as $method) {
 
-            $reflMethod = new ReflectionMethod($method->class, $method->name);
-            $methodAnnotations = $reader->getMethodAnnotations($reflMethod);
+            $reflectionMethod = new ReflectionMethod($method->class, $method->name);
+            $methodAnnotations = $reader->getMethodAnnotations($reflectionMethod);
 
-            foreach ($methodAnnotations as $annot) {
+            foreach ($methodAnnotations as $methodAnnotation) {
 
-                if ($annot instanceof JobAnnotation) {
+                if ($methodAnnotation instanceof JobAnnotation) {
 
-                    $job = new Job($annot, $reflMethod, $this->callableName, $this->servers, $defaultSettings);
+                    $job = new Job($methodAnnotation, $reflectionMethod, $this->callableName, $this->servers, $defaultSettings);
                     $this->jobCollection->add($job);
                 }
             }

@@ -75,7 +75,7 @@ class GearmanClient extends AbstractGearmanService
     private function enqueue($jobName, $params, $method, $unique)
     {
         $worker = $this->getJob($jobName);
-        
+
         if (false !== $worker) {
             return $this->doEnqueue($worker, $params, $method, $unique);
         }

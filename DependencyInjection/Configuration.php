@@ -34,7 +34,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('bundles')
                     ->prototype('array')
                         ->children()
-                            ->scalarNode('namespace')
+                            ->scalarNode('name')
                                 ->isRequired()
                                 ->cannotBeEmpty()
                             ->end()
@@ -79,8 +79,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
 
         return $treeBuilder;
     }

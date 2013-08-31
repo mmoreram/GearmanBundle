@@ -29,7 +29,7 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
     protected function configure()
     {
         parent::configure();
-        
+
         $this->setName('gearman:job:describe')
              ->setDescription('Describe given job')
              ->addArgument('job', InputArgument::REQUIRED, 'job to describe');
@@ -49,7 +49,7 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
     {
         $job = $input->getArgument('job');
         $job = $this->getContainer()->get('gearman')->getJob($job);
-        
+
         $this
             ->getContainer()
             ->get('gearman.describer')
