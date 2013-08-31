@@ -56,7 +56,7 @@ class GearmanCacheClearCommand extends ContainerAwareCommand
 
         $this
             ->getContainer()
-            ->get('@gearman.cache.wrapper')
+            ->get('gearman.cache.wrapper')
             ->flush();
     }
 }
