@@ -2,7 +2,7 @@
 
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/gearman-bundle/badges/quality-score.png?s=1b65ccb8a983546f3ed776ebc33bc0d63d956e93)](https://scrutinizer-ci.com/g/mmoreram/gearman-bundle/)
 
-#GearmanBundle for Symfony2
+# GearmanBundle for Symfony2
 
 > This bundle is being refactored.  
 > All tests are being performed and will be published as soon as possible.  
@@ -12,17 +12,17 @@
 >  
 > Marc Morera  
 
-##About
+## About
 
 GearmanBundle is a bundle for Symfony2 intended to provide an easy way to support developers who need to use job queues. For example: mail queues, Solr generation queues or Database upload queues.
 
-##Branches
+## Branches
 
 * Use version `2.1` for Symfony2 `2.1.*`
 * Use version `2.2` for Symfony2 `2.2.*`
 * Use version `2.3` or the `master` for Symfony2 `2.3.*`
 
-##Installation
+## Installation
 You have to add require line into you composer.json file
 
     "require": {
@@ -184,7 +184,7 @@ Job annotations always overwrite work annotations, and work annotations always o
         }
     }
 
-### Worker Annotations
+## Worker Annotations
 
     /**
      * @Gearman\Work(
@@ -206,7 +206,7 @@ Job annotations always overwrite work annotations, and work annotations always o
 * service : You can use even a service. Must specify callable service name
 * defaultMethod : You can define witch method will be used as default in all jobs
 
-### Job Annotations
+## Job Annotations
 
     /**
      * @Gearman\Job(
@@ -285,7 +285,7 @@ Gearman provides a set of commands that will make easier to know all workers set
         gearman:worker:execute                Execute one worker with all contained Jobs
         gearman:worker:list                   List all Gearman Workers and their Jobs
 
-### Workers and Jobs list
+## Workers and Jobs list
 
 Once all your workers are defined, you can simply list them to ensure all settings are correct.
 
@@ -299,7 +299,7 @@ Once all your workers are defined, you can simply list them to ensure all settin
           callablename: MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething
 
 
-### Worker settings
+## Worker settings
 
 You can describe full worker using its callableName.  
 This command provides you all information about desired Worker, overwritting custom annotation settings to default config settings.  
@@ -324,7 +324,7 @@ This command also provides you all needed information to work with Supervisord.
 
         Acme Worker. Containing multiple available jobs
 
-### Job settings
+## Job settings
 
 You can also describe full job using also its callableName
 This command provides you all information about desired Job, overwritting custom annotation settings to worker settings.  
@@ -362,7 +362,7 @@ This command also provides you all needed information to work with Supervisord.
 
         #Acme Job action. This is just a description of a method that do something
 
-### Job and Worker execution
+## Run a job!
 
 You can execute by command line an instance of a worker or a job.  
 The difference between them is that an instance of a worker can execute any of their jobs, without assignning any priority to them, and a job only can run itself.
@@ -370,34 +370,55 @@ The difference between them is that an instance of a worker can execute any of t
     php app/console gearman:worker:execute MmoreramerinoTestBundleServicesMyAcmeWorker
     php app/console gearman:job:execute MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething
 
+> By using callableName you can let Supervisord maintain alive a worker.
+> When the job is executed as times as iterations is defined, will die, but supervisord will alive it again.  
+> You can have as many as worker instances as you want.  
+> Get some [Supervisord](http://supervisord.org/) info
 
-## Gearman Service
 
-You can request a Job by using the gearman service.
+## Gearman Client
+
+You can request a Job by using the gearman client.
 
     $this
         ->getContainer()
         ->get('gearman');
 
-### Jobs
+### Servers
+
+    $gearman
+        ->clearServers()
+        ->setServer('127.1.1.1', 4677)
+        ->addServer('127.1.1.1', 4678)
+        ->addServer('127.1.1.1', 4679);
+
+* addServer: Add new server to requested client
+* setServer: Clean server list and set new server to requested client
+* clearServers: Clear server list
+
+> By default, if no server is set, gearman will use server defined as default in config.yml  
+> host: *127.0.0.1*  
+> port: *4730*
+
+## Jobs
 
     $result = $gearman
         ->doJob('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', json_encode(array('value1')));
 
-* doJob : Call the job and wait for the result
-* doNormalJob : Call the job and wait for the result ( Only newest gearman versions )
-* doHighJob : Call the job and wait for the result on High Preference
-* doLowJob : Call the job and wait for the result on Low Preference
-* doBackroundJob : Call the job without waiting for the result. 
+* doJob: Call the job and wait for the result
+* doNormalJob: Call the job and wait for the result ( Only newest gearman versions )
+* doHighJob: Call the job and wait for the result on High Preference
+* doLowJob: Call the job and wait for the result on Low Preference
+* doBackroundJob: Call the job without waiting for the result. 
     * It recieves a job handle for the submitted job
-* doHighBackgroundJob : Call the job without waitting for the result on High Preference. 
+* doHighBackgroundJob: Call the job without waitting for the result on High Preference. 
     * It recieves a job handle for the submitted job
-* doLowBackgroundJob : Call the job without waitting for the result on Low Preference.
+* doLowBackgroundJob: Call the job without waitting for the result on Low Preference.
     * It recieves a job handle for the submitted job
-* callJob : Call the job with default method.
+* callJob: Call the job with default method.
     * Defined in settings, work annotations or the job annotations
 
-### Tasks
+## Tasks
 
     $gearman
         ->addTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value1')
@@ -405,15 +426,15 @@ You can request a Job by using the gearman service.
         ->addHighBackgroundTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value3')
         ->runTasks();
 
-* addTask : Adds a task to be run in parallel with other tasks
-* addTaskHigh : Add a high priority task to run in parallel
-* addTaskLow : Add a low priority task to run in parallel
-* addTaskBackground : Add a background task to be run in parallel
-* addTaskHighBackground : Add a high priority background task to be run in parallel
-* addTaskLowBackground : Add a low priority background task to be run in parallel
-* runTasks : Run a list of tasks in parallel
+* addTask: Adds a task to be run in parallel with other tasks
+* addTaskHigh: Add a high priority task to run in parallel
+* addTaskLow: Add a low priority task to run in parallel
+* addTaskBackground: Add a background task to be run in parallel
+* addTaskHighBackground: Add a high priority background task to be run in parallel
+* addTaskLowBackground: Add a low priority background task to be run in parallel
+* runTasks: Run a list of tasks in parallel
 
-##Contribute
+## Contribute
 
 All code is Symfony2 Code formatted, so every pull request must validate phpcs standards.  
 You should read [Symfony2 coding standards](http://symfony.com/doc/current/contributing/code/standards.html) and install [this](https://github.com/opensky/Symfony2-coding-standard) CodeSniffer to check all code is validated.  

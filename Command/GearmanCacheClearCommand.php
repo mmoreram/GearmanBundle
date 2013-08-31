@@ -56,7 +56,7 @@ class GearmanCacheClearCommand extends ContainerAwareCommand
 
         $this
             ->getContainer()
-            ->get('@liip_doctrine_cache.ns.gearman')
-            ->delete($this->getContainer()->getParameter('gearman.cache.id'));
+            ->get('@gearman.cache.wrapper')
+            ->flush();
     }
 }

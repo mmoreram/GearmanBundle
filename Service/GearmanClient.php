@@ -22,20 +22,42 @@ class GearmanClient extends AbstractGearmanService
 {
 
     /**
-     * Server variable to define in what server must connect to
-     *
      * @var array
+     * 
+     * Server set to define in what server must connect to
      */
-    public $server;
+    public $servers = array();
 
 
     /**
+     * @var array
+     * 
      * task structure to store all about called tasks
-     *
-     * @var $taskStructure
      */
     public $taskStructure = array();
 
+
+    /**
+     * @var array
+     * 
+     * Set default servers
+     */
+    public $defaultServers;
+
+
+    /**
+     * Set  default servers
+     * 
+     * @param array $defaultServers Default servers
+     * 
+     * @return GearmanClient self Object
+     */
+    public function setDefaultServers(array $defaultServers)
+    {
+        $this->defaultServers = $defaultServers;
+
+        return $this;
+    }
 
 
     /**
@@ -48,17 +70,67 @@ class GearmanClient extends AbstractGearmanService
      *
      * @return mixed result depending of method called.
      */
-     public function callJob($name, $params = array())
-     {
-        $worker = $this->getJob($name);
-        $methodCallable = $worker['job']['defaultMethod'] . 'Job';
+    public function callJob($name, $params = array())
+    {
+       $worker = $this->getJob($name);
+       $methodCallable = $worker['job']['defaultMethod'] . 'Job';
 
-        if (!method_exists($this, $methodCallable)) {
-            throw new NoCallableGearmanMethodException($methodCallable);
-        }
+       if (!method_exists($this, $methodCallable)) {
+           throw new NoCallableGearmanMethodException($methodCallable);
+       }
 
-        return $this->$methodCallable($name, $params);
-     }
+       return $this->$methodCallable($name, $params);
+    }
+
+
+    /**
+     * Set server to client. Empty all servers and set this one
+     *
+     * @param type $servername Server name (must be ip)
+     * @param type $port       Port of server. By default 4730
+     *
+     * @return GearmanClient Returns self object
+     */
+    public function setServer($servername, $port = 4730)
+    {
+        $this
+            ->clearServers()
+            ->addServer($servername, $port);
+
+        return $this;
+    }
+
+
+    /**
+     * Add server to client
+     *
+     * @param type $servername Server name (must be ip)
+     * @param type $port       Port of server. By default 4730
+     *
+     * @return GearmanClient Returns self object
+     */
+    public function addServer($servername, $port = 4730)
+    {
+        $this->servers[] = array(
+            'host'  =>  $servername,
+            'port'  =>  $port,
+        );
+
+        return $this;
+    }
+
+
+    /**
+     * Clear server list
+     *
+     * @return GearmanClient Returns self object
+     */
+    public function clearServers()
+    {
+        $this->servers = array();
+
+        return $this;
+    }
 
 
     /**
@@ -77,6 +149,7 @@ class GearmanClient extends AbstractGearmanService
         $worker = $this->getJob($jobName);
 
         if (false !== $worker) {
+
             return $this->doEnqueue($worker, $params, $method, $unique);
         }
 
@@ -108,22 +181,6 @@ class GearmanClient extends AbstractGearmanService
 
 
     /**
-     * Set server of gearman
-     *
-     * @param type $servername Server name (must be ip)
-     * @param type $port       Port of server. By default 4730
-     *
-     * @return GearmanClient Returns self object
-     */
-    public function setServer($servername, $port = 4730)
-    {
-        $this->server = array($servername, $port);
-
-        return $this;
-    }
-
-
-    /**
      * Given a GearmanClient, set all included servers
      *
      * @param GearmanClient $gearmanClient Object to include servers
@@ -132,26 +189,20 @@ class GearmanClient extends AbstractGearmanService
      */
     private function assignServers(\GearmanClient $gearmanClient)
     {
-        if (empty($this->server)) {
+        $servers = $this->defaultServers;
 
-            $gearmanClient->addServer();
-        } else {
+        if (!empty($this->servers)) {
 
-            $gearmanClient->addServer($this->server[0], $this->server[1]);
+            $servers = $this->servers;
         }
 
-        return $this;
-    }
+        /**
+         * We include each server into gearman client
+         */
+        foreach ($servers as $server) {
 
-
-    /**
-     * Clear server slot
-     *
-     * @return GearmanClient Returns self object
-     */
-    public function clearServers()
-    {
-        $this->server = null;
+            $gearmanClient->addServer($server['host'], $server['port']);
+        }
 
         return $this;
     }

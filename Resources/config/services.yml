@@ -32,3 +32,5 @@ services:
     gearman:
         class: %gearman.client.class%
         parent: gearman.abstract.service
+        calls:
+          - [setDefaultServers, [%gearman.servers%]]
