@@ -10,12 +10,15 @@
 namespace Mmoreram\GearmanBundle\Service;
 
 use Symfony\Component\Config\FileLocator;
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
 use Doctrine\Common\Cache\Cache;
 use Symfony\Component\Finder\Finder;
+use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use \Doctrine\Common\Version as DoctrineVersion;
 
 use Mmoreram\GearmanBundle\Module\WorkerCollection;
 use Mmoreram\GearmanBundle\Module\WorkerDirectoryLoader;
@@ -226,9 +229,9 @@ class GearmanCacheWrapper
         /**
          * Depending on Symfony2 version
          */
-        if (version_compare(\Doctrine\Common\Version::VERSION, '2.2.0-DEV', '>=')) {
+        if (version_compare(DoctrineVersion::VERSION, '2.2.0-DEV', '>=')) {
 
-            $reader = new \Doctrine\Common\Annotations\SimpleAnnotationReader();
+            $reader = new SimpleAnnotationReader();
             $reader->addNamespace('Mmoreram\GearmanBundle\Driver');
         } else {
 
@@ -236,7 +239,6 @@ class GearmanCacheWrapper
             $reader->setDefaultAnnotationNamespace('Mmoreram\GearmanBundle\Driver\\');
         }
 
-        $workerCollection = new WorkerCollection;
         $finder = new Finder();
         $finder
             ->files()
@@ -244,6 +246,20 @@ class GearmanCacheWrapper
             ->exclude($this->excludedPaths)
             ->in($this->paths);
 
+        return $this->parseFiles($finder, $reader);
+    }
+
+
+    /**
+     * Load all workers with their jobs
+     *
+     * @return WorkerCollection collection of all info
+     */
+    private function parseFiles(Finder $finder, Reader $reader)
+    {
+
+        $workerCollection = new WorkerCollection;
+        
         /**
          * Every file found is parsed
          */
