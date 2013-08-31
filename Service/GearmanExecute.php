@@ -86,7 +86,7 @@ class GearmanExecute extends AbstractGearmanService
 
         $objInstance = $this->createJob($worker);
         $this->runJob($gearmanWorker, $objInstance, $jobs);
-        
+
         return $this;
     }
 
@@ -94,7 +94,7 @@ class GearmanExecute extends AbstractGearmanService
     /**
      * Given a worker settings, return Job instance
      * 
-     * @parma array $worker Worker settings
+     * @param array $worker Worker settings
      * 
      * @return Object Job instance
      */

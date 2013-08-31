@@ -148,7 +148,6 @@ class WorkerClass
         $this->className = $reflectionClass->getName();
         $this->service = $workAnnotation->service;
 
-        
         $this
             ->loadSettings($workAnnotation, $defaultSettings)
             ->loadServers($workAnnotation, $servers)

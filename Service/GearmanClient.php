@@ -15,8 +15,8 @@ use Mmoreram\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
 
 /**
  * Implementation of GearmanInterface
- *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * 
+ * @todo Find the way of reducing number of class methods
  */
 class GearmanClient extends AbstractGearmanService
 {

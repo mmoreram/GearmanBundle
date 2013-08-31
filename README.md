@@ -1,4 +1,26 @@
+![Gearman Bundle](http://mmoreram.github.io/gearman-bundle/gearmanbundle-logo.png)
+
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/gearman-bundle/badges/quality-score.png?s=1b65ccb8a983546f3ed776ebc33bc0d63d956e93)](https://scrutinizer-ci.com/g/mmoreram/gearman-bundle/)
+
 #GearmanBundle for Symfony2
+
+> This bundle is being refactored.  
+> All tests are being performed and will be published as soon as possible.  
+> All help will be very grateful.  
+> My apologies for all possible issues caused by this changed.  
+> I am at your disposal.  
+>  
+> Marc Morera  
+
+##About
+
+GearmanBundle is a bundle for Symfony2 intended to provide an easy way to support developers who need to use job queues. For example: mail queues, Solr generation queues or Database upload queues.
+
+##Branches
+
+* Use version `2.1` for Symfony2 `2.1.*`
+* Use version `2.2` for Symfony2 `2.2.*`
+* Use version `2.3` or the `master` for Symfony2 `2.3.*`
 
 ##Installation
 You have to add require line into you composer.json file
@@ -390,4 +412,11 @@ You can request a Job by using the gearman service.
 * addTaskHighBackground : Add a high priority background task to be run in parallel
 * addTaskLowBackground : Add a low priority background task to be run in parallel
 * runTasks : Run a list of tasks in parallel
+
+##Contribute
+
+All code is Symfony2 Code formatted, so every pull request must validate phpcs standards.  
+You should read [Symfony2 coding standards](http://symfony.com/doc/current/contributing/code/standards.html) and install [this](https://github.com/opensky/Symfony2-coding-standard) CodeSniffer to check all code is validated.  
+
+There is also a policy for contributing to this project. All pull request must be all explained step by step, to make us more understandable and easier to merge pull request. All new features must be tested with PHPUnit.
 

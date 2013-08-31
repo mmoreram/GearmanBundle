@@ -252,6 +252,9 @@ class GearmanCacheWrapper
 
     /**
      * Load all workers with their jobs
+     * 
+     * @param Finder $finder Finder
+     * @param Reader $reader Reader
      *
      * @return WorkerCollection collection of all info
      */
@@ -259,7 +262,7 @@ class GearmanCacheWrapper
     {
 
         $workerCollection = new WorkerCollection;
-        
+
         /**
          * Every file found is parsed
          */
@@ -302,14 +305,17 @@ class GearmanCacheWrapper
      * @param string $file A PHP file path
      *
      * @return string|false Full class name if found, false otherwise
+     * 
+     * @todo Find another way more tidy and clean of getting file namespace
      */
     protected function getFileClassNamespace($file)
     {
         $class = false;
         $namespace = false;
         $tokens = token_get_all(file_get_contents($file));
+
         for ($i = 0, $count = count($tokens); $i < $count; $i++) {
-            
+
             $token = $tokens[$i];
 
             if (!is_array($token)) {

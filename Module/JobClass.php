@@ -84,7 +84,7 @@ class JobClass extends ContainerAware
     /**
      * Construct method
      *
-     * @param JobAnnotation    $jobAnnotation  jobAnnotation class
+     * @param JobAnnotation    $jobAnnotation     JobAnnotation class
      * @param ReflectionMethod $method            ReflextionMethod class
      * @param string           $callableNameClass Callable name class
      * @param array            $servers           Array of servers defined for Worker
@@ -141,8 +141,8 @@ class JobClass extends ContainerAware
     /**
      * Load settings
      * 
-     * @param WorkAnnotation $JobAnnotation   JobAnnotation class
-     * @param array          $defaultSettings Default settings for Worker
+     * @param JobAnnotation $jobAnnotation   JobAnnotation class
+     * @param array         $defaultSettings Default settings for Worker
      * 
      * @return JobClass self Object
      */

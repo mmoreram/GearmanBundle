@@ -68,7 +68,6 @@ class GearmanDescriber
         $output->writeln('<info>    @job\supervisord : </info><comment>/usr/bin/php ' . $script.' ' . $job['realCallableName'] . ' --no-interaction</comment>');
         $output->writeln('<info>    @job\iterations : ' . $job['iterations'] . '</info>');
         $output->writeln('<info>    @job\defaultMethod : ' . $job['defaultMethod'] . '</info>');
-        
 
         /**
          * Printed every server is defined for current job
@@ -126,7 +125,6 @@ class GearmanDescriber
 
         $output->writeln('<info>    @worker\iterations : ' . $worker['iterations'] . '</info>');
         $output->writeln('<info>    @Worker\#jobs : '.count($worker['jobs']).'</info>');
-
 
         if ($tinyJobDescription) {
             $output->writeln('<info>    @Worker\jobs</info>');
