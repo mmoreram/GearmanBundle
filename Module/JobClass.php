@@ -9,8 +9,8 @@
 
 namespace Mmoreram\GearmanBundle\Module;
 
-use Mmoreram\GearmanBundle\Driver\Gearman\Job;
-use Mmoreram\GearmanBundle\Driver\Gearman\Work;
+use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
+use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use ReflectionMethod;
 
@@ -84,52 +84,82 @@ class JobClass extends ContainerAware
     /**
      * Construct method
      *
-     * @param Job              $methodAnnotation  MethodAnnotation class
+     * @param JobAnnotation    $jobAnnotation  jobAnnotation class
      * @param ReflectionMethod $method            ReflextionMethod class
      * @param string           $callableNameClass Callable name class
      * @param array            $servers           Array of servers defined for Worker
      * @param array            $defaultSettings   Default settings for Worker
      */
-    public function __construct( Job $methodAnnotation, ReflectionMethod $method, $callableNameClass, array $servers, array $defaultSettings)
+    public function __construct(JobAnnotation $jobAnnotation, ReflectionMethod $method, $callableNameClass, array $servers, array $defaultSettings)
     {
-        $this->callableName = is_null($methodAnnotation->name)
+        $this->callableName = is_null($jobAnnotation->name)
                             ? $method->getName()
-                            : $methodAnnotation->name;
+                            : $jobAnnotation->name;
 
         $this->methodName = $method->getName();
 
         $this->realCallableName = str_replace('\\', '', $callableNameClass . '~' . $this->callableName);
-        $this->description  = is_null($methodAnnotation->description)
+        $this->description  = is_null($jobAnnotation->description)
                             ? 'No description is defined'
-                            : $methodAnnotation->description;
+                            : $jobAnnotation->description;
+
+        $this
+            ->loadSettings($jobAnnotation, $defaultSettings)
+            ->loadServers($jobAnnotation, $servers);
+    }
 
 
-        $this->iterations   = is_null($methodAnnotation->iterations)
-                            ? (int) $defaultSettings['iterations']
-                            : $methodAnnotation->iterations;
-
-
-        $this->defaultMethod    = is_null($methodAnnotation->defaultMethod)
-                                ? $defaultSettings['method']
-                                : $methodAnnotation->defaultMethod;
-
-
+    /**
+     * Load settings
+     * 
+     * @param JobAnnotation $jobAnnotation JobAnnotation class
+     * @param array         $servers       Array of servers defined for Worker
+     * 
+     * @return JobClass self Object
+     */
+    private function loadServers(JobAnnotation $jobAnnotation, array $servers)
+    {
         /**
          * By default, this job takes default servers defined in its worker
          */
         $this->servers = $servers;
 
-
         /**
          * If is configured some servers definition in the worker, overwrites
          */
-        if ($methodAnnotation->servers) {
+        if ($jobAnnotation->servers) {
 
-            $this->servers  = ( is_array($methodAnnotation->servers) && !isset($methodAnnotation->servers['host']) )
-                            ? $methodAnnotation->servers
-                            : array($methodAnnotation->servers);
+            $this->servers  = ( is_array($jobAnnotation->servers) && !isset($jobAnnotation->servers['host']) )
+                            ? $jobAnnotation->servers
+                            : array($jobAnnotation->servers);
         }
+
+        return $this;
     }
+
+
+    /**
+     * Load settings
+     * 
+     * @param WorkAnnotation $JobAnnotation   JobAnnotation class
+     * @param array          $defaultSettings Default settings for Worker
+     * 
+     * @return JobClass self Object
+     */
+    private function loadSettings(JobAnnotation $jobAnnotation, array $defaultSettings)
+    {
+        $this->iterations   = is_null($jobAnnotation->iterations)
+                            ? (int) $defaultSettings['iterations']
+                            : $jobAnnotation->iterations;
+
+
+        $this->defaultMethod    = is_null($jobAnnotation->defaultMethod)
+                                ? $defaultSettings['method']
+                                : $jobAnnotation->defaultMethod;
+
+        return $this;
+    }
+
 
     /**
      * Retrieve all Job data in cache format

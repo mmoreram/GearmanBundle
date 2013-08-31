@@ -10,10 +10,10 @@
 namespace Mmoreram\GearmanBundle\Module;
 
 use Doctrine\Common\Annotations\Reader;
-use Mmoreram\GearmanBundle\Driver\Gearman\Work;
 use Mmoreram\GearmanBundle\Module\JobCollection;
 use Mmoreram\GearmanBundle\Module\JobClass as Job;
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
+use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -100,6 +100,14 @@ class WorkerClass
 
 
     /**
+     * @var array
+     * 
+     * settings
+     */
+    private $settings;
+
+
+    /**
      * @var JobCollection
      * 
      * All jobs inside Worker
@@ -110,48 +118,54 @@ class WorkerClass
     /**
      * Retrieves all jobs available from worker
      *
-     * @param Work            $classAnnotation ClassAnnotation class
+     * @param WorkAnnotation  $workAnnotation  workAnnotation class
      * @param ReflectionClass $reflectionClass Reflexion class
      * @param Reader          $reader          ReaderAnnotation class
      * @param array           $servers         Array of servers defined for Worker
      * @param array           $defaultSettings Default settings for Worker
      */
-    public function __construct(Work $classAnnotation, ReflectionClass $reflectionClass, Reader $reader, array $servers, array $defaultSettings)
+    public function __construct(WorkAnnotation $workAnnotation, ReflectionClass $reflectionClass, Reader $reader, array $servers, array $defaultSettings)
     {
         $this->namespace = $reflectionClass->getNamespaceName();
 
         /**
          * Setting worker callable name
          */
-        $this->callableName = is_null($classAnnotation->name)
+        $this->callableName = is_null($workAnnotation->name)
                             ? $reflectionClass->getName()
-                            : $this->namespace .'\\' .$classAnnotation->name;
+                            : $this->namespace .'\\' .$workAnnotation->name;
 
         $this->callableName = str_replace('\\', '', $this->callableName);
 
         /**
          * Setting worker description
          */
-        $this->description  = is_null($classAnnotation->description)
+        $this->description  = is_null($workAnnotation->description)
                             ? 'No description is defined'
-                            : $classAnnotation->description;
+                            : $workAnnotation->description;
 
         $this->fileName = $reflectionClass->getFileName();
         $this->className = $reflectionClass->getName();
-        $this->service = $classAnnotation->service;
+        $this->service = $workAnnotation->service;
 
-        $this->iterations   = is_null($classAnnotation->iterations)
-                            ? (int) $defaultSettings['iterations']
-                            : $classAnnotation->iterations;
+        
+        $this
+            ->loadSettings($workAnnotation, $defaultSettings)
+            ->loadServers($workAnnotation, $servers)
+            ->createJobCollection($reflectionClass, $reader);
+    }
 
-        $defaultSettings['iterations'] = $this->iterations;
 
-        $this->defaultMethod    = is_null($classAnnotation->defaultMethod)
-                                ? $defaultSettings['method']
-                                : $classAnnotation->defaultMethod;
-
-        $defaultSettings['method'] = $this->defaultMethod;
-
+    /**
+     * Load settings
+     * 
+     * @param WorkAnnotation $workAnnotation WorkAnnotation class
+     * @param array          $servers        Array of servers defined for Worker
+     * 
+     * @return WorkerClass self Object
+     */
+    private function loadServers(WorkAnnotation $workAnnotation, array $servers)
+    {
         /**
          * By default, this worker takes default servers definition
          */
@@ -160,15 +174,56 @@ class WorkerClass
         /**
          * If is configured some servers definition in the worker, overwrites
          */
-        if ($classAnnotation->servers) {
+        if ($workAnnotation->servers) {
 
-            $this->servers  = ( is_array($classAnnotation->servers) && !isset($classAnnotation->servers['host']) )
-                            ? $classAnnotation->servers
-                            : array($classAnnotation->servers);
+            $this->servers  = ( is_array($workAnnotation->servers) && !isset($workAnnotation->servers['host']) )
+                            ? $workAnnotation->servers
+                            : array($workAnnotation->servers);
         }
 
-        $this->jobCollection = new JobCollection;
+        return $this;
+    }
 
+
+    /**
+     * Load settings
+     * 
+     * @param WorkAnnotation $workAnnotation  WorkAnnotation class
+     * @param array          $defaultSettings Default settings for Worker
+     * 
+     * @return WorkerClass self Object
+     */
+    private function loadSettings(WorkAnnotation $workAnnotation, array $defaultSettings)
+    {
+        $this->iterations   = is_null($workAnnotation->iterations)
+                            ? (int) $defaultSettings['iterations']
+                            : $workAnnotation->iterations;
+
+        $defaultSettings['iterations'] = $this->iterations;
+
+        $this->defaultMethod    = is_null($workAnnotation->defaultMethod)
+                                ? $defaultSettings['method']
+                                : $workAnnotation->defaultMethod;
+
+        $defaultSettings['method'] = $this->defaultMethod;
+
+        $this->settings = $defaultSettings;
+
+        return $this;
+    }
+
+
+    /**
+     * Creates job collection of worker
+     * 
+     * @param ReflectionClass $reflectionClass Reflexion class
+     * @param Reader          $reader          ReaderAnnotation class
+     * 
+     * @return WorkerClass self Object
+     */
+    private function createJobCollection(ReflectionClass $reflectionClass, Reader $reader)
+    {
+        $this->jobCollection = new JobCollection;
 
         /**
          * For each defined method, we parse it
@@ -191,11 +246,13 @@ class WorkerClass
                     /**
                      * Creates new Job
                      */
-                    $job = new Job($methodAnnotation, $reflectionMethod, $this->callableName, $this->servers, $defaultSettings);
+                    $job = new Job($methodAnnotation, $reflectionMethod, $this->callableName, $this->servers, $this->settings);
                     $this->jobCollection->add($job);
                 }
             }
         }
+
+        return $this;
     }
 
 
