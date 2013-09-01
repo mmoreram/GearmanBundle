@@ -2,7 +2,10 @@
 
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/gearman-bundle/badges/quality-score.png?s=1b65ccb8a983546f3ed776ebc33bc0d63d956e93)](https://scrutinizer-ci.com/g/mmoreram/gearman-bundle/)
 
-# GearmanBundle for Symfony2
+GearmanBundle for Symfony2
+-----
+
+GearmanBundle is a bundle for Symfony2 intended to provide an easy way to support developers who need to use job queues. For example: mail queues, Solr generation queues or Database upload queues.
 
 > This bundle is being refactored.  
 > All tests are being performed and will be published as soon as possible.  
@@ -12,10 +15,29 @@
 >  
 > Marc Morera  
 
-## About
+Table of contents
+-----
+1. [Installing/Configuring](#installingconfiguring)
+    * [Branches](#branches)
+    * [Installation](#installation)
+    * [Configuration](#configuration)
+2. [Definition of Workers](#definition-of-workers)
+    * [Worker Annotations](#worker-annotations)
+    * [Job Annotations](#job-annotations)
+    * [Job as a service](#job-as-a-service)
+3. [Running your Jobs](#running-your-jobs)
+    * [Listing workers and jobs](#listing-workers-and-jobs)
+    * [Listing worker settings](#listing-worker-settings)
+    * [Listing job settings](#listing-job-settings)
+    * [Run a job](#run-a-job)
+4. [Client](#client)
+    * [Servers](#servers)
+    * [Request a job](#request-a-job)
+    * [Tasks](#tasks)
+6. [Contribute](#contribute)
 
-GearmanBundle is a bundle for Symfony2 intended to provide an easy way to support developers who need to use job queues. For example: mail queues, Solr generation queues or Database upload queues.
-
+Installing/Configuring
+-----
 ## Branches
 
 * Use version `2.1` for Symfony2 `2.1.*`
@@ -121,7 +143,8 @@ In development mode you do not want to cache things over more than one request. 
             presta_sitemap:
                 type: array
 
-## Workers and Jobs definition
+Definition of Workers
+-----
 
 This Bundle allows you to configure whatever as a Job. It provides you an easy way to execute it with Supervisor, for example. Moreover, it let you call client methods in Symfony2 environment in a really simple and practical way.  
 Job annotations always overwrite work annotations, and work annotations always overwrite environment settings.
@@ -224,7 +247,7 @@ Job annotations always overwrite work annotations, and work annotations always o
 * servers : array containing servers providers will connect to offer this job
 * defaultMethod : You can define witch method will be used as default in this job
 
-### Service as a Worker
+## job as a service
 
 If you want to use your service as a worker, you have to specify service variable in Worker annotation
 
@@ -270,7 +293,8 @@ And have this service defined in your dependency injection definition file
                     event_dispatcher: @event_dispatcher
                     mailer: @mailer
   
-## Workers and Jobs execution
+Running your Jobs
+-----
 
 Gearman provides a set of commands that will make easier to know all workers settings.
 
@@ -285,7 +309,7 @@ Gearman provides a set of commands that will make easier to know all workers set
         gearman:worker:execute                Execute one worker with all contained Jobs
         gearman:worker:list                   List all Gearman Workers and their Jobs
 
-## Workers and Jobs list
+## Listing workers and jobs
 
 Once all your workers are defined, you can simply list them to ensure all settings are correct.
 
@@ -299,7 +323,7 @@ Once all your workers are defined, you can simply list them to ensure all settin
           callablename: MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething
 
 
-## Worker settings
+## Listing worker settings
 
 You can describe full worker using its callableName.  
 This command provides you all information about desired Worker, overwritting custom annotation settings to default config settings.  
@@ -324,7 +348,7 @@ This command also provides you all needed information to work with Supervisord.
 
         Acme Worker. Containing multiple available jobs
 
-## Job settings
+## Listing job settings
 
 You can also describe full job using also its callableName
 This command provides you all information about desired Job, overwritting custom annotation settings to worker settings.  
@@ -362,7 +386,7 @@ This command also provides you all needed information to work with Supervisord.
 
         #Acme Job action. This is just a description of a method that do something
 
-## Run a job!
+## Run a job
 
 You can execute by command line an instance of a worker or a job.  
 The difference between them is that an instance of a worker can execute any of their jobs, without assignning any priority to them, and a job only can run itself.
@@ -376,7 +400,8 @@ The difference between them is that an instance of a worker can execute any of t
 > Get some [Supervisord](http://supervisord.org/) info
 
 
-## Gearman Client
+Client
+-----
 
 You can request a Job by using the gearman client.
 
@@ -384,7 +409,7 @@ You can request a Job by using the gearman client.
         ->getContainer()
         ->get('gearman');
 
-### Servers
+## Servers
 
     $gearman
         ->clearServers()
@@ -400,7 +425,7 @@ You can request a Job by using the gearman client.
 > host: *127.0.0.1*  
 > port: *4730*
 
-## Jobs
+## Request a job
 
     $result = $gearman
         ->doJob('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', json_encode(array('value1')));
@@ -434,7 +459,8 @@ You can request a Job by using the gearman client.
 * addTaskLowBackground: Add a low priority background task to be run in parallel
 * runTasks: Run a list of tasks in parallel
 
-## Contribute
+Contribute
+-----
 
 All code is Symfony2 Code formatted, so every pull request must validate phpcs standards.  
 You should read [Symfony2 coding standards](http://symfony.com/doc/current/contributing/code/standards.html) and install [this](https://github.com/opensky/Symfony2-coding-standard) CodeSniffer to check all code is validated.  
