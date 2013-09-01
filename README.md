@@ -10,16 +10,17 @@ GearmanBundle is a bundle for Symfony2 intended to provide an easy way to suppor
 > This bundle is being refactored.  
 > All tests are being performed and will be published as soon as possible.  
 > All help will be very grateful.  
-> My apologies for all possible issues caused by this changed.  
+> My apologies for all possible issues caused by this big refactoring.  
 > I am at your disposal.  
 >  
-> Marc Morera  
+> [Marc Morera](https://github.com/mmoreram)
 
 Table of contents
 -----
 1. [Installing/Configuring](#installingconfiguring)
     * [Branches](#branches)
-    * [Installation](#installation)
+    * [Installing Gearman](#installing-gearman)
+    * [Installing GearmanBundle](#installing-gearmanbundle)
     * [Configuration](#configuration)
 2. [Definition of Workers](#definition-of-workers)
     * [Worker Annotations](#worker-annotations)
@@ -34,17 +35,46 @@ Table of contents
     * [Servers](#servers)
     * [Request a job](#request-a-job)
     * [Tasks](#tasks)
+5. [Kernel events](#kernel-events)
+    * [Complete Callback](#complete-callback)
+    * [Created Callback](#created-callback)
+    * [Data Callback](#data-callback)
+    * [Exception Callback](#exception-callback)
+    * [Fail Callback](#fail-callback)
+    * [Status Callback](#status-callback)
+    * [Warning Callback](#warning-callback)
+    * [Workload Callback](#workload-callback)
 6. [Contribute](#contribute)
 
 Installing/Configuring
 -----
 ## Branches
 
-* Use version `2.1` for Symfony2 `2.1.*`
-* Use version `2.2` for Symfony2 `2.2.*`
-* Use version `2.3` or the `master` for Symfony2 `2.3.*`
+* Use version `2.1` for Symfony version `2.1.*`
+* Use version `2.2` for Symfony version `2.2.*`
+* Use version `2.3` or the `master` for Symfony version `2.3.*`
 
-## Installation
+## Installing [Gearman](http://gearman.org)
+
+To install Gearman Job Server with `apt-get` use the following commands:
+
+    $ sudo apt-get install gearman-job-server
+
+And start server
+
+    $ service gearman-job-server start
+
+Then you need to install **Gearman driver** using the following commands
+
+    $ pecl install channel://pecl.php.net/gearman-X.X.X
+
+You will find all available gearman versions in [Pear Repository](http://pecl.php.net/package/gearman)  
+Finally you need to start php module
+
+    $ echo "extension=gearman.so" > /etc/php5/conf.d/gearman.ini
+
+## Installing [GearmanBundle](https://github.com/mmoreram/gearman-bundle)
+
 You have to add require line into you composer.json file
 
     "require": {
@@ -247,7 +277,7 @@ Job annotations always overwrite work annotations, and work annotations always o
 * servers : array containing servers providers will connect to offer this job
 * defaultMethod : You can define witch method will be used as default in this job
 
-## job as a service
+## Job as a service
 
 If you want to use your service as a worker, you have to specify service variable in Worker annotation
 
@@ -458,6 +488,93 @@ You can request a Job by using the gearman client.
 * addTaskHighBackground: Add a high priority background task to be run in parallel
 * addTaskLowBackground: Add a low priority background task to be run in parallel
 * runTasks: Run a list of tasks in parallel
+
+# Kernel Events
+
+GearmanBundle transforms Gearman callbacks to Symfony2 kernel events.
+
+## Complete Callback
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackCompleteEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+For more information about this GearmanEvent, read [GearmanClient::setCompleteCallback](http://www.php.net/manual/en/gearmanclient.setcompletecallback.php) documentation.
+
+    services:
+        my_event_listener:
+            class: AcmeBundle\EventListener\MyEventListener
+            tags:
+              - { name: kernel.event_listener, event: gearman.client.callback.complete, method: onComplete }
+
+
+## Created Callback
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackCreatedEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+For more information about this GearmanEvent, read [GearmanClient::setCreatedCallback](http://www.php.net/manual/en/gearmanclient.setcreatedcallback.php) documentation.
+
+    services:
+        my_event_listener:
+            class: AcmeBundle\EventListener\MyEventListener
+            tags:
+              - { name: kernel.event_listener, event: gearman.client.callback.created, method: onCreated }
+
+## Data Callback
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackDataEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+For more information about this GearmanEvent, read [GearmanClient::setDataCallback](http://www.php.net/manual/en/gearmanclient.setdatacallback.php) documentation.
+
+    services:
+        my_event_listener:
+            class: AcmeBundle\EventListener\MyEventListener
+            tags:
+              - { name: kernel.event_listener, event: gearman.client.callback.data, method: onData }
+
+## Exception Callback
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackExceptionEvent` with no methods.  
+For more information about this GearmanEvent, read [GearmanClient::setExceptionCallback](http://www.php.net/manual/en/gearmanclient.setexceptioncallback.php) documentation.
+
+    services:
+        my_event_listener:
+            class: AcmeBundle\EventListener\MyEventListener
+            tags:
+              - { name: kernel.event_listener, event: gearman.client.callback.exception, method: onExcept }
+
+## Fail Callback
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackFailEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+For more information about this GearmanEvent, read [GearmanClient::setFailCallback](http://www.php.net/manual/en/gearmanclient.setfailcallback.php) documentation.
+
+    services:
+        my_event_listener:
+            class: AcmeBundle\EventListener\MyEventListener
+            tags:
+              - { name: kernel.event_listener, event: gearman.client.callback.fail, method: onFail }
+
+## Status Callback
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackFailEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+For more information about this GearmanEvent, read [GearmanClient::setStatusCallback](http://www.php.net/manual/en/gearmanclient.setstatuscallback.php) documentation.
+
+    services:
+        my_event_listener:
+            class: AcmeBundle\EventListener\MyEventListener
+            tags:
+              - { name: kernel.event_listener, event: gearman.client.callback.status, method: onStatus }
+
+## Warning Callback
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackWarningEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+For more information about this GearmanEvent, read [GearmanClient::setWarningCallback](http://www.php.net/manual/en/gearmanclient.setwarningcallback.php) documentation.
+
+    services:
+        my_event_listener:
+            class: AcmeBundle\EventListener\MyEventListener
+            tags:
+              - { name: kernel.event_listener, event: gearman.client.callback.warning, method: onWarning }
+
+## Workload Callback
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackWorkloadEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+For more information about this GearmanEvent, read [GearmanClient::setWorkloadCallback](http://www.php.net/manual/en/gearmanclient.setworkloadcallback.php) documentation.
+
+    services:
+        my_event_listener:
+            class: AcmeBundle\EventListener\MyEventListener
+            tags:
+              - { name: kernel.event_listener, event: gearman.client.callback.workload, method: onWorkload }
+
+
 
 Contribute
 -----

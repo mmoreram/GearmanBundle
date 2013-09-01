@@ -23,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  */
 class GearmanWorkerListCommand extends ContainerAwareCommand
 {
+
     /**
      * Console Command configuration
      */
@@ -33,6 +34,7 @@ class GearmanWorkerListCommand extends ContainerAwareCommand
         $this->setName('gearman:worker:list')
              ->setDescription('List all Gearman Workers and their Jobs');
     }
+
 
     /**
      * Executes the current command.

@@ -66,7 +66,7 @@ abstract class AbstractGearmanService
             }
         }
 
-        throw new JobDoesNotExistException($jobName);
+        throw new JobDoesNotExistException();
     }
 
 
@@ -88,7 +88,7 @@ abstract class AbstractGearmanService
             }
         }
 
-        throw new WorkerDoesNotExistException($workerName);
+        throw new WorkerDoesNotExistException();
     }
 
 

@@ -28,6 +28,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  */
 class GearmanCacheWarmupCommand extends ContainerAwareCommand
 {
+
     /**
      * Console Command configuration
      */
@@ -39,6 +40,7 @@ class GearmanCacheWarmupCommand extends ContainerAwareCommand
                 ->setAliases(array('cache:gearman:warmup'))
                 ->setDescription('Warms up gearman cache data');
     }
+
 
     /**
      * Executes the current command.

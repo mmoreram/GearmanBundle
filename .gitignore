@@ -8,5 +8,4 @@ coverage
 composer.lock
 vendor
 composer.phar
-phpcs.lo
 phpcs.log

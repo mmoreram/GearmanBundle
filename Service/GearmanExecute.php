@@ -12,7 +12,6 @@ namespace Mmoreram\GearmanBundle\Service;
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Object;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -85,7 +84,7 @@ class GearmanExecute extends AbstractGearmanService
         }
 
         $objInstance = $this->createJob($worker);
-        $this->runJob($gearmanWorker, $objInstance, $jobs);
+        $this->runJob($gearmanWorker, $objInstance, $jobs, $iterations);
 
         return $this;
     }
@@ -135,10 +134,11 @@ class GearmanExecute extends AbstractGearmanService
      * @param \GearmanWorker $gearmanWorker Gearman Worker
      * @param Object         $objInstance   Job instance
      * @param array          $jobs          Array of jobs to subscribe
+     * @param integer        $iterations    Number of iterations
      * 
      * @return GearmanExecute self Object
      */
-    private function runJob(\GearmanWorker $gearmanWorker, $objInstance, array $jobs)
+    private function runJob(\GearmanWorker $gearmanWorker, $objInstance, array $jobs, $iterations)
     {
 
         /**
@@ -148,7 +148,6 @@ class GearmanExecute extends AbstractGearmanService
 
             $gearmanWorker->addFunction($job['realCallableName'], array($objInstance, $job['methodName']));
         }
-
 
         /**
          * Executes GearmanWorker with all jobs defined

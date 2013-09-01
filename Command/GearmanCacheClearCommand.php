@@ -28,6 +28,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  */
 class GearmanCacheClearCommand extends ContainerAwareCommand
 {
+
     /**
      * Console Command configuration
      */
@@ -39,6 +40,7 @@ class GearmanCacheClearCommand extends ContainerAwareCommand
                 ->setAliases(array('cache:gearman:clear'))
                 ->setDescription('Clears gearman cache data on current environment');
     }
+
 
     /**
      * Executes the current command.

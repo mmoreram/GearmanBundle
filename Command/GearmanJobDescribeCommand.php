@@ -23,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  */
 class GearmanJobDescribeCommand extends ContainerAwareCommand
 {
+
     /**
      * Console Command configuration
      */
@@ -34,6 +35,7 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
              ->setDescription('Describe given job')
              ->addArgument('job', InputArgument::REQUIRED, 'job to describe');
     }
+
 
     /**
      * Executes the current command.

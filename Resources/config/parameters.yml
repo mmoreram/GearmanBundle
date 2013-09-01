@@ -1,6 +1,7 @@
 parameters:
 
     gearman.client.class:           Mmoreram\GearmanBundle\Service\GearmanClient
+    gearman.callbacks.class:        Mmoreram\GearmanBundle\Service\GearmanCallbacks
     gearman.execute.class:          Mmoreram\GearmanBundle\Service\GearmanExecute
     gearman.describer.class:        Mmoreram\GearmanBundle\Service\GearmanDescriber
     gearman.cache.wrapper.class:    Mmoreram\GearmanBundle\Service\GearmanCacheWrapper

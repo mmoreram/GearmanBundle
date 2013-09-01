@@ -12,6 +12,7 @@ namespace Mmoreram\GearmanBundle\Service;
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Mmoreram\GearmanBundle\Service\GearmanInterface;
 use Mmoreram\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
+use Mmoreram\GearmanBundle\GearmanMethods;
 
 /**
  * Implementation of GearmanInterface
@@ -22,11 +23,19 @@ class GearmanClient extends AbstractGearmanService
 {
 
     /**
+     * @var GearmanCallbacks
+     * 
+     * Gearman callbacks
+     */
+    private $gearmanCallbacks;
+
+
+    /**
      * @var array
      * 
      * Server set to define in what server must connect to
      */
-    public $servers = array();
+    private $servers = array();
 
 
     /**
@@ -34,7 +43,7 @@ class GearmanClient extends AbstractGearmanService
      * 
      * task structure to store all about called tasks
      */
-    public $taskStructure = array();
+    private $taskStructure = array();
 
 
     /**
@@ -42,7 +51,7 @@ class GearmanClient extends AbstractGearmanService
      * 
      * Set default servers
      */
-    public $defaultServers;
+    private $defaultServers;
 
 
     /**
@@ -61,25 +70,17 @@ class GearmanClient extends AbstractGearmanService
 
 
     /**
-     * Runs a single task and returns some result, depending of method called.
-     * Method called depends of default callable method setted on gearman settings
-     *  or overwritted on work or job annotations
-     *
-     * @param string $name   A GearmanBundle registered function the worker is to execute
-     * @param Mixed  $params Parameters to send to job
-     *
-     * @return mixed result depending of method called.
+     * Set gearman callbacks
+     * 
+     * @param GearmanCallbacks $gearmanCallbacks Gearman callbacks
+     * 
+     * @return GearmanClient self Object
      */
-    public function callJob($name, $params = array())
+    public function setGearmanCallbacks(GearmanCallbacks $gearmanCallbacks)
     {
-       $worker = $this->getJob($name);
-       $methodCallable = $worker['job']['defaultMethod'] . 'Job';
+        $this->gearmanCallbacks = $gearmanCallbacks;
 
-       if (!method_exists($this, $methodCallable)) {
-           throw new NoCallableGearmanMethodException($methodCallable);
-       }
-
-       return $this->$methodCallable($name, $params);
+        return $this;
     }
 
 
@@ -159,7 +160,6 @@ class GearmanClient extends AbstractGearmanService
 
     /**
      * Execute a GearmanClient call given a worker, params and a method.
-     * If any method is given, it performs a "do" call
      *
      * If he GarmanClient call is asyncronous, result value will be a handler.
      * Otherwise, will return job result.
@@ -171,12 +171,12 @@ class GearmanClient extends AbstractGearmanService
      *
      * @return mixed  Return result of the GearmanClient call
      */
-    private function doEnqueue(Array $worker, $params = '', $method = 'do', $unique = null)
+    private function doEnqueue(Array $worker, $params = '', $method = null, $unique = null)
     {
-        $gmclient = new \GearmanClient();
-        $this->assignServers($gmclient);
+        $gearmanClient = new \GearmanClient();
+        $this->assignServers($gearmanClient);
 
-        return $gmclient->$method($worker['job']['realCallableName'], $params, $unique);
+        return $gearmanClient->$method($worker['job']['realCallableName'], $params, $unique);
     }
 
 
@@ -213,6 +213,26 @@ class GearmanClient extends AbstractGearmanService
      */
 
     /**
+     * Runs a single task and returns some result, depending of method called.
+     * Method called depends of default callable method setted on gearman settings
+     *  or overwritted on work or job annotations
+     *
+     * @param string $name   A GearmanBundle registered function the worker is to execute
+     * @param Mixed  $params Parameters to send to job
+     * @param string $unique A unique ID used to identify a particular task
+     *
+     * @return mixed result depending of method called.
+     */
+    public function callJob($name, $params = array(), $unique = null)
+    {
+       $worker = $this->getJob($name);
+       $methodCallable = $worker['job']['defaultMethod'] . 'Job';
+
+       return $this->enqueue($name, $params, $methodCallable, $unique);
+    }
+
+
+    /**
      * Runs a single task and returns a string representation of the result.
      * It is up to the GearmanClient and GearmanWorker to agree on the format of the result.
      * The GearmanClient::do() method is deprecated as of pecl/gearman 1.0.0. Use GearmanClient::doNormal().
@@ -227,7 +247,7 @@ class GearmanClient extends AbstractGearmanService
     public function doJob($name, $params = array(), $unique = null)
     {
 
-        return $this->enqueue($name, $params, 'do', $unique);
+        return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DO, $unique);
     }
 
 
@@ -244,7 +264,7 @@ class GearmanClient extends AbstractGearmanService
     public function doNormalJob($name, $params = array(), $unique = null)
     {
 
-        return $this->enqueue($name, $params, 'doNormal', $unique);
+        return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DONORMAL, $unique);
     }
 
 
@@ -261,7 +281,7 @@ class GearmanClient extends AbstractGearmanService
     public function doBackgroundJob($name, $params = array(), $unique = null)
     {
 
-        return $this->enqueue($name, $params, 'doBackground', $unique);
+        return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOBACKGROUND, $unique);
     }
 
 
@@ -279,7 +299,7 @@ class GearmanClient extends AbstractGearmanService
     public function doHighJob($name, $params = array(), $unique = null)
     {
 
-        return $this->enqueue($name, $params, 'doHigh', $unique);
+        return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOHIGH, $unique);
     }
 
 
@@ -296,7 +316,7 @@ class GearmanClient extends AbstractGearmanService
     public function doHighBackgroundJob($name, $params = array(), $unique = null)
     {
 
-        return $this->enqueue($name, $params, 'doHighBackground', $unique);
+        return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOHIGHBACKGROUND, $unique);
     }
 
 
@@ -314,7 +334,7 @@ class GearmanClient extends AbstractGearmanService
     public function doLowJob($name, $params = array(), $unique = null)
     {
 
-        return $this->enqueue($name, $params, 'doLow', $unique);
+        return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOLOW, $unique);
     }
 
 
@@ -331,7 +351,7 @@ class GearmanClient extends AbstractGearmanService
     public function doLowBackgroundJob($name, $params = array(), $unique = null)
     {
 
-        return $this->enqueue($name, $params, 'doLowBackground', $unique);
+        return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOLOWBACKGROUND, $unique);
     }
 
 
@@ -354,10 +374,11 @@ class GearmanClient extends AbstractGearmanService
      */
     public function addTask($name, $params =array(), &$context = null, $unique = null)
     {
-        $this->enqueueTask($name, $params, $context, $unique, 'addTask');
+        $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASK);
 
         return $this;
     }
+
 
     /**
      * Adds a high priority task to be run in parallel with other tasks.
@@ -373,10 +394,11 @@ class GearmanClient extends AbstractGearmanService
      */
     public function addTaskHigh($name, $params =array(), &$context = null, $unique = null)
     {
-        $this->enqueueTask($name, $params, $context, $unique, 'addTaskHigh');
+        $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKHIGH);
 
         return $this;
     }
+
 
     /**
      * Adds a low priority background task to be run in parallel with other tasks.
@@ -392,10 +414,11 @@ class GearmanClient extends AbstractGearmanService
      */
     public function addTaskLow($name, $params =array(), &$context = null, $unique = null)
     {
-        $this->enqueueTask($name, $params, $context, $unique, 'addTaskLow');
+        $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKLOW);
 
         return $this;
     }
+
 
     /**
      * Adds a background task to be run in parallel with other tasks
@@ -410,10 +433,11 @@ class GearmanClient extends AbstractGearmanService
      */
     public function addTaskBackground($name, $params =array(), &$context = null, $unique = null)
     {
-        $this->enqueueTask($name, $params, $context, $unique, 'addTaskBackground');
+        $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKNACKGROUND);
 
         return $this;
     }
+
 
     /**
      * Adds a high priority background task to be run in parallel with other tasks.
@@ -429,10 +453,11 @@ class GearmanClient extends AbstractGearmanService
      */
     public function addTaskHighBackground($name, $params =array(), &$context = null, $unique = null)
     {
-        $this->enqueueTask($name, $params, $context, $unique, 'addTaskHighBackground');
+        $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKHIGHBACKGROUND);
 
         return $this;
     }
+
 
     /**
      * Adds a low priority background task to be run in parallel with other tasks.
@@ -448,7 +473,7 @@ class GearmanClient extends AbstractGearmanService
      */
     public function addTaskLowBackground($name, $params =array(), &$context = null, $unique = null)
     {
-        $this->enqueueTask($name, $params, $context, $unique, 'addTaskLowBackground');
+        $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKLOWBACKGROUND);
 
         return $this;
     }
@@ -508,8 +533,10 @@ class GearmanClient extends AbstractGearmanService
         $taskStructure = $this->taskStructure;
         $gearmanClient = new \GearmanClient();
         $this->assignServers($gearmanClient);
+        $this->gearmanCallbacks->assignTaskCallbacks($gearmanClient);
 
         foreach ($this->taskStructure as $task) {
+
             $type = $task['method'];
             $jobName = $task['name'];
             $worker = $this->getJob($jobName);

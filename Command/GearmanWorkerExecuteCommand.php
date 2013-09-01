@@ -23,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  */
 class GearmanWorkerExecuteCommand extends ContainerAwareCommand
 {
+
     /**
      * Console Command configuration
      */
@@ -35,6 +36,7 @@ class GearmanWorkerExecuteCommand extends ContainerAwareCommand
              ->addArgument('worker', InputArgument::REQUIRED, 'work to execute')
              ->addOption('no-description', null, InputOption::VALUE_NONE, 'Don\'t print worker description');
     }
+
 
     /**
      * Executes the current command.
