@@ -147,7 +147,7 @@ class GearmanCacheWrapper
     {
         if ($this->cache->contains($this->cacheId)) {
 
-            $this->workerCollection = $this->cache->get($this->cacheId);
+            $this->workerCollection = $this->cache->fetch($this->cacheId);
 
         } else {
 
