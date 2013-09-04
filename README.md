@@ -135,13 +135,14 @@ Also we must config gearman cache, using doctrine cache.
         defaults:
 
             # default method related with all jobs
-            # do
+            # do // deprecated as of pecl/gearman 1.0.0. Use doNormal 
+            # doNormal
             # doBackground
             # doHigh
             # doHighBackground
             # doLow
             # doLowBackground
-            method: do
+            method: doNormal
 
             # Default number of executions before job dies.
             # If annotations defined, will be overwritten
@@ -189,7 +190,7 @@ Job annotations always overwrite work annotations, and work annotations always o
      * @Gearman\Work(
      *     iterations = 3, 
      *     description = "Worker test description",
-     *     defaultMethod = "do",
+     *     defaultMethod = "doBackground",
      *     servers = {
      *         { "host": "192.168.1.1", "port": 4560 },
      *         { "host": "192.168.1.2", "port": 4560 }, 
@@ -244,7 +245,7 @@ Job annotations always overwrite work annotations, and work annotations always o
      *     name = "MyAcmeWorker",
      *     iterations = 3, 
      *     description = "Acme Worker. Containing multiple available jobs",
-     *     defaultMethod = "do",
+     *     defaultMethod = "doHigh",
      *     servers = {
      *         { "host": "192.168.1.1", "port": 4560 },
      *         { "host": "192.168.1.2", "port": 4560 }, 

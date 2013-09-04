@@ -75,7 +75,7 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue(150)
                         ->end()
                         ->scalarNode('method')
-                            ->defaultValue('do')
+                            ->defaultValue('doNormal')
                         ->end()
                     ->end()
                 ->end()
