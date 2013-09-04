@@ -21,12 +21,12 @@
     "require": {
         "php": ">=5.3.3",
         "ext-gearman": "*",
-        "symfony/framework-bundle": ">=2.2.3",
-        "doctrine/annotations": "1.0.*@dev",
-        "symfony/console": ">=2.2.3",
-        "symfony/config": ">=2.2.3",
-        "symfony/http-kernel": ">=2.2.3",
-        "symfony/dependency-injection": ">=2.2.3",
+        "symfony/framework-bundle": ">=2.1",
+        "doctrine/common": ">=2.1",
+        "symfony/console": ">=2.1",
+        "symfony/config": ">=2.1",
+        "symfony/http-kernel": ">=2.1",
+        "symfony/dependency-injection": ">=2.1",
         "liip/doctrine-cache-bundle": "dev-master"
     },
     "target-dir": "Mmoreram/GearmanBundle",
