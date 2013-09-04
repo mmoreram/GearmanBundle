@@ -114,7 +114,7 @@ Also we must config gearman cache, using doctrine cache.
             AcmeBundle:
 
                 # Bundle namespace
-                namespace: Mmoreramerino\TestBundle
+                namespace: MmoreramerinoTestBundle
 
                 # Bundle search can be enabled or disabled
                 active: true
