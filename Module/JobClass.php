@@ -10,7 +10,6 @@
 namespace Mmoreram\GearmanBundle\Module;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
-use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use ReflectionMethod;
 
@@ -21,6 +20,14 @@ use ReflectionMethod;
  */
 class JobClass extends ContainerAware
 {
+
+    /**
+     * @var string
+     * 
+     * Default description when is not defined
+     */
+    const DEFAULT_DESCRIPTION = 'No description is defined';
+
 
     /**
      * @var string
@@ -100,64 +107,80 @@ class JobClass extends ContainerAware
 
         $this->realCallableName = str_replace('\\', '', $callableNameClass . '~' . $this->callableName);
         $this->description  = is_null($jobAnnotation->description)
-                            ? 'No description is defined'
+                            ? self::DEFAULT_DESCRIPTION
                             : $jobAnnotation->description;
 
-        $this
-            ->loadSettings($jobAnnotation, $defaultSettings)
-            ->loadServers($jobAnnotation, $servers);
+        $this->servers = $this->loadServers($jobAnnotation, $servers);
+        $this->iterations = $this->loadIterations($jobAnnotation, $defaultSettings);
+        $this->defaultMethod = $this->loadDefaultMethod($jobAnnotation, $defaultSettings);
     }
 
 
     /**
-     * Load settings
+     * Load servers
+     * 
+     * If any server is defined in JobAnnotation, this one is used.
+     * Otherwise is used servers set in Class
      * 
      * @param JobAnnotation $jobAnnotation JobAnnotation class
      * @param array         $servers       Array of servers defined for Worker
      * 
-     * @return JobClass self Object
+     * @return array Servers
      */
     private function loadServers(JobAnnotation $jobAnnotation, array $servers)
     {
-        /**
-         * By default, this job takes default servers defined in its worker
-         */
-        $this->servers = $servers;
 
         /**
          * If is configured some servers definition in the worker, overwrites
          */
         if ($jobAnnotation->servers) {
 
-            $this->servers  = ( is_array($jobAnnotation->servers) && !isset($jobAnnotation->servers['host']) )
-                            ? $jobAnnotation->servers
-                            : array($jobAnnotation->servers);
+            $servers    = ( is_array($jobAnnotation->servers) && !isset($jobAnnotation->servers['host']) )
+                        ? $jobAnnotation->servers
+                        : array($jobAnnotation->servers);
         }
 
-        return $this;
+        return $servers;
     }
 
 
     /**
-     * Load settings
+     * Load iterations
+     * 
+     * If iterations is defined in JobAnnotation, this one is used.
+     * Otherwise is used set in Class
      * 
      * @param JobAnnotation $jobAnnotation   JobAnnotation class
      * @param array         $defaultSettings Default settings for Worker
      * 
-     * @return JobClass self Object
+     * @return integer Iteration
      */
-    private function loadSettings(JobAnnotation $jobAnnotation, array $defaultSettings)
+    private function loadIterations(JobAnnotation $jobAnnotation, array $defaultSettings)
     {
-        $this->iterations   = is_null($jobAnnotation->iterations)
-                            ? (int) $defaultSettings['iterations']
-                            : $jobAnnotation->iterations;
+
+        return  is_null($jobAnnotation->iterations)
+                ? (int) $defaultSettings['iterations']
+                : (int) $jobAnnotation->iterations;
+    }
 
 
-        $this->defaultMethod    = is_null($jobAnnotation->defaultMethod)
-                                ? $defaultSettings['method']
-                                : $jobAnnotation->defaultMethod;
-
-        return $this;
+    /**
+     * Load defaultMethod
+     * 
+     * If defaultMethod is defined in JobAnnotation, this one is used.
+     * Otherwise is used set in Class
+     * 
+     * @param JobAnnotation $jobAnnotation   JobAnnotation class
+     * @param array         $defaultSettings Default settings for Worker
+     * 
+     * @return string Default method
+     */
+    private function loadDefaultMethod(JobAnnotation $jobAnnotation, array $defaultSettings)
+    {
+        
+        return  is_null($jobAnnotation->defaultMethod)
+                ? $defaultSettings['method']
+                : $jobAnnotation->defaultMethod;
     }
 
 

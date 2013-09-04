@@ -17,7 +17,7 @@ use Doctrine\Common\Annotations\Annotation;
  * 
  * @Annotation
  */
-final class Job extends Annotation
+class Job extends Annotation
 {
     /**
      * Method name to assign into job

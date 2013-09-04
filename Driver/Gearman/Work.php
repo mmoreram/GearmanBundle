@@ -16,7 +16,7 @@ use Doctrine\Common\Annotations\Annotation;
  * 
  * @Annotation 
  */
-final class Work extends Annotation
+class Work extends Annotation
 {
     /**
      * Name of worker
