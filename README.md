@@ -100,6 +100,9 @@ And register the bundle in your appkernel.php file
 ## Configuration
 We must configure our Worker. Common definitions must be defined in config.yml file, setting values for all installed Workers. 
 Also we must config gearman cache, using doctrine cache.
+
+> If `iterations` value is 0, worker will not kill itself never, so thread will be alive as long as needed.  
+> The reason to allow workers to kill themselves is just to prevent each process to accumulate a large quantity of memory.
     
     liip_doctrine_cache:
         namespaces:
@@ -146,7 +149,7 @@ Also we must config gearman cache, using doctrine cache.
 
             # Default number of executions before job dies.
             # If annotations defined, will be overwritten
-            # If empty, 150 is defined by default
+            # If empty, 0 is defined by default
             iterations: 150
 
         # Server list where workers and clients will connect to
