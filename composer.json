@@ -22,7 +22,7 @@
         "php": ">=5.3.3",
         "ext-gearman": "*",
         "symfony/framework-bundle": ">=2.1",
-        "doctrine/common": ">=2.1",
+        "doctrine/common": ">=2.2.0-dev",
         "symfony/console": ">=2.1",
         "symfony/config": ">=2.1",
         "symfony/http-kernel": ">=2.1",
