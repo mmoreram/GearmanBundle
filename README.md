@@ -7,13 +7,13 @@ GearmanBundle for Symfony2
 
 GearmanBundle is a bundle for Symfony2 intended to provide an easy way to support developers who need to use job queues. For example: mail queues, Solr generation queues or Database upload queues.
 
-> This bundle is being refactored.  
+> This bundle has been refactored.  
 > All tests are being performed and will be published as soon as possible.  
 > All help will be very grateful.  
-> My apologies for all possible issues caused by this big refactoring.  
+> My apologies for all possible issues caused by this big repository change.  
 > I am at your disposal.  
 >  
-> [Marc Morera](https://github.com/mmoreram)
+> [@mmoreram](https://github.com/mmoreram)
 
 Table of contents
 -----
