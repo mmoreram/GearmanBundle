@@ -72,7 +72,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('defaults')
                     ->children()
                         ->scalarNode('iterations')
-                            ->defaultValue(150)
+                            ->defaultValue(0)
                         ->end()
                         ->scalarNode('method')
                             ->defaultValue('doNormal')

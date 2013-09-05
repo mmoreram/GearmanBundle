@@ -150,6 +150,11 @@ class GearmanExecute extends AbstractGearmanService
         }
 
         /**
+         * If iterations value is 0, is like worker will never die
+         */
+        $alive = ( 0 == $iterations );
+
+        /**
          * Executes GearmanWorker with all jobs defined
          */
         while ($gearmanWorker->work()) {
@@ -159,7 +164,10 @@ class GearmanExecute extends AbstractGearmanService
                 break;
             }
 
-            if ($iterations-- <= 0) {
+            /**
+             * Only finishes its execution if alive is false and iterations arrives to 0
+             */
+            if (!$alive && $iterations-- <= 0) {
 
                 break;
             }
