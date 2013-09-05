@@ -11,17 +11,13 @@ namespace Mmoreram\GearmanBundle\Service;
 
 use Symfony\Component\Config\FileLocator;
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Routing\Loader\AnnotationDirectoryLoader;
 use Doctrine\Common\Cache\Cache;
 use Symfony\Component\Finder\Finder;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
-use \Doctrine\Common\Version as DoctrineVersion;
 
 use Mmoreram\GearmanBundle\Module\WorkerCollection;
-use Mmoreram\GearmanBundle\Module\WorkerDirectoryLoader;
 use Mmoreram\GearmanBundle\Module\WorkerClass as Worker;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
 use ReflectionClass;
@@ -226,18 +222,8 @@ class GearmanCacheWrapper
         AnnotationRegistry::registerFile(__DIR__ . "/../Driver/Gearman/Work.php");
         AnnotationRegistry::registerFile(__DIR__ . "/../Driver/Gearman/Job.php");
 
-        /**
-         * Depending on Symfony2 version
-         */
-        if (version_compare(DoctrineVersion::VERSION, '2.2.0-DEV', '>=')) {
-
-            $reader = new SimpleAnnotationReader();
-            $reader->addNamespace('Mmoreram\GearmanBundle\Driver');
-        } else {
-
-            $reader = new AnnotationReader();
-            $reader->setDefaultAnnotationNamespace('Mmoreram\GearmanBundle\Driver\\');
-        }
+        $reader = new SimpleAnnotationReader();
+        $reader->addNamespace('Mmoreram\GearmanBundle\Driver');
 
         $finder = new Finder();
         $finder
