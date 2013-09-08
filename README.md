@@ -1,6 +1,7 @@
 ![Gearman Bundle](https://raw.github.com/mmoreram/gearman-bundle/master/Resources/public/images/gearman-bundle.png)
 
-[![Build Status](https://travis-ci.org/mmoreram/GearmanBundle.png?branch=master)](https://travis-ci.org/mmoreram/GearmanBundle)  [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/badges/quality-score.png?s=29f1ed342d3df54678614b58b0e243136aa24726)](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/)
+[![knpbundles.com](http://knpbundles.com/mmoreram/GearmanBundle/badge-short)](http://knpbundles.com/mmoreram/GearmanBundle)  
+[![Build Status](https://travis-ci.org/mmoreram/GearmanBundle.png?branch=master)](https://travis-ci.org/mmoreram/GearmanBundle)  [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/badges/quality-score.png?s=29f1ed342d3df54678614b58b0e243136aa24726)](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/)  [![Latest Stable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
 
 GearmanBundle for Symfony2
 -----
