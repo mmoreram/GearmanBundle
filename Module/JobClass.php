@@ -92,18 +92,18 @@ class JobClass extends ContainerAware
      * Construct method
      *
      * @param JobAnnotation    $jobAnnotation     JobAnnotation class
-     * @param ReflectionMethod $method            ReflextionMethod class
+     * @param ReflectionMethod $reflectionMethod  ReflextionMethod class
      * @param string           $callableNameClass Callable name class
      * @param array            $servers           Array of servers defined for Worker
      * @param array            $defaultSettings   Default settings for Worker
      */
-    public function __construct(JobAnnotation $jobAnnotation, ReflectionMethod $method, $callableNameClass, array $servers, array $defaultSettings)
+    public function __construct(JobAnnotation $jobAnnotation, ReflectionMethod $reflectionMethod, $callableNameClass, array $servers, array $defaultSettings)
     {
         $this->callableName = is_null($jobAnnotation->name)
-                            ? $method->getName()
+                            ? $reflectionMethod->getName()
                             : $jobAnnotation->name;
 
-        $this->methodName = $method->getName();
+        $this->methodName = $reflectionMethod->getName();
 
         $this->realCallableName = str_replace('\\', '', $callableNameClass . '~' . $this->callableName);
         $this->description  = is_null($jobAnnotation->description)
@@ -177,7 +177,7 @@ class JobClass extends ContainerAware
      */
     private function loadDefaultMethod(JobAnnotation $jobAnnotation, array $defaultSettings)
     {
-        
+
         return  is_null($jobAnnotation->defaultMethod)
                 ? $defaultSettings['method']
                 : $jobAnnotation->defaultMethod;
