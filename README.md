@@ -1,10 +1,7 @@
-![Gearman Bundle](https://raw.github.com/mmoreram/gearman-bundle/master/Resources/public/images/gearman-bundle.png)
-
-[![knpbundles.com](http://knpbundles.com/mmoreram/GearmanBundle/badge-short)](http://knpbundles.com/mmoreram/GearmanBundle)  
-[![Build Status](https://travis-ci.org/mmoreram/GearmanBundle.png?branch=master)](https://travis-ci.org/mmoreram/GearmanBundle)  [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/badges/quality-score.png?s=29f1ed342d3df54678614b58b0e243136aa24726)](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/)  [![Latest Stable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
-
 GearmanBundle for Symfony2
------
+---
+[![Build Status](https://travis-ci.org/mmoreram/GearmanBundle.png?branch=master)](https://travis-ci.org/mmoreram/GearmanBundle)  [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/badges/quality-score.png?s=29f1ed342d3df54678614b58b0e243136aa24726)](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/)  [![Latest Stable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)  [![Dependency Status](https://www.versioneye.com/user/projects/522d1934632bac49b4000454/badge.png)](https://www.versioneye.com/user/projects/522d1934632bac49b4000454)  
+[![knpbundles.com](http://knpbundles.com/mmoreram/GearmanBundle/badge-short)](http://knpbundles.com/mmoreram/GearmanBundle)  
 
 GearmanBundle is a bundle for Symfony2 intended to provide an easy way to support developers who need to use job queues. For example: mail queues, Solr generation queues or Database upload queues.
 
@@ -589,3 +586,4 @@ You should read [Symfony2 coding standards](http://symfony.com/doc/current/contr
 
 There is also a policy for contributing to this project. All pull request must be all explained step by step, to make us more understandable and easier to merge pull request. All new features must be tested with PHPUnit.
 
+![Gearman Bundle](https://raw.github.com/mmoreram/gearman-bundle/master/Resources/public/images/gearman-bundle.png)
