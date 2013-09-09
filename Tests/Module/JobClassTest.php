@@ -29,9 +29,9 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \ReflectionClass
      * 
-     * Method reflection class
+     * Reflection Method
      */
-    private $methodReflectionClass;
+    private $reflectionMethod;
 
 
     /**
@@ -80,7 +80,7 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
 
-        $this->methodReflectionClass = $this->getMockBuilder('\ReflectionMethod')
+        $this->reflectionMethod = $this->getMockBuilder('\ReflectionMethod')
                                             ->disableOriginalConstructor()
                                             ->setMethods(array(
                                                 'getName',
@@ -94,13 +94,17 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * Testing first combination
+     * Testing scenario with all Job annotations filled
+     * 
+     * All settings given in annotations should be considered to configure Job
+     * 
+     * Also testing server definition in JobAnnotation as an array of arrays ( multi server )
      */
-    public function testCombination1()
+    public function testJobAnnotationsDefined()
     {
 
         $this
-            ->methodReflectionClass
+            ->reflectionMethod
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($this->methodName));
@@ -116,7 +120,7 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $jobClass = new JobClass($this->jobAnnotation, $this->methodReflectionClass, $this->callableNameClass, $this->servers, $this->defaultSettings);
+        $jobClass = new JobClass($this->jobAnnotation, $this->reflectionMethod, $this->callableNameClass, $this->servers, $this->defaultSettings);
         $this->assertEquals($jobClass->toArray(), array(
 
             'callableName'          =>  $this->jobAnnotation->name,
@@ -131,18 +135,22 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * Testing second combination
+     * Testing scenario with any Job annotation filled
+     * 
+     * All settings set as default should be considered to configure Job
+     * 
+     * Also testing empty server definition in JobAnnotation
      */
-    public function testCombination2()
+    public function testJonAnnotationsEmpty()
     {
 
         $this
-            ->methodReflectionClass
+            ->reflectionMethod
             ->expects($this->exactly(2))
             ->method('getName')
             ->will($this->returnValue($this->methodName));
 
-        $jobClass = new JobClass($this->jobAnnotation, $this->methodReflectionClass, $this->callableNameClass, $this->servers, $this->defaultSettings);
+        $jobClass = new JobClass($this->jobAnnotation, $this->reflectionMethod, $this->callableNameClass, $this->servers, $this->defaultSettings);
         $this->assertEquals($jobClass->toArray(), array(
 
             'callableName'          =>  $this->methodName,
@@ -157,13 +165,13 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * Testing specific server scenario
+     * Testing specific server scenario configured in Job annotations as a simple server
      */
     public function testCombinationServers()
     {
 
         $this
-            ->methodReflectionClass
+            ->reflectionMethod
             ->expects($this->exactly(2))
             ->method('getName')
             ->will($this->returnValue($this->methodName));
@@ -173,7 +181,7 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
             'port'  =>  '80',
         );
 
-        $jobClass = new JobClass($this->jobAnnotation, $this->methodReflectionClass, $this->callableNameClass, $this->servers, $this->defaultSettings);
+        $jobClass = new JobClass($this->jobAnnotation, $this->reflectionMethod, $this->callableNameClass, $this->servers, $this->defaultSettings);
         $this->assertEquals($jobClass->toArray(), array(
 
             'callableName'          =>  $this->methodName,
