@@ -7,7 +7,7 @@
     "keywords": ["gearman"],
     "homepage": "https://github.com/mmoreram/GearmanBundle",
     "type": "symfony-bundle",
-    "license": "Apache",
+    "license": "MIT",
     "authors": [
         {
             "name": "Marc Morera",
@@ -20,14 +20,14 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "ext-gearman": "*",
+        "ext-gearman": ">=0.1",
         "symfony/framework-bundle": ">=2.1",
-        "doctrine/common": ">=2.2.0-dev",
+        "doctrine/common": ">=2.2",
         "symfony/console": ">=2.1",
         "symfony/config": ">=2.1",
         "symfony/http-kernel": ">=2.1",
         "symfony/dependency-injection": ">=2.1",
-        "liip/doctrine-cache-bundle": "dev-master"
+        "liip/doctrine-cache-bundle": "1.0.3"
     },
     "target-dir": "Mmoreram/GearmanBundle",
     "autoload": {
