@@ -24,7 +24,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
      * 
      * Worker annotation driver
      */
-    private $workerAnnotation;
+    private $workAnnotation;
 
 
     /**
@@ -49,14 +49,6 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
      * Class namespace
      */
     private $classNamespace = 'MyClassNamespace';
-
-
-    /**
-     * @var string
-     * 
-     * Callable name
-     */
-    private $callableNameClass = 'MyClassCallablaName';
 
 
     /**

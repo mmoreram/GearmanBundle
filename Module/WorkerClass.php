@@ -108,14 +108,6 @@ class WorkerClass
 
 
     /**
-     * @var array
-     * 
-     * settings
-     */
-    private $settings;
-
-
-    /**
      * @var JobCollection
      * 
      * All jobs inside Worker
