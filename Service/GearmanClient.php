@@ -433,7 +433,7 @@ class GearmanClient extends AbstractGearmanService
      */
     public function addTaskBackground($name, $params = '', &$context = null, $unique = null)
     {
-        $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKNACKGROUND);
+        $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKBACKGROUND);
 
         return $this;
     }
