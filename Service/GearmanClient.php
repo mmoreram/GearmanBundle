@@ -139,13 +139,13 @@ class GearmanClient extends AbstractGearmanService
      *     method.
      *
      * @param string $jobName A GearmanBundle registered function the worker is to execute
-     * @param mixed  $params  Parameters to send to job
+     * @param string $params  Parameters to send to job as string
      * @param string $method  Method to execute
      * @param string $unique  A unique ID used to identify a particular task
      *
      * @return mixed Return result of the call
      */
-    private function enqueue($jobName, $params, $method, $unique)
+    private function enqueue($jobName, $params = '', $method, $unique)
     {
         $worker = $this->getJob($jobName);
 
@@ -165,7 +165,7 @@ class GearmanClient extends AbstractGearmanService
      * Otherwise, will return job result.
      *
      * @param array  $worker Worker definition
-     * @param mixed  $params Parameters to send to job
+     * @param string $params Parameters to send to job as string
      * @param string $method Method to execute
      * @param string $unique A unique ID used to identify a particular task
      *
@@ -218,12 +218,12 @@ class GearmanClient extends AbstractGearmanService
      *  or overwritted on work or job annotations
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
-     * @param Mixed  $params Parameters to send to job
+     * @param string $params Parameters to send to job as string
      * @param string $unique A unique ID used to identify a particular task
      *
      * @return mixed result depending of method called.
      */
-    public function callJob($name, $params = array(), $unique = null)
+    public function callJob($name, $params = '', $unique = null)
     {
        $worker = $this->getJob($name);
        $methodCallable = $worker['job']['defaultMethod'] . 'Job';
@@ -238,13 +238,13 @@ class GearmanClient extends AbstractGearmanService
      * The GearmanClient::do() method is deprecated as of pecl/gearman 1.0.0. Use GearmanClient::doNormal().
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
-     * @param Mixed  $params Parameters to send to job
+     * @param string $params Parameters to send to job as string
      * @param string $unique A unique ID used to identify a particular task
      *
      * @return string A string representing the results of running a task.
      * @deprecated
      */
-    public function doJob($name, $params = array(), $unique = null)
+    public function doJob($name, $params = '', $unique = null)
     {
 
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DO, $unique);
@@ -256,12 +256,12 @@ class GearmanClient extends AbstractGearmanService
      * It is up to the GearmanClient and GearmanWorker to agree on the format of the result.
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
-     * @param Mixed  $params Parameters to send to job
+     * @param string $params Parameters to send to job as string
      * @param string $unique A unique ID used to identify a particular task
      *
      * @return string A string representing the results of running a task.
      */
-    public function doNormalJob($name, $params = array(), $unique = null)
+    public function doNormalJob($name, $params = '', $unique = null)
     {
 
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DONORMAL, $unique);
@@ -273,12 +273,12 @@ class GearmanClient extends AbstractGearmanService
      *     can be used to get the status of the running task.
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
-     * @param Mixed  $params Parameters to send to job
+     * @param string $params Parameters to send to job as string
      * @param string $unique A unique ID used to identify a particular task
      *
      * @return string Job handle for the submitted task.
      */
-    public function doBackgroundJob($name, $params = array(), $unique = null)
+    public function doBackgroundJob($name, $params = '', $unique = null)
     {
 
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOBACKGROUND, $unique);
@@ -291,12 +291,12 @@ class GearmanClient extends AbstractGearmanService
      * High priority tasks will get precedence over normal and low priority tasks in the job queue.
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
-     * @param Mixed  $params Parameters to send to job
+     * @param string $params Parameters to send to job as string
      * @param string $unique A unique ID used to identify a particular task
      *
      * @return string A string representing the results of running a task.
      */
-    public function doHighJob($name, $params = array(), $unique = null)
+    public function doHighJob($name, $params = '', $unique = null)
     {
 
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOHIGH, $unique);
@@ -308,12 +308,12 @@ class GearmanClient extends AbstractGearmanService
      * High priority tasks take precedence over normal and low priority tasks in the job queue.
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
-     * @param Mixed  $params Parameters to send to job
+     * @param string $params Parameters to send to job as string
      * @param string $unique A unique ID used to identify a particular task
      *
      * @return string The job handle for the submitted task.
      */
-    public function doHighBackgroundJob($name, $params = array(), $unique = null)
+    public function doHighBackgroundJob($name, $params = '', $unique = null)
     {
 
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOHIGHBACKGROUND, $unique);
@@ -326,12 +326,12 @@ class GearmanClient extends AbstractGearmanService
      * Normal and high priority tasks will get precedence over low priority tasks in the job queue.
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
-     * @param Mixed  $params Parameters to send to job
+     * @param string $params Parameters to send to job as string
      * @param string $unique A unique ID used to identify a particular task
      *
      * @return string A string representing the results of running a task.
      */
-    public function doLowJob($name, $params = array(), $unique = null)
+    public function doLowJob($name, $params = '', $unique = null)
     {
 
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOLOW, $unique);
@@ -343,12 +343,12 @@ class GearmanClient extends AbstractGearmanService
      * Normal and high priority tasks will get precedence over low priority tasks in the job queue.
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
-     * @param Mixed  $params Parameters to send to job
+     * @param string $params Parameters to send to job as string
      * @param string $unique A unique ID used to identify a particular task
      *
      * @return string The job handle for the submitted task.
      */
-    public function doLowBackgroundJob($name, $params = array(), $unique = null)
+    public function doLowBackgroundJob($name, $params = '', $unique = null)
     {
 
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOLOWBACKGROUND, $unique);
@@ -366,13 +366,13 @@ class GearmanClient extends AbstractGearmanService
      * Note that enough workers need to be available for the tasks to all run in parallel.
      *
      * @param string $name     A GermanBundle registered function to be executed
-     * @param Mixed  $params   Parameters to send to task
+     * @param string $params   Parameters to send to task as string
      * @param Mixed  &$context Application context to associate with a task
      * @param string $unique   A unique ID used to identify a particular task
      *
      * @return GearmanClient Return this object
      */
-    public function addTask($name, $params =array(), &$context = null, $unique = null)
+    public function addTask($name, $params = '', &$context = null, $unique = null)
     {
         $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASK);
 
@@ -386,13 +386,13 @@ class GearmanClient extends AbstractGearmanService
      * Tasks with a high priority will be selected from the queue before those of normal or low priority.
      *
      * @param string $name     A GermanBundle registered function to be executed
-     * @param Mixed  $params   Parameters to send to task
+     * @param string $params   Parameters to send to task as string
      * @param Mixed  &$context Application context to associate with a task
      * @param string $unique   A unique ID used to identify a particular task
      *
      * @return GearmanClient Return this object
      */
-    public function addTaskHigh($name, $params =array(), &$context = null, $unique = null)
+    public function addTaskHigh($name, $params = '', &$context = null, $unique = null)
     {
         $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKHIGH);
 
@@ -406,13 +406,13 @@ class GearmanClient extends AbstractGearmanService
      * Tasks with a low priority will be selected from the queue after those of normal or low priority.
      *
      * @param string $name     A GermanBundle registered function to be executed
-     * @param Mixed  $params   Parameters to send to task
+     * @param string $params   Parameters to send to task as string
      * @param Mixed  &$context Application context to associate with a task
      * @param string $unique   A unique ID used to identify a particular task
      *
      * @return GearmanClient Return this object
      */
-    public function addTaskLow($name, $params =array(), &$context = null, $unique = null)
+    public function addTaskLow($name, $params = '', &$context = null, $unique = null)
     {
         $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKLOW);
 
@@ -425,15 +425,15 @@ class GearmanClient extends AbstractGearmanService
      * Call this method for all the tasks to be run in parallel, then call GearmanClient::runTasks() to perform the work.
      *
      * @param string $name     A GermanBundle registered function to be executed
-     * @param Mixed  $params   Parameters to send to task
+     * @param string $params   Parameters to send to task as string
      * @param Mixed  &$context Application context to associate with a task
      * @param string $unique   A unique ID used to identify a particular task
      *
      * @return GearmanClient Return this object
      */
-    public function addTaskBackground($name, $params =array(), &$context = null, $unique = null)
+    public function addTaskBackground($name, $params = '', &$context = null, $unique = null)
     {
-        $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKNACKGROUND);
+        $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKBACKGROUND);
 
         return $this;
     }
@@ -445,13 +445,13 @@ class GearmanClient extends AbstractGearmanService
      * Tasks with a high priority will be selected from the queue before those of normal or low priority.
      *
      * @param string $name     A GermanBundle registered function to be executed
-     * @param Mixed  $params   Parameters to send to task
+     * @param string $params   Parameters to send to task as string
      * @param Mixed  &$context Application context to associate with a task
      * @param string $unique   A unique ID used to identify a particular task
      *
      * @return GearmanClient Return this object
      */
-    public function addTaskHighBackground($name, $params =array(), &$context = null, $unique = null)
+    public function addTaskHighBackground($name, $params = '', &$context = null, $unique = null)
     {
         $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKHIGHBACKGROUND);
 
@@ -465,13 +465,13 @@ class GearmanClient extends AbstractGearmanService
      * Tasks with a low priority will be selected from the queue after those of normal or high priority.
      *
      * @param string $name     A GermanBundle registered function to be executed
-     * @param Mixed  $params   Parameters to send to task
+     * @param string $params   Parameters to send to task as string
      * @param Mixed  &$context Application context to associate with a task
      * @param string $unique   A unique ID used to identify a particular task
      *
      * @return GearmanClient Return this object
      */
-    public function addTaskLowBackground($name, $params =array(), &$context = null, $unique = null)
+    public function addTaskLowBackground($name, $params = '', &$context = null, $unique = null)
     {
         $this->enqueueTask($name, $params, $context, $unique, GearmanMethods::GEARMAN_METHOD_ADDTASKLOWBACKGROUND);
 
@@ -483,7 +483,7 @@ class GearmanClient extends AbstractGearmanService
      * Adds a task into the structure of tasks with included type of call
      *
      * @param string $name    A GermanBundle registered function to be executed
-     * @param Mixed  $params  Parameters to send to task
+     * @param string $params  Parameters to send to task as string
      * @param Mixed  $context Application context to associate with a task
      * @param string $unique  A unique ID used to identify a particular task
      * @param string $method  Method to perform
