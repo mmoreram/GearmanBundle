@@ -145,7 +145,7 @@ class GearmanClient extends AbstractGearmanService
      *
      * @return mixed Return result of the call
      */
-    private function enqueue($jobName, $params = '', $method, $unique)
+    private function enqueue($jobName, $params = '', $method = null, $unique = null)
     {
         $worker = $this->getJob($jobName);
 
@@ -530,7 +530,6 @@ class GearmanClient extends AbstractGearmanService
      */
     public function runTasks()
     {
-        $taskStructure = $this->taskStructure;
         $gearmanClient = new \GearmanClient();
         $this->assignServers($gearmanClient);
         $this->gearmanCallbacks->assignTaskCallbacks($gearmanClient);
