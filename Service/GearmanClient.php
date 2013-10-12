@@ -10,7 +10,6 @@
 namespace Mmoreram\GearmanBundle\Service;
 
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
-use Mmoreram\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
 use Mmoreram\GearmanBundle\GearmanMethods;
 
 /**
