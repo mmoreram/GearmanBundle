@@ -20,7 +20,6 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "ext-gearman": ">=0.1",
         "symfony/framework-bundle": ">=2.1",
         "doctrine/common": ">=2.2",
         "symfony/console": ">=2.1",
