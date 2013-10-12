@@ -9,7 +9,6 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
-use Symfony\Component\Config\FileLocator;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\HttpKernel\Kernel;

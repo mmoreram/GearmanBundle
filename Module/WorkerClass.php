@@ -15,7 +15,6 @@ use Mmoreram\GearmanBundle\Module\JobClass as Job;
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
 use ReflectionClass;
-use ReflectionMethod;
 
 /**
  * Worker class

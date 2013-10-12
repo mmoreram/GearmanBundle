@@ -10,12 +10,11 @@
 namespace Mmoreram\GearmanBundle\Service;
 
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
-use Mmoreram\GearmanBundle\Service\GearmanInterface;
 use Mmoreram\GearmanBundle\Exceptions\NoCallableGearmanMethodException;
 use Mmoreram\GearmanBundle\GearmanMethods;
 
 /**
- * Implementation of GearmanInterface
+ * GearmanClient. Implementation of AbstractGearmanService
  */
 class GearmanClient extends AbstractGearmanService
 {
