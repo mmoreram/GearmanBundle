@@ -31,17 +31,25 @@ class GearmanCacheWrapper
 {
 
     /**
-     * Bundles loaded by kernel
-     *
      * @var Array
+     * 
+     * Bundles loaded by kernel
      */
     private $kernelBundles;
 
 
     /**
-     * Bundles available to perform search
-     *
+     * @var Kernel
+     * 
+     * Kernel object
+     */
+    private $kernel;
+
+
+    /**
      * @var Array
+     * 
+     * Bundles available to perform search
      */
     private $bundles;
 
@@ -126,6 +134,7 @@ class GearmanCacheWrapper
     public function __construct(Kernel $kernel, Cache $cache, $cacheId, array $bundles, array $servers, array $defaultSettings)
     {
         $this->kernelBundles = $kernel->getBundles();
+        $this->kernel = $kernel;
         $this->bundles = $bundles;
         $this->cache = $cache;
         $this->cacheId = $cacheId;
@@ -219,8 +228,8 @@ class GearmanCacheWrapper
      */
     private function parseNamespaceMap()
     {
-        AnnotationRegistry::registerFile(__DIR__ . "/../Driver/Gearman/Work.php");
-        AnnotationRegistry::registerFile(__DIR__ . "/../Driver/Gearman/Job.php");
+        AnnotationRegistry::registerFile($this->kernel->locateResource("@GearmanBundle/Driver/Gearman/Work.php"));
+        AnnotationRegistry::registerFile($this->kernel->locateResource("@GearmanBundle/Driver/Gearman/Job.php"));
 
         $reader = new SimpleAnnotationReader();
         $reader->addNamespace('Mmoreram\GearmanBundle\Driver');
