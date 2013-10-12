@@ -16,8 +16,6 @@ use Mmoreram\GearmanBundle\GearmanMethods;
 
 /**
  * Implementation of GearmanInterface
- * 
- * @todo Find the way of reducing number of class methods
  */
 class GearmanClient extends AbstractGearmanService
 {
