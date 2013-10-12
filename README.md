@@ -1,17 +1,12 @@
 GearmanBundle for Symfony2
----
-[![Payment Suite](http://origin.shields.io/Still/maintained.png?color=green)](https://github.com/mmoreram/GearmanBundle)  [![Build Status](https://travis-ci.org/mmoreram/GearmanBundle.png?branch=master)](https://travis-ci.org/mmoreram/GearmanBundle)  [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/badges/quality-score.png?s=29f1ed342d3df54678614b58b0e243136aa24726)](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/)  [![Latest Stable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)  [![Dependency Status](https://www.versioneye.com/user/projects/522d1ea8632bac341a000d95/badge.png)](https://www.versioneye.com/user/projects/522d1ea8632bac341a000d95)  
-[![knpbundles.com](http://knpbundles.com/mmoreram/GearmanBundle/badge-short)](http://knpbundles.com/mmoreram/GearmanBundle)  
+=====
+[![Payment Suite](http://origin.shields.io/Still/maintained.png?color=green)](https://github.com/mmoreram/GearmanBundle)
+[![Build Status](https://travis-ci.org/mmoreram/GearmanBundle.png?branch=master)](https://travis-ci.org/mmoreram/GearmanBundle)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/badges/quality-score.png?s=29f1ed342d3df54678614b58b0e243136aa24726)](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/)
+[![Latest Stable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
+[![Dependency Status](https://www.versioneye.com/user/projects/522d1ea8632bac341a000d95/badge.png)](https://www.versioneye.com/user/projects/522d1ea8632bac341a000d95)  
 
 GearmanBundle is a bundle for Symfony2 intended to provide an easy way to support developers who need to use job queues. For example: mail queues, Solr generation queues or Database upload queues.
-
-> This bundle has been refactored.  
-> All tests are being performed and will be published as soon as possible.  
-> All help will be very grateful.  
-> My apologies for all possible issues caused by this big repository change.  
-> I am at your disposal.  
->  
-> [@mmoreram](https://github.com/mmoreram)
 
 Table of contents
 -----
