@@ -291,8 +291,6 @@ class GearmanCacheWrapper
      * @param string $file A PHP file path
      *
      * @return string|false Full class name if found, false otherwise
-     * 
-     * @todo Find another way more tidy and clean of getting file namespace
      */
     protected function getFileClassNamespace($file)
     {
