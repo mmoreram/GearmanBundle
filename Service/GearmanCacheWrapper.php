@@ -265,7 +265,7 @@ class GearmanCacheWrapper
             /**
              * File is checked to be parsed
              */
-            if( strtolower( $file->getExtension() ) != 'php') {
+            if('php' !== strtolower($file->getExtension())) {
                 continue;
             }
             
