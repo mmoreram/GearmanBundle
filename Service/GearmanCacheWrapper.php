@@ -261,7 +261,14 @@ class GearmanCacheWrapper
          * Every file found is parsed
          */
         foreach ($finder as $file) {
-
+            
+            /**
+             * File is checked to be parsed
+             */
+            if('php' !== strtolower($file->getExtension())) {
+                continue;
+            }
+            
             /**
              * File is accepted to be parsed
              */
