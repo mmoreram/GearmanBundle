@@ -263,9 +263,11 @@ class GearmanCacheWrapper
         foreach ($finder as $file) {
             
             /**
-             * File is checked to be parsed
+             * File is checked to be parsed. Is just parsed if is a php file
+             * Otherwise, jump to next file
              */
-            if('php' !== strtolower($file->getExtension())) {
+            if ('php' !== strtolower($file->getExtension())) {
+                
                 continue;
             }
             
