@@ -486,6 +486,13 @@ You can request a Job by using the gearman client.
 * addTaskLowBackground: Add a low priority background task to be run in parallel
 * runTasks: Run a list of tasks in parallel
 
+## Request Job Status
+
+With the Handle given if requesting a job you can request the status of the job. The Method gives a boolean.
+
+    $result = $gearman
+        ->jobIsRunning($result);
+
 # Kernel Events
 
 GearmanBundle transforms Gearman callbacks to Symfony2 kernel events.
