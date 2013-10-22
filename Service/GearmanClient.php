@@ -546,4 +546,20 @@ class GearmanClient extends AbstractGearmanService
 
         return $gearmanClient->runTasks();
     }
+
+    /**
+     * Fetches the Status of a special Job. You need the Job handle for the Task you want to check.
+     * As long as the Job is known by the Gearmen-Servers it will return a true
+     *
+     * @param string $backgroundId the job handle string
+     * @return bool
+     */
+    public function jobIsRunning($backgroundId)
+    {
+        $gearmanClient = new \GearmanClient();
+        $this->assignServers($gearmanClient);
+        $statusData = $gearmanClient->jobStatus($backgroundId);
+
+        return isset($statusData[0]) && $statusData[0];
+    }
 }
