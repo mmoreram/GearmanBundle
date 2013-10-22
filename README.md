@@ -426,6 +426,23 @@ The difference between them is that an instance of a worker can execute any of t
 > You can have as many as worker instances as you want.  
 > Get some [Supervisord](http://supervisord.org/) info
 
+## Request Job Status
+
+With the Handle given if requesting a background job you can request the status of the job. The Method returns a JobStatus object placed in `Mmoreram\GearmanBundle\Module\JobStatus'
+
+    $jobStatus = $gearman->getJobStatus($result);
+    $jobIsKnown = $jobStatus->isKnown();
+    $jobIsRunning = $jobStatus->isRunning();
+    $jobIsFinished = $jobStatus->isFinished();
+
+    /**
+     * Also gives completition data
+     */
+     $completed = $jobStatus->getCompleted();
+     $completitionTotal = $jobStatus->getCompletitionTotal();
+     $completitionPercent = $jobStatus->getCompletionPercent(); 
+
+
 
 Client
 -----
@@ -485,13 +502,6 @@ You can request a Job by using the gearman client.
 * addTaskHighBackground: Add a high priority background task to be run in parallel
 * addTaskLowBackground: Add a low priority background task to be run in parallel
 * runTasks: Run a list of tasks in parallel
-
-## Request Job Status
-
-With the Handle given if requesting a job you can request the status of the job. The Method gives a boolean.
-
-    $result = $gearman
-        ->jobIsRunning($result);
 
 # Kernel Events
 

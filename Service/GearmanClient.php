@@ -11,6 +11,7 @@ namespace Mmoreram\GearmanBundle\Service;
 
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Mmoreram\GearmanBundle\GearmanMethods;
+use Mmoreram\GearmanBundle\Module\JobStatus;
 
 /**
  * GearmanClient. Implementation of AbstractGearmanService
@@ -352,6 +353,25 @@ class GearmanClient extends AbstractGearmanService
 
 
     /**
+     * Fetches the Status of a special Background Job.
+     *
+     * @param string $idJob The job handle string
+     * 
+     * @return JobStatus Job status
+     */
+    public function getJobStatus($idJob)
+    {
+        $gearmanClient = new \GearmanClient();
+        $this->assignServers($gearmanClient);
+        $statusData = $gearmanClient->jobStatus($idJob);
+
+        $jobStatus = new JobStatus($statusData);
+
+        return $jobStatus;
+    }
+
+
+    /**
      * Task methods
      */
 
@@ -545,21 +565,5 @@ class GearmanClient extends AbstractGearmanService
         $this->taskStructure = array();
 
         return $gearmanClient->runTasks();
-    }
-
-    /**
-     * Fetches the Status of a special Job. You need the Job handle for the Task you want to check.
-     * As long as the Job is known by the Gearmen-Servers it will return a true
-     *
-     * @param string $backgroundId the job handle string
-     * @return bool
-     */
-    public function jobIsRunning($backgroundId)
-    {
-        $gearmanClient = new \GearmanClient();
-        $this->assignServers($gearmanClient);
-        $statusData = $gearmanClient->jobStatus($backgroundId);
-
-        return isset($statusData[0]) && $statusData[0];
     }
 }
