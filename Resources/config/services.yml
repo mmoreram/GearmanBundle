@@ -40,3 +40,4 @@ services:
         calls:
           - [setDefaultServers, [%gearman.servers%]]
           - [setGearmanCallbacks, [@gearman.callbacks]]
+          - [setDefaultSettings, [%gearman.default.settings%]]

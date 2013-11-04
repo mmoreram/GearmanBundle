@@ -50,6 +50,13 @@ class GearmanClient extends AbstractGearmanService
      */
     protected $defaultServers;
 
+    /**
+     * @var array
+     *
+     * Set default settings
+     */
+    protected $settings;
+
 
     /**
      * Set  default servers
@@ -76,6 +83,20 @@ class GearmanClient extends AbstractGearmanService
     public function setGearmanCallbacks(GearmanCallbacks $gearmanCallbacks)
     {
         $this->gearmanCallbacks = $gearmanCallbacks;
+
+        return $this;
+    }
+
+    /**
+     * Set default settings
+     *
+     * @param array $settings
+     *
+     * @return GearmanClient self Object
+     */
+    public function setDefaultSettings($settings)
+    {
+        $this->settings = $settings;
 
         return $this;
     }
@@ -548,7 +569,10 @@ class GearmanClient extends AbstractGearmanService
     {
         $gearmanClient = new \GearmanClient();
         $this->assignServers($gearmanClient);
-        $this->gearmanCallbacks->assignTaskCallbacks($gearmanClient);
+
+        if ($this->settings['callbacks']) {
+            $this->gearmanCallbacks->assignTaskCallbacks($gearmanClient);
+        }
 
         foreach ($this->taskStructure as $task) {
 

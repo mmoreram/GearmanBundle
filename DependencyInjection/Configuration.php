@@ -77,6 +77,9 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('method')
                             ->defaultValue('doNormal')
                         ->end()
+                        ->scalarNode('callbacks')
+                            ->defaultValue(true)
+                        ->end()
                     ->end()
                 ->end()
             ->end();
