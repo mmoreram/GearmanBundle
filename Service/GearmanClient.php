@@ -24,7 +24,7 @@ class GearmanClient extends AbstractGearmanService
      * 
      * Gearman callbacks
      */
-    private $gearmanCallbacks;
+    protected $gearmanCallbacks;
 
 
     /**
@@ -32,7 +32,7 @@ class GearmanClient extends AbstractGearmanService
      * 
      * Server set to define in what server must connect to
      */
-    private $servers = array();
+    protected $servers = array();
 
 
     /**
@@ -40,7 +40,7 @@ class GearmanClient extends AbstractGearmanService
      * 
      * task structure to store all about called tasks
      */
-    private $taskStructure = array();
+    protected $taskStructure = array();
 
 
     /**
@@ -48,7 +48,7 @@ class GearmanClient extends AbstractGearmanService
      * 
      * Set default servers
      */
-    private $defaultServers;
+    protected $defaultServers;
 
 
     /**
