@@ -121,7 +121,14 @@ class JobClass extends ContainerAware
 
         $this->methodName = $reflectionMethod->getName();
         $this->realCallableNameNoPrefix = str_replace('\\', '', $callableNameClass . '~' . $this->callableName);
-        $this->jobPrefix = $defaultSettings['jobPrefix'];
+        
+        if(true === isset($defaultSettings['jobPrefix'])){
+            $this->jobPrefix = $defaultSettings['jobPrefix'];
+        }
+        else{
+            $this->jobPrefix = null;
+        }
+
         $this->realCallableName = $this->jobPrefix . $this->realCallableNameNoPrefix;
         $this->description  = is_null($jobAnnotation->description)
                             ? self::DEFAULT_DESCRIPTION

@@ -124,13 +124,15 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
         $jobClass = new JobClass($this->jobAnnotation, $this->reflectionMethod, $this->callableNameClass, $this->servers, $this->defaultSettings);
         $this->assertEquals($jobClass->toArray(), array(
 
-            'callableName'          =>  $this->jobAnnotation->name,
-            'methodName'            =>  $this->methodName,
-            'realCallableName'      =>  str_replace('\\', '', $this->callableNameClass . '~' . $this->jobAnnotation->name),
-            'description'           =>  $this->jobAnnotation->description,
-            'iterations'            =>  $this->jobAnnotation->iterations,
-            'servers'               =>  $this->jobAnnotation->servers,
-            'defaultMethod'         =>  $this->jobAnnotation->defaultMethod,
+            'callableName'                  =>  $this->jobAnnotation->name,
+            'methodName'                    =>  $this->methodName,
+            'realCallableName'              =>  str_replace('\\', '', $this->callableNameClass . '~' . $this->jobAnnotation->name),
+            'jobPrefix'                     =>  null,
+            'realCallableNameNoPrefix'      =>  str_replace('\\', '', $this->callableNameClass . '~' . $this->jobAnnotation->name),
+            'description'                   =>  $this->jobAnnotation->description,
+            'iterations'                    =>  $this->jobAnnotation->iterations,
+            'servers'                       =>  $this->jobAnnotation->servers,
+            'defaultMethod'                 =>  $this->jobAnnotation->defaultMethod,
         ));
     }
 
@@ -142,7 +144,7 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
      * 
      * Also testing empty server definition in JobAnnotation
      */
-    public function testJonAnnotationsEmpty()
+    public function testJobAnnotationsEmpty()
     {
 
         $this
@@ -154,13 +156,15 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
         $jobClass = new JobClass($this->jobAnnotation, $this->reflectionMethod, $this->callableNameClass, $this->servers, $this->defaultSettings);
         $this->assertEquals($jobClass->toArray(), array(
 
-            'callableName'          =>  $this->methodName,
-            'methodName'            =>  $this->methodName,
-            'realCallableName'      =>  str_replace('\\', '', $this->callableNameClass . '~' . $this->methodName),
-            'description'           =>  $jobClass::DEFAULT_DESCRIPTION,
-            'iterations'            =>  $this->defaultSettings['iterations'],
-            'servers'               =>  $this->servers,
-            'defaultMethod'         =>  $this->defaultSettings['method'],
+            'callableName'                  =>  $this->methodName,
+            'methodName'                    =>  $this->methodName,
+            'realCallableName'              =>  str_replace('\\', '', $this->callableNameClass . '~' . $this->methodName),
+            'jobPrefix'                     =>  null,
+            'realCallableNameNoPrefix'      =>  str_replace('\\', '', $this->callableNameClass . '~' . $this->methodName),
+            'description'                   =>  $jobClass::DEFAULT_DESCRIPTION,
+            'iterations'                    =>  $this->defaultSettings['iterations'],
+            'servers'                       =>  $this->servers,
+            'defaultMethod'                 =>  $this->defaultSettings['method'],
         ));
     }
 
@@ -185,13 +189,50 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
         $jobClass = new JobClass($this->jobAnnotation, $this->reflectionMethod, $this->callableNameClass, $this->servers, $this->defaultSettings);
         $this->assertEquals($jobClass->toArray(), array(
 
-            'callableName'          =>  $this->methodName,
-            'methodName'            =>  $this->methodName,
-            'realCallableName'      =>  str_replace('\\', '', $this->callableNameClass . '~' . $this->methodName),
-            'description'           =>  $jobClass::DEFAULT_DESCRIPTION,
-            'iterations'            =>  $this->defaultSettings['iterations'],
-            'servers'               =>  array($this->jobAnnotation->servers),
-            'defaultMethod'         =>  $this->defaultSettings['method'],
+            'callableName'                  =>  $this->methodName,
+            'methodName'                    =>  $this->methodName,
+            'realCallableName'              =>  str_replace('\\', '', $this->callableNameClass . '~' . $this->methodName),
+            'jobPrefix'                     =>  null,
+            'realCallableNameNoPrefix'      =>  str_replace('\\', '', $this->callableNameClass . '~' . $this->methodName),
+            'description'                   =>  $jobClass::DEFAULT_DESCRIPTION,
+            'iterations'                    =>  $this->defaultSettings['iterations'],
+            'servers'                       =>  array($this->jobAnnotation->servers),
+            'defaultMethod'                 =>  $this->defaultSettings['method'],
+        ));
+    }
+
+    /**
+     * Testing if giving a job a prefix that it uses it.
+     */
+    public function testJobPrefix()
+    {
+
+        $this
+            ->reflectionMethod
+            ->expects($this->exactly(2))
+            ->method('getName')
+            ->will($this->returnValue($this->methodName));
+
+        $this->jobAnnotation->servers = array(
+            'host'  =>  '10.0.0.2',
+            'port'  =>  '80',
+        );
+
+        $settings = $this->defaultSettings;
+        $settings['jobPrefix'] = 'test';
+
+        $jobClass = new JobClass($this->jobAnnotation, $this->reflectionMethod, $this->callableNameClass, $this->servers, $settings);
+        $this->assertEquals($jobClass->toArray(), array(
+
+            'callableName'                  =>  $this->methodName,
+            'methodName'                    =>  $this->methodName,
+            'realCallableName'              =>  'test'.str_replace('\\', '', $this->callableNameClass . '~' . $this->methodName),
+            'jobPrefix'                     =>  'test',
+            'realCallableNameNoPrefix'      =>  str_replace('\\', '', $this->callableNameClass . '~' . $this->methodName),
+            'description'                   =>  $jobClass::DEFAULT_DESCRIPTION,
+            'iterations'                    =>  $this->defaultSettings['iterations'],
+            'servers'                       =>  array($this->jobAnnotation->servers),
+            'defaultMethod'                 =>  $this->defaultSettings['method'],
         ));
     }
 }
