@@ -80,6 +80,9 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('callbacks')
                             ->defaultValue(true)
                         ->end()
+                        ->scalarNode('generate-unique-key')
+                            ->defaultValue(true)
+                        ->end()
                     ->end()
                 ->end()
             ->end();
