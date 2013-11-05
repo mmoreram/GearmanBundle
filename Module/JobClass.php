@@ -46,6 +46,14 @@ class JobClass extends ContainerAware
      */
     private $methodName;
 
+    /**
+     * @var string
+     *
+     * RealCallable name for this job without the job prefix
+     *
+     */
+    private $realCallableNameNoPrefix;
+
 
     /**
      * @var string
@@ -87,6 +95,13 @@ class JobClass extends ContainerAware
      */
     private $servers;
 
+    /**
+     * @var string
+     *
+     * The prefix to be prepended to all job callable names.
+     */
+    private $jobPrefix;
+
 
     /**
      * Construct method
@@ -99,13 +114,15 @@ class JobClass extends ContainerAware
      */
     public function __construct(JobAnnotation $jobAnnotation, ReflectionMethod $reflectionMethod, $callableNameClass, array $servers, array $defaultSettings)
     {
+
         $this->callableName = is_null($jobAnnotation->name)
                             ? $reflectionMethod->getName()
                             : $jobAnnotation->name;
 
         $this->methodName = $reflectionMethod->getName();
-
-        $this->realCallableName = str_replace('\\', '', $callableNameClass . '~' . $this->callableName);
+        $this->realCallableNameNoPrefix = str_replace('\\', '', $callableNameClass . '~' . $this->callableName);
+        $this->jobPrefix = $defaultSettings['jobPrefix'];
+        $this->realCallableName = $this->jobPrefix . $this->realCallableNameNoPrefix;
         $this->description  = is_null($jobAnnotation->description)
                             ? self::DEFAULT_DESCRIPTION
                             : $jobAnnotation->description;
@@ -193,14 +210,15 @@ class JobClass extends ContainerAware
     {
         return array(
 
-            'callableName'          =>  $this->callableName,
-            'methodName'            =>  $this->methodName,
-            'realCallableName'      =>  $this->realCallableName,
-            'description'           =>  $this->description,
-
-            'iterations'			=>  $this->iterations,
-            'servers'               =>  $this->servers,
-            'defaultMethod'         =>  $this->defaultMethod,
+            'callableName'                  =>  $this->callableName,
+            'methodName'                    =>  $this->methodName,
+            'realCallableName'              =>  $this->realCallableName,
+            'jobPrefix'                     =>  $this->jobPrefix,
+            'realCallableNameNoPrefix'      =>  $this->realCallableNameNoPrefix,
+            'description'                   =>  $this->description,
+            'iterations'			        =>  $this->iterations,
+            'servers'                       =>  $this->servers,
+            'defaultMethod'                 =>  $this->defaultMethod,
         );
     }
 }

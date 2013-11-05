@@ -115,6 +115,14 @@ class WorkerClass
 
 
     /**
+     * The prefix for all job names
+     *
+     * @var string $jobPrefix
+     */
+    private $jobPrefix = null;
+
+
+    /**
      * Retrieves all jobs available from worker
      *
      * @param WorkAnnotation         $workAnnotation  workAnnotation class
@@ -148,10 +156,15 @@ class WorkerClass
         $this->className = $reflectionClass->getName();
         $this->service = $workAnnotation->service;
 
+        if(isset($defaultSettings['job_prefix']))
+            $this->jobPrefix = $defaultSettings['job_prefix'];
+
         $this->servers = $this->loadServers($workAnnotation, $servers);
         $this->iterations = $this->loadIterations($workAnnotation, $defaultSettings);
         $this->defaultMethod = $this->loadDefaultMethod($workAnnotation, $defaultSettings);
         $this->jobCollection = $this->createJobCollection($reflectionClass, $reader);
+
+
     }
 
 
@@ -249,15 +262,14 @@ class WorkerClass
             foreach ($methodAnnotations as $methodAnnotation) {
 
                 /**
-                 * Annotation is only laoded if is typeof JobAnnotation
+                 * Annotation is only loaded if is typeof JobAnnotation
                  */
                 if ($methodAnnotation instanceof JobAnnotation) {
-
                     /**
                      * Creates new Job
                      */
                     $job = new Job($methodAnnotation, $reflectionMethod, $this->callableName, $this->servers, array(
-
+                        'jobPrefix'     =>  $this->jobPrefix,
                         'iterations'    =>  $this->iterations,
                         'method'        =>  $this->defaultMethod,
                     ));

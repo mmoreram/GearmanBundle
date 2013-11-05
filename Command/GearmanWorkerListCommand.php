@@ -59,7 +59,11 @@ class GearmanWorkerListCommand extends ContainerAwareCommand
                 foreach ($worker['jobs'] as $job) {
                     $output->writeln('<comment>      - #'.$it++.'</comment>');
                     $output->writeln('<comment>          name: '.$job['methodName'].'</comment>');
-                    $output->writeln('<comment>          callablename:</comment><info> '.$job['realCallableName'].'</info>');
+                    $output->writeln('<comment>          callablename:</comment><info> '.$job['realCallableNameNoPrefix'].'</info>');
+
+                    if(false === is_null($job['jobPrefix'])){
+                        $output->writeln('<comment>          job prefix:</comment><info> '.$job['jobPrefix'].'</info>');
+                    }
                 }
                 $output->writeln('');
             }

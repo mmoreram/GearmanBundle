@@ -130,7 +130,14 @@ class GearmanDescriber
             $output->writeln('<info>    @Worker\jobs</info>');
             $output->writeln('');
             foreach ($worker['jobs'] as $job) {
-                $output->writeln('<comment>        # ' . $job['realCallableName'] . '</comment>');
+
+                if(false === is_null($job['jobPrefix'])){
+                    $output->writeln('<comment>        # ' . $job['realCallableNameNoPrefix'] . ' with prefix: '.$job['jobPrefix'].'</comment>');
+                }
+                else{
+                    $output->writeln('<comment>        # ' . $job['realCallableNameNoPrefix'] . ' </comment>');
+                }
+
             }
         }
 
