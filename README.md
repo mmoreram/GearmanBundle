@@ -1,6 +1,6 @@
 GearmanBundle for Symfony2
 =====
-[![Payment Suite](http://origin.shields.io/Still/maintained.png?color=green)](https://github.com/mmoreram/GearmanBundle)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/cf3d97c6-e026-4489-8493-a3f4a1e75a68/mini.png)](https://insight.sensiolabs.com/projects/cf3d97c6-e026-4489-8493-a3f4a1e75a68)
 [![Build Status](https://travis-ci.org/mmoreram/GearmanBundle.png?branch=master)](https://travis-ci.org/mmoreram/GearmanBundle)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/badges/quality-score.png?s=29f1ed342d3df54678614b58b0e243136aa24726)](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/)
 [![Latest Stable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
@@ -607,3 +607,4 @@ You should read [Symfony2 coding standards](http://symfony.com/doc/current/contr
 There is also a policy for contributing to this project. All pull request must be all explained step by step, to make us more understandable and easier to merge pull request. All new features must be tested with PHPUnit.
 
 ![Gearman Bundle](https://raw.github.com/mmoreram/gearman-bundle/master/Resources/public/images/gearman-bundle.png)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/cf3d97c6-e026-4489-8493-a3f4a1e75a68/small.png)](https://insight.sensiolabs.com/projects/cf3d97c6-e026-4489-8493-a3f4a1e75a68)
