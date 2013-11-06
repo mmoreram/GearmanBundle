@@ -82,6 +82,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('job_prefix')
                             ->defaultValue(null)
+                        ->end()
                         ->scalarNode('generate-unique-key')
                             ->defaultValue(true)
                         ->end()

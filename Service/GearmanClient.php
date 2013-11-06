@@ -604,10 +604,10 @@ class GearmanClient extends AbstractGearmanService
      *
      * @param string $name
      * @param string $params
-     * @return null|string
+     * @return string
      */
     private function generateUniqueKey($name, $params = '')
     {
-        return md5($name.$params);
+        return md5($name . $params);
     }
 }
