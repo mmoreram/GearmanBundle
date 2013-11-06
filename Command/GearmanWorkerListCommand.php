@@ -63,7 +63,7 @@ class GearmanWorkerListCommand extends ContainerAwareCommand
 
                     if (false === is_null($job['jobPrefix'])) {
 
-                        $output->writeln('<comment>          job prefix:</comment><info> '.$job['jobPrefix'].'</info>');
+                        $output->writeln('<comment>          jobPrefix:</comment><info> '.$job['jobPrefix'].'</info>');
                     }
                 }
                 $output->writeln('');
