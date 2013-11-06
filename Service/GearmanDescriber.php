@@ -62,6 +62,11 @@ class GearmanDescriber
         $output->writeln('<info>    @job\methodName : ' . $job['methodName'] . '</info>');
         $output->writeln('<info>    @job\callableName : ' . $job['realCallableName'] . '</info>');
 
+        if(false === is_null($job['jobPrefix'])){
+            $output->writeln('<info>    @job\jobPrefix : ' . $job['jobPrefix'] . '</info>');
+        }
+
+
         /**
          * Also a complete and clean execution path is given , for supervisord
          */
@@ -133,7 +138,7 @@ class GearmanDescriber
 
                 if ($job['jobPrefix']) {
 
-                    $output->writeln('<comment>        # ' . $job['realCallableNameNoPrefix'] . ' with prefix: ' . $job['jobPrefix'] . '</comment>');
+                    $output->writeln('<comment>        # ' . $job['realCallableNameNoPrefix'] . ' with jobPrefix: ' . $job['jobPrefix'] . '</comment>');
                 } else {
 
                     $output->writeln('<comment>        # ' . $job['realCallableNameNoPrefix'] . ' </comment>');
