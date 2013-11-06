@@ -26,8 +26,10 @@
         "symfony/config": ">=2.1",
         "symfony/http-kernel": ">=2.1",
         "symfony/dependency-injection": ">=2.1",
-        "liip/doctrine-cache-bundle": "1.0.3",
-    	"phpunit/phpunit": "3.7.*"
+        "liip/doctrine-cache-bundle": "1.0.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
     },
     "target-dir": "Mmoreram/GearmanBundle",
     "autoload": {
