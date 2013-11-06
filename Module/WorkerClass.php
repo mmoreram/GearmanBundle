@@ -156,8 +156,10 @@ class WorkerClass
         $this->className = $reflectionClass->getName();
         $this->service = $workAnnotation->service;
 
-        if(isset($defaultSettings['job_prefix']))
+        if (isset($defaultSettings['job_prefix'])) {
+
             $this->jobPrefix = $defaultSettings['job_prefix'];
+        }
 
         $this->servers = $this->loadServers($workAnnotation, $servers);
         $this->iterations = $this->loadIterations($workAnnotation, $defaultSettings);
@@ -181,7 +183,6 @@ class WorkerClass
      */
     private function loadServers(WorkAnnotation $workAnnotation, array $servers)
     {
-
         /**
          * If is configured some servers definition in the worker, overwrites
          */

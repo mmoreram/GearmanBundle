@@ -124,17 +124,18 @@ class GearmanDescriber
         }
 
         $output->writeln('<info>    @worker\iterations : ' . $worker['iterations'] . '</info>');
-        $output->writeln('<info>    @Worker\#jobs : '.count($worker['jobs']).'</info>');
+        $output->writeln('<info>    @Worker\#jobs : ' . count($worker['jobs']) . '</info>');
 
         if ($tinyJobDescription) {
             $output->writeln('<info>    @Worker\jobs</info>');
             $output->writeln('');
             foreach ($worker['jobs'] as $job) {
 
-                if(false === is_null($job['jobPrefix'])){
-                    $output->writeln('<comment>        # ' . $job['realCallableNameNoPrefix'] . ' with prefix: '.$job['jobPrefix'].'</comment>');
-                }
-                else{
+                if ($job['jobPrefix']) {
+
+                    $output->writeln('<comment>        # ' . $job['realCallableNameNoPrefix'] . ' with prefix: ' . $job['jobPrefix'] . '</comment>');
+                } else {
+
                     $output->writeln('<comment>        # ' . $job['realCallableNameNoPrefix'] . ' </comment>');
                 }
 

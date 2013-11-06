@@ -61,7 +61,8 @@ class GearmanWorkerListCommand extends ContainerAwareCommand
                     $output->writeln('<comment>          name: '.$job['methodName'].'</comment>');
                     $output->writeln('<comment>          callablename:</comment><info> '.$job['realCallableNameNoPrefix'].'</info>');
 
-                    if(false === is_null($job['jobPrefix'])){
+                    if (false === is_null($job['jobPrefix'])) {
+
                         $output->writeln('<comment>          job prefix:</comment><info> '.$job['jobPrefix'].'</info>');
                     }
                 }

@@ -41,15 +41,16 @@ abstract class AbstractGearmanService
      * Construct method
      *
      * @param GearmanCacheWrapper $gearmanCacheWrapper GearmanCacheWrapper
-     * @param array $defaultSettings The default settings for the bundle.
-     *
+     * @param array               $defaultSettings     The default settings for the bundle
      */
-    public function __construct(GearmanCacheWrapper $gearmanCacheWrapper,array $defaultSettings)
+    public function __construct(GearmanCacheWrapper $gearmanCacheWrapper, array $defaultSettings)
     {
         $this->workers = $gearmanCacheWrapper->getWorkers();
 
-        if(isset($defaultSettings['job_prefix']))
+        if (isset($defaultSettings['job_prefix'])) {
+
             $this->jobPrefix = $defaultSettings['job_prefix'];
+        }
     }
 
 
