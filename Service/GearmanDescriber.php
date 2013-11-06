@@ -38,6 +38,7 @@ class GearmanDescriber
         $this->kernel = $kernel;
     }
 
+
     /**
      * Describe Job.
      *
@@ -62,7 +63,7 @@ class GearmanDescriber
         $output->writeln('<info>    @job\methodName : ' . $job['methodName'] . '</info>');
         $output->writeln('<info>    @job\callableName : ' . $job['realCallableName'] . '</info>');
 
-        if(false === is_null($job['jobPrefix'])){
+        if( $job['jobPrefix']) {
             $output->writeln('<info>    @job\jobPrefix : ' . $job['jobPrefix'] . '</info>');
         }
 
