@@ -27,6 +27,7 @@ services:
         abstract:  true
         arguments:
             gearman.cache.wrapper: @gearman.cache.wrapper
+            default_settings: %gearman.default.settings%
 
     gearman.execute:
         class: %gearman.execute.class%

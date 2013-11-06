@@ -80,6 +80,9 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('callbacks')
                             ->defaultValue(true)
                         ->end()
+                        ->scalarNode('job_prefix')
+                            ->defaultValue(null)
+                        ->end()
                     ->end()
                 ->end()
             ->end();

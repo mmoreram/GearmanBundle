@@ -30,13 +30,26 @@ abstract class AbstractGearmanService
 
 
     /**
+     * The prefix for all job names
+     *
+     * @var string $jobPrefix
+     */
+    protected $jobPrefix = null;
+
+
+    /**
      * Construct method
      *
      * @param GearmanCacheWrapper $gearmanCacheWrapper GearmanCacheWrapper
+     * @param array $defaultSettings The default settings for the bundle.
+     *
      */
-    public function __construct(GearmanCacheWrapper $gearmanCacheWrapper)
+    public function __construct(GearmanCacheWrapper $gearmanCacheWrapper,array $defaultSettings)
     {
         $this->workers = $gearmanCacheWrapper->getWorkers();
+
+        if(isset($defaultSettings['job_prefix']))
+            $this->jobPrefix = $defaultSettings['job_prefix'];
     }
 
 
@@ -50,6 +63,8 @@ abstract class AbstractGearmanService
      */
     public function getJob($jobName)
     {
+        $jobName = $this->jobPrefix . $jobName;
+
         foreach ($this->workers as $worker) {
 
             if (is_array($worker['jobs'])) {
