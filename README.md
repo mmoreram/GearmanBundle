@@ -152,6 +152,10 @@ Also we must config gearman cache, using doctrine cache.
             # If empty name will not be modified
             # Useful for rename jobs in different environments
             job_prefix: null
+            
+            # Autogenerate unique key in jobs/tasks if not set
+            # This key is unique given a Job name and a payload serialized
+            generate-unique-key: true
 
         # Server list where workers and clients will connect to
         # Each server must contain host and port
