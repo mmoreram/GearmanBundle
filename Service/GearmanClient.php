@@ -167,7 +167,8 @@ class GearmanClient extends AbstractGearmanService
     {
         $worker = $this->getJob($jobName);
 
-        if ($this->settings['generate-unique-key']) {
+        if ($this->settings['generate_unique_key']) {
+
             $unique = $this->generateUniqueKey($jobName, $params);
         }
 
@@ -533,7 +534,8 @@ class GearmanClient extends AbstractGearmanService
      */
     private function enqueueTask($name, $params, $context, $unique, $method)
     {
-        if ($this->settings['generate-unique-key']) {
+        if ($this->settings['generate_unique_key']) {
+
             $unique = $this->generateUniqueKey($name, $params);
         }
 
@@ -599,12 +601,14 @@ class GearmanClient extends AbstractGearmanService
         return $gearmanClient->runTasks();
     }
 
+
     /**
      * Generates a unique string if null
      *
-     * @param string $name
-     * @param string $params
-     * @return string
+     * @param string $name   Name of the Worker/Job 
+     * @param string $params Params
+     *
+     * @return string Unique string generated for given object and params
      */
     private function generateUniqueKey($name, $params = '')
     {

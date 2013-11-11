@@ -50,4 +50,14 @@ class GearmanClientCallbackStatusEventTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->gearmanClientCallbackStatusEvent->getGearmanTask(), $this->gearmanTask);
     }
+
+
+    /**
+     * Tests if Event extends needed classes
+    */
+    public function testInstancesOf()
+    {
+        $this->assertInstanceOf('Symfony\Component\EventDispatcher\Event', $this->gearmanClientCallbackStatusEvent);
+        $this->assertInstanceOf('Mmoreram\GearmanBundle\Event\Abstracts\AbstractGearmanClientTaskEvent', $this->gearmanClientCallbackStatusEvent);
+    }
 }

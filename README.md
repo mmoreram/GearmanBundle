@@ -155,7 +155,7 @@ Also we must config gearman cache, using doctrine cache.
             
             # Autogenerate unique key in jobs/tasks if not set
             # This key is unique given a Job name and a payload serialized
-            generate-unique-key: true
+            generate_unique_key: true
 
         # Server list where workers and clients will connect to
         # Each server must contain host and port
