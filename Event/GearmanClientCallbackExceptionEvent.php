@@ -8,11 +8,12 @@
 
 namespace Mmoreram\GearmanBundle\Event;
 
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * GearmanClientCallbackExceptionEvent
  */
-class GearmanClientCallbackExceptionEvent
+class GearmanClientCallbackExceptionEvent extends Event
 {
 
 }
