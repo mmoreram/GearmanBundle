@@ -9,7 +9,7 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use GearmanTask;
 
 use Mmoreram\GearmanBundle\GearmanEvents;
@@ -31,7 +31,7 @@ class GearmanCallbacks
 {
 
     /**
-     * @var EventDispatcher
+     * @var EventDispatcherInterface
      * 
      * Event dispatcher
      */
@@ -41,9 +41,9 @@ class GearmanCallbacks
     /**
      * Construct method
      *
-     * @param EventDispatcher $eventDispatcher Event dispatcher
+     * @param EventDispatcherInterface $eventDispatcher Event dispatcher
      */
-    public function __construct(EventDispatcher $eventDispatcher)
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
     }
