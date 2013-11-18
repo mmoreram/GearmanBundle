@@ -232,15 +232,21 @@ class GearmanCacheWrapper
 
         $reader = new SimpleAnnotationReader();
         $reader->addNamespace('Mmoreram\GearmanBundle\Driver');
+        $workerCollection = new WorkerCollection;
 
-        $finder = new Finder();
-        $finder
-            ->files()
-            ->followLinks()
-            ->exclude($this->excludedPaths)
-            ->in($this->paths);
+        if (!empty($this->paths)) {
 
-        return $this->parseFiles($finder, $reader);
+            $finder = new Finder();
+            $finder
+                ->files()
+                ->followLinks()
+                ->exclude($this->excludedPaths)
+                ->in($this->paths);
+
+            $workerCollection = $this->parseFiles($finder, $reader);
+        }
+
+        return $workerCollection;
     }
 
 

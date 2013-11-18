@@ -63,7 +63,7 @@ class GearmanDescriber
         $output->writeln('<info>    @job\methodName : ' . $job['methodName'] . '</info>');
         $output->writeln('<info>    @job\callableName : ' . $job['realCallableName'] . '</info>');
 
-        if( $job['jobPrefix']) {
+        if ($job['jobPrefix']) {
             $output->writeln('<info>    @job\jobPrefix : ' . $job['jobPrefix'] . '</info>');
         }
 
