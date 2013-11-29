@@ -178,9 +178,8 @@ class GearmanCacheWrapper
 
     /**
      * Return Gearman bundle settings, previously loaded by method load()
+     * 
      * If settings are not loaded, a SettingsNotLoadedException Exception is thrown
-     *
-     * @return array Bundles that gearman will be able to search annotations
      */
     public function loadNamespaceMap()
     {
@@ -241,7 +240,8 @@ class GearmanCacheWrapper
                 ->files()
                 ->followLinks()
                 ->exclude($this->excludedPaths)
-                ->in($this->paths);
+                ->in($this->paths)
+                ->name('*.php');
 
             $workerCollection = $this->parseFiles($finder, $reader);
         }
@@ -267,15 +267,6 @@ class GearmanCacheWrapper
          * Every file found is parsed
          */
         foreach ($finder as $file) {
-
-            /**
-             * File is checked to be parsed. Is just parsed if is a php file
-             * Otherwise, jump to next file
-             */
-            if ('php' !== strtolower($file->getExtension())) {
-
-                continue;
-            }
 
             /**
              * File is accepted to be parsed
