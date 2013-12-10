@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -69,6 +69,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('defaults')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('iterations')
                             ->defaultValue(0)

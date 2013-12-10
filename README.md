@@ -4,7 +4,7 @@ GearmanBundle for Symfony2
 [![Build Status](https://travis-ci.org/mmoreram/GearmanBundle.png?branch=master)](https://travis-ci.org/mmoreram/GearmanBundle)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/badges/quality-score.png?s=29f1ed342d3df54678614b58b0e243136aa24726)](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/)
 [![Latest Stable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
-[![Dependency Status](https://www.versioneye.com/user/projects/522d1ea8632bac341a000d95/badge.png)](https://www.versioneye.com/user/projects/522d1ea8632bac341a000d95)  
+[![Dependency Status](https://www.versioneye.com/user/projects/522d1ea8632bac341a000d95/badge.png)](https://www.versioneye.com/user/projects/522d1ea8632bac341a000d95)
 
 GearmanBundle is a bundle for Symfony2 intended to provide an easy way to support developers who need to use job queues. For example: mail queues, Solr generation queues or Database upload queues.
 
@@ -37,7 +37,8 @@ Table of contents
     * [Status Callback](#status-callback)
     * [Warning Callback](#warning-callback)
     * [Workload Callback](#workload-callback)
-6. [Contribute](#contribute)
+6. [Cache](#cache)
+7. [Contribute](#contribute)
 
 Installing/Configuring
 -----
@@ -61,7 +62,7 @@ Then you need to install **Gearman driver** using the following commands
 
     $ pecl install channel://pecl.php.net/gearman-X.X.X
 
-You will find all available gearman versions in [Pear Repository](http://pecl.php.net/package/gearman)  
+You will find all available gearman versions in [Pear Repository](http://pecl.php.net/package/gearman)
 Finally you need to start php module
 
     $ echo "extension=gearman.so" > /etc/php5/conf.d/gearman.ini
@@ -91,12 +92,12 @@ And register the bundle in your appkernel.php file
     );
 
 ## Configuration
-We must configure our Worker. Common definitions must be defined in config.yml file, setting values for all installed Workers. 
+We must configure our Worker. Common definitions must be defined in config.yml file, setting values for all installed Workers.
 Also we must config gearman cache, using doctrine cache.
 
-> If `iterations` value is 0, worker will not kill itself never, so thread will be alive as long as needed.  
+> If `iterations` value is 0, worker will not kill itself never, so thread will be alive as long as needed.
 > The reason to allow workers to kill themselves is just to prevent each process to accumulate a large quantity of memory.
-    
+
     liip_doctrine_cache:
         namespaces:
             gearman:
@@ -131,7 +132,7 @@ Also we must config gearman cache, using doctrine cache.
         defaults:
 
             # Default method related with all jobs
-            # do // deprecated as of pecl/gearman 1.0.0. Use doNormal 
+            # do // deprecated as of pecl/gearman 1.0.0. Use doNormal
             # doNormal
             # doBackground
             # doHigh
@@ -152,7 +153,7 @@ Also we must config gearman cache, using doctrine cache.
             # If empty name will not be modified
             # Useful for rename jobs in different environments
             job_prefix: null
-            
+
             # Autogenerate unique key in jobs/tasks if not set
             # This key is unique given a Job name and a payload serialized
             generate_unique_key: true
@@ -185,23 +186,23 @@ In development mode you do not want to cache things over more than one request. 
 Definition of Workers
 -----
 
-This Bundle allows you to configure whatever as a Job. It provides you an easy way to execute it with Supervisor, for example. Moreover, it let you call client methods in Symfony2 environment in a really simple and practical way.  
+This Bundle allows you to configure whatever as a Job. It provides you an easy way to execute it with Supervisor, for example. Moreover, it let you call client methods in Symfony2 environment in a really simple and practical way.
 Job annotations always overwrite work annotations, and work annotations always overwrite environment settings.
 
     <?php
 
-    namespace Acme\AcmeBundle\Workers; 
+    namespace Acme\AcmeBundle\Workers;
 
-    use Mmoreram\GearmanBundle\Driver\Gearman; 
+    use Mmoreram\GearmanBundle\Driver\Gearman;
 
     /**
      * @Gearman\Work(
-     *     iterations = 3, 
+     *     iterations = 3,
      *     description = "Worker test description",
      *     defaultMethod = "doBackground",
      *     servers = {
      *         { "host": "192.168.1.1", "port": 4560 },
-     *         { "host": "192.168.1.2", "port": 4560 }, 
+     *         { "host": "192.168.1.2", "port": 4560 },
      *     }
      * )
      */
@@ -215,8 +216,8 @@ Job annotations always overwrite work annotations, and work annotations always o
         * @return boolean
         *
         * @Gearman\Job(
-        *     iterations = 3, 
-        *     name = "test", 
+        *     iterations = 3,
+        *     name = "test",
         *     description = "This is a description"
         * )
         */
@@ -251,12 +252,12 @@ Job annotations always overwrite work annotations, and work annotations always o
     /**
      * @Gearman\Work(
      *     name = "MyAcmeWorker",
-     *     iterations = 3, 
+     *     iterations = 3,
      *     description = "Acme Worker. Containing multiple available jobs",
      *     defaultMethod = "doHigh",
      *     servers = {
      *         { "host": "192.168.1.1", "port": 4560 },
-     *         { "host": "192.168.1.2", "port": 4560 }, 
+     *         { "host": "192.168.1.2", "port": 4560 },
      *     }
      * )
      */
@@ -273,7 +274,7 @@ Job annotations always overwrite work annotations, and work annotations always o
     /**
      * @Gearman\Job(
      *     name = "doSomething",
-     *     iterations = 10, 
+     *     iterations = 10,
      *     description = "Acme Job action. This is just a description of a method that do something",
      *     defaultMethod = "doBackground",
      *     servers = { "host": "192.168.1.1", "port": 4560 }
@@ -292,7 +293,7 @@ If you want to use your service as a worker, you have to specify service variabl
 
     <?php
 
-    namespace Acme\AcmeBundle\Services; 
+    namespace Acme\AcmeBundle\Services;
 
     /**
      * @Gearman\Work(
@@ -301,7 +302,7 @@ If you want to use your service as a worker, you have to specify service variabl
      */
     class AcmeService
     {
- 
+
         ... some code ...
 
         /**
@@ -328,10 +329,11 @@ And have this service defined in your dependency injection definition file
         Services:
             myServiceName:
                 class: Acme\AcmeBundle\Services\AcmeService
-                arguments: 
+                arguments:
                     event_dispatcher: @event_dispatcher
                     mailer: @mailer
-  
+
+
 Running your Jobs
 -----
 
@@ -364,12 +366,12 @@ Once all your workers are defined, you can simply list them to ensure all settin
 
 ## Listing worker settings
 
-You can describe full worker using its callableName.  
-This command provides you all information about desired Worker, overwritting custom annotation settings to default config settings.  
+You can describe full worker using its callableName.
+This command provides you all information about desired Worker, overwritting custom annotation settings to default config settings.
 This command also provides you all needed information to work with Supervisord.
 
     php app/console gearman:worker:describe MmoreramerinoTestBundleServicesMyAcmeWorker
-    
+
     @Worker\className : Mmoreramerino\TestBundle\Services\AcmeWorker
     @Worker\fileName : /var/www/projects/myrepo/src/Mmoreramerino/TestBundle/Services/AcmeWorker.php
     @Worker\nameSpace : Mmoreramerino\TestBundle\Services
@@ -390,7 +392,7 @@ This command also provides you all needed information to work with Supervisord.
 ## Listing job settings
 
 You can also describe full job using also its callableName
-This command provides you all information about desired Job, overwritting custom annotation settings to worker settings.  
+This command provides you all information about desired Job, overwritting custom annotation settings to worker settings.
 This command also provides you all needed information to work with Supervisord.
 
     php app/console gearman:job:describe MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething
@@ -427,15 +429,15 @@ This command also provides you all needed information to work with Supervisord.
 
 ## Run a job
 
-You can execute by command line an instance of a worker or a job.  
+You can execute by command line an instance of a worker or a job.
 The difference between them is that an instance of a worker can execute any of their jobs, without assignning any priority to them, and a job only can run itself.
 
     php app/console gearman:worker:execute MmoreramerinoTestBundleServicesMyAcmeWorker
     php app/console gearman:job:execute MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething
 
 > By using callableName you can let Supervisord maintain alive a worker.
-> When the job is executed as times as iterations is defined, will die, but supervisord will alive it again.  
-> You can have as many as worker instances as you want.  
+> When the job is executed as times as iterations is defined, will die, but supervisord will alive it again.
+> You can have as many as worker instances as you want.
 > Get some [Supervisord](http://supervisord.org/) info
 
 ## Request Job Status
@@ -452,8 +454,7 @@ With the Handle given if requesting a background job you can request the status 
      */
      $completed = $jobStatus->getCompleted();
      $completitionTotal = $jobStatus->getCompletitionTotal();
-     $completitionPercent = $jobStatus->getCompletionPercent(); 
-
+     $completitionPercent = $jobStatus->getCompletionPercent();
 
 
 Client
@@ -477,8 +478,8 @@ You can request a Job by using the gearman client.
 * setServer: Clean server list and set new server to requested client
 * clearServers: Clear server list
 
-> By default, if no server is set, gearman will use server defined as default in config.yml  
-> host: *127.0.0.1*  
+> By default, if no server is set, gearman will use server defined as default in config.yml
+> host: *127.0.0.1*
 > port: *4730*
 
 ## Request a job
@@ -490,9 +491,9 @@ You can request a Job by using the gearman client.
 * doNormalJob: Call the job and wait for the result ( Only newest gearman versions )
 * doHighJob: Call the job and wait for the result on High Preference
 * doLowJob: Call the job and wait for the result on Low Preference
-* doBackroundJob: Call the job without waiting for the result. 
+* doBackroundJob: Call the job without waiting for the result.
     * It recieves a job handle for the submitted job
-* doHighBackgroundJob: Call the job without waitting for the result on High Preference. 
+* doHighBackgroundJob: Call the job without waitting for the result on High Preference.
     * It recieves a job handle for the submitted job
 * doLowBackgroundJob: Call the job without waitting for the result on Low Preference.
     * It recieves a job handle for the submitted job
@@ -520,7 +521,7 @@ You can request a Job by using the gearman client.
 GearmanBundle transforms Gearman callbacks to Symfony2 kernel events.
 
 ## Complete Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackCompleteEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackCompleteEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setCompleteCallback](http://www.php.net/manual/en/gearmanclient.setcompletecallback.php) documentation.
 
     services:
@@ -531,7 +532,7 @@ For more information about this GearmanEvent, read [GearmanClient::setCompleteCa
 
 
 ## Created Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackCreatedEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackCreatedEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setCreatedCallback](http://www.php.net/manual/en/gearmanclient.setcreatedcallback.php) documentation.
 
     services:
@@ -541,7 +542,7 @@ For more information about this GearmanEvent, read [GearmanClient::setCreatedCal
               - { name: kernel.event_listener, event: gearman.client.callback.created, method: onCreated }
 
 ## Data Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackDataEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackDataEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setDataCallback](http://www.php.net/manual/en/gearmanclient.setdatacallback.php) documentation.
 
     services:
@@ -551,7 +552,7 @@ For more information about this GearmanEvent, read [GearmanClient::setDataCallba
               - { name: kernel.event_listener, event: gearman.client.callback.data, method: onData }
 
 ## Exception Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackExceptionEvent` with no methods.  
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackExceptionEvent` with no methods.
 For more information about this GearmanEvent, read [GearmanClient::setExceptionCallback](http://www.php.net/manual/en/gearmanclient.setexceptioncallback.php) documentation.
 
     services:
@@ -561,7 +562,7 @@ For more information about this GearmanEvent, read [GearmanClient::setExceptionC
               - { name: kernel.event_listener, event: gearman.client.callback.exception, method: onExcept }
 
 ## Fail Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackFailEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackFailEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setFailCallback](http://www.php.net/manual/en/gearmanclient.setfailcallback.php) documentation.
 
     services:
@@ -571,7 +572,7 @@ For more information about this GearmanEvent, read [GearmanClient::setFailCallba
               - { name: kernel.event_listener, event: gearman.client.callback.fail, method: onFail }
 
 ## Status Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackFailEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackFailEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setStatusCallback](http://www.php.net/manual/en/gearmanclient.setstatuscallback.php) documentation.
 
     services:
@@ -581,7 +582,7 @@ For more information about this GearmanEvent, read [GearmanClient::setStatusCall
               - { name: kernel.event_listener, event: gearman.client.callback.status, method: onStatus }
 
 ## Warning Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackWarningEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackWarningEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setWarningCallback](http://www.php.net/manual/en/gearmanclient.setwarningcallback.php) documentation.
 
     services:
@@ -591,7 +592,7 @@ For more information about this GearmanEvent, read [GearmanClient::setWarningCal
               - { name: kernel.event_listener, event: gearman.client.callback.warning, method: onWarning }
 
 ## Workload Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackWorkloadEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.  
+This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackWorkloadEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setWorkloadCallback](http://www.php.net/manual/en/gearmanclient.setworkloadcallback.php) documentation.
 
     services:
@@ -601,12 +602,31 @@ For more information about this GearmanEvent, read [GearmanClient::setWorkloadCa
               - { name: kernel.event_listener, event: gearman.client.callback.workload, method: onWorkload }
 
 
+Cache
+-----
+
+GearmanBundle caches all annotations. You can clear or warmup just gearman cache by using custom commands
+
+    /app/console
+
+    gearman
+        gearman:cache:clear                   Clears gearman cache data on current environment
+        gearman:cache:warmup                  Warms up gearman cache data
+
+Gearman also clear and warmup cache when using Symfony2 cache commands
+
+    /app/console
+
+    cache
+        cache:clear                           Clears the cache
+        cache:warmup                          Warms up an empty cache
+
 
 Contribute
 -----
 
-All code is Symfony2 Code formatted, so every pull request must validate phpcs standards.  
-You should read [Symfony2 coding standards](http://symfony.com/doc/current/contributing/code/standards.html) and install [this](https://github.com/opensky/Symfony2-coding-standard) CodeSniffer to check all code is validated.  
+All code is Symfony2 Code formatted, so every pull request must validate phpcs standards.
+You should read [Symfony2 coding standards](http://symfony.com/doc/current/contributing/code/standards.html) and install [this](https://github.com/opensky/Symfony2-coding-standard) CodeSniffer to check all code is validated.
 
 There is also a policy for contributing to this project. All pull request must be all explained step by step, to make us more understandable and easier to merge pull request. All new features must be tested with PHPUnit.
 

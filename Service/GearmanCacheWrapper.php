@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -15,6 +15,8 @@ use Symfony\Component\HttpKernel\Kernel;
 use Doctrine\Common\Cache\Cache;
 use Symfony\Component\Finder\Finder;
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
+use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 use Mmoreram\GearmanBundle\Module\WorkerCollection;
 use Mmoreram\GearmanBundle\Module\WorkerClass as Worker;
@@ -26,12 +28,12 @@ use ReflectionClass;
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class GearmanCacheWrapper
+class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
 {
 
     /**
      * @var Array
-     * 
+     *
      * Bundles loaded by kernel
      */
     private $kernelBundles;
@@ -39,7 +41,7 @@ class GearmanCacheWrapper
 
     /**
      * @var Kernel
-     * 
+     *
      * Kernel object
      */
     private $kernel;
@@ -47,7 +49,7 @@ class GearmanCacheWrapper
 
     /**
      * @var Array
-     * 
+     *
      * Bundles available to perform search
      */
     private $bundles;
@@ -79,7 +81,7 @@ class GearmanCacheWrapper
 
     /**
      * @var string
-     * 
+     *
      * Gearman cache id
      */
     private $cacheId;
@@ -87,7 +89,7 @@ class GearmanCacheWrapper
 
     /**
      * @var array
-     * 
+     *
      * WorkerCollection with all workers and jobs available
      */
     private $workerCollection;
@@ -95,7 +97,7 @@ class GearmanCacheWrapper
 
     /**
      * @var array
-     * 
+     *
      * Collection of servers to connect
      */
     private $servers;
@@ -103,7 +105,7 @@ class GearmanCacheWrapper
 
     /**
      * @var array
-     * 
+     *
      * Default settings defined by user in config.yml
      */
     private $defaultSettings;
@@ -111,7 +113,7 @@ class GearmanCacheWrapper
 
     /**
      * Return workerCollection
-     * 
+     *
      * @return array all available workers
      */
     public function getWorkers()
@@ -165,7 +167,7 @@ class GearmanCacheWrapper
 
     /**
      * flush all cache
-     * 
+     *
      * @return GearmanCacheLoader self Object
      */
     public function flush()
@@ -178,7 +180,7 @@ class GearmanCacheWrapper
 
     /**
      * Return Gearman bundle settings, previously loaded by method load()
-     * 
+     *
      * If settings are not loaded, a SettingsNotLoadedException Exception is thrown
      */
     public function loadNamespaceMap()
@@ -252,7 +254,7 @@ class GearmanCacheWrapper
 
     /**
      * Load all workers with their jobs
-     * 
+     *
      * @param Finder $finder Finder
      * @param Reader $reader Reader
      *
@@ -297,6 +299,45 @@ class GearmanCacheWrapper
         return $workerCollection;
     }
 
+
+    /**
+     * Cache clear implementation
+     *
+     * @param string $cacheDir The cache directory
+     */
+    public function clear($cacheDir)
+    {
+        $this->flush();
+    }
+
+
+    /**
+     * Warms up the cache.
+     *
+     * @param string $cacheDir The cache directory
+     */
+    public function warmUp($cacheDir)
+    {
+        $this->load();
+    }
+
+
+    /**
+     * Checks whether this warmer is optional or not.
+     *
+     * Optional warmers can be ignored on certain conditions.
+     *
+     * A warmer should return true if the cache can be
+     * generated incrementally and on-demand.
+     *
+     * As GearmanBundle loads cache incrementaly so is optional
+     *
+     * @return Boolean true if the warmer is optional, false otherwise
+     */
+    public function isOptional()
+    {
+        return true;
+    }
 
 
     /**
