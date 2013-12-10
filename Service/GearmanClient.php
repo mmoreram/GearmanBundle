@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -12,6 +12,7 @@ namespace Mmoreram\GearmanBundle\Service;
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Mmoreram\GearmanBundle\GearmanMethods;
 use Mmoreram\GearmanBundle\Module\JobStatus;
+use Mmoreram\GearmanBundle\Generators\UniqueJobIdentifierGenerator;
 
 /**
  * GearmanClient. Implementation of AbstractGearmanService
@@ -21,7 +22,7 @@ class GearmanClient extends AbstractGearmanService
 
     /**
      * @var GearmanCallbacks
-     * 
+     *
      * Gearman callbacks
      */
     protected $gearmanCallbacks;
@@ -29,7 +30,7 @@ class GearmanClient extends AbstractGearmanService
 
     /**
      * @var array
-     * 
+     *
      * Server set to define in what server must connect to
      */
     protected $servers = array();
@@ -37,7 +38,7 @@ class GearmanClient extends AbstractGearmanService
 
     /**
      * @var array
-     * 
+     *
      * task structure to store all about called tasks
      */
     protected $taskStructure = array();
@@ -45,7 +46,7 @@ class GearmanClient extends AbstractGearmanService
 
     /**
      * @var array
-     * 
+     *
      * Set default servers
      */
     protected $defaultServers;
@@ -59,10 +60,31 @@ class GearmanClient extends AbstractGearmanService
 
 
     /**
+     * @var UniqueJobIdentifierGenerator
+     *
+     * Unique Job Intefier Generator
+     */
+    protected $uniqueJobIdentifierGenerator;
+
+
+    /**
+     * Init tasks structure
+     *
+     * @return GearmanClient self Object
+     */
+    public function initTaskStructure()
+    {
+        $this->taskStructure = array();
+
+        return $this;
+    }
+
+
+    /**
      * Set  default servers
-     * 
+     *
      * @param array $defaultServers Default servers
-     * 
+     *
      * @return GearmanClient self Object
      */
     public function setDefaultServers(array $defaultServers)
@@ -74,10 +96,25 @@ class GearmanClient extends AbstractGearmanService
 
 
     /**
+     * Set UniqueJobIdentifierGenerator object
+     *
+     * @param UniqueJobIdentifierGenerator $uniqueJobIdentifierGenerator Unique Job Intefier Generator
+     *
+     * @return GearmanClient self Object
+     */
+    public function setUniqueJobIdentifierGenerator(UniqueJobIdentifierGenerator $uniqueJobIdentifierGenerator)
+    {
+        $this->uniqueJobIdentifierGenerator = $uniqueJobIdentifierGenerator;
+
+        return $this;
+    }
+
+
+    /**
      * Set gearman callbacks
-     * 
+     *
      * @param GearmanCallbacks $gearmanCallbacks Gearman callbacks
-     * 
+     *
      * @return GearmanClient self Object
      */
     public function setGearmanCallbacks(GearmanCallbacks $gearmanCallbacks)
@@ -161,23 +198,17 @@ class GearmanClient extends AbstractGearmanService
      * @param string $method  Method to execute
      * @param string $unique  A unique ID used to identify a particular task
      *
-     * @return mixed Return result of the call
+     * @return mixed Return result of the call. If worker is not valid, return false
      */
-    private function enqueue($jobName, $params = '', $method = null, $unique = null)
+    private function enqueue($jobName, $params, $method, $unique)
     {
         $worker = $this->getJob($jobName);
 
-        if ($this->settings['generate_unique_key']) {
+        $unique = $this->uniqueJobIdentifierGenerator->generateUniqueKey($jobName, $params, $unique, $method);
 
-            $unique = $this->generateUniqueKey($jobName, $params);
-        }
-
-        if (false !== $worker) {
-
-            return $this->doEnqueue($worker, $params, $method, $unique);
-        }
-
-        return false;
+        return    $worker
+                ? $this->doEnqueue($worker, $params, $method, $unique)
+                : false;
     }
 
 
@@ -194,7 +225,7 @@ class GearmanClient extends AbstractGearmanService
      *
      * @return mixed  Return result of the GearmanClient call
      */
-    private function doEnqueue(Array $worker, $params = '', $method = null, $unique = null)
+    private function doEnqueue(array $worker, $params, $method, $unique)
     {
         $gearmanClient = new \GearmanClient();
         $this->assignServers($gearmanClient);
@@ -382,7 +413,7 @@ class GearmanClient extends AbstractGearmanService
      * Fetches the Status of a special Background Job.
      *
      * @param string $idJob The job handle string
-     * 
+     *
      * @return JobStatus Job status
      */
     public function getJobStatus($idJob)
@@ -534,16 +565,12 @@ class GearmanClient extends AbstractGearmanService
      */
     private function enqueueTask($name, $params, $context, $unique, $method)
     {
-        if ($this->settings['generate_unique_key']) {
-
-            $unique = $this->generateUniqueKey($name, $params);
-        }
 
         $task = array(
             'name'      =>  $name,
             'params'    =>  $params,
             'context'   =>  $context,
-            'unique'    =>  $unique,
+            'unique'    =>  $this->uniqueJobIdentifierGenerator->generateUniqueKey($name, $params, $unique, $method),
             'method'    =>  $method,
         );
 
@@ -596,22 +623,8 @@ class GearmanClient extends AbstractGearmanService
             }
         }
 
-        $this->taskStructure = array();
+        $this->initTaskStructure();
 
         return $gearmanClient->runTasks();
-    }
-
-
-    /**
-     * Generates a unique string if null
-     *
-     * @param string $name   Name of the Worker/Job 
-     * @param string $params Params
-     *
-     * @return string Unique string generated for given object and params
-     */
-    private function generateUniqueKey($name, $params = '')
-    {
-        return md5($name . $params);
     }
 }

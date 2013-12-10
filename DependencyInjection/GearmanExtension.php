@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -39,6 +39,7 @@ class GearmanExtension extends Extension
         $container->setParameter('gearman.bundles', $config['bundles']);
         $container->setParameter('gearman.servers', $config['servers']);
         $container->setParameter('gearman.default.settings', $config['defaults']);
+        $container->setParameter('gearman.default.settings.generate_unique_key', $config['defaults']['generate_unique_key']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('parameters.yml');

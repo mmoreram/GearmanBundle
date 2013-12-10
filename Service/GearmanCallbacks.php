@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -32,7 +32,7 @@ class GearmanCallbacks
 
     /**
      * @var EventDispatcherInterface
-     * 
+     *
      * Event dispatcher
      */
     private $eventDispatcher;
@@ -51,9 +51,9 @@ class GearmanCallbacks
 
     /**
      * Assign all GearmanClient callbacks as Symfony2 events
-     * 
+     *
      * @param \GearmanClient $gearmanClient Gearman client
-     * 
+     *
      * @return GearmanCallbacks self Object
      */
     public function assignTaskCallbacks(\GearmanClient $gearmanClient)
@@ -71,9 +71,9 @@ class GearmanCallbacks
 
     /**
      * Assigns CompleteCallback into GearmanTask
-     * 
+     *
      * @param GearmanTask $gearmanTask Gearman Task
-     * 
+     *
      * @see http://www.php.net/manual/en/gearmanclient.setcompletecallback.php
      */
     public function assignCompleteCallback(GearmanTask $gearmanTask)
@@ -87,9 +87,9 @@ class GearmanCallbacks
 
     /**
      * Assigns FailCallback into GearmanTask
-     * 
+     *
      * @param GearmanTask $gearmanTask Gearman Task
-     * 
+     *
      * @see http://www.php.net/manual/en/gearmanclient.setfailcallback.php
      */
     public function assignFailCallback(GearmanTask $gearmanTask)
@@ -103,9 +103,9 @@ class GearmanCallbacks
 
     /**
      * Assigns DataCallback into GearmanTask
-     * 
+     *
      * @param GearmanTask $gearmanTask Gearman Task
-     * 
+     *
      * @see http://www.php.net/manual/en/gearmanclient.setdatacallback.php
      */
     public function assignDataCallback(GearmanTask $gearmanTask)
@@ -118,9 +118,9 @@ class GearmanCallbacks
 
     /**
      * Assigns CreatedCallback into GearmanTask
-     * 
+     *
      * @param GearmanTask $gearmanTask Gearman task
-     * 
+     *
      * @see http://www.php.net/manual/en/gearmanclient.setcreatedcallback.php
      */
     public function assignCreatedCallback(GearmanTask $gearmanTask)
@@ -133,7 +133,7 @@ class GearmanCallbacks
 
     /**
      * Assigns ExceptionCallback into GearmanTask
-     * 
+     *
      * @see http://www.php.net/manual/en/gearmanclient.setexceptioncallback.php
      */
     public function assignExceptionCallback()
@@ -146,9 +146,9 @@ class GearmanCallbacks
 
     /**
      * Assigns StatusCallback into GearmanTask
-     * 
+     *
      * @param GearmanTask $gearmanTask Gearman Task
-     * 
+     *
      * @see http://www.php.net/manual/en/gearmanclient.setstatuscallback.php
      */
     public function assignStatusCallback(GearmanTask $gearmanTask)
@@ -161,9 +161,9 @@ class GearmanCallbacks
 
     /**
      * Assigns WarningCallback into GearmanTask
-     * 
+     *
      * @param GearmanTask $gearmanTask Gearman Task
-     * 
+     *
      * @see http://www.php.net/manual/en/gearmanclient.setwarningcallback.php
      */
     public function assignWarningCallback(GearmanTask $gearmanTask)
@@ -176,9 +176,9 @@ class GearmanCallbacks
 
     /**
      * Assigns WorkloadCallback into GearmanTask
-     * 
+     *
      * @param GearmanTask $gearmanTask Gearman Task
-     * 
+     *
      * @see http://www.php.net/manual/en/gearmanclient.setworkloadcallback.php
      */
     public function assignWorkloadCallback(GearmanTask $gearmanTask)

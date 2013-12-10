@@ -1,14 +1,25 @@
 services:
 
+    #
+    # Generators
+    #
+    gearman.unique_job_identifier:
+        class: %gearman.unique_job_identifier.class%
+        arguments:
+            generate_unique_key: %gearman.default.settings.generate_unique_key%
+
+    #
+    # Services
+    #
     gearman.cache.wrapper:
         class: %gearman.cache.wrapper.class%
         arguments:
             kernel: @kernel
-            gearman.cache: @liip_doctrine_cache.ns.gearman
-            gearman.cache.id: %gearman.cache.id%
-            gearman.bundles: %gearman.bundles%
-            gearman.servers: %gearman.servers%
-            gearman.default.settings: %gearman.default.settings%
+            gearman_cache: @liip_doctrine_cache.ns.gearman
+            gearman_cache_id: %gearman.cache.id%
+            gearman_bundles: %gearman.bundles%
+            gearman_servers: %gearman.servers%
+            gearman_default_settings: %gearman.default.settings%
         calls:
             - [loadNamespaceMap,  []]
             - [load,  []]
@@ -29,7 +40,7 @@ services:
     gearman.abstract.service:
         abstract:  true
         arguments:
-            gearman.cache.wrapper: @gearman.cache.wrapper
+            gearman_cache_wrapper: @gearman.cache.wrapper
             default_settings: %gearman.default.settings%
 
     gearman.execute:
@@ -42,6 +53,8 @@ services:
         class: %gearman.client.class%
         parent: gearman.abstract.service
         calls:
+            - [initTaskStructure, []]
             - [setDefaultServers, [%gearman.servers%]]
             - [setGearmanCallbacks, [@gearman.callbacks]]
+            - [setUniqueJobIdentifierGenerator, [@gearman.unique_job_identifier]]
             - [setDefaultSettings, [%gearman.default.settings%]]
