@@ -12,7 +12,7 @@ namespace Mmoreram\GearmanBundle\Service;
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Mmoreram\GearmanBundle\GearmanMethods;
 use Mmoreram\GearmanBundle\Module\JobStatus;
-use Mmoreram\GearmanBundle\Generators\UniqueJobIdentifierGenerator;
+use Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator;
 
 /**
  * GearmanClient. Implementation of AbstractGearmanService
