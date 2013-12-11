@@ -8,7 +8,7 @@ parameters:
     #
     # Generators
     #
-    gearman.unique_job_identifier.class: Mmoreram\GearmanBundle\Generators\UniqueJobIdentifierGenerator
+    gearman.unique_job_identifier.class: Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator
 
     #
     # Services
