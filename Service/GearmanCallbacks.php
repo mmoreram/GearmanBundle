@@ -100,7 +100,6 @@ class GearmanCallbacks
     }
 
 
-
     /**
      * Assigns DataCallback into GearmanTask
      *
