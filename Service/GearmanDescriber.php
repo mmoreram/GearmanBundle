@@ -10,7 +10,7 @@
 namespace Mmoreram\GearmanBundle\Service;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Implementation of GearmanDescriber
@@ -21,7 +21,7 @@ class GearmanDescriber
 {
 
     /**
-     * @var Kernel
+     * @var KernelInterface
      *
      * Kernel
      */
@@ -31,9 +31,9 @@ class GearmanDescriber
     /**
      * Construct method
      *
-     * @param Kernel $kernel Kernel
+     * @param KernelInterface $kernel Kernel
      */
-    public function __construct(Kernel $kernel)
+    public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
     }

@@ -72,6 +72,10 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
     private $defaultSettings = array(
         'method'        =>  'doHigh',
         'iterations'    =>  100,
+        'callbacks'     =>  true,
+        'jobPrefix'     =>  null,
+        'generate_unique_key' => true,
+        'workers_name_prepend_namespace' => true,
     );
 
 

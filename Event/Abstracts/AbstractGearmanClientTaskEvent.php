@@ -31,7 +31,7 @@ abstract class AbstractGearmanClientTaskEvent extends Event
      *
      * @param GearmanTask $gearmanTask Gearman Task
      */
-    public function __construct(\GearmanTask $gearmanTask)
+    public function __construct(GearmanTask $gearmanTask)
     {
         $this->gearmanTask = $gearmanTask;
     }

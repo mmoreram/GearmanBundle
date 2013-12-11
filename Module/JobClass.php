@@ -9,9 +9,10 @@
 
 namespace Mmoreram\GearmanBundle\Module;
 
-use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use ReflectionMethod;
+
+use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
 
 /**
  * Job class

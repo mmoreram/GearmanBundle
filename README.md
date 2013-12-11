@@ -40,7 +40,7 @@ Table of contents
 6. [Customizing](#customizing)
     * [Custom unique job identifier method](#customuniquejobidentifiermethod)
 7. [Cache](#cache)
-8. [Contribute](#contribute)
+8. [Contributing](#contribute)
 
 Installing/Configuring
 -----
@@ -159,6 +159,10 @@ Also we must config gearman cache, using doctrine cache.
             # Autogenerate unique key in jobs/tasks if not set
             # This key is unique given a Job name and a payload serialized
             generate_unique_key: true
+
+            # Prepend namespace when callableName is built
+            # By default this variable is set as true
+            workers_name_prepend_namespace: true
 
         # Server list where workers and clients will connect to
         # Each server must contain host and port
@@ -683,13 +687,20 @@ Gearman also clear and warmup cache when using Symfony2 cache commands
         cache:warmup                          Warms up an empty cache
 
 
-Contribute
+Contributing
 -----
 
 All code is Symfony2 Code formatted, so every pull request must validate phpcs standards.
 You should read [Symfony2 coding standards](http://symfony.com/doc/current/contributing/code/standards.html) and install [this](https://github.com/opensky/Symfony2-coding-standard) CodeSniffer to check all code is validated.
 
 There is also a policy for contributing to this project. All pull request must be all explained step by step, to make us more understandable and easier to merge pull request. All new features must be tested with PHPUnit.
+
+If you'd like to contribute, please read the [Contributing Code][1] part of the documentation. If you're submitting a pull request, please follow the guidelines in the [Submitting a Patch][2] section and use the [Pull Request Template][3].
+
+[1]: http://symfony.com/doc/current/contributing/code/index.html
+[2]: http://symfony.com/doc/current/contributing/code/patches.html#check-list
+[3]: http://symfony.com/doc/current/contributing/code/patches.html#make-a-pull-request
+
 
 ![Gearman Bundle](https://raw.github.com/mmoreram/gearman-bundle/master/Resources/public/images/gearman-bundle.png)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/cf3d97c6-e026-4489-8493-a3f4a1e75a68/small.png)](https://insight.sensiolabs.com/projects/cf3d97c6-e026-4489-8493-a3f4a1e75a68)

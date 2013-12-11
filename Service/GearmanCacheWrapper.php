@@ -9,19 +9,19 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
-use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Symfony\Component\HttpKernel\Kernel;
-use Doctrine\Common\Cache\Cache;
 use Symfony\Component\Finder\Finder;
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
+use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use ReflectionClass;
 
 use Mmoreram\GearmanBundle\Module\WorkerCollection;
 use Mmoreram\GearmanBundle\Module\WorkerClass as Worker;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
-use ReflectionClass;
 
 /**
  * Gearman cache loader class
@@ -58,7 +58,7 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
     /**
      * @var Array
      *
-     * paths to search on
+     * Paths to search on
      */
     private $paths = array();
 
@@ -66,15 +66,15 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
     /**
      * @var Array
      *
-     * paths to ignore
+     * Paths to ignore
      */
     private $excludedPaths = array();
 
 
     /**
-     * @var GearmanCache
+     * @var Cache
      *
-     * Gearman Cache
+     * Cache instance
      */
     private $cache;
 
@@ -82,7 +82,7 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
     /**
      * @var string
      *
-     * Gearman cache id
+     * Cache id
      */
     private $cacheId;
 
@@ -125,14 +125,14 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
     /**
      * Construct method
      *
-     * @param Kernel $kernel          Kernel instance
-     * @param Cache  $cache           Cache
-     * @param string $cacheId         Cache id where to save parsing data
-     * @param array  $bundles         Bundle array where to parse workers, defined on condiguration
-     * @param array  $servers         Server list defined on configuration
-     * @param array  $defaultSettings Default settings defined on configuration
+     * @param KernelInterface $kernel          Kernel instance
+     * @param Cache           $cache           Cache instance
+     * @param string          $cacheId         Cache id
+     * @param array           $bundles         Bundle array where to parse workers, defined on condiguration
+     * @param array           $servers         Server list defined on configuration
+     * @param array           $defaultSettings Default settings defined on configuration
      */
-    public function __construct(Kernel $kernel, Cache $cache, $cacheId, array $bundles, array $servers, array $defaultSettings)
+    public function __construct(KernelInterface $kernel, Cache $cache, $cacheId, array $bundles, array $servers, array $defaultSettings)
     {
         $this->kernelBundles = $kernel->getBundles();
         $this->kernel = $kernel;
@@ -341,48 +341,22 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
 
 
     /**
-     * Returns the full class name for the first class in the file.
+     * Returns file class namespace
      *
      * @param string $file A PHP file path
      *
-     * @return string|false Full class name if found, false otherwise
+     * @return string|false Full class namespace if found, false otherwise
      */
     protected function getFileClassNamespace($file)
     {
-        $class = false;
-        $namespace = false;
-        $tokens = token_get_all(file_get_contents($file));
+        $filenameBlock = explode('/', $file);
+        $filename = explode('.', end($filenameBlock), 2);
+        $filename = reset($filename);
 
-        for ($i = 0, $count = count($tokens); $i < $count; $i++) {
+        preg_match('/\snamespace\s+(.+?);/s', file_get_contents($file), $match);
 
-            $token = $tokens[$i];
-
-            if (!is_array($token)) {
-
-                continue;
-            }
-
-            if (true === $class && T_STRING === $token[0]) {
-                return $namespace.'\\'.$token[1];
-            }
-
-            if (true === $namespace && T_STRING === $token[0]) {
-                $namespace = '';
-                do {
-                    $namespace .= $token[1];
-                    $token = $tokens[++$i];
-                } while ($i < $count && is_array($token) && in_array($token[0], array(T_NS_SEPARATOR, T_STRING)));
-            }
-
-            if (T_CLASS === $token[0]) {
-                $class = true;
-            }
-
-            if (T_NAMESPACE === $token[0]) {
-                $namespace = true;
-            }
-        }
-
-        return false;
+        return    is_array($match) && isset($match[1])
+                ? $match[1] . '\\' . $filename
+                : false;
     }
 }

@@ -10,11 +10,12 @@
 namespace Mmoreram\GearmanBundle\Module;
 
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use ReflectionClass;
+
 use Mmoreram\GearmanBundle\Module\JobCollection;
 use Mmoreram\GearmanBundle\Module\JobClass as Job;
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
-use ReflectionClass;
 
 /**
  * Worker class
@@ -137,11 +138,22 @@ class WorkerClass
         $this->namespace = $reflectionClass->getNamespaceName();
 
         /**
+         * If WorkAnnotation name field is defined, workers_name_prepend_namespace value
+         * in defaultSettings array must be checked.
+         * 
+         * If true, namespace must be prepended to workAnnotation name for callableName
+         * Otherwise, only workAnnotation value is set as callableName
+         */
+        $callableNameNamespace  = $defaultSettings['workers_name_prepend_namespace']
+                                ? $this->namespace
+                                : '';
+
+        /**
          * Setting worker callable name
          */
         $this->callableName = is_null($workAnnotation->name)
                             ? $reflectionClass->getName()
-                            : $this->namespace . $workAnnotation->name;
+                            : $callableNameNamespace . $workAnnotation->name;
 
         $this->callableName = str_replace('\\', '', $this->callableName);
 
@@ -165,8 +177,6 @@ class WorkerClass
         $this->iterations = $this->loadIterations($workAnnotation, $defaultSettings);
         $this->defaultMethod = $this->loadDefaultMethod($workAnnotation, $defaultSettings);
         $this->jobCollection = $this->createJobCollection($reflectionClass, $reader);
-
-
     }
 
 
@@ -175,10 +185,10 @@ class WorkerClass
      * 
      * If any server is defined in JobAnnotation, this one is used.
      * Otherwise is used servers set in Class
-     * 
+     *
      * @param WorkAnnotation $workAnnotation WorkAnnotation class
      * @param array          $servers        Array of servers defined for Worker
-     * 
+     *
      * @return array Servers
      */
     private function loadServers(WorkAnnotation $workAnnotation, array $servers)
@@ -203,10 +213,10 @@ class WorkerClass
      * 
      * If iterations is defined in WorkAnnotation, this one is used.
      * Otherwise is used set in Class
-     * 
+     *
      * @param WorkAnnotation $workAnnotation  WorkAnnotation class
      * @param array          $defaultSettings Default settings for Worker
-     * 
+     *
      * @return integer Iteration
      */
     private function loadIterations(WorkAnnotation $workAnnotation, array $defaultSettings)
@@ -223,10 +233,10 @@ class WorkerClass
      * 
      * If defaultMethod is defined in WorkAnnotation, this one is used.
      * Otherwise is used set in Class
-     * 
+     *
      * @param WorkAnnotation $workAnnotation  WorkAnnotation class
      * @param array          $defaultSettings Default settings for Worker
-     * 
+     *
      * @return string Default method
      */
     private function loadDefaultMethod(WorkAnnotation $workAnnotation, array $defaultSettings)
@@ -240,10 +250,10 @@ class WorkerClass
 
     /**
      * Creates job collection of worker
-     * 
+     *
      * @param ReflectionClass        $reflectionClass Reflexion class
      * @param SimpleAnnotationReader $reader          ReaderAnnotation class
-     * 
+     *
      * @return WorkerClass self Object
      */
     private function createJobCollection(ReflectionClass $reflectionClass, SimpleAnnotationReader $reader)

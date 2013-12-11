@@ -18,12 +18,13 @@ use Doctrine\Common\Annotations\Annotation;
  */
 class Work extends Annotation
 {
+
     /**
      * Name of worker
      *
      * @var integer
      */
-    public $name = null;
+    public $name;
 
 
     /**
@@ -31,7 +32,7 @@ class Work extends Annotation
      *
      * @var string
      */
-    public $description = null;
+    public $description;
 
 
     /**
@@ -39,7 +40,7 @@ class Work extends Annotation
      *
      * @var integer
      */
-    public $iterations = null;
+    public $iterations;
 
 
     /**
@@ -47,7 +48,7 @@ class Work extends Annotation
      *
      * @var mixed
      */
-    public $servers = null;
+    public $servers;
 
 
     /**
@@ -55,7 +56,7 @@ class Work extends Annotation
      *
      * @var string
      */
-    public $defaultMethod = null;
+    public $defaultMethod;
 
 
     /**

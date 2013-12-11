@@ -9,9 +9,10 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
-use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -22,7 +23,7 @@ class GearmanExecute extends AbstractGearmanService
 {
 
     /**
-     * @var Container
+     * @var ContainerInterface
      *
      * Container instance
      */
@@ -32,11 +33,11 @@ class GearmanExecute extends AbstractGearmanService
     /**
      * Set container
      *
-     * @param Container $container Container
+     * @param ContainerInterface $container Container
      *
      * @return GearmanExecute self Object
      */
-    public function setContainer(Container $container)
+    public function setContainer(ContainerInterface $container)
     {
 
         $this->container = $container;
