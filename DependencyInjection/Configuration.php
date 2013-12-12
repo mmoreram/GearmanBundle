@@ -52,8 +52,8 @@ class Configuration implements ConfigurationInterface
                     ->performNoDeepMerging()
                     ->defaultValue(array(
                         'localhost' =>  array(
-                            'hostname'  =>  '127.0.0.1',
-                            'port'      =>  "4730",
+                            'host'  =>  '127.0.0.1',
+                            'port'  =>  "4730",
                         )
                     ))
                     ->prototype('array')
