@@ -167,7 +167,7 @@ class GearmanExecute extends AbstractGearmanService
             /**
              * Only finishes its execution if alive is false and iterations arrives to 0
              */
-            if (!$alive && $iterations-- <= 0) {
+            if (!$alive && --$iterations <= 0) {
 
                 break;
             }
