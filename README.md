@@ -13,7 +13,7 @@ GearmanBundle is a bundle for Symfony2 intended to provide an easy way to suppor
 Table of contents
 -----
 1. [Installing/Configuring](#installingconfiguring)
-    * [Branches](#branches)
+    * [Tags](#tags)
     * [Installing Gearman](#installing-gearman)
     * [Installing GearmanBundle](#installing-gearmanbundle)
     * [Configuration](#configuration)
@@ -46,7 +46,7 @@ Table of contents
 
 Installing/Configuring
 -----
-## Branches
+## Tags
 
 * Use version `2.3-dev` for last updated. Alias of `dev-master`.
 * Use last stable version tag to stay in a stable release.
