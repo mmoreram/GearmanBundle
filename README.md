@@ -48,9 +48,11 @@ Installing/Configuring
 -----
 ## Branches
 
-* Use version `2.1` for Symfony version `2.1.*`
-* Use version `2.2` for Symfony version `2.2.*`
-* Use version `2.3` or the `master` for Symfony version `2.3.*`
+* Use version `2.3-dev` for last updated. Alias of `dev-master`.
+* Use last stable version tag to stay in a stable release.
+
+> As long as Symfony2 versions 2.1 and 2.2 are not maintained anymore, and
+> as long as these branches had same code than master branch, they all have been deleted
 
 ## Installing [Gearman](http://gearman.org)
 
