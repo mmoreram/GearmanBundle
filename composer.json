@@ -34,5 +34,11 @@
     "target-dir": "Mmoreram/GearmanBundle",
     "autoload": {
         "psr-0": { "Mmoreram\\GearmanBundle": "" }
+    },
+    "minimum-stability": "stable", 
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
     }
 }
