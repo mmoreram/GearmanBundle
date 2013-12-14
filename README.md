@@ -73,7 +73,7 @@ Finally you need to start php module
 
     $ echo "extension=gearman.so" > /etc/php5/conf.d/gearman.ini
 
-## Installing [GearmanBundle](https://github.com/mmoreram/gearman-bundle)
+## Installing [GearmanBundle](https://github.com/mmoreram/GearmanBundle)
 
 You have to add require line into you composer.json file
 
