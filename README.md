@@ -708,3 +708,4 @@ If you'd like to contribute, please read the [Contributing Code][1] part of the 
 
 ![Gearman Bundle](https://raw.github.com/mmoreram/gearman-bundle/master/Resources/public/images/gearman-bundle.png)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/cf3d97c6-e026-4489-8493-a3f4a1e75a68/small.png)](https://insight.sensiolabs.com/projects/cf3d97c6-e026-4489-8493-a3f4a1e75a68)
+[![knpbundles.com](http://knpbundles.com/mmoreram/GearmanBundle/badge)](http://knpbundles.com/mmoreram/GearmanBundle)
