@@ -102,7 +102,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
 
-        $this->reflectionClass = $this  
+        $this->reflectionClass = $this
             ->getMockBuilder('\ReflectionClass')
             ->disableOriginalConstructor()
             ->setMethods(array(
@@ -118,7 +118,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->reader = $this   
+        $this->reader = $this
             ->getMockBuilder('Doctrine\Common\Annotations\SimpleAnnotationReader')
             ->disableOriginalConstructor()
             ->setMethods(array(

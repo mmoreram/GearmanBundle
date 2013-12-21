@@ -11,6 +11,11 @@ parameters:
     gearman.unique_job_identifier.class: Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator
 
     #
+    # Dispatchers
+    #
+    gearman.dispatcher.callbacks.class: Mmoreram\GearmanBundle\Dispatcher\GearmanCallbacksDispatcher
+
+    #
     # Services
     #
     gearman.client.class:           Mmoreram\GearmanBundle\Service\GearmanClient

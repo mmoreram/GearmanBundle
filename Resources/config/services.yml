@@ -20,6 +20,18 @@ services:
             generate_unique_key: %gearman.default.settings.generate_unique_key%
 
     #
+    # Dispatchers
+    #
+    gearman.dispatcher.abstract:
+        abstract: true
+        arguments:
+            event.dispatcher: @event_dispatcher
+
+    gearman.dispatcher.callbacks:
+        parent: gearman.dispatcher.abstract
+        class: %gearman.dispatcher.callbacks.class%
+
+    #
     # Services
     #
     gearman.parser:
@@ -49,11 +61,6 @@ services:
         arguments:
             kernel: @kernel
 
-    gearman.callbacks:
-        class: %gearman.callbacks.class%
-        arguments:
-            event.dispatcher: @event_dispatcher
-
     gearman.abstract.service:
         abstract:  true
         arguments:
@@ -72,6 +79,6 @@ services:
         calls:
             - [initTaskStructure, []]
             - [setDefaultServers, [%gearman.servers%]]
-            - [setGearmanCallbacks, [@gearman.callbacks]]
+            - [setGearmanCallbacksDispatcher, [@gearman.dispatcher.callbacks]]
             - [setUniqueJobIdentifierGenerator, [@gearman.unique_job_identifier]]
             - [setDefaultSettings, [%gearman.default.settings%]]

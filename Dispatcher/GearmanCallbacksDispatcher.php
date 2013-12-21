@@ -7,11 +7,11 @@
  * @since 2013
  */
 
-namespace Mmoreram\GearmanBundle\Service;
+namespace Mmoreram\GearmanBundle\Dispatcher;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use GearmanTask;
 
+use Mmoreram\GearmanBundle\Dispatcher\Abstracts\AbstractGearmanDispatcher;
 use Mmoreram\GearmanBundle\GearmanEvents;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackCompleteEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackFailEvent;
@@ -27,27 +27,8 @@ use Mmoreram\GearmanBundle\Event\GearmanClientCallbackWorkloadEvent;
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class GearmanCallbacks
+class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
 {
-
-    /**
-     * @var EventDispatcherInterface
-     *
-     * Event dispatcher
-     */
-    private $eventDispatcher;
-
-
-    /**
-     * Construct method
-     *
-     * @param EventDispatcherInterface $eventDispatcher Event dispatcher
-     */
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
-    }
-
 
     /**
      * Assign all GearmanClient callbacks as Symfony2 events

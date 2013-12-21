@@ -13,6 +13,7 @@ use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Mmoreram\GearmanBundle\GearmanMethods;
 use Mmoreram\GearmanBundle\Module\JobStatus;
 use Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator;
+use Mmoreram\GearmanBundle\Dispatcher\GearmanCallbacksDispatcher;
 
 /**
  * GearmanClient. Implementation of AbstractGearmanService
@@ -21,11 +22,11 @@ class GearmanClient extends AbstractGearmanService
 {
 
     /**
-     * @var GearmanCallbacks
+     * @var GearmanCallbacksDispatcher
      *
-     * Gearman callbacks
+     * Gearman callbacks dispatcher
      */
-    protected $gearmanCallbacks;
+    protected $gearmanCallbacksDisparcher;
 
 
     /**
@@ -113,13 +114,13 @@ class GearmanClient extends AbstractGearmanService
     /**
      * Set gearman callbacks
      *
-     * @param GearmanCallbacks $gearmanCallbacks Gearman callbacks
+     * @param GearmanCallbacksDispatcher $gearmanCallbacksDispatcher Gearman callbacks dispatcher
      *
      * @return GearmanClient self Object
      */
-    public function setGearmanCallbacks(GearmanCallbacks $gearmanCallbacks)
+    public function setGearmanCallbacksDispatcher(GearmanCallbacksDispatcher $gearmanCallbacksDispatcher)
     {
-        $this->gearmanCallbacks = $gearmanCallbacks;
+        $this->gearmanCallbacksDispatcher = $gearmanCallbacksDispatcher;
 
         return $this;
     }
@@ -608,7 +609,8 @@ class GearmanClient extends AbstractGearmanService
         $this->assignServers($gearmanClient);
 
         if ($this->settings['callbacks']) {
-            $this->gearmanCallbacks->assignTaskCallbacks($gearmanClient);
+
+            $this->gearmanCallbacksDispatcher->assignTaskCallbacks($gearmanClient);
         }
 
         foreach ($this->taskStructure as $task) {
