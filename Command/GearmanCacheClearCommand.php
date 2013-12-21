@@ -48,9 +48,11 @@ class GearmanCacheClearCommand extends ContainerAwareCommand
     {
         $output->writeln('Clearing the cache for the ' . $this->getContainer()->get('kernel')->getEnvironment() . ' environment');
 
+        /**
+         * By requesting service, cache is loaded on the fly
+         */
         $this
             ->getContainer()
-            ->get('gearman.cache.wrapper')
-            ->flush();
+            ->get('gearman.cache.wrapper');
     }
 }

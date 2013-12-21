@@ -17,4 +17,11 @@ parameters:
     gearman.callbacks.class:        Mmoreram\GearmanBundle\Service\GearmanCallbacks
     gearman.execute.class:          Mmoreram\GearmanBundle\Service\GearmanExecute
     gearman.describer.class:        Mmoreram\GearmanBundle\Service\GearmanDescriber
+    gearman.parser.class:           Mmoreram\GearmanBundle\Service\GearmanParser
     gearman.cache.wrapper.class:    Mmoreram\GearmanBundle\Service\GearmanCacheWrapper
+
+    #
+    # External
+    #
+    gearman.external.finder.class:          Symfony\Component\Finder\Finder
+    gearman.external.finder.factory.class:  Symfony\Component\Finder\Finder

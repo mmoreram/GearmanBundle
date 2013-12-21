@@ -102,26 +102,29 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
 
-        $this->reflectionClass = $this  ->getMockBuilder('\ReflectionClass')
-                                        ->disableOriginalConstructor()
-                                        ->setMethods(array(
-                                            'getName',
-                                            'getNamespaceName',
-                                            'getFileName',
-                                            'getMethods',
-                                        ))
-                                        ->getMock();
+        $this->reflectionClass = $this  
+            ->getMockBuilder('\ReflectionClass')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'getName',
+                'getNamespaceName',
+                'getFileName',
+                'getMethods',
+            ))
+                            ->getMock();
 
-        $this->workAnnotation = $this   ->getMockBuilder('\Mmoreram\GearmanBundle\Driver\Gearman\Work')
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
+        $this->workAnnotation = $this
+            ->getMockBuilder('\Mmoreram\GearmanBundle\Driver\Gearman\Work')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->reader = $this   ->getMockBuilder('Doctrine\Common\Annotations\SimpleAnnotationReader')
-                                ->disableOriginalConstructor()
-                                ->setMethods(array(
-                                    'getMethodAnnotations'
-                                ))
-                                ->getMock();
+        $this->reader = $this   
+            ->getMockBuilder('Doctrine\Common\Annotations\SimpleAnnotationReader')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'getMethodAnnotations'
+            ))
+            ->getMock();
     }
 
 

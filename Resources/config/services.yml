@@ -1,6 +1,17 @@
 services:
 
     #
+    # External
+    #
+    gearman.external.finder.factory:
+        class: %gearman.external.finder.factory.class%
+
+    gearman.external.finder:
+        class: %gearman.external.finder.class%
+        factory_service: gearman.external.finder.factory
+        factory_method: create
+
+    #
     # Generators
     #
     gearman.unique_job_identifier:
@@ -11,18 +22,24 @@ services:
     #
     # Services
     #
-    gearman.cache.wrapper:
-        class: %gearman.cache.wrapper.class%
+    gearman.parser:
+        class: %gearman.parser.class%
         arguments:
             kernel: @kernel
-            gearman_cache: @liip_doctrine_cache.ns.gearman
-            gearman_cache_id: %gearman.cache.id%
+            annotations_reader: @annotation_reader
+            gearman_finder: @gearman.external.finder
             gearman_bundles: %gearman.bundles%
             gearman_servers: %gearman.servers%
             gearman_default_settings: %gearman.default.settings%
+
+    gearman.cache.wrapper:
+        class: %gearman.cache.wrapper.class%
+        arguments:
+            gearman_parser: @gearman.parser
+            gearman_cache: @liip_doctrine_cache.ns.gearman
+            gearman_cache_id: %gearman.cache.id%
         calls:
-            - [loadNamespaceMap,  []]
-            - [load,  []]
+            - [load,  [@liip_doctrine_cache.ns.gearman, %gearman.cache.id%]]
         tags:
             - { name: kernel.cache_clearer }
             - { name: kernel.cache_warmer, priority: 0 }

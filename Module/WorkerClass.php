@@ -9,7 +9,7 @@
 
 namespace Mmoreram\GearmanBundle\Module;
 
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use ReflectionClass;
 
 use Mmoreram\GearmanBundle\Module\JobCollection;
@@ -126,13 +126,13 @@ class WorkerClass
     /**
      * Retrieves all jobs available from worker
      *
-     * @param WorkAnnotation         $workAnnotation  workAnnotation class
-     * @param ReflectionClass        $reflectionClass Reflexion class
-     * @param SimpleAnnotationReader $reader          ReaderAnnotation class
-     * @param array                  $servers         Array of servers defined for Worker
-     * @param array                  $defaultSettings Default settings for Worker
+     * @param WorkAnnotation  $workAnnotation  workAnnotation class
+     * @param ReflectionClass $reflectionClass Reflexion class
+     * @param Reader          $reader          Reader class
+     * @param array           $servers         Array of servers defined for Worker
+     * @param array           $defaultSettings Default settings for Worker
      */
-    public function __construct(WorkAnnotation $workAnnotation, ReflectionClass $reflectionClass, SimpleAnnotationReader $reader, array $servers, array $defaultSettings)
+    public function __construct(WorkAnnotation $workAnnotation, ReflectionClass $reflectionClass, Reader $reader, array $servers, array $defaultSettings)
     {
 
         $this->namespace = $reflectionClass->getNamespaceName();
@@ -251,12 +251,12 @@ class WorkerClass
     /**
      * Creates job collection of worker
      *
-     * @param ReflectionClass        $reflectionClass Reflexion class
-     * @param SimpleAnnotationReader $reader          ReaderAnnotation class
+     * @param ReflectionClass $reflectionClass Reflexion class
+     * @param Reader          $reader          ReaderAnnotation class
      *
      * @return WorkerClass self Object
      */
-    private function createJobCollection(ReflectionClass $reflectionClass, SimpleAnnotationReader $reader)
+    private function createJobCollection(ReflectionClass $reflectionClass, Reader $reader)
     {
         $jobCollection = new JobCollection;
 

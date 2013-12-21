@@ -51,7 +51,6 @@ class GearmanCacheWarmupCommand extends ContainerAwareCommand
         $this
             ->getContainer()
             ->get('gearman.cache.wrapper')
-            ->flush()
-            ->load();
+            ->clear('');
     }
 }

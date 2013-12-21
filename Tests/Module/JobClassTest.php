@@ -85,16 +85,18 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
 
-        $this->reflectionMethod = $this->getMockBuilder('\ReflectionMethod')
-                                            ->disableOriginalConstructor()
-                                            ->setMethods(array(
-                                                'getName',
-                                            ))
-                                            ->getMock();
+        $this->reflectionMethod = $this
+            ->getMockBuilder('\ReflectionMethod')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'getName',
+            ))
+            ->getMock();
 
-        $this->jobAnnotation = $this->getMockBuilder('\Mmoreram\GearmanBundle\Driver\Gearman\Job')
-                                    ->disableOriginalConstructor()
-                                    ->getMock();
+        $this->jobAnnotation = $this
+            ->getMockBuilder('\Mmoreram\GearmanBundle\Driver\Gearman\Job')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
 
