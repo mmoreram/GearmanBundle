@@ -76,14 +76,6 @@ class GearmanParser
     /**
      * @var array
      *
-     * WorkerCollection with all workers and jobs available
-     */
-    private $workerCollection;
-
-
-    /**
-     * @var array
-     *
      * Collection of servers to connect
      */
     private $servers;

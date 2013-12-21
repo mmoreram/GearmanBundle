@@ -28,7 +28,7 @@ class GearmanParserTest extends \PHPUnit_Framework_TestCase
      * 
      * Bundle mock
      */
-    private $bundle;
+    private $bundleMock;
 
 
     /**
