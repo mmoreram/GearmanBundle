@@ -9,6 +9,8 @@
 
 namespace Mmoreram\GearmanBundle\Generator;
 
+use Mmoreram\GearmanBundle\Exceptions\WorkerNameTooLongException;
+
 /**
  * Job Unique Key generator
  *
