@@ -388,7 +388,6 @@ class GearmanClient extends AbstractGearmanService
      */
     public function doLowJob($name, $params = '', $unique = null)
     {
-
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOLOW, $unique);
     }
 
