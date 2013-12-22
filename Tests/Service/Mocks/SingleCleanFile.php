@@ -1,6 +1,6 @@
 <?php
 
-namespace My\File\Namespace;
+namespace Mmoreram\GearmanBundle\Tests\Service\Mocks;
 
 /**
  * Doc

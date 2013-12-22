@@ -9,6 +9,8 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Service;
 
+use Mmoreram\GearmanBundle\Module\WorkerCollection;
+
 /**
  * Tests JobClassTest class
  */
@@ -81,7 +83,7 @@ class GearmanParserTest extends \PHPUnit_Framework_TestCase
             ->setMethods(null)
             ->getMock();
 
-        $this->assertEquals('My\File\Namespace\SingleCleanFile', $gearmanParser->getFileClassNamespace($mockNamespace));
+        $this->assertEquals('Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCleanFile', $gearmanParser->getFileClassNamespace($mockNamespace));
     }
 
 
@@ -98,7 +100,7 @@ class GearmanParserTest extends \PHPUnit_Framework_TestCase
             ->setMethods(null)
             ->getMock();
 
-        $this->assertEquals('My\File\Namespace\SingleCommentedFile', $gearmanParser->getFileClassNamespace($mockNamespace));
+        $this->assertEquals('Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCommentedFile', $gearmanParser->getFileClassNamespace($mockNamespace));
     }
 
 
@@ -210,8 +212,9 @@ class GearmanParserTest extends \PHPUnit_Framework_TestCase
     public function testLoadNamespaceMapBoth()
     {
 
-        $this->bundleMock
-            ->expects($this->any())
+        $this
+            ->bundleMock
+            ->expects($this->once())
             ->method('getPath')
             ->will($this->returnValue($this->bundlePath));
 
@@ -247,4 +250,96 @@ class GearmanParserTest extends \PHPUnit_Framework_TestCase
             'libs',
         ));
     }
+
+
+    /**
+     * Testing parseNamespaceMap with empty paths
+     */
+    public function testParseNamespaceMapEmptyPaths()
+    {
+        $paths = array();
+        $excludedPaths = array();
+
+        $reader = $this
+            ->getMockBuilder('\Doctrine\Common\Annotations\Reader')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $finder = $this
+            ->getMockBuilder('\Symfony\Component\Finder\Finder')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'files',
+            ))
+            ->getMock();
+
+        $finder
+            ->expects($this->any())
+            ->method('getPath');
+
+        $workerCollection = $this
+            ->gearmanParser
+            ->parseNamespaceMap($finder, $reader, $paths, $excludedPaths);
+
+        $this->assertEquals($workerCollection, new workerCollection());
+    }
+
+
+    /**
+     * Testing parseNamespaceMap with some paths
+     */
+    public function testParseNamespaceMapSomePaths()
+    {
+        $this->gearmanParser = $this
+            ->getMockBuilder('\Mmoreram\GearmanBundle\Service\GearmanParser')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'parseFiles',
+            ))
+            ->getMock();
+
+        $paths = array(
+            dirname(__FILE__) . '/Mocks/',
+
+        );
+        $excludedPaths = array();
+
+        $reader = $this
+            ->getMockBuilder('\Doctrine\Common\Annotations\SimpleAnnotationReader')
+            ->setMethods(null)
+            ->getMock();
+
+        $finder = $this
+            ->getMockBuilder('\Symfony\Component\Finder\Finder')
+            ->setMethods(null)
+            ->getMock();
+
+        $this
+            ->gearmanParser
+            ->expects($this->once())
+            ->method('parseFiles')
+            ->with(
+                $this->equalTo($finder),
+                $this->equalTo($reader),
+                $this->equalTo(new WorkerCollection)
+            );
+
+        $workerCollection = $this
+            ->gearmanParser
+            ->parseNamespaceMap($finder, $reader, $paths, $excludedPaths);
+
+        $this->assertEquals($workerCollection, new workerCollection());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

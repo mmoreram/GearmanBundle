@@ -14,7 +14,7 @@
  * @author Marc Morera
  */
 
-namespace My\File\Namespace;
+namespace Mmoreram\GearmanBundle\Tests\Service\Mocks;
 
 /**
  * Some class comments
