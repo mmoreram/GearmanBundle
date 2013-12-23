@@ -1,0 +1,8 @@
+framework:
+    secret: "shdhkajshdjhsjdjsahdkjas"
+    test: true
+
+liip_doctrine_cache:
+   namespaces:
+      gearman:
+         type: file_system

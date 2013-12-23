@@ -2,24 +2,26 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
 
 namespace Mmoreram\GearmanBundle\Tests\Service;
 
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
 use Mmoreram\GearmanBundle\Module\WorkerCollection;
 
 /**
- * Tests JobClassTest class
+ * Tests GearmanParser class
  */
-class GearmanParserTest extends \PHPUnit_Framework_TestCase
+class GearmanParserTest extends WebTestCase
 {
 
     /**
      * @var GearmanParser
-     * 
+     *
      * GearmanParser mock
      */
     private $gearmanParser;
@@ -27,7 +29,7 @@ class GearmanParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var Bundle
-     * 
+     *
      * Bundle mock
      */
     private $bundleMock;
@@ -35,7 +37,7 @@ class GearmanParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var array
-     * 
+     *
      * KernelBundles
      */
     private $kernelBundles;
@@ -43,7 +45,7 @@ class GearmanParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var string
-     * 
+     *
      * Bundle path
      */
     private $bundlePath = '/my/bundle/path';
@@ -67,6 +69,17 @@ class GearmanParserTest extends \PHPUnit_Framework_TestCase
                 'getPath'
             ))
             ->getMock();
+    }
+
+
+    /**
+     * Test service can be instanced through container
+     */
+    public function testGearmanParserLoadFromContainer()
+    {
+        static::$kernel = static::createKernel();
+        static::$kernel->boot();
+        $this->assertInstanceOf('\Mmoreram\GearmanBundle\Service\GearmanParser', static::$kernel->getContainer()->get('gearman.parser'));
     }
 
 

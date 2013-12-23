@@ -28,5 +28,4 @@ parameters:
     #
     # External
     #
-    gearman.external.finder.class:          Symfony\Component\Finder\Finder
-    gearman.external.finder.factory.class:  Symfony\Component\Finder\Finder
+    gearman.external.finder.class:  Symfony\Component\Finder\Finder

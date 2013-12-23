@@ -9,6 +9,8 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Generator;
 
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
 use Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator;
 
 /**
@@ -16,8 +18,19 @@ use Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator;
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
-class UniqueJobIdentifierGeneratorTest extends \PHPUnit_Framework_TestCase
+class UniqueJobIdentifierGeneratorTest extends WebTestCase
 {
+
+    /**
+     * Test service can be instanced through container
+     */
+    public function testGearmanClientLoadFromContainer()
+    {
+        static::$kernel = static::createKernel();
+        static::$kernel->boot();
+        $this->assertInstanceOf('\Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator', static::$kernel->getContainer()->get('gearman.unique_job_identifier'));
+    }
+
 
     /**
      * Tests all cases when GenerateUniqueKey is false

@@ -3,13 +3,8 @@ services:
     #
     # External
     #
-    gearman.external.finder.factory:
-        class: %gearman.external.finder.factory.class%
-
     gearman.external.finder:
         class: %gearman.external.finder.class%
-        factory_service: gearman.external.finder.factory
-        factory_method: create
 
     #
     # Generators
