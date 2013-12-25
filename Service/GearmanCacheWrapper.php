@@ -9,19 +9,9 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
-use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
-use ReflectionClass;
-
-use Mmoreram\GearmanBundle\Module\WorkerCollection;
-use Mmoreram\GearmanBundle\Module\WorkerClass as Worker;
-use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
 
 /**
  * Gearman cache loader class
