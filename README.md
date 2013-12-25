@@ -526,8 +526,8 @@ $gearman
 * setServer: Clean server list and set new server to requested client
 * clearServers: Clear server list
 
-> By default, if no server is set, gearman will use server defined as default in config.yml
-> host: *127.0.0.1*
+> By default, if no server is set, gearman will use server defined as default in config.yml  
+> host: *127.0.0.1*  
 > port: *4730*
 
 ## Request a job
