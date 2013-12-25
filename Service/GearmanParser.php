@@ -12,7 +12,6 @@ namespace Mmoreram\GearmanBundle\Service;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionClass;
 
 use Mmoreram\GearmanBundle\Module\WorkerCollection;
