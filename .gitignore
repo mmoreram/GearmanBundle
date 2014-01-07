@@ -1,10 +1,7 @@
-build
-phpunit.xml
-Resources/doc/_build/*
-coverage
-composer.lock
-vendor
-composer.phar
-phpcs.log
 Tests/Functional/cache
 Tests/Functional/logs
+composer.lock
+composer.phar
+phpunit.xml
+phpcs.log
+vendor

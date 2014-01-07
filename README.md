@@ -17,6 +17,7 @@ Table of contents
     * [Installing Gearman](#installing-gearman)
     * [Installing GearmanBundle](#installing-gearmanbundle)
     * [Configuration](#configuration)
+    * [Tests](#tests)
 2. [Definition of Workers](#definition-of-workers)
     * [Worker Annotations](#worker-annotations)
     * [Job Annotations](#job-annotations)
@@ -48,8 +49,9 @@ Installing/Configuring
 -----
 ## Tags
 
-* Use version `2.3-dev` for last updated. Alias of `dev-master`.
+* Use last unstable version ( alias of `dev-master` ) to stay always in last commit
 * Use last stable version tag to stay in a stable release.
+* [![Latest Unstable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/unstable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)  [![Latest Stable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
 
 > As long as Symfony2 versions 2.1 and 2.2 are not maintained anymore, and
 > as long as these branches had same code than master branch, they all have been deleted
@@ -58,27 +60,27 @@ Installing/Configuring
 
 To install Gearman Job Server with `apt-get` use the following commands:
 
-```
-sudo apt-get install gearman-job-server
+``` bash
+$ sudo apt-get install gearman-job-server
 ```
 
 And start server
 
-```
-service gearman-job-server start
+``` bash
+$ service gearman-job-server start
 ```
 
 Then you need to install **Gearman driver** using the following commands
 
-```
-pecl install channel://pecl.php.net/gearman-X.X.X
+``` bash
+$ pecl install channel://pecl.php.net/gearman-X.X.X
 ```
 
 You will find all available gearman versions in [Pear Repository](http://pecl.php.net/package/gearman)
 Finally you need to start php module
 
-```
-echo "extension=gearman.so" > /etc/php5/conf.d/gearman.ini
+``` bash
+$ echo "extension=gearman.so" > /etc/php5/conf.d/gearman.ini
 ```
 
 ## Installing [GearmanBundle](https://github.com/mmoreram/GearmanBundle)
@@ -96,8 +98,9 @@ You have to add require line into you composer.json file
 
 Then you have to use composer to update your project dependencies
 
-```
-php composer.phar update
+``` bash
+$ curl -sS https://getcomposer.org/installer | php
+$ php composer.phar update
 ```
 
 And register the bundle in your appkernel.php file
@@ -209,6 +212,13 @@ liip_doctrine_cache:
     namespaces:
         presta_sitemap:
             type: array
+```
+
+## Tests
+You can test this bundle with this command
+
+``` bash
+$ php vendor/phpunit/phpunit/phpunit.php
 ```
 
 Definition of Workers
@@ -358,24 +368,26 @@ class AcmeService
 
 And have this service defined in your dependency injection definition file
 
-    # /Resources/config/services.yml
-    bundles:
-        Services:
-            myServiceName:
-                class: Acme\AcmeBundle\Services\AcmeService
-                arguments:
-                    event_dispatcher: @event_dispatcher
-                    mailer: @mailer
-
+``` yml
+# /Resources/config/services.yml
+bundles:
+   Services:
+      myServiceName:
+         class: Acme\AcmeBundle\Services\AcmeService
+         arguments:
+            event_dispatcher: @event_dispatcher
+            mailer: @mailer
+```
 
 Running your Jobs
 -----
 
 Gearman provides a set of commands that will make easier to know all workers settings.
 
+``` bash
+$ php app/console
 ```
-/app/console
-
+```
 gearman
     gearman:cache:clear                   Clears gearman cache data on current environment
     gearman:cache:warmup                  Warms up gearman cache data
@@ -390,9 +402,10 @@ gearman
 
 Once all your workers are defined, you can simply list them to ensure all settings are correct.
 
+``` bash
+$ php app/console gearman:workers:list
 ```
-/app/console gearman:workers:list
-
+```
 @Worker:  Mmoreramerino\TestBundle\Services\AcmeWorker
 callablename:  MmoreramerinoTestBundleServicesMyAcmeWorker
 Jobs:
@@ -407,9 +420,10 @@ You can describe full worker using its callableName.
 This command provides you all information about desired Worker, overwritting custom annotation settings to default config settings.
 This command also provides you all needed information to work with Supervisord.
 
+``` bash
+$ php app/console gearman:worker:describe MmoreramerinoTestBundleServicesMyAcmeWorker
 ```
-php app/console gearman:worker:describe MmoreramerinoTestBundleServicesMyAcmeWorker
-
+```
 @Worker\className : Mmoreramerino\TestBundle\Services\AcmeWorker
 @Worker\fileName : /var/www/projects/myrepo/src/Mmoreramerino/TestBundle/Services/AcmeWorker.php
 @Worker\nameSpace : Mmoreramerino\TestBundle\Services
@@ -434,9 +448,10 @@ You can also describe full job using also its callableName
 This command provides you all information about desired Job, overwritting custom annotation settings to worker settings.
 This command also provides you all needed information to work with Supervisord.
 
+``` bash
+$ php app/console gearman:job:describe MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething
 ```
-php app/console gearman:job:describe MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething
-
+```
 @Worker\className : Mmoreramerino\TestBundle\Services\AcmeWorker
 @Worker\fileName : /var/www/projects/myrepo/src/Mmoreramerino/TestBundle/Services/AcmeWorker.php
 @Worker\nameSpace : Mmoreramerino\TestBundle\Services
@@ -473,9 +488,9 @@ php app/console gearman:job:describe MmoreramerinoTestBundleServicesMyAcmeWorker
 You can execute by command line an instance of a worker or a job.
 The difference between them is that an instance of a worker can execute any of their jobs, without assignning any priority to them, and a job only can run itself.
 
-```
-php app/console gearman:worker:execute MmoreramerinoTestBundleServicesMyAcmeWorker
-php app/console gearman:job:execute MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething
+``` bash
+$ php app/console gearman:worker:execute MmoreramerinoTestBundleServicesMyAcmeWorker
+$ php app/console gearman:job:execute MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething
 ```
 
 > By using callableName you can let Supervisord maintain alive a worker.
@@ -526,8 +541,8 @@ $gearman
 * setServer: Clean server list and set new server to requested client
 * clearServers: Clear server list
 
-> By default, if no server is set, gearman will use server defined as default in config.yml
-> host: *127.0.0.1*
+> By default, if no server is set, gearman will use server defined as default in config.yml  
+> host: *127.0.0.1*  
 > port: *4730*
 
 ## Request a job
@@ -735,8 +750,8 @@ Cache
 
 GearmanBundle caches all annotations. You can clear or warmup just gearman cache by using custom commands
 
-```
-/app/console
+``` bash
+$ php app/console
 
 gearman
     gearman:cache:clear                   Clears gearman cache data on current environment
@@ -745,8 +760,8 @@ gearman
 
 Gearman also clear and warmup cache when using Symfony2 cache commands
 
-```
-/app/console
+``` bash
+$ php app/console
 
 cache
     cache:clear                           Clears the cache
