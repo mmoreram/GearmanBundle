@@ -124,7 +124,7 @@ class GearmanParserTest extends WebTestCase
     {
 
         $this->bundleMock
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getPath')
             ->will($this->returnValue($this->bundlePath));
 
@@ -154,7 +154,7 @@ class GearmanParserTest extends WebTestCase
     {
 
         $this->bundleMock
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getPath')
             ->will($this->returnValue($this->bundlePath));
 
@@ -190,7 +190,7 @@ class GearmanParserTest extends WebTestCase
     {
 
         $this->bundleMock
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getPath')
             ->will($this->returnValue($this->bundlePath));
 
@@ -287,7 +287,7 @@ class GearmanParserTest extends WebTestCase
             ->getMock();
 
         $finder
-            ->expects($this->any())
+            ->expects($this->never())
             ->method('getPath');
 
         $workerCollection = $this

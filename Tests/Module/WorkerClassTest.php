@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -22,7 +22,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var WorkAnnotation
-     * 
+     *
      * Worker annotation driver
      */
     private $workAnnotation;
@@ -30,7 +30,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var \ReflectionClass
-     * 
+     *
      * Reflection Class
      */
     private $reflectionClass;
@@ -38,7 +38,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var Reader
-     * 
+     *
      * Reader
      */
     private $reader;
@@ -46,7 +46,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var string
-     * 
+     *
      * Class namespace
      */
     private $classNamespace = 'MyClassNamespace';
@@ -54,7 +54,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var string
-     * 
+     *
      * Class name
      */
     private $className = 'myClass';
@@ -62,7 +62,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var string
-     * 
+     *
      * Filename
      */
     private $fileName = 'myClass.php';
@@ -70,7 +70,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var array
-     * 
+     *
      * Servers list
      */
     private $servers = array(
@@ -83,7 +83,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var array
-     * 
+     *
      * Default settings
      */
     private $defaultSettings = array(
@@ -130,9 +130,9 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Testing scenario with all Job annotations filled
-     * 
+     *
      * All settings given in annotations should be considered to configure Job
-     * 
+     *
      * Also testing server definition in JobAnnotation as an array of arrays ( multi server )
      */
     public function testWorkerAnnotationsDefined()
@@ -164,7 +164,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
         $this
             ->reader
-            ->expects($this->any())
+            ->expects($this->never())
             ->method('getMethodAnnotations');
 
         $this->workAnnotation->name = 'myOtherWorkerName';
@@ -197,9 +197,9 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Testing scenario with any Job annotation filled
-     * 
+     *
      * All settings set as default should be considered to configure Job
-     * 
+     *
      * Also testing empty server definition in JobAnnotation
      */
     public function testWorkerAnnotationsEmpty()
@@ -231,7 +231,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
         $this
             ->reader
-            ->expects($this->any())
+            ->expects($this->never())
             ->method('getMethodAnnotations');
 
         $workerClass = new WorkerClass($this->workAnnotation, $this->reflectionClass, $this->reader, $this->servers, $this->defaultSettings);
@@ -282,7 +282,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
 
         $this
             ->reader
-            ->expects($this->any())
+            ->expects($this->never())
             ->method('getMethodAnnotations');
 
         $this->workAnnotation->servers = array(
