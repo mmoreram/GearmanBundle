@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -18,85 +18,100 @@ class JobStatusTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * Testing when job does not exist
+     * Testing job status
+     *
+     * @dataProvider dataProvider
      */
-    public function testJobStatusNonExistant()
+    public function testJobStatusNonExistant($known, $running, $completed, $completionTotal, $isKnown, $isRunning, $getCompleted, $getCompletionTotal, $getCompletionPercent, $isFinished)
     {
         $jobStatus = new JobStatus(array(
-            false,
-            false,
-            null,
-            null
+            $known,
+            $running,
+            $completed,
+            $completionTotal
         ));
 
-        $this->assertFalse($jobStatus->isKnown());
-        $this->assertFalse($jobStatus->isRunning());
-        $this->assertEquals($jobStatus->getCompleted(), 0);
-        $this->assertEquals($jobStatus->getCompletionTotal(), 0);
-        $this->assertEquals($jobStatus->getCompletionPercent(), 0);
-        $this->assertFalse($jobStatus->isFinished());
+        $this->assertEquals($jobStatus->isKnown(), $isKnown);
+        $this->assertEquals($jobStatus->isRunning(), $isRunning);
+        $this->assertEquals($jobStatus->getCompleted(), $getCompleted);
+        $this->assertEquals($jobStatus->getCompletionTotal(), $getCompletionTotal);
+        $this->assertEquals($jobStatus->getCompletionPercent(), $getCompletionPercent);
+        $this->assertEquals($jobStatus->isFinished(), $isFinished);
     }
 
 
     /**
-     * Testing when job is started
+     * Data provider
      */
-    public function testJobStatusStarted()
+    public function dataProvider()
     {
-        $jobStatus = new JobStatus(array(
-            true,
-            true,
-            0,
-            10
-        ));
+        return array(
 
-        $this->assertTrue($jobStatus->isKnown());
-        $this->assertTrue($jobStatus->isRunning());
-        $this->assertEquals($jobStatus->getCompleted(), 0);
-        $this->assertEquals($jobStatus->getCompletionTotal(), 10);
-        $this->assertEquals($jobStatus->getCompletionPercent(), 0);
-        $this->assertFalse($jobStatus->isFinished());
-    }
+            /**
+             * Testing when job does not exist
+             */
+            array(
+                false,
+                false,
+                null,
+                null,
+                false,
+                false,
+                0,
+                0,
+                0,
+                false
+            ),
+
+            /**
+             * Testing when job is started
+             */
+            array(
+                true,
+                true,
+                0,
+                10,
+                true,
+                true,
+                0,
+                10,
+                0,
+                false
+            ),
+
+            /**
+             * Testing when job is still running
+             */
+            array(
+                true,
+                true,
+                5,
+                10,
+                true,
+                true,
+                5,
+                10,
+                0.5,
+                false
+            ),
+
+            /**
+             * Testing when job is already finished
+             */
+            array(
+                true,
+                false,
+                10,
+                10,
+                true,
+                false,
+                10,
+                10,
+                1,
+                true
+            ),
 
 
-    /**
-     * Testing when job is still running
-     */
-    public function testJobStatusRunning()
-    {
-        $jobStatus = new JobStatus(array(
-            true,
-            true,
-            5,
-            10
-        ));
-
-        $this->assertTrue($jobStatus->isKnown());
-        $this->assertTrue($jobStatus->isRunning());
-        $this->assertEquals($jobStatus->getCompleted(), 5);
-        $this->assertEquals($jobStatus->getCompletionTotal(), 10);
-        $this->assertEquals($jobStatus->getCompletionPercent(), 0.5);
-        $this->assertFalse($jobStatus->isFinished());
-    }
-
-
-    /**
-     * Testing when job is already finished
-     */
-    public function testJobStatusFinished()
-    {
-        $jobStatus = new JobStatus(array(
-            true,
-            false,
-            10,
-            10
-        ));
-
-        $this->assertTrue($jobStatus->isKnown());
-        $this->assertFalse($jobStatus->isRunning());
-        $this->assertEquals($jobStatus->getCompleted(), 10);
-        $this->assertEquals($jobStatus->getCompletionTotal(), 10);
-        $this->assertEquals($jobStatus->getCompletionPercent(), 1);
-        $this->assertTrue($jobStatus->isFinished());
+        );
     }
 }
