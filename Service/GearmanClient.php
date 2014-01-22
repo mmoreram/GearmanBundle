@@ -281,7 +281,7 @@ class GearmanClient extends AbstractGearmanService
     public function callJob($name, $params = '', $unique = null)
     {
        $worker = $this->getJob($name);
-       $methodCallable = $worker['job']['defaultMethod'] . 'Job';
+       $methodCallable = $worker['job']['defaultMethod'];
 
        return $this->enqueue($name, $params, $methodCallable, $unique);
     }
