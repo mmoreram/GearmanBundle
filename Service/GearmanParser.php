@@ -265,7 +265,7 @@ class GearmanParser
      */
     public function getFileClassNamespace($file)
     {
-        $filenameBlock = explode('/', $file);
+        $filenameBlock = explode(DIRECTORY_SEPARATOR, $file);
         $filename = explode('.', end($filenameBlock), 2);
         $filename = reset($filename);
 
