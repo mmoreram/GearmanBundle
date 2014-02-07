@@ -2,6 +2,5 @@ Tests/Functional/cache
 Tests/Functional/logs
 composer.lock
 composer.phar
-phpunit.xml
 phpcs.log
 vendor

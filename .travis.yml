@@ -5,10 +5,6 @@ php:
     - 5.4
     - 5.5
 
-matrix:
-    allow_failures:
-        - php: 5.5
-
 before_script:
   - sh -c "sudo apt-get install uuid-dev"
   - curl -L -o libevent-1.4.14b-stable.tar.gz https://github.com/downloads/libevent/libevent/libevent-1.4.14b-stable.tar.gz
@@ -24,7 +20,7 @@ before_script:
   - composer install --prefer-source --no-interaction
 
 script:
-  - phpunit -c phpunit.xml.dist --coverage-text
+  - phpunit -c phpunit.xml --coverage-text
 
 notifications:
     email: false
