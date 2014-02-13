@@ -39,7 +39,6 @@ class JobStatusTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($jobStatus->isFinished(), $isFinished);
     }
 
-
     /**
      * Data provider
      */
@@ -110,7 +109,6 @@ class JobStatusTest extends \PHPUnit_Framework_TestCase
                 1,
                 true
             ),
-
 
         );
     }

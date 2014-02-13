@@ -20,7 +20,7 @@ class WorkerNameTooLongException extends AbstractGearmanException
 
     /**
      * Construction method
-     * 
+     *
      * @param string    $message  Message
      * @param int       $code     Code
      * @param Exception $previous Previous

@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -33,7 +33,6 @@ class GearmanWorkerDescribeCommand extends ContainerAwareCommand
              ->setDescription('Describe given worker')
              ->addArgument('worker', InputArgument::REQUIRED, 'worker to describe');
     }
-
 
     /**
      * Executes the current command.

@@ -10,7 +10,7 @@
 
 /**
  * Some phpdoc
- * 
+ *
  * @author Marc Morera
  */
 

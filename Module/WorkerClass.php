@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -12,14 +12,13 @@ namespace Mmoreram\GearmanBundle\Module;
 use Doctrine\Common\Annotations\Reader;
 use ReflectionClass;
 
-use Mmoreram\GearmanBundle\Module\JobCollection;
 use Mmoreram\GearmanBundle\Module\JobClass as Job;
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
 
 /**
  * Worker class
- * 
+ *
  * This class provide all worker definition.
  */
 class WorkerClass
@@ -27,93 +26,82 @@ class WorkerClass
 
     /**
      * @var string
-     * 
+     *
      * Default description when is not defined
      */
     const DEFAULT_DESCRIPTION = 'No description is defined';
 
-
     /**
      * @var string
-     * 
+     *
      * Namespace of worker class
      */
     private $namespace;
 
-
     /**
      * @var string
-     * 
+     *
      * Class name of worker
      */
     private $className;
 
-
     /**
      * @var string
-     * 
+     *
      * Filename of worker
      */
     private $fileName;
 
-
     /**
      * @var string
-     * 
+     *
      * Callable name for this job.
      * If is setted on annotations, this value will be used.
      * Otherwise, natural method name will be used.
      */
     private $callableName;
 
-
     /**
      * @var string
-     * 
+     *
      * Service alias if this worker is wanted to be built by dependency injection
      */
     private $service;
 
-
     /**
      * @var string
-     * 
+     *
      * Description of Job
      */
     private $description;
 
-
     /**
      * @var integer
-     * 
+     *
      * Number of iterations this job will be alive before die
      */
     private $iterations;
 
-
     /**
      * @var string
-     * 
+     *
      * Default method this job will be call into Gearman client
      */
     private $defaultMethod;
 
-
     /**
      * @var array
-     * 
+     *
      * Collection of servers to connect
      */
     private $servers;
 
-
     /**
      * @var JobCollection
-     * 
+     *
      * All jobs inside Worker
      */
     private $jobCollection;
-
 
     /**
      * The prefix for all job names
@@ -121,7 +109,6 @@ class WorkerClass
      * @var string $jobPrefix
      */
     private $jobPrefix = null;
-
 
     /**
      * Retrieves all jobs available from worker
@@ -140,7 +127,7 @@ class WorkerClass
         /**
          * If WorkAnnotation name field is defined, workers_name_prepend_namespace value
          * in defaultSettings array must be checked.
-         * 
+         *
          * If true, namespace must be prepended to workAnnotation name for callableName
          * Otherwise, only workAnnotation value is set as callableName
          */
@@ -179,10 +166,9 @@ class WorkerClass
         $this->jobCollection = $this->createJobCollection($reflectionClass, $reader);
     }
 
-
     /**
      * Load servers
-     * 
+     *
      * If any server is defined in JobAnnotation, this one is used.
      * Otherwise is used servers set in Class
      *
@@ -206,11 +192,9 @@ class WorkerClass
         return $servers;
     }
 
-
-
     /**
      * Load iterations
-     * 
+     *
      * If iterations is defined in WorkAnnotation, this one is used.
      * Otherwise is used set in Class
      *
@@ -221,16 +205,14 @@ class WorkerClass
      */
     private function loadIterations(WorkAnnotation $workAnnotation, array $defaultSettings)
     {
-
         return  is_null($workAnnotation->iterations)
                 ? (int) $defaultSettings['iterations']
                 : (int) $workAnnotation->iterations;
     }
 
-
     /**
      * Load defaultMethod
-     * 
+     *
      * If defaultMethod is defined in WorkAnnotation, this one is used.
      * Otherwise is used set in Class
      *
@@ -241,12 +223,10 @@ class WorkerClass
      */
     private function loadDefaultMethod(WorkAnnotation $workAnnotation, array $defaultSettings)
     {
-
         return  is_null($workAnnotation->defaultMethod)
                 ? $defaultSettings['method']
                 : $workAnnotation->defaultMethod;
     }
-
 
     /**
      * Creates job collection of worker
@@ -292,7 +272,6 @@ class WorkerClass
 
         return $jobCollection;
     }
-
 
     /**
      * Retrieve all Worker data in cache format

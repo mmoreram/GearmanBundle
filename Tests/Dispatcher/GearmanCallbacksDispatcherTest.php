@@ -7,7 +7,7 @@
  * @since 2013
  */
 
-namespace Mmoreram\GearmanBundle\Tests\Service;
+namespace Mmoreram\GearmanBundle\Tests\Dispatcher;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

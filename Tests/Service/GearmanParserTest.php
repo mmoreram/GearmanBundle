@@ -26,14 +26,12 @@ class GearmanParserTest extends WebTestCase
      */
     private $gearmanParser;
 
-
     /**
      * @var Bundle
      *
      * Bundle mock
      */
     private $bundleMock;
-
 
     /**
      * @var array
@@ -42,14 +40,12 @@ class GearmanParserTest extends WebTestCase
      */
     private $kernelBundles;
 
-
     /**
      * @var string
      *
      * Bundle path
      */
     private $bundlePath = '/my/bundle/path';
-
 
     /**
      * Setup
@@ -71,7 +67,6 @@ class GearmanParserTest extends WebTestCase
             ->getMock();
     }
 
-
     /**
      * Test service can be instanced through container
      */
@@ -81,7 +76,6 @@ class GearmanParserTest extends WebTestCase
         static::$kernel->boot();
         $this->assertInstanceOf('\Mmoreram\GearmanBundle\Service\GearmanParser', static::$kernel->getContainer()->get('gearman.parser'));
     }
-
 
     /**
      * testing getFileClassNamespace
@@ -99,7 +93,6 @@ class GearmanParserTest extends WebTestCase
         $this->assertEquals('Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCleanFile', $gearmanParser->getFileClassNamespace($mockNamespace));
     }
 
-
     /**
      * testing getFileClassNamespace
      */
@@ -115,7 +108,6 @@ class GearmanParserTest extends WebTestCase
 
         $this->assertEquals('Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCommentedFile', $gearmanParser->getFileClassNamespace($mockNamespace));
     }
-
 
     /**
      * Testing parseNamespaceMap with empty paths
@@ -148,7 +140,6 @@ class GearmanParserTest extends WebTestCase
 
         $this->assertEquals($workerCollection, new workerCollection());
     }
-
 
     /**
      * Testing parseNamespaceMap with some paths
@@ -196,7 +187,6 @@ class GearmanParserTest extends WebTestCase
         $this->assertEquals($workerCollection, new workerCollection());
     }
 
-
     /**
      * Testing parseNamespaceMap with some paths
      *
@@ -227,7 +217,6 @@ class GearmanParserTest extends WebTestCase
         $this->assertEquals($paths, $expectedPaths);
         $this->assertEquals($excludedPaths, $expectedExcludedPaths);
     }
-
 
     /**
      * Load namespace map Data Provider
@@ -318,7 +307,5 @@ class GearmanParserTest extends WebTestCase
             )
         );
     }
-
-
 
 }

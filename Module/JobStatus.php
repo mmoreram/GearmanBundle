@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -16,40 +16,36 @@ class JobStatus
 {
 
     /**
-     * @var boolean 
-     * 
+     * @var boolean
+     *
      * Job is known
      */
     private $known;
 
-
     /**
      * @var boolean
-     * 
+     *
      * Job is running
      */
     private $running;
 
-
     /**
      * @var Integer
-     * 
+     *
      * Job completition
      */
     private $completed;
 
-
     /**
      * @var integer
-     * 
+     *
      * Job completition total
      */
     private $completionTotal;
 
-
     /**
      * Construct method
-     * 
+     *
      * @param array $response Response to parse
      */
     public function __construct(array $response)
@@ -66,10 +62,9 @@ class JobStatus
                                 : $response[3];
     }
 
-
     /**
      * Return if job is known
-     * 
+     *
      * @return boolean Job is still known
      */
     public function isKnown()
@@ -77,10 +72,9 @@ class JobStatus
         return $this->known;
     }
 
-
     /**
      * Return if job is still running
-     * 
+     *
      * @return boolean Jon is still running
      */
     public function isRunning()
@@ -88,10 +82,9 @@ class JobStatus
         return $this->running;
     }
 
-
     /**
      * Return completed value
-     * 
+     *
      * @return integer Completed
      */
     public function getCompleted()
@@ -99,10 +92,9 @@ class JobStatus
         return $this->completed;
     }
 
-
     /**
      * Return completition total
-     * 
+     *
      * @return integer Completition total
      */
     public function getCompletionTotal()
@@ -110,14 +102,13 @@ class JobStatus
         return $this->completionTotal;
     }
 
-
     /**
      * Return percent completed.
-     * 
+     *
      * 0 is not started or not known
      * 1 is finished
      * Between 0 and 1 is in process. Value is a float
-     * 
+     *
      * @return float Percent completed
      */
     public function getCompletionPercent()
@@ -132,10 +123,9 @@ class JobStatus
         return $percent;
     }
 
-
     /**
      * Return if job is still running
-     * 
+     *
      * @return boolean Jon is still running
      */
     public function isFinished()

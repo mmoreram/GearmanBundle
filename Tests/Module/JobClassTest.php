@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -11,7 +11,6 @@ namespace Mmoreram\GearmanBundle\Tests\Module;
 
 use Mmoreram\GearmanBundle\Module\JobClass;
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
-use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
 
 /**
  * Tests JobClassTest class
@@ -21,39 +20,35 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var Job
-     * 
+     *
      * Job annotation driver
      */
     private $jobAnnotation;
 
-
     /**
      * @var \ReflectionClass
-     * 
+     *
      * Reflection Method
      */
     private $reflectionMethod;
 
-
     /**
      * @var string
-     * 
+     *
      * Callable name
      */
     private $callableNameClass = 'MyClassCallablaName';
 
-
     /**
      * @var string
-     * 
+     *
      * Class name
      */
     private $methodName = 'myMethod';
 
-
     /**
      * @var array
-     * 
+     *
      * Servers list
      */
     private $servers = array(
@@ -63,10 +58,9 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
         ),
     );
 
-
     /**
      * @var array
-     * 
+     *
      * Default settings
      */
     private $defaultSettings = array(
@@ -77,7 +71,6 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
         'generate_unique_key' => true,
         'workers_name_prepend_namespace' => true,
     );
-
 
     /**
      * Setup
@@ -99,12 +92,11 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-
     /**
      * Testing scenario with all Job annotations filled
-     * 
+     *
      * All settings given in annotations should be considered to configure Job
-     * 
+     *
      * Also testing server definition in JobAnnotation as an array of arrays ( multi server )
      */
     public function testJobAnnotationsDefined()
@@ -142,12 +134,11 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-
     /**
      * Testing scenario with any Job annotation filled
-     * 
+     *
      * All settings set as default should be considered to configure Job
-     * 
+     *
      * Also testing empty server definition in JobAnnotation
      */
     public function testJobAnnotationsEmpty()
@@ -173,7 +164,6 @@ class JobClassTest extends \PHPUnit_Framework_TestCase
             'defaultMethod'                 =>  $this->defaultSettings['method'],
         ));
     }
-
 
     /**
      * Testing specific server scenario configured in Job annotations as a simple server

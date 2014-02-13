@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -29,7 +29,6 @@ class GearmanExecute extends AbstractGearmanService
      */
     private $container;
 
-
     /**
      * Set container
      *
@@ -42,7 +41,6 @@ class GearmanExecute extends AbstractGearmanService
 
         $this->container = $container;
     }
-
 
     /**
      * Executes a job given a jobName and given settings and annotations of job
@@ -59,12 +57,11 @@ class GearmanExecute extends AbstractGearmanService
         }
     }
 
-
     /**
      * Given a worker, execute GearmanWorker function defined by job.
      *
      * @param array $worker Worker definition
-     * 
+     *
      * @return GearmanExecute self Object
      */
     private function callJob(Array $worker)
@@ -90,19 +87,18 @@ class GearmanExecute extends AbstractGearmanService
         return $this;
     }
 
-
     /**
      * Given a worker settings, return Job instance
-     * 
+     *
      * @param array $worker Worker settings
-     * 
+     *
      * @return Object Job instance
      */
     private function createJob(array $worker)
     {
         /**
          * If service is defined, we must retrieve this class with dependency injection
-         * 
+         *
          * Otherwise we just create it with a simple new()
          */
         if ($worker['service']) {
@@ -116,7 +112,7 @@ class GearmanExecute extends AbstractGearmanService
             /**
              * If instance of given object is instanceof ContainerAwareInterface, we inject full container
              *  by calling container setter.
-             * 
+             *
              * @see https://github.com/mmoreram/gearman-bundle/pull/12
              */
             if ($objInstance instanceof ContainerAwareInterface) {
@@ -128,15 +124,14 @@ class GearmanExecute extends AbstractGearmanService
         return $objInstance;
     }
 
-
     /**
      * Given a GearmanWorker and an instance of Job, run it
-     * 
+     *
      * @param \GearmanWorker $gearmanWorker Gearman Worker
      * @param Object         $objInstance   Job instance
      * @param array          $jobs          Array of jobs to subscribe
      * @param integer        $iterations    Number of iterations
-     * 
+     *
      * @return GearmanExecute self Object
      */
     private function runJob(\GearmanWorker $gearmanWorker, $objInstance, array $jobs, $iterations)
@@ -176,7 +171,6 @@ class GearmanExecute extends AbstractGearmanService
 
     }
 
-
     /**
      * Adds into worker all defined Servers.
      * If any is defined, performs default method
@@ -196,7 +190,6 @@ class GearmanExecute extends AbstractGearmanService
             $gmworker->addServer();
         }
     }
-
 
     /**
      * Executes a worker given a workerName subscribing all his jobs inside and given settings and annotations of worker and jobs

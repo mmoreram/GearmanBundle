@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -20,7 +20,7 @@ use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
 
 /**
  * Gearman parsing methods
- * 
+ *
  * This class has responability of parsing, if needed, all defined bundle files
  * looking for some Workers.
  *
@@ -36,14 +36,12 @@ class GearmanParser
      */
     private $kernelBundles;
 
-
     /**
      * @var Kernel
      *
      * Kernel object
      */
     private $kernel;
-
 
     /**
      * @var Reader
@@ -52,14 +50,12 @@ class GearmanParser
      */
     private $reader;
 
-
     /**
      * @var Finder
      *
      * Finder
      */
     private $finder;
-
 
     /**
      * @var Array
@@ -68,7 +64,6 @@ class GearmanParser
      */
     private $bundles;
 
-
     /**
      * @var array
      *
@@ -76,14 +71,12 @@ class GearmanParser
      */
     private $servers;
 
-
     /**
      * @var array
      *
      * Default settings defined by user in config.yml
      */
     private $defaultSettings;
-
 
     /**
      * Construct method
@@ -106,10 +99,9 @@ class GearmanParser
         $this->defaultSettings = $defaultSettings;
     }
 
-
     /**
      * Loads Worker Collection from parsed files
-     * 
+     *
      * @return WorkerCollection collection of all info
      */
     public function load()
@@ -119,15 +111,14 @@ class GearmanParser
         return $this->parseNamespaceMap($this->finder, $this->reader, $paths, $excludedPaths);
     }
 
-
     /**
      * Return Gearman bundle settings, previously loaded by method load()
      *
      * If settings are not loaded, a SettingsNotLoadedException Exception is thrown
-     * 
+     *
      * @param array $kernelBundles Kernel bundles
      * @param array $bundles       Bundle array of settings
-     * 
+     *
      * @return array Return an array containing paths and ignore paths
      */
     public function loadNamespaceMap(array $kernelBundles, array $bundles)
@@ -175,13 +166,12 @@ class GearmanParser
         );
     }
 
-
     /**
      * Perform a parsing inside all namespace map
-     * 
+     *
      * Creates an empty worker collection and, if exist some parseable files
      * parse them, filling this object
-     * 
+     *
      * @param Finder $finder        Finder
      * @param Reader $reader        Reader
      * @param array  $paths         Paths where to look for
@@ -207,7 +197,6 @@ class GearmanParser
 
         return $workerCollection;
     }
-
 
     /**
      * Load all workers with their jobs
@@ -254,7 +243,6 @@ class GearmanParser
 
         return $this;
     }
-
 
     /**
      * Returns file class namespace, if exists

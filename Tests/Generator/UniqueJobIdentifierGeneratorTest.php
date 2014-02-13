@@ -31,7 +31,6 @@ class UniqueJobIdentifierGeneratorTest extends WebTestCase
         $this->assertInstanceOf('\Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator', static::$kernel->getContainer()->get('gearman.unique_job_identifier'));
     }
 
-
     /**
      * Tests all cases when GenerateUniqueKey is false
      */
@@ -53,7 +52,6 @@ class UniqueJobIdentifierGeneratorTest extends WebTestCase
             'name', 'params', '', 'method'
         ));
     }
-
 
     /**
      * Tests all cases when GenerateUniqueKey is true

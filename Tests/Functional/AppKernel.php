@@ -27,7 +27,6 @@ class AppKernel extends Kernel
         );
     }
 
-
     /**
      * Setup configuration file.
      */

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * RSQueueBundle for Symfony2
+ * Gearman Bundle for Symfony2
  *
- * Marc Morera 2013
+ * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2013
  */
 
 namespace Mmoreram\GearmanBundle\Tests\Event;
@@ -23,14 +24,12 @@ class GearmanClientCallbackWorkloadEventTest extends \PHPUnit_Framework_TestCase
      */
     private $gearmanClientCallbackWorkloadEvent;
 
-
     /**
      * @var array
      *
      * Payload for testing
      */
     private $gearmanTask;
-
 
     /**
      * Setup
@@ -42,7 +41,6 @@ class GearmanClientCallbackWorkloadEventTest extends \PHPUnit_Framework_TestCase
         $this->gearmanClientCallbackWorkloadEvent = new GearmanClientCallbackWorkloadEvent($this->gearmanTask);
     }
 
-
     /**
      * Testing payload getter
      */
@@ -50,7 +48,6 @@ class GearmanClientCallbackWorkloadEventTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->gearmanClientCallbackWorkloadEvent->getGearmanTask(), $this->gearmanTask);
     }
-
 
     /**
      * Tests if Event extends needed classes

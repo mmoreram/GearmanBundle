@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -32,7 +32,6 @@ class GearmanCacheWarmupCommand extends ContainerAwareCommand
                 ->setAliases(array('cache:gearman:warmup'))
                 ->setDescription('Warms up gearman cache data');
     }
-
 
     /**
      * Executes the current command.

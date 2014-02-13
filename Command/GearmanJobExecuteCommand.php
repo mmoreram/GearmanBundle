@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -36,7 +36,6 @@ class GearmanJobExecuteCommand extends ContainerAwareCommand
              ->addOption('no-description', null, InputOption::VALUE_NONE, 'Don\'t print job description');
     }
 
-
     /**
      * Executes the current command.
      *
@@ -52,7 +51,6 @@ class GearmanJobExecuteCommand extends ContainerAwareCommand
         $dialog = $this->getHelperSet()->get('dialog');
 
         if (!$input->getOption('no-interaction') && !$dialog->askConfirmation($output, '<question>This will execute asked job?</question>', 'y')) {
-
             return;
         }
 

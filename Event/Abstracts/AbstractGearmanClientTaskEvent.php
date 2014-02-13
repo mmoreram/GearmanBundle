@@ -1,16 +1,16 @@
 <?php
 
 /**
- * RSQueueBundle for Symfony2
+ * Gearman Bundle for Symfony2
  *
- * Marc Morera 2013
+ * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2013
  */
 
 namespace Mmoreram\GearmanBundle\Event\Abstracts;
 
 use Symfony\Component\EventDispatcher\Event;
 use GearmanTask;
-
 
 /**
  * AbstractGearmanClientTaskEvent
@@ -25,7 +25,6 @@ abstract class AbstractGearmanClientTaskEvent extends Event
      */
     protected $gearmanTask;
 
-
     /**
      * Construct method
      *
@@ -36,10 +35,9 @@ abstract class AbstractGearmanClientTaskEvent extends Event
         $this->gearmanTask = $gearmanTask;
     }
 
-
     /**
      * Get Gearman Task
-     * 
+     *
      * @return GearmanTask Gearman Task
      */
     public function getGearmanTask()

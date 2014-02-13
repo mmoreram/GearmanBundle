@@ -1,15 +1,15 @@
 <?php
 
 /**
- * RSQueueBundle for Symfony2
+ * Gearman Bundle for Symfony2
  *
- * Marc Morera 2013
+ * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2013
  */
 
 namespace Mmoreram\GearmanBundle\Event;
 
 use Mmoreram\GearmanBundle\Event\Abstracts\AbstractGearmanClientTaskEvent;
-
 
 /**
  * GearmanClientCallbackWarningEvent

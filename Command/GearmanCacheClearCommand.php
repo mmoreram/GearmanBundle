@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -32,7 +32,6 @@ class GearmanCacheClearCommand extends ContainerAwareCommand
                 ->setAliases(array('cache:gearman:clear'))
                 ->setDescription('Clears gearman cache data on current environment');
     }
-
 
     /**
      * Executes the current command.

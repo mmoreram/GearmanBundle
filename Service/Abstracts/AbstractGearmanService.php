@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -28,14 +28,12 @@ abstract class AbstractGearmanService
      */
     protected $workers;
 
-
     /**
      * The prefix for all job names
      *
      * @var string $jobPrefix
      */
     protected $jobPrefix = null;
-
 
     /**
      * Construct method
@@ -52,7 +50,6 @@ abstract class AbstractGearmanService
             $this->jobPrefix = $defaultSettings['job_prefix'];
         }
     }
-
 
     /**
      * Return worker containing a job with $jobName as name
@@ -85,7 +82,6 @@ abstract class AbstractGearmanService
         throw new JobDoesNotExistException();
     }
 
-
     /**
      * Return worker with $workerName as name and all its jobs
      * If is not found, throws WorkerDoesNotExistException Exception
@@ -99,7 +95,6 @@ abstract class AbstractGearmanService
         foreach ($this->workers as $worker) {
 
             if ($workerName === $worker['callableName']) {
-
                 return $worker;
             }
         }
@@ -107,10 +102,9 @@ abstract class AbstractGearmanService
         throw new WorkerDoesNotExistException();
     }
 
-
     /**
      * Return array of workers
-     * 
+     *
      * @return array all available workers
      */
     public function getWorkers()

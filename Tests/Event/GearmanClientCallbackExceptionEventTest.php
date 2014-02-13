@@ -1,9 +1,10 @@
 <?php
 
 /**
- * RSQueueBundle for Symfony2
+ * Gearman Bundle for Symfony2
  *
- * Marc Morera 2013
+ * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2013
  */
 
 namespace Mmoreram\GearmanBundle\Tests\Event;
@@ -23,7 +24,6 @@ class GearmanClientCallbackExceptionEventTest extends \PHPUnit_Framework_TestCas
      */
     private $gearmanClientCallbackExceptionEvent;
 
-
     /**
      * Setup
      */
@@ -31,7 +31,6 @@ class GearmanClientCallbackExceptionEventTest extends \PHPUnit_Framework_TestCas
     {
         $this->gearmanClientCallbackExceptionEvent = new GearmanClientCallbackExceptionEvent($this->gearmanTask);
     }
-
 
     /**
      * Tests if Event extends needed classes

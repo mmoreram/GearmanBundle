@@ -9,10 +9,8 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Module;
 
-use Mmoreram\GearmanBundle\Module\JobClass;
 use Mmoreram\GearmanBundle\Module\WorkerClass;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
-use Mmoreram\GearmanBundle\Driver\Gearman\Job as JonAnnotation;
 
 /**
  * Tests JobClassTest class
@@ -27,14 +25,12 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
      */
     private $workAnnotation;
 
-
     /**
      * @var \ReflectionClass
      *
      * Reflection Class
      */
     private $reflectionClass;
-
 
     /**
      * @var Reader
@@ -43,14 +39,12 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
      */
     private $reader;
 
-
     /**
      * @var string
      *
      * Class namespace
      */
     private $classNamespace = 'MyClassNamespace';
-
 
     /**
      * @var string
@@ -59,14 +53,12 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
      */
     private $className = 'myClass';
 
-
     /**
      * @var string
      *
      * Filename
      */
     private $fileName = 'myClass.php';
-
 
     /**
      * @var array
@@ -79,7 +71,6 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             'port'  =>  '8080',
         ),
     );
-
 
     /**
      * @var array
@@ -94,7 +85,6 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
         'generate_unique_key' => true,
         'workers_name_prepend_namespace' => true,
     );
-
 
     /**
      * Setup
@@ -126,7 +116,6 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             ))
             ->getMock();
     }
-
 
     /**
      * Testing scenario with all Job annotations filled
@@ -194,7 +183,6 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-
     /**
      * Testing scenario with any Job annotation filled
      *
@@ -248,7 +236,6 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             'jobs'                  =>  array(),
         ));
     }
-
 
     /**
      * Testing specific server scenario configured in Job annotations as a simple server

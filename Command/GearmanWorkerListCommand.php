@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -31,7 +31,6 @@ class GearmanWorkerListCommand extends ContainerAwareCommand
         $this->setName('gearman:worker:list')
              ->setDescription('List all Gearman Workers and their Jobs');
     }
-
 
     /**
      * Executes the current command.

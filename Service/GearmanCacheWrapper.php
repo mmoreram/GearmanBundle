@@ -15,10 +15,10 @@ use Doctrine\Common\Cache\Cache;
 
 /**
  * Gearman cache loader class
- * 
+ *
  * This class has responsability of loading all gearman data structure
  * and cache it if needed.
- * 
+ *
  * Also provides this data to external services
  *
  * @author Marc Morera <yuhu@mmoreram.com>
@@ -28,11 +28,10 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
 
     /**
      * @var GearmanParser
-     * 
+     *
      * Gearman file parser
      */
     private $gearmanParser;
-
 
     /**
      * @var Cache
@@ -41,7 +40,6 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
      */
     private $cache;
 
-
     /**
      * @var string
      *
@@ -49,14 +47,12 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
      */
     private $cacheId;
 
-
     /**
      * @var array
      *
      * WorkerCollection with all workers and jobs available
      */
     private $workerCollection;
-
 
     /**
      * Construct method
@@ -72,10 +68,9 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
         $this->cacheId = $cacheId;
     }
 
-
     /**
      * Return gearman file parser
-     * 
+     *
      * @return GearmanParser
      */
     public function getGearmanParser()
@@ -83,10 +78,9 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
         return $this->gearmanParser;
     }
 
-
     /**
      * Return cache
-     * 
+     *
      * @return Cache Cache
      */
     public function getCache()
@@ -94,17 +88,15 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
         return $this->cache;
     }
 
-
     /**
      * Return cache id
-     * 
+     *
      * @return string Cache id
      */
     public function getCacheId()
     {
         return $this->cacheId;
     }
-
 
     /**
      * Return workerCollection
@@ -116,10 +108,9 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
         return $this->workerCollection;
     }
 
-
     /**
      * loads Gearman cache, only if is not loaded yet
-     * 
+     *
      * @param Cache  $cache   Cache instance
      * @param string $cacheId Cache id
      *
@@ -138,7 +129,7 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
 
             /**
              * Cache is empty.
-             * 
+             *
              * Full structure must be generated and cached
              */
             $this->workerCollection = $this
@@ -152,10 +143,9 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
         return $this;
     }
 
-
     /**
      * flush all cache
-     * 
+     *
      * @param Cache  $cache   Cache instance
      * @param string $cacheId Cache id
      *
@@ -167,7 +157,6 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
 
         return $this;
     }
-
 
     /**
      * Cache clear implementation
@@ -183,7 +172,6 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
         return $this;
     }
 
-
     /**
      * Warms up the cache.
      *
@@ -197,7 +185,6 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
 
         return $this;
     }
-
 
     /**
      * Checks whether this warmer is optional or not.

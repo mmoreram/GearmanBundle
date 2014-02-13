@@ -27,7 +27,6 @@ class UniqueJobIdentifierGenerator
      */
     protected $generateUniqueKey;
 
-
     /**
      * Construct method
      *
@@ -38,12 +37,11 @@ class UniqueJobIdentifierGenerator
         $this->generateUniqueKey = $generateUniqueKey;
     }
 
-
     /**
      * Generate unique key if generateUniqueKey is enabled
      *
      * Even some parameters are not used, are passed to allow user overwrite method
-     * 
+     *
      * Also, if name and unique value exceeds 114 bytes, an exception is thrown
      *
      * @param string $name   A GermanBundle registered function to be executed
@@ -52,7 +50,7 @@ class UniqueJobIdentifierGenerator
      * @param string $method Method to perform
      *
      * @return string Generated Unique Key
-     * 
+     *
      * @throws WorkerNameTooLongException If name is too large
      */
     public function generateUniqueKey($name, $params, $unique, $method)

@@ -28,7 +28,6 @@ class GearmanClient extends AbstractGearmanService
      */
     protected $gearmanCallbacksDisparcher;
 
-
     /**
      * @var array
      *
@@ -36,14 +35,12 @@ class GearmanClient extends AbstractGearmanService
      */
     protected $servers = array();
 
-
     /**
      * @var array
      *
      * task structure to store all about called tasks
      */
     protected $taskStructure = array();
-
 
     /**
      * @var array
@@ -59,14 +56,12 @@ class GearmanClient extends AbstractGearmanService
      */
     protected $settings;
 
-
     /**
      * @var UniqueJobIdentifierGenerator
      *
      * Unique Job Intefier Generator
      */
     protected $uniqueJobIdentifierGenerator;
-
 
     /**
      * Init tasks structure
@@ -79,7 +74,6 @@ class GearmanClient extends AbstractGearmanService
 
         return $this;
     }
-
 
     /**
      * Set  default servers
@@ -95,7 +89,6 @@ class GearmanClient extends AbstractGearmanService
         return $this;
     }
 
-
     /**
      * Set UniqueJobIdentifierGenerator object
      *
@@ -109,7 +102,6 @@ class GearmanClient extends AbstractGearmanService
 
         return $this;
     }
-
 
     /**
      * Set gearman callbacks
@@ -139,7 +131,6 @@ class GearmanClient extends AbstractGearmanService
         return $this;
     }
 
-
     /**
      * Set server to client. Empty all servers and set this one
      *
@@ -156,7 +147,6 @@ class GearmanClient extends AbstractGearmanService
 
         return $this;
     }
-
 
     /**
      * Add server to client
@@ -176,7 +166,6 @@ class GearmanClient extends AbstractGearmanService
         return $this;
     }
 
-
     /**
      * Clear server list
      *
@@ -188,7 +177,6 @@ class GearmanClient extends AbstractGearmanService
 
         return $this;
     }
-
 
     /**
      * Get real worker from job name and enqueues the action given one
@@ -212,7 +200,6 @@ class GearmanClient extends AbstractGearmanService
                 : false;
     }
 
-
     /**
      * Execute a GearmanClient call given a worker, params and a method.
      *
@@ -224,7 +211,7 @@ class GearmanClient extends AbstractGearmanService
      * @param string $method Method to execute
      * @param string $unique A unique ID used to identify a particular task
      *
-     * @return mixed  Return result of the GearmanClient call
+     * @return mixed Return result of the GearmanClient call
      */
     private function doEnqueue(array $worker, $params, $method, $unique)
     {
@@ -233,7 +220,6 @@ class GearmanClient extends AbstractGearmanService
 
         return $gearmanClient->$method($worker['job']['realCallableName'], $params, $unique);
     }
-
 
     /**
      * Given a GearmanClient, set all included servers
@@ -262,7 +248,6 @@ class GearmanClient extends AbstractGearmanService
         return $this;
     }
 
-
     /**
      * Job methods
      */
@@ -286,7 +271,6 @@ class GearmanClient extends AbstractGearmanService
        return $this->enqueue($name, $params, $methodCallable, $unique);
     }
 
-
     /**
      * Runs a single task and returns a string representation of the result.
      * It is up to the GearmanClient and GearmanWorker to agree on the format of the result.
@@ -301,10 +285,8 @@ class GearmanClient extends AbstractGearmanService
      */
     public function doJob($name, $params = '', $unique = null)
     {
-
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DO, $unique);
     }
-
 
     /**
      * Runs a single task and returns a string representation of the result.
@@ -318,10 +300,8 @@ class GearmanClient extends AbstractGearmanService
      */
     public function doNormalJob($name, $params = '', $unique = null)
     {
-
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DONORMAL, $unique);
     }
-
 
     /**
      * Runs a task in the background, returning a job handle which
@@ -335,10 +315,8 @@ class GearmanClient extends AbstractGearmanService
      */
     public function doBackgroundJob($name, $params = '', $unique = null)
     {
-
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOBACKGROUND, $unique);
     }
-
 
     /**
      * Runs a single high priority task and returns a string representation of the result.
@@ -353,10 +331,8 @@ class GearmanClient extends AbstractGearmanService
      */
     public function doHighJob($name, $params = '', $unique = null)
     {
-
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOHIGH, $unique);
     }
-
 
     /**
      * Runs a high priority task in the background, returning a job handle which can be used to get the status of the running task.
@@ -370,10 +346,8 @@ class GearmanClient extends AbstractGearmanService
      */
     public function doHighBackgroundJob($name, $params = '', $unique = null)
     {
-
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOHIGHBACKGROUND, $unique);
     }
-
 
     /**
      * Runs a single low priority task and returns a string representation of the result.
@@ -391,7 +365,6 @@ class GearmanClient extends AbstractGearmanService
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOLOW, $unique);
     }
 
-
     /**
      * Runs a low priority task in the background, returning a job handle which can be used to get the status of the running task.
      * Normal and high priority tasks will get precedence over low priority tasks in the job queue.
@@ -404,10 +377,8 @@ class GearmanClient extends AbstractGearmanService
      */
     public function doLowBackgroundJob($name, $params = '', $unique = null)
     {
-
         return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DOLOWBACKGROUND, $unique);
     }
-
 
     /**
      * Fetches the Status of a special Background Job.
@@ -427,11 +398,9 @@ class GearmanClient extends AbstractGearmanService
         return $jobStatus;
     }
 
-
     /**
      * Task methods
      */
-
 
     /**
      * Adds a task to be run in parallel with other tasks.
@@ -452,7 +421,6 @@ class GearmanClient extends AbstractGearmanService
         return $this;
     }
 
-
     /**
      * Adds a high priority task to be run in parallel with other tasks.
      * Call this method for all the high priority tasks to be run in parallel, then call GearmanClient::runTasks() to perform the work.
@@ -471,7 +439,6 @@ class GearmanClient extends AbstractGearmanService
 
         return $this;
     }
-
 
     /**
      * Adds a low priority background task to be run in parallel with other tasks.
@@ -492,7 +459,6 @@ class GearmanClient extends AbstractGearmanService
         return $this;
     }
 
-
     /**
      * Adds a background task to be run in parallel with other tasks
      * Call this method for all the tasks to be run in parallel, then call GearmanClient::runTasks() to perform the work.
@@ -510,7 +476,6 @@ class GearmanClient extends AbstractGearmanService
 
         return $this;
     }
-
 
     /**
      * Adds a high priority background task to be run in parallel with other tasks.
@@ -531,7 +496,6 @@ class GearmanClient extends AbstractGearmanService
         return $this;
     }
 
-
     /**
      * Adds a low priority background task to be run in parallel with other tasks.
      * Call this method for all the tasks to be run in parallel, then call GearmanClient::runTasks() to perform the work.
@@ -550,7 +514,6 @@ class GearmanClient extends AbstractGearmanService
 
         return $this;
     }
-
 
     /**
      * Adds a task into the structure of tasks with included type of call
@@ -592,7 +555,6 @@ class GearmanClient extends AbstractGearmanService
 
         return $this;
     }
-
 
     /**
      * For a set of tasks previously added with GearmanClient::addTask(), GearmanClient::addTaskHigh(),

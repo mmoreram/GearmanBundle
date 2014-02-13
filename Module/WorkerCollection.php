@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -24,7 +24,6 @@ class WorkerCollection
      */
     private $workerClasses = array();
 
-
     /**
      * Adds a Worker into $workerClasses
      * Return self object
@@ -39,7 +38,6 @@ class WorkerCollection
 
         return $this;
     }
-
 
     /**
      * Retrieve all workers loaded previously in cache format

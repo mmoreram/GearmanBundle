@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -27,7 +27,6 @@ class GearmanDescriber
      */
     private $kernel;
 
-
     /**
      * Construct method
      *
@@ -37,7 +36,6 @@ class GearmanDescriber
     {
         $this->kernel = $kernel;
     }
-
 
     /**
      * Describe Job.
@@ -66,7 +64,6 @@ class GearmanDescriber
         if ($job['jobPrefix']) {
             $output->writeln('<info>    @job\jobPrefix : ' . $job['jobPrefix'] . '</info>');
         }
-
 
         /**
          * Also a complete and clean execution path is given , for supervisord

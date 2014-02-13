@@ -2,7 +2,7 @@
 
 /**
  * Gearman Bundle for Symfony2
- * 
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
  * @since 2013
  */
@@ -16,7 +16,7 @@ use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
 
 /**
  * Job class
- * 
+ *
  * This class provide all worker definition.
  */
 class JobClass extends ContainerAware
@@ -24,25 +24,23 @@ class JobClass extends ContainerAware
 
     /**
      * @var string
-     * 
+     *
      * Default description when is not defined
      */
     const DEFAULT_DESCRIPTION = 'No description is defined';
 
-
     /**
      * @var string
-     * 
+     *
      * Callable name for this job
      * If is setted on annotations, this value will be used
      *  otherwise, natural method name will be used.
      */
     private $callableName;
 
-
     /**
      * @var string
-     * 
+     *
      * Method name
      */
     private $methodName;
@@ -55,43 +53,38 @@ class JobClass extends ContainerAware
      */
     private $realCallableNameNoPrefix;
 
-
     /**
      * @var string
-     * 
+     *
      * RealCallable name for this job
      * natural method name will be used.
      */
     private $realCallableName;
 
-
     /**
      * @var string
-     * 
+     *
      * Description of Job
      */
     private $description;
 
-
     /**
      * @var integer
-     * 
+     *
      * Number of iterations this job will be alive before die
      */
     private $iterations;
 
-
     /**
      * @var string
-     * 
+     *
      * Default method this job will be call into Gearman client
      */
     private $defaultMethod;
 
-
     /**
      * @var array
-     * 
+     *
      * Collection of servers to connect
      */
     private $servers;
@@ -102,7 +95,6 @@ class JobClass extends ContainerAware
      * The prefix to be prepended to all job callable names.
      */
     private $jobPrefix;
-
 
     /**
      * Construct method
@@ -137,16 +129,15 @@ class JobClass extends ContainerAware
         $this->defaultMethod = $this->loadDefaultMethod($jobAnnotation, $defaultSettings);
     }
 
-
     /**
      * Load servers
-     * 
+     *
      * If any server is defined in JobAnnotation, this one is used.
      * Otherwise is used servers set in Class
-     * 
+     *
      * @param JobAnnotation $jobAnnotation JobAnnotation class
      * @param array         $servers       Array of servers defined for Worker
-     * 
+     *
      * @return array Servers
      */
     private function loadServers(JobAnnotation $jobAnnotation, array $servers)
@@ -165,46 +156,41 @@ class JobClass extends ContainerAware
         return $servers;
     }
 
-
     /**
      * Load iterations
-     * 
+     *
      * If iterations is defined in JobAnnotation, this one is used.
      * Otherwise is used set in Class
-     * 
+     *
      * @param JobAnnotation $jobAnnotation   JobAnnotation class
      * @param array         $defaultSettings Default settings for Worker
-     * 
+     *
      * @return integer Iteration
      */
     private function loadIterations(JobAnnotation $jobAnnotation, array $defaultSettings)
     {
-
         return  is_null($jobAnnotation->iterations)
                 ? (int) $defaultSettings['iterations']
                 : (int) $jobAnnotation->iterations;
     }
 
-
     /**
      * Load defaultMethod
-     * 
+     *
      * If defaultMethod is defined in JobAnnotation, this one is used.
      * Otherwise is used set in Class
-     * 
+     *
      * @param JobAnnotation $jobAnnotation   JobAnnotation class
      * @param array         $defaultSettings Default settings for Worker
-     * 
+     *
      * @return string Default method
      */
     private function loadDefaultMethod(JobAnnotation $jobAnnotation, array $defaultSettings)
     {
-
         return  is_null($jobAnnotation->defaultMethod)
                 ? $defaultSettings['method']
                 : $jobAnnotation->defaultMethod;
     }
-
 
     /**
      * Retrieve all Job data in cache format

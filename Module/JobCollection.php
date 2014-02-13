@@ -19,11 +19,10 @@ class JobCollection
 
     /**
      * @var array
-     * 
+     *
      * All jobs from worker
      */
     private $workerJobs = array();
-
 
     /**
      * Adds into $workerJobs a Job instance
@@ -40,7 +39,6 @@ class JobCollection
         return $this;
     }
 
-
     /**
      * Retrieve all Jobs added previously
      *
@@ -50,7 +48,6 @@ class JobCollection
     {
         return $this->workerJobs;
     }
-
 
     /**
      * Retrieve all jobs loaded previously in cache format
