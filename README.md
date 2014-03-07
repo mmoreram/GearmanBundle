@@ -204,13 +204,13 @@ In development mode you do not want to cache things over more than one request. 
 #config.yml
 liip_doctrine_cache:
     namespaces:
-        presta_sitemap:
+        gearman:
             type: file_system
 
 # config_dev.yml
 liip_doctrine_cache:
     namespaces:
-        presta_sitemap:
+        gearman:
             type: array
 ```
 
