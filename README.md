@@ -509,11 +509,11 @@ $jobIsRunning = $jobStatus->isRunning();
 $jobIsFinished = $jobStatus->isFinished();
 
 /**
- * Also gives completition data
+ * Also gives completion data
  */
 $completed = $jobStatus->getCompleted();
-$completitionTotal = $jobStatus->getCompletitionTotal();
-$completitionPercent = $jobStatus->getCompletionPercent();
+$completionTotal = $jobStatus->getCompletionTotal();
+$completionPercent = $jobStatus->getCompletionPercent();
 ```
 
 Client
@@ -557,11 +557,11 @@ $result = $gearman
 * doHighJob: Call the job and wait for the result on High Preference
 * doLowJob: Call the job and wait for the result on Low Preference
 * doBackroundJob: Call the job without waiting for the result.
-    * It recieves a job handle for the submitted job
+    * It receives a job handle for the submitted job
 * doHighBackgroundJob: Call the job without waitting for the result on High Preference.
-    * It recieves a job handle for the submitted job
+    * It receives a job handle for the submitted job
 * doLowBackgroundJob: Call the job without waitting for the result on Low Preference.
-    * It recieves a job handle for the submitted job
+    * It receives a job handle for the submitted job
 * callJob: Call the job with default method.
     * Defined in settings, work annotations or the job annotations
 
@@ -588,7 +588,7 @@ $gearman
 GearmanBundle transforms Gearman callbacks to Symfony2 kernel events.
 
 ## Complete Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackCompleteEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
+This event receives as a parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackCompleteEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setCompleteCallback](http://www.php.net/manual/en/gearmanclient.setcompletecallback.php) documentation.
 
 ``` yml
@@ -600,7 +600,7 @@ services:
 ```
 
 ## Created Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackCreatedEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
+This event receives as a parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackCreatedEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setCreatedCallback](http://www.php.net/manual/en/gearmanclient.setcreatedcallback.php) documentation.
 
 ``` yml
@@ -612,7 +612,7 @@ services:
 ```
 
 ## Data Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackDataEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
+This event receives as a parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackDataEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setDataCallback](http://www.php.net/manual/en/gearmanclient.setdatacallback.php) documentation.
 
 ``` yml
@@ -624,7 +624,7 @@ services:
 ```
 
 ## Exception Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackExceptionEvent` with no methods.
+This event receives as a parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackExceptionEvent` with no methods.
 For more information about this GearmanEvent, read [GearmanClient::setExceptionCallback](http://www.php.net/manual/en/gearmanclient.setexceptioncallback.php) documentation.
 
 ``` yml
@@ -636,7 +636,7 @@ services:
 ```
 
 ## Fail Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackFailEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
+This event receives as a parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackFailEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setFailCallback](http://www.php.net/manual/en/gearmanclient.setfailcallback.php) documentation.
 
 ``` yml
@@ -648,7 +648,7 @@ services:
 ```
 
 ## Status Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackFailEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
+This event receives as a parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackStatusEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setStatusCallback](http://www.php.net/manual/en/gearmanclient.setstatuscallback.php) documentation.
 
 ``` yml
@@ -660,7 +660,7 @@ services:
 ```
 
 ## Warning Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackWarningEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
+This event receives as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackWarningEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setWarningCallback](http://www.php.net/manual/en/gearmanclient.setwarningcallback.php) documentation.
 
 ``` yml
@@ -672,7 +672,7 @@ services:
 ```
 
 ## Workload Callback
-This event recieves as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackWorkloadEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
+This event receives as parameter an instance of `Mmoreram\GearmanBundle\Event\GearmanClientCallbackWorkloadEvent` with one method `$event->getGearmanTask()`. This method returns an instance of `\GearmanTask`.
 For more information about this GearmanEvent, read [GearmanClient::setWorkloadCallback](http://www.php.net/manual/en/gearmanclient.setworkloadcallback.php) documentation.
 
 ``` yml

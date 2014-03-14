@@ -26,7 +26,7 @@ class GearmanClient extends AbstractGearmanService
      *
      * Gearman callbacks dispatcher
      */
-    protected $gearmanCallbacksDisparcher;
+    protected $gearmanCallbacksDispatcher;
 
     /**
      * @var array
