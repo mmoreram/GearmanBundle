@@ -4,3 +4,5 @@ composer.lock
 composer.phar
 phpcs.log
 vendor
+
+/.idea/
