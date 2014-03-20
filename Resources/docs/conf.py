@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 source_suffix = '.rst'
 master_doc = 'index'
-project = 'Payment Suite'
+project = 'GearmanBundle'
 copyright = u'2013-2014, Marc Morera'
 version = ''
 release = ''
