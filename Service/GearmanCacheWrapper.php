@@ -25,7 +25,6 @@ use Doctrine\Common\Cache\Cache;
  */
 class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
 {
-
     /**
      * @var GearmanParser
      *
@@ -114,7 +113,7 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
      * @param Cache  $cache   Cache instance
      * @param string $cacheId Cache id
      *
-     * @return GearmanCacheLoader self Object
+     * @return GearmanCacheWrapper self Object
      */
     public function load(Cache $cache, $cacheId)
     {
@@ -149,7 +148,7 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
      * @param Cache  $cache   Cache instance
      * @param string $cacheId Cache id
      *
-     * @return GearmanCacheLoader self Object
+     * @return GearmanCacheWrapper self Object
      */
     public function flush(Cache $cache, $cacheId)
     {
@@ -163,7 +162,7 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
      *
      * @param string $cacheDir The cache directory
      *
-     * @return GearmanCacheLoader self Object
+     * @return GearmanCacheWrapper self Object
      */
     public function clear($cacheDir)
     {
@@ -177,7 +176,7 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
      *
      * @param string $cacheDir The cache directory
      *
-     * @return GearmanCacheLoader self Object
+     * @return GearmanCacheWrapper self Object
      */
     public function warmUp($cacheDir)
     {

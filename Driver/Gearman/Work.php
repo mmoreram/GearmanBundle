@@ -18,7 +18,6 @@ use Doctrine\Common\Annotations\Annotation;
  */
 class Work extends Annotation
 {
-
     /**
      * Name of worker
      *

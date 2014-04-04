@@ -4,7 +4,7 @@
  * Gearman Bundle for Symfony2
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
+ * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Event\Abstracts;
@@ -17,7 +17,6 @@ use GearmanTask;
  */
 abstract class AbstractGearmanClientTaskEvent extends Event
 {
-
     /**
      * @var GearmanTask
      *

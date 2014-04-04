@@ -4,7 +4,7 @@
  * Gearman Bundle for Symfony2
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
+ * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Command;
@@ -20,7 +20,6 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  */
 class GearmanWorkerListCommand extends ContainerAwareCommand
 {
-
     /**
      * Console Command configuration
      */
@@ -28,8 +27,9 @@ class GearmanWorkerListCommand extends ContainerAwareCommand
     {
         parent::configure();
 
-        $this->setName('gearman:worker:list')
-             ->setDescription('List all Gearman Workers and their Jobs');
+        $this
+            ->setName('gearman:worker:list')
+            ->setDescription('List all Gearman Workers and their Jobs');
     }
 
     /**
@@ -52,17 +52,17 @@ class GearmanWorkerListCommand extends ContainerAwareCommand
 
             foreach ($workers as $worker) {
 
-                $output->writeln('<comment>    @Worker:  </comment><info>'.$worker['className'].'</info>');
-                $output->writeln('<comment>    callablename:  </comment><info>'.$worker['callableName'].'</info>');
+                $output->writeln('<comment>    @Worker:  </comment><info>' . $worker['className'] . '</info>');
+                $output->writeln('<comment>    callablename:  </comment><info>' . $worker['callableName'] . '</info>');
                 $output->writeln('<comment>    Jobs:</comment>');
                 foreach ($worker['jobs'] as $job) {
-                    $output->writeln('<comment>      - #'.$it++.'</comment>');
-                    $output->writeln('<comment>          name: '.$job['methodName'].'</comment>');
-                    $output->writeln('<comment>          callablename:</comment><info> '.$job['realCallableNameNoPrefix'].'</info>');
+                    $output->writeln('<comment>      - #' . $it++ . '</comment>');
+                    $output->writeln('<comment>          name: ' . $job['methodName'] . '</comment>');
+                    $output->writeln('<comment>          callablename:</comment><info> ' . $job['realCallableNameNoPrefix'] . '</info>');
 
                     if (false === is_null($job['jobPrefix'])) {
 
-                        $output->writeln('<comment>          jobPrefix:</comment><info> '.$job['jobPrefix'].'</info>');
+                        $output->writeln('<comment>          jobPrefix:</comment><info> ' . $job['jobPrefix'] . '</info>');
                     }
                 }
                 $output->writeln('');

@@ -4,7 +4,7 @@
  * Gearman Bundle for Symfony2
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
+ * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Module;
@@ -23,7 +23,6 @@ use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
  */
 class WorkerClass
 {
-
     /**
      * @var string
      *
@@ -131,25 +130,25 @@ class WorkerClass
          * If true, namespace must be prepended to workAnnotation name for callableName
          * Otherwise, only workAnnotation value is set as callableName
          */
-        $callableNameNamespace  = $defaultSettings['workers_name_prepend_namespace']
-                                ? $this->namespace
-                                : '';
+        $callableNameNamespace = $defaultSettings['workers_name_prepend_namespace']
+            ? $this->namespace
+            : '';
 
         /**
          * Setting worker callable name
          */
         $this->callableName = is_null($workAnnotation->name)
-                            ? $reflectionClass->getName()
-                            : $callableNameNamespace . $workAnnotation->name;
+            ? $reflectionClass->getName()
+            : $callableNameNamespace . $workAnnotation->name;
 
         $this->callableName = str_replace('\\', '', $this->callableName);
 
         /**
          * Setting worker description
          */
-        $this->description  = is_null($workAnnotation->description)
-                            ? self::DEFAULT_DESCRIPTION
-                            : $workAnnotation->description;
+        $this->description = is_null($workAnnotation->description)
+            ? self::DEFAULT_DESCRIPTION
+            : $workAnnotation->description;
 
         $this->fileName = $reflectionClass->getFileName();
         $this->className = $reflectionClass->getName();
@@ -184,9 +183,9 @@ class WorkerClass
          */
         if ($workAnnotation->servers) {
 
-            $servers    = ( is_array($workAnnotation->servers) && !isset($workAnnotation->servers['host']) )
-                        ? $workAnnotation->servers
-                        : array($workAnnotation->servers);
+            $servers = (is_array($workAnnotation->servers) && !isset($workAnnotation->servers['host']))
+                ? $workAnnotation->servers
+                : array($workAnnotation->servers);
         }
 
         return $servers;
@@ -205,9 +204,9 @@ class WorkerClass
      */
     private function loadIterations(WorkAnnotation $workAnnotation, array $defaultSettings)
     {
-        return  is_null($workAnnotation->iterations)
-                ? (int) $defaultSettings['iterations']
-                : (int) $workAnnotation->iterations;
+        return is_null($workAnnotation->iterations)
+            ? (int)$defaultSettings['iterations']
+            : (int)$workAnnotation->iterations;
     }
 
     /**
@@ -223,9 +222,9 @@ class WorkerClass
      */
     private function loadDefaultMethod(WorkAnnotation $workAnnotation, array $defaultSettings)
     {
-        return  is_null($workAnnotation->defaultMethod)
-                ? $defaultSettings['method']
-                : $workAnnotation->defaultMethod;
+        return is_null($workAnnotation->defaultMethod)
+            ? $defaultSettings['method']
+            : $workAnnotation->defaultMethod;
     }
 
     /**
@@ -260,9 +259,9 @@ class WorkerClass
                      * Creates new Job
                      */
                     $job = new Job($methodAnnotation, $reflectionMethod, $this->callableName, $this->servers, array(
-                        'jobPrefix'     =>  $this->jobPrefix,
-                        'iterations'    =>  $this->iterations,
-                        'method'        =>  $this->defaultMethod,
+                        'jobPrefix'  => $this->jobPrefix,
+                        'iterations' => $this->iterations,
+                        'method'     => $this->defaultMethod,
                     ));
 
                     $jobCollection->add($job);
@@ -282,15 +281,15 @@ class WorkerClass
     {
         return array(
 
-            'namespace'     =>  $this->namespace,
-            'className'     =>  $this->className,
-            'fileName'      =>  $this->fileName,
-            'callableName'  =>  $this->callableName,
-            'description'   =>  $this->description,
-            'service'       =>  $this->service,
-            'servers'       =>  $this->servers,
-            'iterations'    =>  $this->iterations,
-            'jobs'          =>  $this->jobCollection->toArray(),
+            'namespace'    => $this->namespace,
+            'className'    => $this->className,
+            'fileName'     => $this->fileName,
+            'callableName' => $this->callableName,
+            'description'  => $this->description,
+            'service'      => $this->service,
+            'servers'      => $this->servers,
+            'iterations'   => $this->iterations,
+            'jobs'         => $this->jobCollection->toArray(),
         );
     }
 

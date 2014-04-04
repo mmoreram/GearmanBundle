@@ -4,7 +4,7 @@
  * Gearman Bundle for Symfony2
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
+ * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Service\Abstracts;
@@ -20,11 +20,10 @@ use Mmoreram\GearmanBundle\Exceptions\WorkerDoesNotExistException;
  */
 abstract class AbstractGearmanService
 {
-
     /**
      * All workers
      *
-     * @var type
+     * @var array
      */
     protected $workers;
 
@@ -58,6 +57,8 @@ abstract class AbstractGearmanService
      * @param string $jobName Name of job
      *
      * @return Array
+     *
+     * @throws JobDoesNotExistException
      */
     public function getJob($jobName)
     {
@@ -89,6 +90,8 @@ abstract class AbstractGearmanService
      * @param string $workerName Name of worker
      *
      * @return Array
+     *
+     * @throws WorkerDoesNotExistException
      */
     public function getWorker($workerName)
     {

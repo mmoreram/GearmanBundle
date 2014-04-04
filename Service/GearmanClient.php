@@ -4,7 +4,7 @@
  * Gearman Bundle for Symfony2
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
+ * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Service;
@@ -20,7 +20,6 @@ use Mmoreram\GearmanBundle\Dispatcher\GearmanCallbacksDispatcher;
  */
 class GearmanClient extends AbstractGearmanService
 {
-
     /**
      * @var GearmanCallbacksDispatcher
      *
@@ -134,8 +133,8 @@ class GearmanClient extends AbstractGearmanService
     /**
      * Set server to client. Empty all servers and set this one
      *
-     * @param type $servername Server name (must be ip)
-     * @param type $port       Port of server. By default 4730
+     * @param string $servername Server name (must be ip)
+     * @param int    $port       Port of server. By default 4730
      *
      * @return GearmanClient Returns self object
      */
@@ -151,16 +150,16 @@ class GearmanClient extends AbstractGearmanService
     /**
      * Add server to client
      *
-     * @param type $servername Server name (must be ip)
-     * @param type $port       Port of server. By default 4730
+     * @param string $servername Server name (must be ip)
+     * @param int    $port       Port of server. By default 4730
      *
      * @return GearmanClient Returns self object
      */
     public function addServer($servername, $port = 4730)
     {
         $this->servers[] = array(
-            'host'  =>  $servername,
-            'port'  =>  $port,
+            'host' => $servername,
+            'port' => $port,
         );
 
         return $this;
@@ -193,11 +192,13 @@ class GearmanClient extends AbstractGearmanService
     {
         $worker = $this->getJob($jobName);
 
-        $unique = $this->uniqueJobIdentifierGenerator->generateUniqueKey($jobName, $params, $unique, $method);
+        $unique = $this
+            ->uniqueJobIdentifierGenerator
+            ->generateUniqueKey($jobName, $params, $unique, $method);
 
-        return    $worker
-                ? $this->doEnqueue($worker, $params, $method, $unique)
-                : false;
+        return $worker
+            ? $this->doEnqueue($worker, $params, $method, $unique)
+            : false;
     }
 
     /**
@@ -224,7 +225,7 @@ class GearmanClient extends AbstractGearmanService
     /**
      * Given a GearmanClient, set all included servers
      *
-     * @param GearmanClient $gearmanClient Object to include servers
+     * @param \GearmanClient $gearmanClient Object to include servers
      *
      * @return GearmanClient Returns self object
      */
@@ -254,8 +255,8 @@ class GearmanClient extends AbstractGearmanService
 
     /**
      * Runs a single task and returns some result, depending of method called.
-     * Method called depends of default callable method setted on gearman settings
-     *  or overwritted on work or job annotations
+     * Method called depends of default callable method setted on gearman
+     * settings or overwritted on work or job annotations
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
      * @param string $params Parameters to send to job as string
@@ -265,16 +266,19 @@ class GearmanClient extends AbstractGearmanService
      */
     public function callJob($name, $params = '', $unique = null)
     {
-       $worker = $this->getJob($name);
-       $methodCallable = $worker['job']['defaultMethod'];
+        $worker = $this->getJob($name);
+        $methodCallable = $worker['job']['defaultMethod'];
 
-       return $this->enqueue($name, $params, $methodCallable, $unique);
+        return $this->enqueue($name, $params, $methodCallable, $unique);
     }
 
     /**
      * Runs a single task and returns a string representation of the result.
-     * It is up to the GearmanClient and GearmanWorker to agree on the format of the result.
-     * The GearmanClient::do() method is deprecated as of pecl/gearman 1.0.0. Use GearmanClient::doNormal().
+     * It is up to the GearmanClient and GearmanWorker to agree on the format of
+     * the result.
+     *
+     * The GearmanClient::do() method is deprecated as of pecl/gearman 1.0.0.
+     * Use GearmanClient::doNormal().
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
      * @param string $params Parameters to send to job as string
@@ -290,7 +294,8 @@ class GearmanClient extends AbstractGearmanService
 
     /**
      * Runs a single task and returns a string representation of the result.
-     * It is up to the GearmanClient and GearmanWorker to agree on the format of the result.
+     * It is up to the GearmanClient and GearmanWorker to agree on the format of
+     * the result.
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
      * @param string $params Parameters to send to job as string
@@ -304,8 +309,8 @@ class GearmanClient extends AbstractGearmanService
     }
 
     /**
-     * Runs a task in the background, returning a job handle which
-     *     can be used to get the status of the running task.
+     * Runs a task in the background, returning a job handle which can be used
+     * to get the status of the running task.
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
      * @param string $params Parameters to send to job as string
@@ -319,9 +324,14 @@ class GearmanClient extends AbstractGearmanService
     }
 
     /**
-     * Runs a single high priority task and returns a string representation of the result.
-     * It is up to the GearmanClient and GearmanWorker to agree on the format of the result.
-     * High priority tasks will get precedence over normal and low priority tasks in the job queue.
+     * Runs a single high priority task and returns a string representation of
+     * the result.
+     *
+     * It is up to the GearmanClient and GearmanWorker to agree on the format of
+     * the result.
+     *
+     * High priority tasks will get precedence over normal and low priority
+     * tasks in the job queue.
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
      * @param string $params Parameters to send to job as string
@@ -335,8 +345,11 @@ class GearmanClient extends AbstractGearmanService
     }
 
     /**
-     * Runs a high priority task in the background, returning a job handle which can be used to get the status of the running task.
-     * High priority tasks take precedence over normal and low priority tasks in the job queue.
+     * Runs a high priority task in the background, returning a job handle which
+     * can be used to get the status of the running task.
+     *
+     * High priority tasks take precedence over normal and low priority tasks in
+     * the job queue.
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
      * @param string $params Parameters to send to job as string
@@ -350,9 +363,14 @@ class GearmanClient extends AbstractGearmanService
     }
 
     /**
-     * Runs a single low priority task and returns a string representation of the result.
-     * It is up to the GearmanClient and GearmanWorker to agree on the format of the result.
-     * Normal and high priority tasks will get precedence over low priority tasks in the job queue.
+     * Runs a single low priority task and returns a string representation of
+     * the result.
+     *
+     * It is up to the GearmanClient and GearmanWorker to agree on the format of
+     * the result.
+     *
+     * Normal and high priority tasks will get precedence over low priority
+     * tasks in the job queue.
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
      * @param string $params Parameters to send to job as string
@@ -366,8 +384,11 @@ class GearmanClient extends AbstractGearmanService
     }
 
     /**
-     * Runs a low priority task in the background, returning a job handle which can be used to get the status of the running task.
-     * Normal and high priority tasks will get precedence over low priority tasks in the job queue.
+     * Runs a low priority task in the background, returning a job handle which
+     * can be used to get the status of the running task.
+     *
+     * Normal and high priority tasks will get precedence over low priority
+     * tasks in the job queue.
      *
      * @param string $name   A GearmanBundle registered function the worker is to execute
      * @param string $params Parameters to send to job as string
@@ -404,8 +425,11 @@ class GearmanClient extends AbstractGearmanService
 
     /**
      * Adds a task to be run in parallel with other tasks.
-     * Call this method for all the tasks to be run in parallel, then call GearmanClient::runTasks() to perform the work.
-     * Note that enough workers need to be available for the tasks to all run in parallel.
+     * Call this method for all the tasks to be run in parallel, then call
+     * GearmanClient::runTasks() to perform the work.
+     *
+     * Note that enough workers need to be available for the tasks to all run in
+     * parallel.
      *
      * @param string $name     A GermanBundle registered function to be executed
      * @param string $params   Parameters to send to task as string
@@ -423,8 +447,11 @@ class GearmanClient extends AbstractGearmanService
 
     /**
      * Adds a high priority task to be run in parallel with other tasks.
-     * Call this method for all the high priority tasks to be run in parallel, then call GearmanClient::runTasks() to perform the work.
-     * Tasks with a high priority will be selected from the queue before those of normal or low priority.
+     * Call this method for all the high priority tasks to be run in parallel,
+     * then call GearmanClient::runTasks() to perform the work.
+     *
+     * Tasks with a high priority will be selected from the queue before those
+     * of normal or low priority.
      *
      * @param string $name     A GermanBundle registered function to be executed
      * @param string $params   Parameters to send to task as string
@@ -441,9 +468,14 @@ class GearmanClient extends AbstractGearmanService
     }
 
     /**
-     * Adds a low priority background task to be run in parallel with other tasks.
-     * Call this method for all the tasks to be run in parallel, then call GearmanClient::runTasks() to perform the work.
-     * Tasks with a low priority will be selected from the queue after those of normal or low priority.
+     * Adds a low priority background task to be run in parallel with other
+     * tasks.
+     *
+     * Call this method for all the tasks to be run in parallel, then call
+     * GearmanClient::runTasks() to perform the work.
+     *
+     * Tasks with a low priority will be selected from the queue after those of
+     * normal or low priority.
      *
      * @param string $name     A GermanBundle registered function to be executed
      * @param string $params   Parameters to send to task as string
@@ -461,7 +493,8 @@ class GearmanClient extends AbstractGearmanService
 
     /**
      * Adds a background task to be run in parallel with other tasks
-     * Call this method for all the tasks to be run in parallel, then call GearmanClient::runTasks() to perform the work.
+     * Call this method for all the tasks to be run in parallel, then call
+     * GearmanClient::runTasks() to perform the work.
      *
      * @param string $name     A GermanBundle registered function to be executed
      * @param string $params   Parameters to send to task as string
@@ -478,9 +511,14 @@ class GearmanClient extends AbstractGearmanService
     }
 
     /**
-     * Adds a high priority background task to be run in parallel with other tasks.
-     * Call this method for all the tasks to be run in parallel, then call GearmanClient::runTasks() to perform the work.
-     * Tasks with a high priority will be selected from the queue before those of normal or low priority.
+     * Adds a high priority background task to be run in parallel with other
+     * tasks.
+     *
+     * Call this method for all the tasks to be run in parallel, then call
+     * GearmanClient::runTasks() to perform the work.
+     *
+     * Tasks with a high priority will be selected from the queue before those
+     * of normal or low priority.
      *
      * @param string $name     A GermanBundle registered function to be executed
      * @param string $params   Parameters to send to task as string
@@ -497,9 +535,14 @@ class GearmanClient extends AbstractGearmanService
     }
 
     /**
-     * Adds a low priority background task to be run in parallel with other tasks.
-     * Call this method for all the tasks to be run in parallel, then call GearmanClient::runTasks() to perform the work.
-     * Tasks with a low priority will be selected from the queue after those of normal or high priority.
+     * Adds a low priority background task to be run in parallel with other
+     * tasks.
+     *
+     * Call this method for all the tasks to be run in parallel, then call
+     * GearmanClient::runTasks() to perform the work.
+     *
+     * Tasks with a low priority will be selected from the queue after those of
+     * normal or high priority.
      *
      * @param string $name     A GermanBundle registered function to be executed
      * @param string $params   Parameters to send to task as string
@@ -530,11 +573,11 @@ class GearmanClient extends AbstractGearmanService
     {
 
         $task = array(
-            'name'      =>  $name,
-            'params'    =>  $params,
-            'context'   =>  $context,
-            'unique'    =>  $this->uniqueJobIdentifierGenerator->generateUniqueKey($name, $params, $unique, $method),
-            'method'    =>  $method,
+            'name'    => $name,
+            'params'  => $params,
+            'context' => $context,
+            'unique'  => $this->uniqueJobIdentifierGenerator->generateUniqueKey($name, $params, $unique, $method),
+            'method'  => $method,
         );
 
         $this->addTaskToStructure($task);
@@ -557,9 +600,16 @@ class GearmanClient extends AbstractGearmanService
     }
 
     /**
-     * For a set of tasks previously added with GearmanClient::addTask(), GearmanClient::addTaskHigh(),
-     * GearmanClient::addTaskLow(), GearmanClient::addTaskBackground(), GearmanClient::addTaskHighBackground(),
-     * or GearmanClient::addTaskLowBackground(), this call starts running the tasks in parallel.
+     * For a set of tasks previously added with
+     *
+     * GearmanClient::addTask(),
+     * GearmanClient::addTaskHigh(),
+     * GearmanClient::addTaskLow(),
+     * GearmanClient::addTaskBackground(),
+     * GearmanClient::addTaskHighBackground(),
+     * GearmanClient::addTaskLowBackground(),
+     *
+     * this call starts running the tasks in parallel.
      * Note that enough workers need to be available for the tasks to all run in parallel
      *
      * @return boolean run tasks result
@@ -582,7 +632,12 @@ class GearmanClient extends AbstractGearmanService
 
             if (false !== $worker) {
 
-                $gearmanClient->$type($worker['job']['realCallableName'], $task['params'], $task['context'], $task['unique']);
+                $gearmanClient->$type(
+                    $worker['job']['realCallableName'],
+                    $task['params'],
+                    $task['context'],
+                    $task['unique']
+                );
             }
         }
 

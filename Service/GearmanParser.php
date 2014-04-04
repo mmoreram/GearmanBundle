@@ -37,7 +37,7 @@ class GearmanParser
     private $kernelBundles;
 
     /**
-     * @var Kernel
+     * @var KernelInterface
      *
      * Kernel object
      */
@@ -88,7 +88,14 @@ class GearmanParser
      * @param array           $servers         Server list defined on configuration
      * @param array           $defaultSettings Default settings defined on configuration
      */
-    public function __construct(KernelInterface $kernel, Reader $reader, Finder $finder, array $bundles, array $servers, array $defaultSettings)
+    public function __construct(
+        KernelInterface $kernel,
+        Reader $reader,
+        Finder $finder,
+        array $bundles,
+        array $servers,
+        array $defaultSettings
+    )
     {
         $this->kernelBundles = $kernel->getBundles();
         $this->kernel = $kernel;
@@ -179,7 +186,12 @@ class GearmanParser
      *
      * @return WorkerCollection collection of all info
      */
-    public function parseNamespaceMap(Finder $finder, Reader $reader, array $paths, array $excludedPaths)
+    public function parseNamespaceMap(
+        Finder $finder,
+        Reader $reader,
+        array $paths,
+        array $excludedPaths
+    )
     {
         $workerCollection = new WorkerCollection;
 
@@ -207,7 +219,11 @@ class GearmanParser
      *
      * @return GearmanParser self Object
      */
-    public function parseFiles(Finder $finder, Reader $reader, WorkerCollection $workerCollection)
+    public function parseFiles(
+        Finder $finder,
+        Reader $reader,
+        WorkerCollection $workerCollection
+    )
     {
 
         /**

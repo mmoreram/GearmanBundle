@@ -4,7 +4,7 @@
  * Gearman Bundle for Symfony2
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
+ * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Command;
@@ -21,7 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  */
 class GearmanWorkerDescribeCommand extends ContainerAwareCommand
 {
-
     /**
      * Console Command configuration
      */
@@ -29,9 +28,10 @@ class GearmanWorkerDescribeCommand extends ContainerAwareCommand
     {
         parent::configure();
 
-        $this->setName('gearman:worker:describe')
-             ->setDescription('Describe given worker')
-             ->addArgument('worker', InputArgument::REQUIRED, 'worker to describe');
+        $this
+            ->setName('gearman:worker:describe')
+            ->setDescription('Describe given worker')
+            ->addArgument('worker', InputArgument::REQUIRED, 'worker to describe');
     }
 
     /**

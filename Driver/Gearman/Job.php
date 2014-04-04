@@ -4,7 +4,7 @@
  * Gearman Bundle for Symfony2
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
+ * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Driver\Gearman;
@@ -18,7 +18,6 @@ use Doctrine\Common\Annotations\Annotation;
  */
 class Job extends Annotation
 {
-
     /**
      * Method name to assign into job
      *

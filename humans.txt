@@ -1,12 +1,11 @@
-/* TEAM */            
-Creator : Marc Morera 
+/* TEAM */
+Creator : Marc Morera
 Site: https://github.com/mmoreram/gearman-bundle
 Contact: yuhu at mmoreram dot com
-Twitter: mmoreram                   
+Twitter: mmoreram
 Location: Barcelona, Catalunya, Catalunya.
 
 /* THANKS */
 http://gearman.org/
 http://github.com
 http://symfony.com
-Fabien Potencier

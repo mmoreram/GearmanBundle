@@ -12,10 +12,11 @@ config gearman cache, using doctrine cache.
 
 .. code-block:: yml
 
-    liip_doctrine_cache:
-       namespaces:
-          gearman:
-             type: file_system
+    doctrine_cache:
+        providers:
+            gearman_cache:
+                type: file_system
+                namespace: doctrine_cache.ns.gearman
 
     gearman:
        # Bundles will parsed searching workers
@@ -87,27 +88,29 @@ config gearman cache, using doctrine cache.
              port: 4730
 
 In development mode you do not want to cache things over more than one
-request. An easy solution for this is to use the array cache in the dev
-environment ( Extracted from `LiipDoctrineCacheBundle`_ documentation )
+request. An easy solution for this is to use the array provider in the dev
+environment ( Extracted from `DoctrineCacheBundle`_ documentation )
 
 .. code-block:: yml
 
     #config.yml
-    liip_doctrine_cache:
-        namespaces:
-            gearman:
+    doctrine_cache:
+        providers:
+            gearman_cache:
                 type: file_system
+                namespace: doctrine_cache.ns.gearman
 
 In development mode you do not want to cache things over more than one
 request. An easy solution for this is to use the array cache in the dev
-environment ( Extracted from `LiipDoctrineCacheBundle`_ documentation )
+environment ( Extracted from `DoctrineCacheBundle`_ documentation )
 
 .. code-block:: yml
 
     #config_dev.yml
-    liip_doctrine_cache:
-        namespaces:
-            gearman:
+    doctrine_cache:
+        providers:
+            gearman_cache:
                 type: array
+                namespace: doctrine_cache.ns.gearman
 
-.. _LiipDoctrineCacheBundle: https://github.com/liip/LiipDoctrineCacheBundle#development-mode
+.. _DoctrineCacheBundle: https://github.com/doctrine/DoctrineCacheBundle#cache-providers

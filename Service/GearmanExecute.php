@@ -4,7 +4,7 @@
  * Gearman Bundle for Symfony2
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
+ * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Service;
@@ -21,7 +21,6 @@ use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
  */
 class GearmanExecute extends AbstractGearmanService
 {
-
     /**
      * @var ContainerInterface
      *
@@ -110,8 +109,9 @@ class GearmanExecute extends AbstractGearmanService
             $objInstance = new $worker['className'];
 
             /**
-             * If instance of given object is instanceof ContainerAwareInterface, we inject full container
-             *  by calling container setter.
+             * If instance of given object is instanceof
+             * ContainerAwareInterface, we inject full container by calling
+             * container setter.
              *
              * @see https://github.com/mmoreram/gearman-bundle/pull/12
              */
@@ -148,7 +148,7 @@ class GearmanExecute extends AbstractGearmanService
         /**
          * If iterations value is 0, is like worker will never die
          */
-        $alive = ( 0 == $iterations );
+        $alive = (0 == $iterations);
 
         /**
          * Executes GearmanWorker with all jobs defined
@@ -161,7 +161,8 @@ class GearmanExecute extends AbstractGearmanService
             }
 
             /**
-             * Only finishes its execution if alive is false and iterations arrives to 0
+             * Only finishes its execution if alive is false and iterations
+             * arrives to 0
              */
             if (!$alive && --$iterations <= 0) {
 
@@ -192,7 +193,8 @@ class GearmanExecute extends AbstractGearmanService
     }
 
     /**
-     * Executes a worker given a workerName subscribing all his jobs inside and given settings and annotations of worker and jobs
+     * Executes a worker given a workerName subscribing all his jobs inside and
+     * given settings and annotations of worker and jobs
      *
      * @param string $workerName Name of worker to be executed
      */

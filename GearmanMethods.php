@@ -18,7 +18,8 @@ class GearmanMethods
     /**
      * Gearman method do
      *
-     * The GearmanClient::do() method is deprecated as of pecl/gearman 1.0.0. Use GearmanClient::doNormal().
+     * The GearmanClient::do() method is deprecated as of pecl/gearman 1.0.0.
+     * Use GearmanClient::doNormal().
      *
      * @see http://www.php.net/manual/en/gearmanclient.do.php
      *

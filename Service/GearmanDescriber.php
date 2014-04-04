@@ -19,7 +19,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class GearmanDescriber
 {
-
     /**
      * @var KernelInterface
      *

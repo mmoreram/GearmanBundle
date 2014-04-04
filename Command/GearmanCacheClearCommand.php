@@ -4,7 +4,7 @@
  * Gearman Bundle for Symfony2
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
+ * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Command;
@@ -14,13 +14,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
- * Warm ups all cache data
+ * Clears all cache data
  *
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 class GearmanCacheClearCommand extends ContainerAwareCommand
 {
-
     /**
      * Console Command configuration
      */
@@ -28,9 +27,10 @@ class GearmanCacheClearCommand extends ContainerAwareCommand
     {
         parent::configure();
 
-        $this   ->setName('gearman:cache:clear')
-                ->setAliases(array('cache:gearman:clear'))
-                ->setDescription('Clears gearman cache data on current environment');
+        $this
+            ->setName('gearman:cache:clear')
+            ->setAliases(array('cache:gearman:clear'))
+            ->setDescription('Clears gearman cache data on current environment');
     }
 
     /**

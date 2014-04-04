@@ -4,7 +4,7 @@
  * Gearman Bundle for Symfony2
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
+ * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Module;
@@ -16,7 +16,6 @@ use Mmoreram\GearmanBundle\Module\JobClass as Job;
  */
 class JobCollection
 {
-
     /**
      * @var array
      *

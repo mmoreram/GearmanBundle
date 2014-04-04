@@ -26,7 +26,8 @@ class GearmanEvents
     const GEARMAN_CLIENT_CALLBACK_COMPLETE = 'gearman.client.callback.complete';
 
     /**
-     * Sets the callback function to be used when a task does not complete successfully
+     * Sets the callback function to be used when a task does not complete
+     * successfully
      *
      * event.name : gearman.client.callback.fail
      * event.class : GearmanClientCallbackFailEvent
@@ -46,7 +47,8 @@ class GearmanEvents
     const GEARMAN_CLIENT_CALLBACK_DATA = 'gearman.client.callback.data';
 
     /**
-     * Sets a function to be called when a task is received and queued by the Gearman job server
+     * Sets a function to be called when a task is received and queued by the
+     * Gearman job server
      *
      * event.name : gearman.client.callback.created
      * event.class : GearmanClientCallbackCreatedEvent
@@ -66,7 +68,8 @@ class GearmanEvents
     const GEARMAN_CLIENT_CALLBACK_EXCEPTION = 'gearman.client.callback.exception';
 
     /**
-     * Sets a callback function used for getting updated status information from a worker
+     * Sets a callback function used for getting updated status information from
+     * a worker
      *
      * event.name : gearman.client.callback.status
      * event.class : GearmanClientCallbackStatusEvent
@@ -86,8 +89,11 @@ class GearmanEvents
     const GEARMAN_CLIENT_CALLBACK_WARNING = 'gearman.client.callback.warning';
 
     /**
-     * Sets a function to be called when a worker needs to send back data prior to job completion.
-     * A worker can do this when it needs to send updates, send partial results, or flush data during long running jobs
+     * Sets a function to be called when a worker needs to send back data prior
+     * to job completion.
+     *
+     * A worker can do this when it needs to send updates, send partial results,
+     * or flush data during long running jobs
      *
      * event.name : gearman.client.callback.workload
      * event.class : GearmanClientCallbackWorkloadEvent
