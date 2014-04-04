@@ -43,10 +43,10 @@ services:
         class: %gearman.cache.wrapper.class%
         arguments:
             gearman_parser: @gearman.parser
-            gearman_cache: @liip_doctrine_cache.ns.gearman
+            gearman_cache: @doctrine_cache.providers.gearman_cache
             gearman_cache_id: %gearman.cache.id%
         calls:
-            - [load,  [@liip_doctrine_cache.ns.gearman, %gearman.cache.id%]]
+            - [load,  [@doctrine_cache.providers.gearman_cache, %gearman.cache.id%]]
         tags:
             - { name: kernel.cache_clearer }
             - { name: kernel.cache_warmer, priority: 0 }
