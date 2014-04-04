@@ -32,3 +32,4 @@ script:
 
 notifications:
     email: false
+    
