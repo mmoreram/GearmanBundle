@@ -111,7 +111,7 @@ And register the bundle in your appkernel.php file
 ``` php
 return array(
    // ...
-   new Liip\DoctrineCacheBundle\LiipDoctrineCacheBundle(),
+   new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
    new Mmoreram\GearmanBundle\GearmanBundle(),
    // ...
 );
@@ -125,10 +125,11 @@ Also we must config gearman cache, using doctrine cache.
 > The reason to allow workers to kill themselves is just to prevent each process to accumulate a large quantity of memory.
 
 ``` yml
-liip_doctrine_cache:
-   namespaces:
-      gearman:
-         type: file_system
+doctrine_cache:
+    providers:
+        gearman_cache:
+            type: file_system
+            namespace: doctrine_cache.ns.gearman
 
 
 gearman:
@@ -205,16 +206,18 @@ In development mode you do not want to cache things over more than one request. 
 
 ``` yml
 #config.yml
-liip_doctrine_cache:
-    namespaces:
-        gearman:
+doctrine_cache:
+    providers:
+        gearman_cache:
             type: file_system
+            namespace: doctrine_cache.ns.gearman
 
 # config_dev.yml
-liip_doctrine_cache:
-    namespaces:
-        gearman:
+doctrine_cache:
+    providers:
+        gearman_cache:
             type: array
+            namespace: doctrine_cache.ns.gearman
 ```
 
 ## Tests

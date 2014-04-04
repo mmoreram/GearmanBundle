@@ -2,7 +2,8 @@ framework:
     secret: "shdhkajshdjhsjdjsahdkjas"
     test: true
 
-liip_doctrine_cache:
-   namespaces:
-      gearman:
-         type: file_system
+doctrine_cache:
+    providers:
+        gearman_cache:
+            type: file_system
+            namespace: doctrine_cache.ns.gearman
