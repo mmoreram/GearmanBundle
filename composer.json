@@ -26,7 +26,8 @@
         "symfony/config": ">=2.1",
         "symfony/http-kernel": ">=2.1",
         "symfony/dependency-injection": ">=2.1",
-        "doctrine/doctrine-cache-bundle": "1.0.0"
+        "doctrine/doctrine-cache-bundle": "1.0.0",
+        "symfony/finder": "2.3.12"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
