@@ -69,7 +69,7 @@ And register the bundle in your appkernel.php file
 
     return array(
        // ...
-       new Liip\DoctrineCacheBundle\LiipDoctrineCacheBundle(),
+       new Doctrine\DoctrineCacheBundle\DoctrineCacheBundle(),
        new Mmoreram\GearmanBundle\GearmanBundle(),
        // ...
     );
