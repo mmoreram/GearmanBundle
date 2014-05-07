@@ -69,7 +69,7 @@ And register the bundle in your appkernel.php file
 
     return array(
        // ...
-       new Doctrine\DoctrineCacheBundle\DoctrineCacheBundle(),
+       new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
        new Mmoreram\GearmanBundle\GearmanBundle(),
        // ...
     );
