@@ -289,7 +289,7 @@ class GearmanClient extends AbstractGearmanService
      */
     public function doJob($name, $params = '', $unique = null)
     {
-        return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DO, $unique);
+        return $this->enqueue($name, $params, GearmanMethods::GEARMAN_METHOD_DONORMAL, $unique);
     }
 
     /**
