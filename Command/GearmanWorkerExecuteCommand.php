@@ -62,8 +62,7 @@ class GearmanWorkerExecuteCommand extends ContainerAwareCommand
         $worker = $input->getArgument('worker');
         $workerStruct = $this->getContainer()->get('gearman')->getWorker($worker);
 
-        if (!$input->getOption('no-description')) {
-
+        if (!$input->getOption('no-description') || !$input->getOption('quiet')) {
             $this->getContainer()->get('gearman.describer')->describeWorker($output, $workerStruct, true);
         }
 
