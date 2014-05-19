@@ -54,7 +54,10 @@ class GearmanWorkerExecuteCommand extends ContainerAwareCommand
             return;
         }
 
-        $output->writeln(sprintf('<info>[%s] loading...</info>', date('Y-m-d H:i:s')));
+        if (!$input->getOption('quiet')) {
+            $output->writeln(sprintf('<info>[%s] loading...</info>', date('Y-m-d H:i:s')));
+        }
+
 
         $worker = $input->getArgument('worker');
         $workerStruct = $this->getContainer()->get('gearman')->getWorker($worker);
@@ -64,7 +67,10 @@ class GearmanWorkerExecuteCommand extends ContainerAwareCommand
             $this->getContainer()->get('gearman.describer')->describeWorker($output, $workerStruct, true);
         }
 
-        $output->writeln(sprintf('<info>[%s] loaded. Ctrl+C to break</info>', date('Y-m-d H:i:s')));
+        if (!$input->getOption('quiet')) {
+            $output->writeln(sprintf('<info>[%s] loaded. Ctrl+C to break</info>', date('Y-m-d H:i:s')));
+        }
+
         $this->getContainer()->get('gearman.execute')->executeWorker($worker);
     }
 }
