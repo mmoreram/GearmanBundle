@@ -3,33 +3,60 @@
 /**
  * Gearman Bundle for Symfony2
  *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputInterface;
+
+use Mmoreram\GearmanBundle\Command\Abstracts\AbstractGearmanCommand;
+use Mmoreram\GearmanBundle\Service\GearmanCacheWrapper;
 
 /**
  * Clears all cache data
  *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2.3.1
  */
-class GearmanCacheClearCommand extends ContainerAwareCommand
+class GearmanCacheClearCommand extends AbstractGearmanCommand
 {
+    /**
+     * @var GearmanCacheWrapper
+     *
+     * GearmanCacheWrapper
+     */
+    protected $gearmanCacheWrapper;
+
+    /**
+     * Set the GearmanCacheWrapper instance
+     *
+     * @param GearmanCacheWrapper $gearmanCacheWrapper GearmanCacheWrapper
+     *
+     * @return GearmanCacheWarmupCommand self Object
+     */
+    public function setGearmanCacheWrapper(GearmanCacheWrapper $gearmanCacheWrapper)
+    {
+        $this->gearmanCacheWrapper = $gearmanCacheWrapper;
+
+        return $this;
+    }
+
     /**
      * Console Command configuration
      */
     protected function configure()
     {
-        parent::configure();
-
         $this
             ->setName('gearman:cache:clear')
-            ->setAliases(array('cache:gearman:clear'))
+            ->setAliases(array(
+                'cache:gearman:clear'
+            ))
             ->setDescription('Clears gearman cache data on current environment');
     }
 
@@ -45,13 +72,17 @@ class GearmanCacheClearCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Clearing the cache for the ' . $this->getContainer()->get('kernel')->getEnvironment() . ' environment');
+        if (
+            !$input->getOption('quiet')
+        ) {
+            $kernelEnvironment = $this
+                ->kernel
+                ->getEnvironment();
 
-        /**
-         * By requesting service, cache is loaded on the fly
-         */
+            $output->writeln('Clearing the cache for the ' . $kernelEnvironment . ' environment');
+        }
         $this
-            ->getContainer()
-            ->get('gearman.cache.wrapper');
+            ->gearmanCacheWrapper
+            ->clear('');
     }
 }

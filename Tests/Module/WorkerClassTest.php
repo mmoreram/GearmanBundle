@@ -3,11 +3,16 @@
 /**
  * Gearman Bundle for Symfony2
  *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  */
 
 namespace Mmoreram\GearmanBundle\Tests\Module;
+use Doctrine\Common\Annotations\SimpleAnnotationReader;
 
 use Mmoreram\GearmanBundle\Module\WorkerClass;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
@@ -33,7 +38,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
     private $reflectionClass;
 
     /**
-     * @var Reader
+     * @var SimpleAnnotationReader
      *
      * Reader
      */
@@ -168,7 +173,14 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $workerClass = new WorkerClass($this->workAnnotation, $this->reflectionClass, $this->reader, $this->servers, $this->defaultSettings);
+        $workerClass = new WorkerClass(
+            $this->workAnnotation,
+            $this->reflectionClass,
+            $this->reader,
+            $this->servers,
+            $this->defaultSettings
+        );
+
         $this->assertEquals($workerClass->toArray(), array(
 
             'namespace'             =>  $this->classNamespace,
@@ -222,7 +234,14 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('getMethodAnnotations');
 
-        $workerClass = new WorkerClass($this->workAnnotation, $this->reflectionClass, $this->reader, $this->servers, $this->defaultSettings);
+        $workerClass = new WorkerClass(
+            $this->workAnnotation,
+            $this->reflectionClass,
+            $this->reader,
+            $this->servers,
+            $this->defaultSettings
+        );
+
         $this->assertEquals($workerClass->toArray(), array(
 
             'namespace'             =>  $this->classNamespace,
@@ -277,7 +296,14 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             'port'  =>  '80',
         );
 
-        $workerClass = new WorkerClass($this->workAnnotation, $this->reflectionClass, $this->reader, $this->servers, $this->defaultSettings);
+        $workerClass = new WorkerClass(
+            $this->workAnnotation,
+            $this->reflectionClass,
+            $this->reader,
+            $this->servers,
+            $this->defaultSettings
+        );
+
         $this->assertEquals($workerClass->toArray(), array(
 
             'namespace'             =>  $this->classNamespace,

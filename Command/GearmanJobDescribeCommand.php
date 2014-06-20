@@ -3,35 +3,86 @@
 /**
  * Gearman Bundle for Symfony2
  *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+
+use Mmoreram\GearmanBundle\Command\Abstracts\AbstractGearmanCommand;
+use Mmoreram\GearmanBundle\Service\GearmanDescriber;
+use Mmoreram\GearmanBundle\Service\GearmanClient;
 
 /**
  * Gearman Job Describe Command class
  *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2.3.1
  */
-class GearmanJobDescribeCommand extends ContainerAwareCommand
+class GearmanJobDescribeCommand extends AbstractGearmanCommand
 {
+    /**
+     * @var GearmanClient
+     *
+     * Gearman client
+     */
+    protected $gearmanClient;
+
+    /**
+     * @var GearmanDescriber
+     *
+     * GearmanDescriber
+     */
+    protected $gearmanDescriber;
+
+    /**
+     * Set gearman client
+     *
+     * @param GearmanClient $gearmanClient Gearman client
+     *
+     * @return GearmanJobDescribeCommand self Object
+     */
+    public function setGearmanClient(GearmanClient $gearmanClient)
+    {
+        $this->gearmanClient = $gearmanClient;
+
+        return $this;
+    }
+
+    /**
+     * set Gearman describer
+     *
+     * @param GearmanDescriber $gearmanDescriber GearmanDescriber
+     *
+     * @return GearmanJobDescribeCommand self Object
+     */
+    public function setGearmanDescriber(GearmanDescriber $gearmanDescriber)
+    {
+        $this->gearmanDescriber = $gearmanDescriber;
+
+        return $this;
+    }
+
     /**
      * Console Command configuration
      */
     protected function configure()
     {
-        parent::configure();
-
         $this
             ->setName('gearman:job:describe')
             ->setDescription('Describe given job')
-            ->addArgument('job', InputArgument::REQUIRED, 'job to describe');
+            ->addArgument(
+                'job',
+                InputArgument::REQUIRED,
+                'job to describe'
+            );
     }
 
     /**
@@ -47,11 +98,10 @@ class GearmanJobDescribeCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $job = $input->getArgument('job');
-        $job = $this->getContainer()->get('gearman')->getJob($job);
+        $job = $this->gearmanClient->getJob($job);
 
         $this
-            ->getContainer()
-            ->get('gearman.describer')
+            ->gearmanDescriber
             ->describeJob($output, $job);
     }
 }

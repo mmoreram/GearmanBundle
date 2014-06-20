@@ -3,23 +3,50 @@
 /**
  * Gearman Bundle for Symfony2
  *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputInterface;
+
+use Mmoreram\GearmanBundle\Command\Abstracts\AbstractGearmanCommand;
+use Mmoreram\GearmanBundle\Service\GearmanClient;
 
 /**
  * Gearman Job List Command class
  *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2.3.1
  */
-class GearmanWorkerListCommand extends ContainerAwareCommand
+class GearmanWorkerListCommand extends AbstractGearmanCommand
 {
+    /**
+     * @var GearmanClient
+     *
+     * Gearman client
+     */
+    protected $gearmanClient;
+
+    /**
+     * Set gearman client
+     *
+     * @param GearmanClient $gearmanClient Gearman client
+     *
+     * @return GearmanJobDescribeCommand self Object
+     */
+    public function setGearmanClient(GearmanClient $gearmanClient)
+    {
+        $this->gearmanClient = $gearmanClient;
+
+        return $this;
+    }
+
     /**
      * Console Command configuration
      */
@@ -44,7 +71,11 @@ class GearmanWorkerListCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $workers = $this->getContainer()->get('gearman')->getWorkers();
+        if ($input->getOption('quiet')) {
+            return;
+        }
+
+        $workers = $this->gearmanClient->getWorkers();
 
         if (is_array($workers)) {
 
@@ -52,20 +83,19 @@ class GearmanWorkerListCommand extends ContainerAwareCommand
 
             foreach ($workers as $worker) {
 
-                $output->writeln('<comment>    @Worker:  </comment><info>' . $worker['className'] . '</info>');
-                $output->writeln('<comment>    callablename:  </comment><info>' . $worker['callableName'] . '</info>');
-                $output->writeln('<comment>    Jobs:</comment>');
+                $output->writeln('<comment>@Worker:  </comment><info>' . $worker['className'] . '</info>');
+                $output->writeln('<comment>callablename:  </comment><info>' . $worker['callableName'] . '</info>');
+                $output->writeln('<comment>Jobs:</comment>');
                 foreach ($worker['jobs'] as $job) {
-                    $output->writeln('<comment>      - #' . $it++ . '</comment>');
-                    $output->writeln('<comment>          name: ' . $job['methodName'] . '</comment>');
-                    $output->writeln('<comment>          callablename:</comment><info> ' . $job['realCallableNameNoPrefix'] . '</info>');
+                    $output->writeln('<comment>  - #' . $it++ . '</comment>');
+                    $output->writeln('<comment>      name: ' . $job['methodName'] . '</comment>');
+                    $output->writeln('<comment>      callablename:</comment><info> ' . $job['realCallableNameNoPrefix'] . '</info>');
 
                     if (false === is_null($job['jobPrefix'])) {
 
-                        $output->writeln('<comment>          jobPrefix:</comment><info> ' . $job['jobPrefix'] . '</info>');
+                        $output->writeln('<comment>      jobPrefix:</comment><info> ' . $job['jobPrefix'] . '</info>');
                     }
                 }
-                $output->writeln('');
             }
         }
     }

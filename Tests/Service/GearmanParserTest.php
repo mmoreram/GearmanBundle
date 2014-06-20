@@ -3,22 +3,29 @@
 /**
  * Gearman Bundle for Symfony2
  *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  */
 
 namespace Mmoreram\GearmanBundle\Tests\Service;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Doctrine\Common\Annotations\Reader;
+use Symfony\Component\Finder\Finder;
 
 use Mmoreram\GearmanBundle\Module\WorkerCollection;
+use Mmoreram\GearmanBundle\Service\GearmanParser;
 
 /**
  * Tests GearmanParser class
  */
 class GearmanParserTest extends WebTestCase
 {
-
     /**
      * @var GearmanParser
      *
@@ -74,7 +81,13 @@ class GearmanParserTest extends WebTestCase
     {
         static::$kernel = static::createKernel();
         static::$kernel->boot();
-        $this->assertInstanceOf('\Mmoreram\GearmanBundle\Service\GearmanParser', static::$kernel->getContainer()->get('gearman.parser'));
+
+        $this->assertInstanceOf(
+            '\Mmoreram\GearmanBundle\Service\GearmanParser',
+            static::$kernel
+                ->getContainer()
+                ->get('gearman.parser')
+        );
     }
 
     /**
@@ -84,13 +97,19 @@ class GearmanParserTest extends WebTestCase
     {
         $mockNamespace = dirname(__FILE__) . '/Mocks/SingleCleanFile.php';
 
+        /**
+         * @var GearmanParser $gearmanParser
+         */
         $gearmanParser = $this
             ->getMockBuilder('\Mmoreram\GearmanBundle\Service\GearmanParser')
             ->disableOriginalConstructor()
             ->setMethods(null)
             ->getMock();
 
-        $this->assertEquals('Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCleanFile', $gearmanParser->getFileClassNamespace($mockNamespace));
+        $this->assertEquals(
+            'Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCleanFile',
+            $gearmanParser->getFileClassNamespace($mockNamespace)
+        );
     }
 
     /**
@@ -100,13 +119,19 @@ class GearmanParserTest extends WebTestCase
     {
         $mockNamespace = dirname(__FILE__) . '/Mocks/SingleCommentedFile.php';
 
+        /**
+         * @var GearmanParser $gearmanParser
+         */
         $gearmanParser = $this
             ->getMockBuilder('\Mmoreram\GearmanBundle\Service\GearmanParser')
             ->disableOriginalConstructor()
             ->setMethods(null)
             ->getMock();
 
-        $this->assertEquals('Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCommentedFile', $gearmanParser->getFileClassNamespace($mockNamespace));
+        $this->assertEquals(
+            'Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCommentedFile',
+            $gearmanParser->getFileClassNamespace($mockNamespace)
+        );
     }
 
     /**
@@ -117,11 +142,17 @@ class GearmanParserTest extends WebTestCase
         $paths = array();
         $excludedPaths = array();
 
+        /**
+         * @var Reader $reader
+         */
         $reader = $this
             ->getMockBuilder('\Doctrine\Common\Annotations\Reader')
             ->disableOriginalConstructor()
             ->getMock();
 
+        /**
+         * @var Finder $finder
+         */
         $finder = $this
             ->getMockBuilder('\Symfony\Component\Finder\Finder')
             ->disableOriginalConstructor()

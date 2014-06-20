@@ -3,33 +3,63 @@
 /**
  * Gearman Bundle for Symfony2
  *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputInterface;
+
+use Mmoreram\GearmanBundle\Command\Abstracts\AbstractGearmanCommand;
+use Mmoreram\GearmanBundle\Service\GearmanCacheWrapper;
 
 /**
  * Warms up all cache data
  *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2.3.1
  */
-class GearmanCacheWarmupCommand extends ContainerAwareCommand
+class GearmanCacheWarmupCommand extends AbstractGearmanCommand
 {
+    /**
+     * @var GearmanCacheWrapper
+     *
+     * GearmanCacheWrapper
+     */
+    protected $gearmanCacheWrapper;
+
+    /**
+     * Set the GearmanCacheWrapper instance
+     *
+     * @param GearmanCacheWrapper $gearmanCacheWrapper GearmanCacheWrapper
+     *
+     * @return GearmanCacheWarmupCommand self Object
+     */
+    public function setGearmanCacheWrapper(GearmanCacheWrapper $gearmanCacheWrapper)
+    {
+        $this->gearmanCacheWrapper = $gearmanCacheWrapper;
+
+        return $this;
+    }
+
+    /**
+     * Set the kernel environment
+
     /**
      * Console Command configuration
      */
     protected function configure()
     {
-        parent::configure();
-
         $this
             ->setName('gearman:cache:warmup')
-            ->setAliases(array('cache:gearman:warmup'))
+            ->setAliases(array(
+                'cache:gearman:warmup'
+            ))
             ->setDescription('Warms up gearman cache data');
     }
 
@@ -45,11 +75,18 @@ class GearmanCacheWarmupCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Warming up the cache for the ' . $this->getContainer()->get('kernel')->getEnvironment() . ' environment');
+        if (
+            !$input->getOption('quiet')
+        ) {
+            $kernelEnvironment = $this
+                ->kernel
+                ->getEnvironment();
+
+            $output->writeln('Warming the cache for the ' . $kernelEnvironment . ' environment');
+        }
 
         $this
-            ->getContainer()
-            ->get('gearman.cache.wrapper')
-            ->clear('');
+            ->gearmanCacheWrapper
+            ->warmup('');
     }
 }

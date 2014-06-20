@@ -1,32 +1,6 @@
 services:
 
     #
-    # External
-    #
-    gearman.external.finder:
-        class: %gearman.external.finder.class%
-
-    #
-    # Generators
-    #
-    gearman.unique_job_identifier:
-        class: %gearman.unique_job_identifier.class%
-        arguments:
-            generate_unique_key: %gearman.default.settings.generate_unique_key%
-
-    #
-    # Dispatchers
-    #
-    gearman.dispatcher.abstract:
-        abstract: true
-        arguments:
-            event.dispatcher: @event_dispatcher
-
-    gearman.dispatcher.callbacks:
-        parent: gearman.dispatcher.abstract
-        class: %gearman.dispatcher.callbacks.class%
-
-    #
     # Services
     #
     gearman.parser:
@@ -34,7 +8,7 @@ services:
         arguments:
             kernel: @kernel
             annotations_reader: @annotation_reader
-            gearman_finder: @gearman.external.finder
+            symfony_finder: @gearman.external.symfony_finder
             gearman_bundles: %gearman.bundles%
             gearman_servers: %gearman.servers%
             gearman_default_settings: %gearman.default.settings%
