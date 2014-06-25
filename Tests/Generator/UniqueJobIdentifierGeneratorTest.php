@@ -3,8 +3,12 @@
 /**
  * Gearman Bundle for Symfony2
  *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  */
 
 namespace Mmoreram\GearmanBundle\Tests\Generator;
@@ -15,12 +19,9 @@ use Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator;
 
 /**
  * Gearman execute methods. All Worker methods
- *
- * @author Marc Morera <yuhu@mmoreram.com>
  */
 class UniqueJobIdentifierGeneratorTest extends WebTestCase
 {
-
     /**
      * Test service can be instanced through container
      */
@@ -28,7 +29,13 @@ class UniqueJobIdentifierGeneratorTest extends WebTestCase
     {
         static::$kernel = static::createKernel();
         static::$kernel->boot();
-        $this->assertInstanceOf('\Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator', static::$kernel->getContainer()->get('gearman.unique_job_identifier'));
+
+        $this->assertInstanceOf(
+            '\Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator',
+            static::$kernel
+                ->getContainer()
+                ->get('gearman.unique_job_identifier')
+        );
     }
 
     /**
@@ -36,7 +43,6 @@ class UniqueJobIdentifierGeneratorTest extends WebTestCase
      */
     public function testGenerateUniqueKeyFalse()
     {
-
         $generator = new UniqueJobIdentifierGenerator(false);
 
         $this->assertEquals('uniqueValue', $generator->generateUniqueKey(
@@ -58,7 +64,6 @@ class UniqueJobIdentifierGeneratorTest extends WebTestCase
      */
     public function testGenerateUniqueKeyTrue()
     {
-
         $generator = new UniqueJobIdentifierGenerator(true);
         $unique = 'c1af4ce5c9773ce30d8cc6d1e0e7d699';
 

@@ -3,8 +3,12 @@
 /**
  * Gearman Bundle for Symfony2
  *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  */
 
 namespace Mmoreram\GearmanBundle\Service;
@@ -21,7 +25,7 @@ use Doctrine\Common\Cache\Cache;
  *
  * Also provides this data to external services
  *
- * @author Marc Morera <yuhu@mmoreram.com>
+ * @since 2.3.1
  */
 class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
 {
@@ -60,7 +64,11 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
      * @param Cache         $cache         Cache instance
      * @param string        $cacheId       Cache id
      */
-    public function __construct(GearmanParser $gearmanParser, Cache $cache, $cacheId)
+    public function __construct(
+        GearmanParser $gearmanParser,
+        Cache $cache,
+        $cacheId
+    )
     {
         $this->gearmanParser = $gearmanParser;
         $this->cache = $cache;

@@ -3,8 +3,12 @@
 /**
  * Gearman Bundle for Symfony2
  *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since  2013
  */
 
 namespace Mmoreram\GearmanBundle\Generator;
@@ -14,8 +18,9 @@ use Mmoreram\GearmanBundle\Exceptions\WorkerNameTooLongException;
 /**
  * Job Unique Key generator
  *
- * @author Marc Morera <yuhu@mmoreram.com>
- * @see    https://github.com/mmoreram/GearmanBundle/issues/66
+ * @see https://github.com/mmoreram/GearmanBundle/issues/66
+ *
+ * @since 2.3.1
  */
 class UniqueJobIdentifierGenerator
 {
@@ -52,6 +57,8 @@ class UniqueJobIdentifierGenerator
      * @return string Generated Unique Key
      *
      * @throws WorkerNameTooLongException If name is too large
+     *
+     * @api
      */
     public function generateUniqueKey($name, $params, $unique, $method)
     {

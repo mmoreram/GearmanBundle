@@ -15,6 +15,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Gearman execute methods. All Worker methods
  *
  * @author Marc Morera <yuhu@mmoreram.com>
+ *
+ * @since 2.3.3
  */
 abstract class AbstractGearmanDispatcher
 {

@@ -3,26 +3,42 @@
 /**
  * Gearman Bundle for Symfony2
  *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Feel free to edit as you please, and have fun.
+ *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @since 2013
  */
 
 namespace Mmoreram\GearmanBundle\Tests\Module;
+
+use PHPUnit_Framework_TestCase;
 
 use Mmoreram\GearmanBundle\Module\JobStatus;
 
 /**
  * Tests JobStatusTest class
  */
-class JobStatusTest extends \PHPUnit_Framework_TestCase
+class JobStatusTest extends PHPUnit_Framework_TestCase
 {
-
     /**
      * Testing job status
      *
-     * @dataProvider dataProvider
+     * @dataProvider dataJobStatusNonExistant
      */
-    public function testJobStatusNonExistant($known, $running, $completed, $completionTotal, $isKnown, $isRunning, $getCompleted, $getCompletionTotal, $getCompletionPercent, $isFinished)
+    public function testJobStatusNonExistant(
+        $known,
+        $running,
+        $completed,
+        $completionTotal,
+        $isKnown,
+        $isRunning,
+        $getCompleted,
+        $getCompletionTotal,
+        $getCompletionPercent,
+        $isFinished
+    )
     {
         $jobStatus = new JobStatus(array(
             $known,
@@ -40,9 +56,9 @@ class JobStatusTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider
+     * Data provider for testJobStatusNonExistant
      */
-    public function dataProvider()
+    public function dataJobStatusNonExistant()
     {
         return array(
 
