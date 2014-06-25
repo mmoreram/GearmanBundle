@@ -84,7 +84,7 @@ class JobClassTest extends PHPUnit_Framework_TestCase
     {
         $this->reflectionMethod = $this
             ->getMockBuilder('\ReflectionMethod')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(array('\Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCleanFile', 'myMethod'))
             ->setMethods(array(
                 'getName',
             ))

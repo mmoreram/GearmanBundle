@@ -22,7 +22,6 @@ use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
  */
 class WorkerClassTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var WorkAnnotation
      *
@@ -96,17 +95,16 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-
         $this->reflectionClass = $this
             ->getMockBuilder('\ReflectionClass')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(array('\Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCleanFile'))
             ->setMethods(array(
                 'getName',
                 'getNamespaceName',
                 'getFileName',
                 'getMethods',
             ))
-                            ->getMock();
+            ->getMock();
 
         $this->workAnnotation = $this
             ->getMockBuilder('\Mmoreram\GearmanBundle\Driver\Gearman\Work')
@@ -131,7 +129,6 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
      */
     public function testWorkerAnnotationsDefined()
     {
-
         $this
             ->reflectionClass
             ->expects($this->once())
@@ -204,7 +201,6 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
      */
     public function testWorkerAnnotationsEmpty()
     {
-
         $this
             ->reflectionClass
             ->expects($this->once())
@@ -261,7 +257,6 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
      */
     public function testCombinationServers()
     {
-
         $this
             ->reflectionClass
             ->expects($this->once())
