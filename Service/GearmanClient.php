@@ -188,7 +188,7 @@ class GearmanClient extends AbstractGearmanService
      *
      * @return mixed Return result of the call. If worker is not valid, return false
      */
-    private function enqueue($jobName, $params, $method, $unique)
+    protected function enqueue($jobName, $params, $method, $unique)
     {
         $worker = $this->getJob($jobName);
 
@@ -214,7 +214,7 @@ class GearmanClient extends AbstractGearmanService
      *
      * @return mixed Return result of the GearmanClient call
      */
-    private function doEnqueue(array $worker, $params, $method, $unique)
+    protected function doEnqueue(array $worker, $params, $method, $unique)
     {
         $gearmanClient = new \GearmanClient();
         $this->assignServers($gearmanClient);
@@ -229,7 +229,7 @@ class GearmanClient extends AbstractGearmanService
      *
      * @return GearmanClient Returns self object
      */
-    private function assignServers(\GearmanClient $gearmanClient)
+    protected function assignServers(\GearmanClient $gearmanClient)
     {
         $servers = $this->defaultServers;
 
@@ -569,7 +569,7 @@ class GearmanClient extends AbstractGearmanService
      *
      * @return GearmanClient Return this object
      */
-    private function enqueueTask($name, $params, $context, $unique, $method)
+    protected function enqueueTask($name, $params, $context, $unique, $method)
     {
 
         $task = array(
@@ -592,7 +592,7 @@ class GearmanClient extends AbstractGearmanService
      *
      * @return GearmanClient Return this object
      */
-    private function addTaskToStructure(array $task)
+    protected function addTaskToStructure(array $task)
     {
         $this->taskStructure[] = $task;
 
