@@ -13,14 +13,14 @@
 
 namespace Mmoreram\GearmanBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Mmoreram\GearmanBundle\Event\Abstracts\AbstractGearmanClientTaskEvent;
 
 /**
  * GearmanClientCallbackExceptionEvent
  *
  * @since 2.3.1
  */
-class GearmanClientCallbackExceptionEvent extends Event
+class GearmanClientCallbackExceptionEvent extends AbstractGearmanClientTaskEvent
 {
 
 }
