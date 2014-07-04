@@ -152,9 +152,9 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
      *
      * @see http://www.php.net/manual/en/gearmanclient.setexceptioncallback.php
      */
-    public function assignExceptionCallback()
+    public function assignExceptionCallback(GearmanTask $gearmanTask)
     {
-        $event = new GearmanClientCallbackExceptionEvent;
+        $event = new GearmanClientCallbackExceptionEvent($gearmanTask);
         $this->eventDispatcher->dispatch(
             GearmanEvents::GEARMAN_CLIENT_CALLBACK_EXCEPTION,
             $event
