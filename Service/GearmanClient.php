@@ -69,6 +69,13 @@ class GearmanClient extends AbstractGearmanService
     protected $uniqueJobIdentifierGenerator;
 
     /**
+     * @var int
+     *
+     * Return code from internal client.
+     */
+    protected $returnCode;
+
+    /**
      * Init tasks structure
      *
      * @return GearmanClient self Object
@@ -225,7 +232,10 @@ class GearmanClient extends AbstractGearmanService
         $gearmanClient = new \GearmanClient();
         $this->assignServers($gearmanClient);
 
-        return $gearmanClient->$method($worker['job']['realCallableName'], $params, $unique);
+        $result = $gearmanClient->$method($worker['job']['realCallableName'], $params, $unique);
+        $this->returnCode = $gearmanClient->returnCode();
+
+        return $result;
     }
 
     /**
@@ -423,6 +433,16 @@ class GearmanClient extends AbstractGearmanService
         $jobStatus = new JobStatus($statusData);
 
         return $jobStatus;
+    }
+
+    /**
+     * Gets the return code from the last run job.
+     *
+     * @return int
+     */
+    public function getReturnCode()
+    {
+        return $this->returnCode;
     }
 
     /**
