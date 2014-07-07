@@ -38,6 +38,8 @@ Request a job
     $result = $gearman
         ->doJob('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', json_encode(array('value1')));
 
+    $returnCode = $gearman->getReturnCode();
+
 - doJob: Call the job and wait for the result
 - doNormalJob: Call the job and wait for the result ( Only newest gearman versions )
 - doHighJob: Call the job and wait for the result on High Preference
@@ -50,6 +52,7 @@ Request a job
     - It receives a job handle for the submitted job
 - callJob: Call the job with default method.
     - Defined in settings, work annotations or the job annotations
+- getReturnCode: Retrieve the return code from the last requested job.
 
 Tasks
 ~~~~~
