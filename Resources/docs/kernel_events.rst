@@ -114,3 +114,21 @@ For more information about this GearmanEvent, read [GearmanClient::setWorkloadCa
             class: AcmeBundle\EventListener\MyEventListener
             tags:
               - { name: kernel.event_listener, event: gearman.client.callback.workload, method: onWorkload }
+
+Execute Work Event
+~~~~~~~~~~~~~~~~~~
+
+This event receives as parameter an instanceof `Mmoreram\GearmanBundle\Event\GearmanExecuteWorkEvent` with four methods:
+`$event->getJobs()` returns the configuration of the jobs,
+`$event->getIterationsRemaining()` returns the remaining iterations for these jobs,
+`$event->getReturnCode()` returns the return code of the last executed job.
+
+This event is dispatched after a job has been completed.  After this event is completed, the worker continues with its iterations.
+
+.. code-block:: yml
+
+    services:
+        my_event_listener:
+            class: AcmeBundle\EventListener\MyEventListener
+            tags:
+              - { name: kernel.event_listener, event: gearman.execute.work, method: onWork }
