@@ -41,6 +41,7 @@ services:
         parent: gearman.abstract.service
         calls:
             - [setContainer,  [@service_container]]
+            - [setEventDispatcher, [@event_dispatcher]]
 
     gearman:
         class: %gearman.client.class%

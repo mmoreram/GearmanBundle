@@ -13,10 +13,13 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
+use Mmoreram\GearmanBundle\Event\GearmanExecuteWorkEvent;
+use Mmoreram\GearmanBundle\GearmanEvents;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -33,6 +36,13 @@ class GearmanExecute extends AbstractGearmanService
     private $container;
 
     /**
+     * @var EventDispatcherInterface
+     *
+     * EventDispatcher instance
+     */
+    private $eventDispatcher;
+
+    /**
      * Set container
      *
      * @param ContainerInterface $container Container
@@ -41,8 +51,21 @@ class GearmanExecute extends AbstractGearmanService
      */
     public function setContainer(ContainerInterface $container)
     {
-
         $this->container = $container;
+
+        return $this;
+    }
+
+    /**
+     * @param EventDispatcherInterface $eventDispatcher
+     *
+     * @return GearmanExecute self Object
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+
+        return $this;
     }
 
     /**
@@ -159,6 +182,11 @@ class GearmanExecute extends AbstractGearmanService
          */
         while ($gearmanWorker->work()) {
 
+            $iterations = $iterations - 1;
+
+            $event = new GearmanExecuteWorkEvent($jobs, $iterations, $gearmanWorker->returnCode());
+            $this->eventDispatcher->dispatch(GearmanEvents::GEARMAN_EXECUTE_WORK, $event);
+
             if ($gearmanWorker->returnCode() != GEARMAN_SUCCESS) {
 
                 break;
@@ -168,7 +196,7 @@ class GearmanExecute extends AbstractGearmanService
              * Only finishes its execution if alive is false and iterations
              * arrives to 0
              */
-            if (!$alive && --$iterations <= 0) {
+            if (!$alive && $iterations <= 0) {
 
                 break;
             }
