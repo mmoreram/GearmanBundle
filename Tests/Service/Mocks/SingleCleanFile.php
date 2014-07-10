@@ -23,7 +23,7 @@ class SingleCleanFile
      *
      *
      */
-    public function myMethod() {
-
+    public function myMethod()
+    {
     }
 }

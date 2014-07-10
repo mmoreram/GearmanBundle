@@ -47,9 +47,9 @@ class GearmanWorkExecutedEvent extends Event
     /**
      * Construct method
      *
-     * @param array $jobs Jobs
+     * @param array $jobs                Jobs
      * @param int   $iterationsRemaining Iterations Remaining
-     * @param int   $returnCode Return code
+     * @param int   $returnCode          Return code
      */
     public function __construct(array $jobs, $iterationsRemaining, $returnCode)
     {
