@@ -13,13 +13,13 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
-use Mmoreram\GearmanBundle\Event\GearmanExecuteWorkEvent;
-use Mmoreram\GearmanBundle\GearmanEvents;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Mmoreram\GearmanBundle\Event\GearmanWorkExecutedEvent;
+use Mmoreram\GearmanBundle\GearmanEvents;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -40,7 +40,7 @@ class GearmanExecute extends AbstractGearmanService
      *
      * EventDispatcher instance
      */
-    private $eventDispatcher;
+    protected $eventDispatcher;
 
     /**
      * Set container
@@ -182,10 +182,10 @@ class GearmanExecute extends AbstractGearmanService
          */
         while ($gearmanWorker->work()) {
 
-            $iterations = $iterations - 1;
+            $iterations--;
 
-            $event = new GearmanExecuteWorkEvent($jobs, $iterations, $gearmanWorker->returnCode());
-            $this->eventDispatcher->dispatch(GearmanEvents::GEARMAN_EXECUTE_WORK, $event);
+            $event = new GearmanWorkExecutedEvent($jobs, $iterations, $gearmanWorker->returnCode());
+            $this->eventDispatcher->dispatch(GearmanEvents::GEARMAN_WORK_EXECUTED, $event);
 
             if ($gearmanWorker->returnCode() != GEARMAN_SUCCESS) {
 
