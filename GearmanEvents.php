@@ -106,4 +106,13 @@ class GearmanEvents
      * @var string
      */
     const GEARMAN_CLIENT_CALLBACK_WORKLOAD = 'gearman.client.callback.workload';
+
+    /**
+     * Sets a function to be called when a worker has completed a job.
+     *
+     * This will be fired by the worker after completion of a job before preparing to start another work cycle.
+     *
+     * @var string
+     */
+    const GEARMAN_WORK_EXECUTED = 'gearman.work.executed';
 }
