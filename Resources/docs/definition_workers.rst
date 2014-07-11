@@ -126,6 +126,8 @@ variable in Worker annotation.
 
     namespace Acme\AcmeBundle\Services;
 
+    use Mmoreram\GearmanBundle\Driver\Gearman;
+
     /**
      * @Gearman\Work(
      *     service="myServiceName"
@@ -178,6 +180,7 @@ To avoid needing to check the output is available, you can by default set it to 
 
     use Symfony\Component\Console\Output\NullOutput;
     use Mmoreram\GearmanBundle\Command\Util\GearmanOutputAwareInterface;
+    use Mmoreram\GearmanBundle\Driver\Gearman;
 
     /**
      * @Gearman\Work(
