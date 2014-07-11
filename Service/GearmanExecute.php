@@ -13,10 +13,13 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+use Mmoreram\GearmanBundle\Command\Util\GearmanOutputAwareInterface;
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Mmoreram\GearmanBundle\Event\GearmanWorkExecutedEvent;
 use Mmoreram\GearmanBundle\GearmanEvents;
@@ -43,6 +46,13 @@ class GearmanExecute extends AbstractGearmanService
     protected $eventDispatcher;
 
     /**
+     * @var OutputInterface
+     *
+     * Output instance
+     */
+    protected $output;
+
+    /**
      * Set container
      *
      * @param ContainerInterface $container Container
@@ -57,6 +67,8 @@ class GearmanExecute extends AbstractGearmanService
     }
 
     /**
+     * Set event dispatcher
+     *
      * @param EventDispatcherInterface $eventDispatcher
      *
      * @return GearmanExecute self Object
@@ -64,6 +76,20 @@ class GearmanExecute extends AbstractGearmanService
     public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
+
+        return $this;
+    }
+
+    /**
+     * Set output
+     *
+     * @param OutputInterface $output
+     *
+     * @return GearmanExecute self Object
+     */
+    public function setOutput(OutputInterface $output)
+    {
+        $this->output = $output;
 
         return $this;
     }
@@ -163,6 +189,13 @@ class GearmanExecute extends AbstractGearmanService
      */
     private function runJob(\GearmanWorker $gearmanWorker, $objInstance, array $jobs, $iterations)
     {
+
+        /**
+         * Set the output of this instance, this should allow workers to use the console output.
+         */
+        if($objInstance instanceof GearmanOutputAwareInterface) {
+            $objInstance->setOutput($this->output ? : new NullOutput());
+        }
 
         /**
          * Every job defined in worker is added into GearmanWorker

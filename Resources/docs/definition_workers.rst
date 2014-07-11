@@ -163,3 +163,69 @@ And have this service defined in your dependency injection definition file
              arguments:
                 event_dispatcher: @event_dispatcher
                 mailer: @mailer
+
+Console output from workers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you need your worker to output information to the console, you can have your worker class implement `Mmoreram\GearmanBundle\Command\Util\GearmanOutputAwareInterface`.
+
+This interface requires a single method be implemented `public function setOutput(OutputInterface $output);`.
+To avoid needing to check the output is available, you can by default set it to an instance of `Symfony\Component\Console\Output\NullOutput`.
+
+.. code-block:: php
+
+    namespace Acme\AcmeBundle\Services;
+
+    use Symfony\Component\Console\Output\NullOutput;
+    use Mmoreram\GearmanBundle\Command\Util\GearmanOutputAwareInterface;
+
+    /**
+     * @Gearman\Work(
+     *     iterations = 3,
+     *     description = "Worker test description",
+     *     defaultMethod = "doBackground"
+     * )
+     */
+    class AcmeWorker implements GearmanOutputAwareInterface
+    {
+        /**
+         * @var OutputInterface
+         */
+        protected $output;
+
+        /**
+         * Constructor
+         */
+        public function __construct()
+        {
+            $this->output = new NullOutput();
+        }
+
+        /**
+         * @param OutputInterface $output
+         */
+        public function setOutput(OutputInterface $output)
+        {
+            $this->output = $output;
+        }
+
+        /**
+         * Test method to run as a job with console output
+         *
+         * @param \GearmanJob $job Object with job parameters
+         *
+         * @return boolean
+         *
+         * @Gearman\Job(
+         *     iterations = 3,
+         *     name = "test",
+         *     description = "This is a description"
+         * )
+         */
+        public function testA(\GearmanJob $job)
+        {
+            $this->output->writeln('Job testA done!');
+
+            return true;
+        }
+    }
