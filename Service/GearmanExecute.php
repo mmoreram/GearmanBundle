@@ -193,7 +193,7 @@ class GearmanExecute extends AbstractGearmanService
         /**
          * Set the output of this instance, this should allow workers to use the console output.
          */
-        if($objInstance instanceof GearmanOutputAwareInterface) {
+        if ($objInstance instanceof GearmanOutputAwareInterface) {
             $objInstance->setOutput($this->output ? : new NullOutput());
         }
 
