@@ -183,6 +183,7 @@ class GearmanWorkerExecuteCommand extends AbstractGearmanCommand
 
         $this
             ->gearmanExecute
+            ->setOutput($output)
             ->executeWorker($worker);
     }
 }

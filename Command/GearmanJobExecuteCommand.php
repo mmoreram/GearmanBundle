@@ -184,6 +184,7 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
 
         $this
             ->gearmanExecute
+            ->setOutput($output)
             ->executeJob($job);
     }
 }
