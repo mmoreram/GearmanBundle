@@ -13,8 +13,8 @@
 
 namespace Mmoreram\GearmanBundle\Command\Abstracts;
 
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class AbstractGearmanCommand

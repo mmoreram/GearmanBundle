@@ -15,8 +15,8 @@ namespace Mmoreram\GearmanBundle\Tests\Module;
 
 use PHPUnit_Framework_TestCase;
 
-use Mmoreram\GearmanBundle\Module\JobClass;
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
+use Mmoreram\GearmanBundle\Module\JobClass;
 
 /**
  * Tests JobClassTest class

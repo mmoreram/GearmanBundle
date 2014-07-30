@@ -16,9 +16,9 @@ namespace Mmoreram\GearmanBundle\Module;
 use Doctrine\Common\Annotations\Reader;
 use ReflectionClass;
 
-use Mmoreram\GearmanBundle\Module\JobClass as Job;
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
+use Mmoreram\GearmanBundle\Module\JobClass as Job;
 
 /**
  * Worker class

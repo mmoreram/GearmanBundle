@@ -13,8 +13,8 @@
 
 namespace Mmoreram\GearmanBundle\Module;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
 use ReflectionMethod;
+use Symfony\Component\DependencyInjection\ContainerAware;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
 

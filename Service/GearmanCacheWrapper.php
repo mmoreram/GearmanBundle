@@ -13,9 +13,9 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
+use Doctrine\Common\Cache\Cache;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
-use Doctrine\Common\Cache\Cache;
 
 /**
  * Gearman cache loader class

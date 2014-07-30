@@ -15,14 +15,14 @@ namespace Mmoreram\GearmanBundle\Service;
 
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Mmoreram\GearmanBundle\Command\Util\GearmanOutputAwareInterface;
-use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 use Mmoreram\GearmanBundle\Event\GearmanWorkExecutedEvent;
 use Mmoreram\GearmanBundle\GearmanEvents;
+use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 
 /**
  * Gearman execute methods. All Worker methods

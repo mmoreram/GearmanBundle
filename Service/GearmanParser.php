@@ -13,14 +13,14 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Doctrine\Common\Annotations\Reader;
 use ReflectionClass;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\KernelInterface;
 
-use Mmoreram\GearmanBundle\Module\WorkerCollection;
-use Mmoreram\GearmanBundle\Module\WorkerClass as Worker;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
+use Mmoreram\GearmanBundle\Module\WorkerClass as Worker;
+use Mmoreram\GearmanBundle\Module\WorkerCollection;
 
 /**
  * Gearman parsing methods

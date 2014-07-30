@@ -13,10 +13,10 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Service;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Doctrine\Common\Annotations\Reader;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 use Mmoreram\GearmanBundle\Module\WorkerCollection;
 use Mmoreram\GearmanBundle\Service\GearmanParser;

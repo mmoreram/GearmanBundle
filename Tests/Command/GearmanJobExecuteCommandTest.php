@@ -13,16 +13,16 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Command;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Helper\DialogHelper;
-use Symfony\Component\HttpKernel\KernelInterface;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 use Mmoreram\GearmanBundle\Command\GearmanJobExecuteCommand;
+use Mmoreram\GearmanBundle\Service\GearmanClient;
 use Mmoreram\GearmanBundle\Service\GearmanDescriber;
 use Mmoreram\GearmanBundle\Service\GearmanExecute;
-use Mmoreram\GearmanBundle\Service\GearmanClient;
 
 /**
  * Class GearmanJobExecuteCommandTest

@@ -13,8 +13,9 @@
 
 namespace Mmoreram\GearmanBundle\Exceptions;
 
-use Mmoreram\GearmanBundle\Exceptions\Abstracts\AbstractGearmanException;
 use Exception;
+
+use Mmoreram\GearmanBundle\Exceptions\Abstracts\AbstractGearmanException;
 
 /**
  * GearmanBundle can't find worker specified as Gearman format Exception

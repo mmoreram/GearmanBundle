@@ -12,10 +12,11 @@
  */
 
 namespace Mmoreram\GearmanBundle\Tests\Module;
+
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
 
-use Mmoreram\GearmanBundle\Module\WorkerClass;
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
+use Mmoreram\GearmanBundle\Module\WorkerClass;
 
 /**
  * Tests JobClassTest class

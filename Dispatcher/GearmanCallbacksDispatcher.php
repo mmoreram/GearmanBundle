@@ -16,14 +16,14 @@ namespace Mmoreram\GearmanBundle\Dispatcher;
 use GearmanTask;
 
 use Mmoreram\GearmanBundle\Dispatcher\Abstracts\AbstractGearmanDispatcher;
-use Mmoreram\GearmanBundle\Event\GearmanClientCallbackExceptionEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackCompleteEvent;
-use Mmoreram\GearmanBundle\Event\GearmanClientCallbackWorkloadEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackCreatedEvent;
-use Mmoreram\GearmanBundle\Event\GearmanClientCallbackWarningEvent;
-use Mmoreram\GearmanBundle\Event\GearmanClientCallbackStatusEvent;
-use Mmoreram\GearmanBundle\Event\GearmanClientCallbackFailEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackDataEvent;
+use Mmoreram\GearmanBundle\Event\GearmanClientCallbackExceptionEvent;
+use Mmoreram\GearmanBundle\Event\GearmanClientCallbackFailEvent;
+use Mmoreram\GearmanBundle\Event\GearmanClientCallbackStatusEvent;
+use Mmoreram\GearmanBundle\Event\GearmanClientCallbackWarningEvent;
+use Mmoreram\GearmanBundle\Event\GearmanClientCallbackWorkloadEvent;
 use Mmoreram\GearmanBundle\GearmanEvents;
 
 /**

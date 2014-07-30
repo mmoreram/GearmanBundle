@@ -13,8 +13,8 @@
 
 namespace Mmoreram\GearmanBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * Gearman Bundle

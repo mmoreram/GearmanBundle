@@ -9,9 +9,9 @@
 
 namespace Mmoreram\GearmanBundle\Service\Abstracts;
 
-use Mmoreram\GearmanBundle\Service\GearmanCacheWrapper;
 use Mmoreram\GearmanBundle\Exceptions\JobDoesNotExistException;
 use Mmoreram\GearmanBundle\Exceptions\WorkerDoesNotExistException;
+use Mmoreram\GearmanBundle\Service\GearmanCacheWrapper;
 
 /**
  * Gearman execute methods. All Worker methods
