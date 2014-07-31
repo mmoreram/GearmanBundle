@@ -30,7 +30,8 @@
         "symfony/finder": ">=2.1"
     },
     "require-dev": {
-        "phpunit/phpunit": ">=3.7"
+        "phpunit/phpunit": ">=3.7",
+        "mmoreram/php-formatter": "~1.0"
     },
     "target-dir": "Mmoreram/GearmanBundle",
     "autoload": {
