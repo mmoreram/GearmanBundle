@@ -252,6 +252,8 @@ class GearmanClient extends AbstractGearmanService
         $result = $gearmanClient->$method($worker['job']['realCallableName'], $params, $unique);
         $this->returnCode = $gearmanClient->returnCode();
 
+        $this->gearmanClient = null;
+
         return $result;
     }
 
@@ -448,6 +450,8 @@ class GearmanClient extends AbstractGearmanService
         $statusData = $gearmanClient->jobStatus($idJob);
 
         $jobStatus = new JobStatus($statusData);
+
+        $this->gearmanClient = null;
 
         return $jobStatus;
     }
@@ -685,6 +689,8 @@ class GearmanClient extends AbstractGearmanService
         }
 
         $this->initTaskStructure();
+
+        $this->gearmanClient = null;
 
         return $gearmanClient->runTasks();
     }
