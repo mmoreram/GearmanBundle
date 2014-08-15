@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "symfony/framework-bundle": ">=2.2",
+        "symfony/framework-bundle": ">=2.4",
         "doctrine/common": ">=2.2",
         "symfony/console": ">=2.1",
         "symfony/config": ">=2.1",
