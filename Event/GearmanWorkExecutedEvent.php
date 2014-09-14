@@ -9,7 +9,6 @@
  * Feel free to edit as you please, and have fun.
  *
  * @author Marc Morera <yuhu@mmoreram.com>
- * @author Dominic Grostate <codekestrel@googlemail.com>
  */
 
 namespace Mmoreram\GearmanBundle\Event;
@@ -18,6 +17,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 /**
  * GearmanWorkExecutedEvent
+ *
+ * @author Dominic Grostate <codekestrel@googlemail.com>
  *
  * @since 2.4.2
  */
