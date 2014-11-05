@@ -163,7 +163,10 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
             ->gearmanClient
             ->getJob($job);
 
-        if (!$input->getOption('quiet')) {
+        if (
+            !$input->getOption('no-description') &&
+            !$input->getOption('quiet')
+        ) {
 
             $this
                 ->gearmanDescriber
