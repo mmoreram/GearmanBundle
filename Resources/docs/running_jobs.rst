@@ -29,7 +29,7 @@ settings are correct.
 
 .. code-block:: bash
 
-    $ php app/console gearman:workers:list
+    $ php app/console gearman:worker:list
 
     @Worker:  Mmoreramerino\TestBundle\Services\AcmeWorker
     callablename:  MmoreramerinoTestBundleServicesMyAcmeWorker
