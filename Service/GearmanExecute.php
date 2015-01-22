@@ -202,7 +202,14 @@ class GearmanExecute extends AbstractGearmanService
          */
         foreach ($jobs as $job) {
 
-            $gearmanWorker->addFunction($job['realCallableName'], array($objInstance, $job['methodName']));
+            $gearmanWorker->addFunction(
+                $job['realCallableName'],
+                array($this, 'handleJob'),
+                array(
+                    'job_object_instance' => $objInstance,
+                    'job_method' => $job['methodName'],
+                )
+            );
         }
 
         /**
@@ -271,5 +278,41 @@ class GearmanExecute extends AbstractGearmanService
 
             $this->callJob($worker);
         }
+    }
+
+    /**
+     * Wrapper function handler for all registered functions
+     * This allows us to do some nice logging when jobs are started/finished
+     *
+     * @see https://github.com/brianlmoon/GearmanManager/blob/ffc828dac2547aff76cb4962bb3fcc4f454ec8a2/GearmanPeclManager.php#L95-206
+     *
+     * @param \GearmanJob $job
+     * @param mixed $context
+     *
+     * @return mixed
+     */
+    public function handleJob(\GearmanJob $job, $context)
+    {
+        if (
+            !is_array($context)
+            || !array_key_exists('job_object_instance', $context)
+            || !array_key_exists('job_method', $context)
+        ) {
+            
+        }
+        $result = call_user_func_array(
+            array($context['job_object_instance'], $context['job_method']),
+            array($job, $context)
+        );
+
+        /**
+         * Workaround for PECL bug #17114
+         * http://pecl.php.net/bugs/bug.php?id=17114
+         */
+        $type = gettype($result);
+        settype($result, $type);
+
+        return $result;
+
     }
 }
