@@ -98,14 +98,15 @@ class GearmanExecute extends AbstractGearmanService
      * Executes a job given a jobName and given settings and annotations of job
      *
      * @param string $jobName Name of job to be executed
+     * @param GearmanWorker $gearmanWorker Worker instance to use
      */
-    public function executeJob($jobName)
+    public function executeJob($jobName, \GearmanWorker $gearmanWorker = null)
     {
         $worker = $this->getJob($jobName);
 
         if (false !== $worker) {
 
-            $this->callJob($worker);
+            $this->callJob($worker, $gearmanWorker);
         }
     }
 
@@ -113,12 +114,14 @@ class GearmanExecute extends AbstractGearmanService
      * Given a worker, execute GearmanWorker function defined by job.
      *
      * @param array $worker Worker definition
-     *
+     * @param GearmanWorker $gearmanWorker Worker instance to use
      * @return GearmanExecute self Object
      */
-    private function callJob(Array $worker)
+    private function callJob(Array $worker, \GearmanWorker $gearmanWorker = null)
     {
-        $gearmanWorker = new \GearmanWorker;
+        if(is_null($gearmanWorker)){
+            $gearmanWorker = new \GearmanWorker;
+        }
 
         if (isset($worker['job'])) {
 
