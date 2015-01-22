@@ -21,6 +21,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Mmoreram\GearmanBundle\Command\Util\GearmanOutputAwareInterface;
 use Mmoreram\GearmanBundle\Event\GearmanWorkExecutedEvent;
+use Mmoreram\GearmanBundle\Event\GearmanWorkStartingEvent;
 use Mmoreram\GearmanBundle\GearmanEvents;
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 
@@ -211,6 +212,7 @@ class GearmanExecute extends AbstractGearmanService
                 array(
                     'job_object_instance' => $objInstance,
                     'job_method' => $job['methodName'],
+                    'jobs' => $jobs
                 )
             );
         }
@@ -301,8 +303,12 @@ class GearmanExecute extends AbstractGearmanService
             || !array_key_exists('job_object_instance', $context)
             || !array_key_exists('job_method', $context)
         ) {
-            
+            throw new \InvalidArgumentException('$context shall be an array with job_object_instance and job_method key.');
         }
+
+        $event = new GearmanWorkStartingEvent($context['jobs']);
+        $this->eventDispatcher->dispatch(GearmanEvents::GEARMAN_WORK_STARTING, $event);
+
         $result = call_user_func_array(
             array($context['job_object_instance'], $context['job_method']),
             array($job, $context)
