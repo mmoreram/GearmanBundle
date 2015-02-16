@@ -71,7 +71,7 @@ class JobClassTest extends PHPUnit_Framework_TestCase
     private $defaultSettings = array(
         'method'                         => 'doHigh',
         'iterations'                     => 100,
-        'minimum_execution_time'         => null,
+        'minimumExecutionTime'           => null,
         'timeout'                        => null,
         'callbacks'                      => true,
         'jobPrefix'                      => null,
@@ -141,6 +141,8 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             'realCallableNameNoPrefix' => str_replace('\\', '', $this->callableNameClass . '~' . $this->jobAnnotation->name),
             'description'              => $this->jobAnnotation->description,
             'iterations'               => $this->jobAnnotation->iterations,
+            'minimumExecutionTime'     => $this->jobAnnotation->minimumExecutionTime,
+            'timeout'                  => $this->jobAnnotation->timeout,
             'servers'                  => $this->jobAnnotation->servers,
             'defaultMethod'            => $this->jobAnnotation->defaultMethod,
         ));
@@ -178,6 +180,8 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             'realCallableNameNoPrefix' => str_replace('\\', '', $this->callableNameClass . '~' . $this->methodName),
             'description'              => $jobClass::DEFAULT_DESCRIPTION,
             'iterations'               => $this->defaultSettings['iterations'],
+            'minimumExecutionTime'     => $this->defaultSettings['minimumExecutionTime'],
+            'timeout'                  => $this->defaultSettings['timeout'],
             'servers'                  => $this->servers,
             'defaultMethod'            => $this->defaultSettings['method'],
         ));
@@ -216,6 +220,8 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             'realCallableNameNoPrefix' => str_replace('\\', '', $this->callableNameClass . '~' . $this->methodName),
             'description'              => $jobClass::DEFAULT_DESCRIPTION,
             'iterations'               => $this->defaultSettings['iterations'],
+            'minimumExecutionTime'     => $this->defaultSettings['minimumExecutionTime'],
+            'timeout'                  => $this->defaultSettings['timeout'],
             'servers'                  => array($this->jobAnnotation->servers),
             'defaultMethod'            => $this->defaultSettings['method'],
         ));
@@ -257,6 +263,8 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             'realCallableNameNoPrefix' => str_replace('\\', '', $this->callableNameClass . '~' . $this->methodName),
             'description'              => $jobClass::DEFAULT_DESCRIPTION,
             'iterations'               => $this->defaultSettings['iterations'],
+            'minimumExecutionTime'     => $this->defaultSettings['minimumExecutionTime'],
+            'timeout'                  => $this->defaultSettings['timeout'],
             'servers'                  => array($this->jobAnnotation->servers),
             'defaultMethod'            => $this->defaultSettings['method'],
         ));

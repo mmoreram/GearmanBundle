@@ -191,6 +191,8 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             'service'               =>  $this->workAnnotation->service,
             'servers'               =>  $this->workAnnotation->servers,
             'iterations'            =>  $this->workAnnotation->iterations,
+            'minimumExecutionTime'  =>  $this->workAnnotation->minimumExecutionTime,
+            'timeout'               =>  $this->workAnnotation->timeout,
             'jobs'                  =>  array(),
         ));
     }
@@ -251,6 +253,8 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             'service'               =>  null,
             'servers'               =>  $this->servers,
             'iterations'            =>  $this->defaultSettings['iterations'],
+            'minimumExecutionTime'  =>  $this->defaultSettings['minimum_execution_time'],
+            'timeout'               =>  $this->defaultSettings['timeout'],
             'jobs'                  =>  array(),
         ));
     }
@@ -312,6 +316,8 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             'service'               =>  null,
             'servers'               =>  array($this->workAnnotation->servers),
             'iterations'            =>  $this->defaultSettings['iterations'],
+            'minimumExecutionTime'  =>  $this->defaultSettings['minimum_execution_time'],
+            'timeout'               =>  $this->defaultSettings['timeout'],
             'jobs'                  =>  array(),
         ));
     }
