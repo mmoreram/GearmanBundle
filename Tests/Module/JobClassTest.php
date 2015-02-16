@@ -71,6 +71,8 @@ class JobClassTest extends PHPUnit_Framework_TestCase
     private $defaultSettings = array(
         'method'                         => 'doHigh',
         'iterations'                     => 100,
+        'minimum_execution_time'         => null,
+        'timeout'                        => null,
         'callbacks'                      => true,
         'jobPrefix'                      => null,
         'generate_unique_key'            => true,

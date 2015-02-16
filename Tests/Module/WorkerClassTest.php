@@ -83,11 +83,13 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
      * Default settings
      */
     private $defaultSettings = array(
-        'method'        =>  'doHigh',
-        'iterations'    =>  100,
-        'callbacks'     =>  true,
-        'jobPrefix'     =>  null,
-        'generate_unique_key' => true,
+        'method'                         => 'doHigh',
+        'iterations'                     => 100,
+        'minimum_execution_time'         => null,
+        'timeout'                        => null,
+        'callbacks'                      => true,
+        'jobPrefix'                      => null,
+        'generate_unique_key'            => true,
         'workers_name_prepend_namespace' => true,
     );
 

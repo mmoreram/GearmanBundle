@@ -242,6 +242,17 @@ class WorkerClass
             : $workAnnotation->defaultMethod;
     }
 
+    /**
+     * Load minimumExecutionTime
+     *
+     * If minimumExecutionTime is defined in JobAnnotation, this one is used.
+     * Otherwise is used set in Class
+     *
+     * @param JobAnnotation $jobAnnotation
+     * @param array $defaultSettings
+     *
+     * @return int
+     */
     private function loadMinimumExecutionTime(WorkAnnotation $workAnnotation, array $defaultSettings)
     {
         return is_null($workAnnotation->minimumExecutionTime)
@@ -249,6 +260,17 @@ class WorkerClass
             : (int) $workAnnotation->minimumExecutionTime;
     }
 
+    /**
+     * Load timeout
+     *
+     * If timeout is defined in JobAnnotation, this one is used.
+     * Otherwise is used set in Class
+     *
+     * @param JobAnnotation $jobAnnotation
+     * @param array $defaultSettings
+     *
+     * @return int
+     */
     private function loadTimeout(WorkAnnotation $workAnnotation, array $defaultSettings)
     {
         return is_null($workAnnotation->timeout)
