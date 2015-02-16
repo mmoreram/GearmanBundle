@@ -88,6 +88,13 @@ class JobClass extends ContainerAware
     private $defaultMethod;
 
     /**
+     * @var int
+     *
+     * Timeout for idle worker
+     */
+    private $timeout;
+
+    /**
      * @var array
      *
      * Collection of servers to connect
@@ -137,6 +144,8 @@ class JobClass extends ContainerAware
 
         $this->servers = $this->loadServers($jobAnnotation, $servers);
         $this->iterations = $this->loadIterations($jobAnnotation, $defaultSettings);
+        $this->minimumExecutionTime = $this->loadMinimumExecutionTime($jobAnnotation, $defaultSettings);
+        $this->timeout = $this->loadTimeout($jobAnnotation, $defaultSettings);
         $this->defaultMethod = $this->loadDefaultMethod($jobAnnotation, $defaultSettings);
     }
 
@@ -204,6 +213,42 @@ class JobClass extends ContainerAware
     }
 
     /**
+     * Load minimumExecutionTime
+     *
+     * If minimumExecutionTime is defined in JobAnnotation, this one is used.
+     * Otherwise is used set in Class
+     *
+     * @param JobAnnotation $jobAnnotation
+     * @param array $defaultSettings
+     *
+     * @return int
+     */
+    private function loadMinimumExecutionTime(JobAnnotation $jobAnnotation, array $defaultSettings)
+    {
+        return is_null($jobAnnotation->minimumExecutionTime)
+            ? (int) $defaultSettings['minimumExecutionTime']
+            : (int) $jobAnnotation->minimumExecutionTime;
+    }
+
+    /**
+     * Load timeout
+     *
+     * If timeout is defined in JobAnnotation, this one is used.
+     * Otherwise is used set in Class
+     *
+     * @param JobAnnotation $jobAnnotation
+     * @param array $defaultSettings
+     *
+     * @return int
+     */
+    private function loadTimeout(JobAnnotation $jobAnnotation, array $defaultSettings)
+    {
+        return is_null($jobAnnotation->timeout)
+            ? (int) $defaultSettings['timeout']
+            : (int) $jobAnnotation->timeout;
+    }
+
+    /**
      * Retrieve all Job data in cache format
      *
      * @return array
@@ -219,6 +264,8 @@ class JobClass extends ContainerAware
             'realCallableNameNoPrefix' => $this->realCallableNameNoPrefix,
             'description'              => $this->description,
             'iterations'               => $this->iterations,
+            'minimumExecutionTime'     => $this->minimumExecutionTime,
+            'timeout'                  => $this->timeout,
             'servers'                  => $this->servers,
             'defaultMethod'            => $this->defaultMethod,
         );

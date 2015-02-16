@@ -60,6 +60,20 @@ class Work extends Annotation
     public $defaultMethod;
 
     /**
+     * Default timeout in seconds for worker idle time
+     *
+     * @var int
+     */
+    public $timeout;
+
+    /**
+     * @var int
+     *
+     * Default number of seconds the execution must run before being allowed to terminate
+     */
+    public $minimumExecutionTime;
+
+    /**
      * Service typeof Class. If it's defined, object will be instanced throught
      * service dependence injection.
      * Otherwise, class will be instance with new() method
