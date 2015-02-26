@@ -29,6 +29,13 @@ abstract class AbstractGearmanClientTaskEvent extends Event
     protected $gearmanTask;
 
     /**
+     * @var mixed
+     *
+     * Context that can be set in the addTask method
+     */
+    protected $context;
+
+    /**
      * Construct method
      *
      * @param GearmanTask $gearmanTask Gearman Task
@@ -46,5 +53,21 @@ abstract class AbstractGearmanClientTaskEvent extends Event
     public function getGearmanTask()
     {
         return $this->gearmanTask;
+    }
+
+    /**
+     * @param mixed $context Context that can be set in the addTask method
+     */
+    public function setContext($context)
+    {
+        $this->context = &$context['context'];
+    }
+
+    /**
+     * @return mixed Context that can be set in the addTask method
+     */
+    public function &getContext()
+    {
+        return $this->context;
     }
 }
