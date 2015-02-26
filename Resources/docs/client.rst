@@ -60,9 +60,9 @@ Tasks
 .. code-block:: php
 
     $gearman
-        ->addTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value1')
-        ->addLowTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value2')
-        ->addHighBackgroundTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value3')
+        ->addTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value1', $context1)
+        ->addLowTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value2', $context2)
+        ->addHighBackgroundTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value3', $context3)
         ->runTasks();
 
 - addTask: Adds a task to be run in parallel with other tasks
