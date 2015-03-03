@@ -128,6 +128,23 @@ itself.
           You can have as many as worker instances as you want.
           Get some `Supervisord`_ info
 
+Overriding default settings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+From the command line you can run the jobs or workers with overridden settings.  These include
+
+- iterations
+- minimum-execution-time
+- timeout
+
+For example:
+
+.. code-block:: bash
+
+    $ php app/console gearman:job:describe MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething --iterations=5 --minimum-execution-time=2 --timeout=20
+
+If these options are ommited, then the configuration defaults are used.
+
 Request job status
 ~~~~~~~~~~~~~~~~~~
 

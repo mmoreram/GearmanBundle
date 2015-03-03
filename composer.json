@@ -30,7 +30,8 @@
         "symfony/http-kernel": "~2.1",
         "symfony/console": "~2.1",
         "symfony/config": "~2.1",
-        "symfony/finder": "~2.1"
+        "symfony/finder": "~2.1",
+        "symfony/options-resolver": "~2.1"
     },
     "target-dir": "Mmoreram/GearmanBundle",
     "autoload": {

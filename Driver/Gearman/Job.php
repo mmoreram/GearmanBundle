@@ -58,4 +58,18 @@ class Job extends Annotation
      * @var string
      */
     public $defaultMethod;
+
+    /**
+     * Timeout in seconds for job idle time
+     *
+     * @var int
+     */
+    public $timeout;
+
+    /**
+     * @var int
+     *
+     * Number of seconds the execution must run before being allowed to terminate
+     */
+    public $minimumExecutionTime;
 }
