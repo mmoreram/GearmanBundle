@@ -90,9 +90,12 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
      *
      * @see http://www.php.net/manual/en/gearmanclient.setcompletecallback.php
      */
-    public function assignCompleteCallback(GearmanTask $gearmanTask)
+    public function assignCompleteCallback(GearmanTask $gearmanTask, $contextReference = null)
     {
         $event = new GearmanClientCallbackCompleteEvent($gearmanTask);
+        if (!is_null($contextReference)) {
+            $event->setContext($contextReference);
+        }
         $this->eventDispatcher->dispatch(
             GearmanEvents::GEARMAN_CLIENT_CALLBACK_COMPLETE,
             $event

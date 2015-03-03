@@ -595,13 +595,13 @@ class GearmanClient extends AbstractGearmanService
      *
      * @return GearmanClient Return this object
      */
-    protected function enqueueTask($name, $params, $context, $unique, $method)
+    protected function enqueueTask($name, $params, &$context, $unique, $method)
     {
-
+        $contextReference = array('context' => &$context);
         $task = array(
             'name'    => $name,
             'params'  => $params,
-            'context' => $context,
+            'context' => $contextReference,
             'unique'  => $this->uniqueJobIdentifierGenerator->generateUniqueKey($name, $params, $unique, $method),
             'method'  => $method,
         );
