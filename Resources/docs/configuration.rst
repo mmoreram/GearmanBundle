@@ -91,7 +91,7 @@ config gearman cache, using doctrine cache.
        # If annotations defined, will be full overwritten
        #
        # If servers empty, simple localhost server is defined by default
-       # If port empty, 4730 is defined by efault
+       # If port empty, 4730 is defined by default
        servers:
           localhost:
              host: 127.0.0.1
