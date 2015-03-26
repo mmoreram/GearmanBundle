@@ -96,6 +96,12 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('workers_name_prepend_namespace')
                             ->defaultTrue()
                         ->end()
+                        ->scalarNode('minimum_execution_time')
+                            ->defaultNull()
+                        ->end()
+                        ->scalarNode('timeout')
+                            ->defaultNull()
+                        ->end()
                     ->end()
                 ->end()
             ->end();

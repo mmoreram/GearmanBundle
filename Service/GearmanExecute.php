@@ -24,6 +24,8 @@ use Mmoreram\GearmanBundle\Event\GearmanWorkExecutedEvent;
 use Mmoreram\GearmanBundle\Event\GearmanWorkStartingEvent;
 use Mmoreram\GearmanBundle\GearmanEvents;
 use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
+use Mmoreram\GearmanBundle\Exceptions\ServerConnectionException;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -52,6 +54,36 @@ class GearmanExecute extends AbstractGearmanService
      * Output instance
      */
     protected $output;
+
+    /**
+     * @var OptionsResolver
+     */
+    protected $executeOptionsResolver;
+
+    /**
+     * Construct method
+     *
+     * @param GearmanCacheWrapper $gearmanCacheWrapper GearmanCacheWrapper
+     * @param array               $defaultSettings     The default settings for the bundle
+     */
+    public function __construct(GearmanCacheWrapper $gearmanCacheWrapper, array $defaultSettings)
+    {
+        parent::__construct($gearmanCacheWrapper, $defaultSettings);
+
+        $this->executeOptionsResolver = new OptionsResolver();
+        $this->executeOptionsResolver
+            ->setDefaults(array(
+                'iterations'             => null,
+                'minimum_execution_time' => null,
+                'timeout'                => null
+            ))
+            ->setAllowedTypes(array(
+                'iterations'             => array('null', 'scalar'),
+                'minimum_execution_time' => array('null', 'scalar'),
+                'timeout'                => array('null', 'scalar')
+            ))
+        ;
+    }
 
     /**
      * Set container
@@ -99,15 +131,15 @@ class GearmanExecute extends AbstractGearmanService
      * Executes a job given a jobName and given settings and annotations of job
      *
      * @param string $jobName Name of job to be executed
+     * @param array $options Array of options passed to the callback
      * @param GearmanWorker $gearmanWorker Worker instance to use
      */
-    public function executeJob($jobName, \GearmanWorker $gearmanWorker = null)
+    public function executeJob($jobName, array $options = array(), \GearmanWorker $gearmanWorker = null)
     {
         $worker = $this->getJob($jobName);
 
         if (false !== $worker) {
-
-            $this->callJob($worker, $gearmanWorker);
+            $this->callJob($worker, $options, $gearmanWorker);
         }
     }
 
@@ -115,30 +147,64 @@ class GearmanExecute extends AbstractGearmanService
      * Given a worker, execute GearmanWorker function defined by job.
      *
      * @param array $worker Worker definition
+     * @param array $options Array of options passed to the callback
      * @param GearmanWorker $gearmanWorker Worker instance to use
      * @return GearmanExecute self Object
      */
-    private function callJob(Array $worker, \GearmanWorker $gearmanWorker = null)
+    private function callJob(Array $worker, array $options = array(), \GearmanWorker $gearmanWorker = null)
     {
         if(is_null($gearmanWorker)){
             $gearmanWorker = new \GearmanWorker;
         }
+        $minimumExecutionTime = null;
 
         if (isset($worker['job'])) {
 
             $jobs = array($worker['job']);
             $iterations = $worker['job']['iterations'];
-            $this->addServers($gearmanWorker, $worker['job']['servers']);
+            $minimumExecutionTime = $worker['job']['minimumExecutionTime'];
+            $timeout = $worker['job']['timeout'];
+            $this->addServers($gearmanWorker, $worker['job']['servers'], $successes);
 
         } else {
 
             $jobs = $worker['jobs'];
             $iterations = $worker['iterations'];
-            $this->addServers($gearmanWorker, $worker['servers']);
+            $minimumExecutionTime = $worker['minimumExecutionTime'];
+            $timeout = $worker['timeout'];
+            $this->addServers($gearmanWorker, $worker['servers'], $successes);
+        }
+
+        $options = $this->executeOptionsResolver->resolve($options);
+
+        $iterations           = $options['iterations']             ?: $iterations;
+        $minimumExecutionTime = $options['minimum_execution_time'] ?: $minimumExecutionTime;
+        $timeout              = $options['timeout']                ?: $timeout;
+
+        if (count($successes) < 1) {
+            sleep($minimumExecutionTime);
+            throw new ServerConnectionException('Worker was unable to connect to any server.');
         }
 
         $objInstance = $this->createJob($worker);
-        $this->runJob($gearmanWorker, $objInstance, $jobs, $iterations);
+
+        /**
+         * Start the timer before running the worker.
+         */
+        $time = time();
+        $this->runJob($gearmanWorker, $objInstance, $jobs, $iterations, $timeout);
+
+        /**
+         * If there is a minimum expected duration, wait out the remaining period if there is any.
+         */
+        if (null !== $minimumExecutionTime) {
+            $now = time();
+            $remaining = $minimumExecutionTime - ($now - $time);
+
+            if ($remaining > 0) {
+                sleep($remaining);
+            }
+        }
 
         return $this;
     }
@@ -191,9 +257,8 @@ class GearmanExecute extends AbstractGearmanService
      *
      * @return GearmanExecute self Object
      */
-    private function runJob(\GearmanWorker $gearmanWorker, $objInstance, array $jobs, $iterations)
+    private function runJob(\GearmanWorker $gearmanWorker, $objInstance, array $jobs, $iterations, $timeout = null)
     {
-
         /**
          * Set the output of this instance, this should allow workers to use the console output.
          */
@@ -222,6 +287,10 @@ class GearmanExecute extends AbstractGearmanService
          */
         $alive = (0 == $iterations);
 
+        if (null !== $timeout) {
+            $gearmanWorker->setTimeout($timeout * 1000);
+        }
+
         /**
          * Executes GearmanWorker with all jobs defined
          */
@@ -246,7 +315,6 @@ class GearmanExecute extends AbstractGearmanService
                 break;
             }
         }
-
     }
 
     /**
@@ -255,18 +323,27 @@ class GearmanExecute extends AbstractGearmanService
      *
      * @param \GearmanWorker $gmworker Worker to perform configuration
      * @param array          $servers  Servers array
+     *
+     * @throws ServerConnectionException if a connection to a server was not possible.
      */
-    private function addServers(\GearmanWorker $gmworker, Array $servers)
+    private function addServers(\GearmanWorker $gmworker, Array $servers, array &$successes = null)
     {
+        $successes = $successes ?: null;
+
         if (!empty($servers)) {
 
             foreach ($servers as $server) {
-
-                $gmworker->addServer($server['host'], $server['port']);
+                if (@$gmworker->addServer($server['host'], $server['port'])) {
+                    $successes[] = $server;
+                }
             }
         } else {
-            $gmworker->addServer();
+            if (@$gmworker->addServer()) {
+                $successes[] = array('127.0.0.1', 4730);
+            }
         }
+
+        return $successes;
     }
 
     /**
@@ -275,13 +352,13 @@ class GearmanExecute extends AbstractGearmanService
      *
      * @param string $workerName Name of worker to be executed
      */
-    public function executeWorker($workerName)
+    public function executeWorker($workerName, array $options = array())
     {
         $worker = $this->getWorker($workerName);
 
         if (false !== $worker) {
 
-            $this->callJob($worker);
+            $this->callJob($worker, $options);
         }
     }
 
@@ -322,6 +399,5 @@ class GearmanExecute extends AbstractGearmanService
         settype($result, $type);
 
         return $result;
-
     }
 }

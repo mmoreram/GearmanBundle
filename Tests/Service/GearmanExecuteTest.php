@@ -57,6 +57,8 @@ class GearmanExecuteTest extends WebTestCase
                 'service'      => false,
                 'servers'      => array(),
                 'iterations'   => 1,
+                'timeout'      => null,
+                'minimumExecutionTime' => null,
                 'jobs' => array(
                     0 => array(
                         'callableName'             => "test",
@@ -67,7 +69,9 @@ class GearmanExecuteTest extends WebTestCase
                         'description'              => "test",
                         'iterations'               => 1,
                         'servers'                  => array(),
-                        'defaultMethod'            => "doBackground"
+                        'defaultMethod'            => "doBackground",
+                        'minimumExecutionTime'     => null,
+                        'timeout'                  => null,
                     )
                 )
             )
@@ -109,7 +113,7 @@ class GearmanExecuteTest extends WebTestCase
         }));
 
         // Execute a job :)
-        $service->executeJob('test', $worker);
+        $service->executeJob('test', array(), $worker);
 
         // Do we have the events ?
         $this->assertTrue($startingFlag);

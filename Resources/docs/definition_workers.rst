@@ -18,6 +18,8 @@ overwrite environment settings.
     /**
      * @Gearman\Work(
      *     iterations = 3,
+     *     minimumExecutionTime = 3,
+     *     timeout = 20,
      *     description = "Worker test description",
      *     defaultMethod = "doBackground",
      *     servers = {
@@ -37,6 +39,8 @@ overwrite environment settings.
          *
          * @Gearman\Job(
          *     iterations = 3,
+         *     minimumExecutionTime = 2,
+         *     timeout = 30,
          *     name = "test",
          *     description = "This is a description"
          * )
@@ -76,6 +80,8 @@ Worker annotations
      * @Gearman\Work(
      *     name = "MyAcmeWorker",
      *     iterations = 3,
+     *     minimumExecutionTime = 3,
+     *     timeout = 20,
      *     description = "Acme Worker. Containing multiple available jobs",
      *     defaultMethod = "doHigh",
      *     servers = {
@@ -88,6 +94,8 @@ Worker annotations
 - name : Name of work. You can associate a group of jobs with some keyword
 - description : Short description about all jobs inside
 - iterations : You can overwrite iterations of all jobs inside
+- minimumExecutionTime: You can overwrite the main default minimum execution time
+- timeout: You can overwrite the main default timeout
 - servers : array containing servers providers will connect to offer all jobs
 - service : You can use even a service. Must specify callable service name
 - defaultMethod : You can define witch method will be used as default in all
@@ -102,6 +110,8 @@ Job annotations
      * @Gearman\Job(
      *     name = "doSomething",
      *     iterations = 10,
+     *     minimumExecutionTime = 2,
+     *     timeout = 30,
      *     description = "Acme Job action. This is just a description of a method that do something",
      *     defaultMethod = "doBackground",
      *     servers = { "host": "192.168.1.1", "port": 4560 }
@@ -111,6 +121,8 @@ Job annotations
 - name : Name of job. You will use it to call job
 - description : Short description about this job. Important field
 - iterations : You can overwrite iterations of this job.
+- minimumExecutionTime: You can overwrite the worker minimum execution time
+- timeout: You can overwrite the worker timeout
 - servers : array containing servers providers will connect to offer this job
 - defaultMethod : You can define witch method will be used as default in this job
 

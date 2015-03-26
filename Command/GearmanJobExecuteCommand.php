@@ -119,6 +119,24 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
                 null,
                 InputOption::VALUE_NONE,
                 'Don\'t print job description'
+            )
+            ->addOption(
+                'iterations',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Override configured iterations'
+            )
+            ->addOption(
+                'minimum-execution-time',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Override configured minimum execution time'
+            )
+            ->addOption(
+                'timeout',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Override configured timeout'
             );
     }
 
@@ -188,6 +206,10 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
         $this
             ->gearmanExecute
             ->setOutput($output)
-            ->executeJob($job);
+            ->executeJob($job, array(
+                'iterations'             => $input->getOption('iterations'),
+                'minimum_execution_time' => $input->getOption('minimum-execution-time'),
+                'timeout'                => $input->getOption('timeout')
+            ));
     }
 }

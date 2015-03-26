@@ -95,6 +95,13 @@ class WorkerClass
     private $defaultMethod;
 
     /**
+     * @var int
+     *
+     * Timeout for idle worker
+     */
+    private $timeout;
+
+    /**
      * @var array
      *
      * Collection of servers to connect
@@ -168,6 +175,8 @@ class WorkerClass
         $this->servers = $this->loadServers($workAnnotation, $servers);
         $this->iterations = $this->loadIterations($workAnnotation, $defaultSettings);
         $this->defaultMethod = $this->loadDefaultMethod($workAnnotation, $defaultSettings);
+        $this->minimumExecutionTime = $this->loadMinimumExecutionTime($workAnnotation, $defaultSettings);
+        $this->timeout = $this->loadTimeout($workAnnotation, $defaultSettings);
         $this->jobCollection = $this->createJobCollection($reflectionClass, $reader);
     }
 
@@ -234,6 +243,42 @@ class WorkerClass
     }
 
     /**
+     * Load minimumExecutionTime
+     *
+     * If minimumExecutionTime is defined in JobAnnotation, this one is used.
+     * Otherwise is used set in Class
+     *
+     * @param JobAnnotation $jobAnnotation
+     * @param array $defaultSettings
+     *
+     * @return int
+     */
+    private function loadMinimumExecutionTime(WorkAnnotation $workAnnotation, array $defaultSettings)
+    {
+        return is_null($workAnnotation->minimumExecutionTime)
+            ? (int) $defaultSettings['minimum_execution_time']
+            : (int) $workAnnotation->minimumExecutionTime;
+    }
+
+    /**
+     * Load timeout
+     *
+     * If timeout is defined in JobAnnotation, this one is used.
+     * Otherwise is used set in Class
+     *
+     * @param JobAnnotation $jobAnnotation
+     * @param array $defaultSettings
+     *
+     * @return int
+     */
+    private function loadTimeout(WorkAnnotation $workAnnotation, array $defaultSettings)
+    {
+        return is_null($workAnnotation->timeout)
+            ? (int) $defaultSettings['timeout']
+            : (int) $workAnnotation->timeout;
+    }
+
+    /**
      * Creates job collection of worker
      *
      * @param ReflectionClass $reflectionClass Reflexion class
@@ -265,9 +310,11 @@ class WorkerClass
                      * Creates new Job
                      */
                     $job = new Job($methodAnnotation, $reflectionMethod, $this->callableName, $this->servers, array(
-                        'jobPrefix'  => $this->jobPrefix,
-                        'iterations' => $this->iterations,
-                        'method'     => $this->defaultMethod,
+                        'jobPrefix'            => $this->jobPrefix,
+                        'iterations'           => $this->iterations,
+                        'method'               => $this->defaultMethod,
+                        'minimumExecutionTime' => $this->minimumExecutionTime,
+                        'timeout'              => $this->timeout,
                     ));
 
                     $jobCollection->add($job);
@@ -287,15 +334,17 @@ class WorkerClass
     {
         return array(
 
-            'namespace'    => $this->namespace,
-            'className'    => $this->className,
-            'fileName'     => $this->fileName,
-            'callableName' => $this->callableName,
-            'description'  => $this->description,
-            'service'      => $this->service,
-            'servers'      => $this->servers,
-            'iterations'   => $this->iterations,
-            'jobs'         => $this->jobCollection->toArray(),
+            'namespace'            => $this->namespace,
+            'className'            => $this->className,
+            'fileName'             => $this->fileName,
+            'callableName'         => $this->callableName,
+            'description'          => $this->description,
+            'service'              => $this->service,
+            'servers'              => $this->servers,
+            'iterations'           => $this->iterations,
+            'minimumExecutionTime' => $this->minimumExecutionTime,
+            'timeout'              => $this->timeout,
+            'jobs'                 => $this->jobCollection->toArray(),
         );
     }
 
