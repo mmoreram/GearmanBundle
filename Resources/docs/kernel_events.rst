@@ -129,6 +129,22 @@ The second method will return `$context` that you could add in the `addTask()` m
             tags:
               - { name: kernel.event_listener, event: gearman.client.callback.workload, method: onWorkload }
 
+Starting Work Event
+~~~~~~~~~~~~~~~~~~
+
+This event receives as parameter an instanceof `Mmoreram\GearmanBundle\Event\GearmanWorkStartingEvent` with one method:
+`$event->getJobs()` returns the configuration of the jobs.
+
+This event is dispatched before a job starts.
+
+.. code-block:: yml
+
+    services:
+        my_event_listener:
+            class: AcmeBundle\EventListener\MyEventListener
+            tags:
+              - { name: kernel.event_listener, event: gearman.work.starting, method: onWorkStarting }
+
 Execute Work Event
 ~~~~~~~~~~~~~~~~~~
 
