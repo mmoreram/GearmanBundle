@@ -51,7 +51,7 @@ You have to add require line into you composer.json file
 
     "require": {
        "php": ">=5.3.3",
-       "symfony/symfony": "2.3.*",
+       "symfony/symfony": "2.4.*",
 
        "mmoreram/gearman-bundle": "dev-master"
     }
