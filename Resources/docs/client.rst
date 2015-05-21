@@ -44,7 +44,7 @@ Request a job
 - doNormalJob: Call the job and wait for the result ( Only newest gearman versions )
 - doHighJob: Call the job and wait for the result on High Preference
 - doLowJob: Call the job and wait for the result on Low Preference
-- doBackroundJob: Call the job without waiting for the result.
+- doBackgroundJob: Call the job without waiting for the result.
     - It receives a job handle for the submitted job
 - doHighBackgroundJob: Call the job without waitting for the result on High Preference.
     - It receives a job handle for the submitted job
