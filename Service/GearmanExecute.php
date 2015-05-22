@@ -287,7 +287,7 @@ class GearmanExecute extends AbstractGearmanService
          */
         $alive = (0 == $iterations);
 
-        if (null !== $timeout) {
+        if ((int)$timeout > 0) {
             $gearmanWorker->setTimeout($timeout * 1000);
         }
 
@@ -328,7 +328,7 @@ class GearmanExecute extends AbstractGearmanService
      */
     private function addServers(\GearmanWorker $gmworker, Array $servers, array &$successes = null)
     {
-        $successes = $successes ?: null;
+        $successes = $successes ?: array();
 
         if (!empty($servers)) {
 
