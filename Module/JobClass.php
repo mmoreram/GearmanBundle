@@ -90,6 +90,13 @@ class JobClass extends ContainerAware
     /**
      * @var int
      *
+     * Job minimum execution time
+     */
+    private $minimumExecutionTime;
+
+    /**
+     * @var int
+     *
      * Timeout for idle worker
      */
     private $timeout;
