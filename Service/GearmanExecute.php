@@ -78,9 +78,9 @@ class GearmanExecute extends AbstractGearmanService
                 'timeout'                => null,
             ))
             ->setAllowedTypes(array(
-                'iterations'             => array('null', 'integer'),
-                'minimum_execution_time' => array('null', 'integer'),
-                'timeout'                => array('null', 'integer'),
+                'iterations'             => array('null', 'scalar'),
+                'minimum_execution_time' => array('null', 'scalar'),
+                'timeout'                => array('null', 'scalar'),
             ))
         ;
     }
