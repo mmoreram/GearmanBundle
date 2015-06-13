@@ -27,6 +27,13 @@ use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
 class GearmanClient extends AbstractGearmanService
 {
     /**
+     * @var \GearmanClient
+     *
+     * Gearman native client instance
+     */
+    protected $gearmanClient;
+
+    /**
      * @var GearmanCallbacksDispatcher
      *
      * Gearman callbacks dispatcher
@@ -74,6 +81,16 @@ class GearmanClient extends AbstractGearmanService
      * Return code from internal client.
      */
     protected $returnCode;
+
+    /**
+     * @return \GearmanClient
+     */
+    public function getNativeClient(){
+        if ($this->gearmanClient === null){
+            $this->gearmanClient = new \GearmanClient();
+        }
+        return $this->gearmanClient;
+    }
 
     /**
      * Init tasks structure
@@ -229,11 +246,13 @@ class GearmanClient extends AbstractGearmanService
      */
     protected function doEnqueue(array $worker, $params, $method, $unique)
     {
-        $gearmanClient = new \GearmanClient();
+        $gearmanClient = $this->getNativeClient();
         $this->assignServers($gearmanClient);
 
         $result = $gearmanClient->$method($worker['job']['realCallableName'], $params, $unique);
         $this->returnCode = $gearmanClient->returnCode();
+
+        $this->gearmanClient = null;
 
         return $result;
     }
@@ -426,11 +445,13 @@ class GearmanClient extends AbstractGearmanService
      */
     public function getJobStatus($idJob)
     {
-        $gearmanClient = new \GearmanClient();
+        $gearmanClient = $this->getNativeClient();
         $this->assignServers($gearmanClient);
         $statusData = $gearmanClient->jobStatus($idJob);
 
         $jobStatus = new JobStatus($statusData);
+
+        $this->gearmanClient = null;
 
         return $jobStatus;
     }
@@ -642,7 +663,7 @@ class GearmanClient extends AbstractGearmanService
      */
     public function runTasks()
     {
-        $gearmanClient = new \GearmanClient();
+        $gearmanClient = $this->getNativeClient();
         $this->assignServers($gearmanClient);
 
         if ($this->settings['callbacks']) {
@@ -668,6 +689,8 @@ class GearmanClient extends AbstractGearmanService
         }
 
         $this->initTaskStructure();
+
+        $this->gearmanClient = null;
 
         return $gearmanClient->runTasks();
     }
