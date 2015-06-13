@@ -75,12 +75,12 @@ class GearmanExecute extends AbstractGearmanService
             ->setDefaults(array(
                 'iterations'             => null,
                 'minimum_execution_time' => null,
-                'timeout'                => null
+                'timeout'                => null,
             ))
             ->setAllowedTypes(array(
                 'iterations'             => array('null', 'scalar'),
                 'minimum_execution_time' => array('null', 'scalar'),
-                'timeout'                => array('null', 'scalar')
+                'timeout'                => array('null', 'scalar'),
             ))
         ;
     }
@@ -132,7 +132,7 @@ class GearmanExecute extends AbstractGearmanService
      *
      * @param string $jobName Name of job to be executed
      * @param array $options Array of options passed to the callback
-     * @param GearmanWorker $gearmanWorker Worker instance to use
+     * @param \GearmanWorker $gearmanWorker Worker instance to use
      */
     public function executeJob($jobName, array $options = array(), \GearmanWorker $gearmanWorker = null)
     {
@@ -148,15 +148,17 @@ class GearmanExecute extends AbstractGearmanService
      *
      * @param array $worker Worker definition
      * @param array $options Array of options passed to the callback
-     * @param GearmanWorker $gearmanWorker Worker instance to use
+     * @param \GearmanWorker $gearmanWorker Worker instance to use
+     *
+     * @throws ServerConnectionException if a connection to a server was not possible.
+     *
      * @return GearmanExecute self Object
      */
     private function callJob(Array $worker, array $options = array(), \GearmanWorker $gearmanWorker = null)
     {
-        if(is_null($gearmanWorker)){
+        if(is_null($gearmanWorker)) {
             $gearmanWorker = new \GearmanWorker;
         }
-        $minimumExecutionTime = null;
 
         if (isset($worker['job'])) {
 
@@ -164,7 +166,7 @@ class GearmanExecute extends AbstractGearmanService
             $iterations = $worker['job']['iterations'];
             $minimumExecutionTime = $worker['job']['minimumExecutionTime'];
             $timeout = $worker['job']['timeout'];
-            $this->addServers($gearmanWorker, $worker['job']['servers'], $successes);
+            $successes = $this->addServers($gearmanWorker, $worker['job']['servers']);
 
         } else {
 
@@ -172,7 +174,7 @@ class GearmanExecute extends AbstractGearmanService
             $iterations = $worker['iterations'];
             $minimumExecutionTime = $worker['minimumExecutionTime'];
             $timeout = $worker['timeout'];
-            $this->addServers($gearmanWorker, $worker['servers'], $successes);
+            $successes = $this->addServers($gearmanWorker, $worker['servers']);
         }
 
         $options = $this->executeOptionsResolver->resolve($options);
@@ -182,7 +184,9 @@ class GearmanExecute extends AbstractGearmanService
         $timeout              = $options['timeout']                ?: $timeout;
 
         if (count($successes) < 1) {
-            sleep($minimumExecutionTime);
+            if ($minimumExecutionTime > 0) {
+                sleep($minimumExecutionTime);
+            }
             throw new ServerConnectionException('Worker was unable to connect to any server.');
         }
 
@@ -197,7 +201,7 @@ class GearmanExecute extends AbstractGearmanService
         /**
          * If there is a minimum expected duration, wait out the remaining period if there is any.
          */
-        if (null !== $minimumExecutionTime) {
+        if ($minimumExecutionTime > 0) {
             $now = time();
             $remaining = $minimumExecutionTime - ($now - $time);
 
@@ -254,6 +258,7 @@ class GearmanExecute extends AbstractGearmanService
      * @param Object         $objInstance   Job instance
      * @param array          $jobs          Array of jobs to subscribe
      * @param integer        $iterations    Number of iterations
+     * @param integer        $timeout       Timeout
      *
      * @return GearmanExecute self Object
      */
@@ -285,9 +290,9 @@ class GearmanExecute extends AbstractGearmanService
         /**
          * If iterations value is 0, is like worker will never die
          */
-        $alive = (0 == $iterations);
+        $alive = (0 === $iterations);
 
-        if (null !== $timeout) {
+        if ($timeout > 0) {
             $gearmanWorker->setTimeout($timeout * 1000);
         }
 
@@ -325,10 +330,12 @@ class GearmanExecute extends AbstractGearmanService
      * @param array          $servers  Servers array
      *
      * @throws ServerConnectionException if a connection to a server was not possible.
+     *
+     * @return array         Successfully added servers
      */
-    private function addServers(\GearmanWorker $gmworker, Array $servers, array &$successes = null)
+    private function addServers(\GearmanWorker $gmworker, array $servers)
     {
-        $successes = $successes ?: null;
+        $successes = array();
 
         if (!empty($servers)) {
 

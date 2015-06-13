@@ -97,7 +97,14 @@ class WorkerClass
     /**
      * @var int
      *
-     * Timeout for idle worker
+     * Job minimum execution time
+     */
+    private $minimumExecutionTime;
+
+    /**
+     * @var int
+     *
+     * Timeout for idle job
      */
     private $timeout;
 
@@ -248,7 +255,7 @@ class WorkerClass
      * If minimumExecutionTime is defined in JobAnnotation, this one is used.
      * Otherwise is used set in Class
      *
-     * @param JobAnnotation $jobAnnotation
+     * @param WorkAnnotation $workAnnotation
      * @param array $defaultSettings
      *
      * @return int
@@ -266,7 +273,7 @@ class WorkerClass
      * If timeout is defined in JobAnnotation, this one is used.
      * Otherwise is used set in Class
      *
-     * @param JobAnnotation $jobAnnotation
+     * @param WorkAnnotation $workAnnotation
      * @param array $defaultSettings
      *
      * @return int
