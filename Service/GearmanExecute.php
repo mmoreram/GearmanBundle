@@ -370,7 +370,7 @@ class GearmanExecute extends AbstractGearmanService
 
         if (false !== $worker) {
 
-            $this->callJob($worker, $options, $gearmanWorker = null);
+            $this->callJob($worker, $options, $gearmanWorker);
         }
     }
 
