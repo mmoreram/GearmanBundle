@@ -5,8 +5,7 @@ You can request a Job by using the gearman client.
 
 .. code-block:: php
 
-    $this
-        ->getContainer()
+    $gearman = $this
         ->get('gearman');
 
 Servers
@@ -36,7 +35,7 @@ Request a job
 .. code-block:: php
 
     $result = $gearman
-        ->doJob('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', json_encode(array('value1')));
+        ->callJob('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', json_encode(array('value1')));
 
     $returnCode = $gearman->getReturnCode();
 
