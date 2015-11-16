@@ -2,7 +2,8 @@ GearmanBundle for Symfony2
 =====
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/cf3d97c6-e026-4489-8493-a3f4a1e75a68/mini.png)](https://insight.sensiolabs.com/projects/cf3d97c6-e026-4489-8493-a3f4a1e75a68)
 [![Build Status](https://travis-ci.org/mmoreram/GearmanBundle.png?branch=master)](https://travis-ci.org/mmoreram/GearmanBundle)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/badges/quality-score.png?s=29f1ed342d3df54678614b58b0e243136aa24726)](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mmoreram/GearmanBundle/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/unstable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
 [![License](https://poser.pugx.org/mmoreram/gearman-bundle/license.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
