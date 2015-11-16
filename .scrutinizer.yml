@@ -1,3 +1,6 @@
+imports:
+    - php
+
 filter:
     excluded_paths: [vendor/*, Tests/*, Resources/*]
 
@@ -6,3 +9,5 @@ tools:
     php_cpd: true
     php_pdepend:
         excluded_dirs: [vendor, Tests]
+    external_code_coverage:
+        timeout: 600    # Timeout in seconds.
