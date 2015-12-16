@@ -110,17 +110,4 @@ environment ( Extracted from `DoctrineCacheBundle`_ documentation )
                 type: file_system
                 namespace: doctrine_cache.ns.gearman
 
-In development mode you do not want to cache things over more than one
-request. An easy solution for this is to use the array cache in the dev
-environment ( Extracted from `DoctrineCacheBundle`_ documentation )
-
-.. code-block:: yml
-
-    #config_dev.yml
-    doctrine_cache:
-        providers:
-            gearman_cache:
-                type: array
-                namespace: doctrine_cache.ns.gearman
-
 .. _DoctrineCacheBundle: https://github.com/doctrine/DoctrineCacheBundle#cache-providers
