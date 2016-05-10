@@ -34,7 +34,7 @@ class GearmanParser
 {
 
     /**
-     * @var Array
+     * @var array
      *
      * Bundles loaded by kernel
      */
@@ -62,7 +62,7 @@ class GearmanParser
     private $finder;
 
     /**
-     * @var Array
+     * @var array
      *
      * Bundles available to perform search
      */

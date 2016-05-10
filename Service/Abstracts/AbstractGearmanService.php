@@ -60,7 +60,7 @@ abstract class AbstractGearmanService
      *
      * @param string $jobName Name of job
      *
-     * @return Array
+     * @return array
      *
      * @throws JobDoesNotExistException
      */
@@ -93,7 +93,7 @@ abstract class AbstractGearmanService
      *
      * @param string $workerName Name of worker
      *
-     * @return Array
+     * @return array
      *
      * @throws WorkerDoesNotExistException
      */
