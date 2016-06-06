@@ -14,7 +14,7 @@
 namespace Mmoreram\GearmanBundle\Tests\Command;
 
 use PHPUnit_Framework_TestCase;
-use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -51,11 +51,11 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
     protected $output;
 
     /**
-     * @var DialogHelper
+     * @var QuestionHelper
      *
-     * Dialog helper
+     * Question helper
      */
-    protected $dialogHelper;
+    protected $questionHelper;
 
     /**
      * @var GearmanClient
@@ -97,9 +97,9 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
             ))
             ->getMock();
 
-        $this->dialogHelper = $this
-            ->getMockBuilder('Symfony\Component\Console\Helper\DialogHelper')
-            ->setMethods(array('askConfirmation'))
+        $this->questionHelper = $this
+            ->getMockBuilder('Symfony\Component\Console\Helper\QuestionHelper')
+            ->setMethods(array('ask'))
             ->getMock();
 
         $helperSet = $this
@@ -110,7 +110,7 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
         $helperSet
             ->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($this->dialogHelper));
+            ->will($this->returnValue($this->questionHelper));
 
         $this
             ->command
@@ -191,9 +191,9 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
             )));
 
         $this
-            ->dialogHelper
+            ->questionHelper
             ->expects($this->any())
-            ->method('askConfirmation')
+            ->method('ask')
             ->will($this->returnValue($confirmation));
 
         $this

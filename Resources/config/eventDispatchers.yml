@@ -6,7 +6,7 @@ services:
     gearman.dispatcher.abstract:
         abstract: true
         arguments:
-            event.dispatcher: @event_dispatcher
+            event.dispatcher: "@event_dispatcher"
 
     gearman.dispatcher.callbacks:
         parent: gearman.dispatcher.abstract
