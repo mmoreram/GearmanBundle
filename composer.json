@@ -3,7 +3,7 @@
     "replace": {
         "mmoreramerino/gearman-bundle": "dev-master"
     },
-    "description": "Adds gearman support to your Symfony2 project",
+    "description": "Adds gearman support to your Symfony2 or Symfony3 project",
     "keywords": ["gearman"],
     "homepage": "https://github.com/mmoreram/GearmanBundle",
     "type": "symfony-bundle",
@@ -12,6 +12,10 @@
         {
             "name": "Marc Morera",
             "email": "yuhu@mmoreram.com"
+        },
+        {
+            "name": "Matt Daum",
+            "email": "matt@setfive.com"
         },
         {
             "name": "Symfony Community",
