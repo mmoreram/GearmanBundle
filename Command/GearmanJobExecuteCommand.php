@@ -13,7 +13,7 @@
 
 namespace Mmoreram\GearmanBundle\Command;
 
-use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,6 +23,7 @@ use Mmoreram\GearmanBundle\Command\Abstracts\AbstractGearmanCommand;
 use Mmoreram\GearmanBundle\Service\GearmanClient;
 use Mmoreram\GearmanBundle\Service\GearmanDescriber;
 use Mmoreram\GearmanBundle\Service\GearmanExecute;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * Gearman Job Execute Command class
@@ -53,11 +54,11 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
     protected $gearmanExecute;
 
     /**
-     * @var DialogHelper
+     * @var QuestionHelper
      *
-     * Dialog
+     * Question
      */
-    protected $dialog;
+    protected $question;
 
     /**
      * Set gearman client
@@ -153,16 +154,16 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /**
-         * @var DialogHelper $dialog
+         * @var QuestionHelper $question
          */
-        $dialog = $this->getHelperSet()->get('dialog');
+        $question = $this->getHelperSet()->get('question');
 
         if (
             !$input->getOption('no-interaction') &&
-            !$dialog->askConfirmation(
+            !$question->ask(
+                $input,
                 $output,
-                '<question>This will execute asked job?</question>',
-                'y'
+                new ConfirmationQuestion('This will execute asked job?')
             )
         ) {
             return;
