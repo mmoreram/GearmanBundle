@@ -4,29 +4,29 @@ services:
     # Services
     #
     gearman.parser:
-        class: %gearman.parser.class%
+        class: "%gearman.parser.class%"
         arguments:
             kernel: "@kernel"
             annotations_reader: "@annotation_reader"
             symfony_finder: "@gearman.external.symfony_finder"
-            gearman_bundles: %gearman.bundles%
-            gearman_servers: %gearman.servers%
-            gearman_default_settings: %gearman.default.settings%
+            gearman_bundles: "%gearman.bundles%"
+            gearman_servers: "%gearman.servers%"
+            gearman_default_settings: "%gearman.default.settings%"
 
     gearman.cache.wrapper:
-        class: %gearman.cache.wrapper.class%
+        class: "%gearman.cache.wrapper.class%"
         arguments:
             gearman_parser: "@gearman.parser"
             gearman_cache: "@doctrine_cache.providers.gearman_cache"
-            gearman_cache_id: %gearman.cache.id%
+            gearman_cache_id: "%gearman.cache.id%"
         calls:
-            - [load,  ["@doctrine_cache.providers.gearman_cache", %gearman.cache.id%]]
+            - [load,  ["@doctrine_cache.providers.gearman_cache", "%gearman.cache.id%"]]
         tags:
             - { name: kernel.cache_clearer }
             - { name: kernel.cache_warmer, priority: 0 }
 
     gearman.describer:
-        class: %gearman.describer.class%
+        class: "%gearman.describer.class%"
         arguments:
             kernel: "@kernel"
 
@@ -34,21 +34,21 @@ services:
         abstract:  true
         arguments:
             gearman_cache_wrapper: "@gearman.cache.wrapper"
-            default_settings: %gearman.default.settings%
+            default_settings: "%gearman.default.settings%"
 
     gearman.execute:
-        class: %gearman.execute.class%
+        class: "%gearman.execute.class%"
         parent: gearman.abstract.service
         calls:
             - [setContainer,  ["@service_container"]]
             - [setEventDispatcher, ["@event_dispatcher"]]
 
     gearman:
-        class: %gearman.client.class%
+        class: "%gearman.client.class%"
         parent: gearman.abstract.service
         calls:
             - [initTaskStructure, []]
-            - [setDefaultServers, [%gearman.servers%]]
+            - [setDefaultServers, ["%gearman.servers%"]]
             - [setGearmanCallbacksDispatcher, ["@gearman.dispatcher.callbacks"]]
             - [setUniqueJobIdentifierGenerator, ["@gearman.unique_job_identifier"]]
-            - [setDefaultSettings, [%gearman.default.settings%]]
+            - [setDefaultSettings, ["%gearman.default.settings%"]]
