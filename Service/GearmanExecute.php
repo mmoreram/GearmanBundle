@@ -322,8 +322,7 @@ class GearmanExecute extends AbstractGearmanService
 
             $gearmanWorker->addFunction(
                 $job['realCallableName'],
-                array($this, 'handleJob'),
-                $this->workersBucket[$job['realCallableName']]
+                array($this, 'handleJob')
             );
         }
 
@@ -420,8 +419,15 @@ class GearmanExecute extends AbstractGearmanService
      *
      * @return mixed
      */
-    public function handleJob(\GearmanJob $job, $context)
+    public function handleJob(\GearmanJob $job)
     {
+
+        if(!isset($this->workersBucket[$job->functionName()])){
+            $context = false;
+        }else{
+            $context = $this->workersBucket[$job->functionName()];
+        }
+
         if (
             !is_array($context)
             || !array_key_exists('job_object_instance', $context)
