@@ -10,4 +10,4 @@ services:
 
     gearman.dispatcher.callbacks:
         parent: gearman.dispatcher.abstract
-        class: %gearman.dispatcher.callbacks.class%
+        class: "%gearman.dispatcher.callbacks.class%"
