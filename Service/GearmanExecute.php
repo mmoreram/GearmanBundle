@@ -66,6 +66,12 @@ class GearmanExecute extends AbstractGearmanService
      */
     protected $stopWorkSignalReceived;
 
+    /**
+     * Bucket with worker objects configuration for PECL
+     * @var array
+     */
+    protected $workersBucket = array();
+
 
     /**
      * Construct method
@@ -303,14 +309,20 @@ class GearmanExecute extends AbstractGearmanService
          */
         foreach ($jobs as $job) {
 
+            /**
+             * worker needs to have it's context into separated memory space;
+             * if it's passed as a value, then garbage collector remove the target
+             * what causes a segfault
+             */
+            $this->workersBucket[$job['realCallableName']] = array(
+                'job_object_instance' => $objInstance,
+                'job_method' => $job['methodName'],
+                'jobs' => $jobs
+            );
+
             $gearmanWorker->addFunction(
                 $job['realCallableName'],
-                array($this, 'handleJob'),
-                array(
-                    'job_object_instance' => $objInstance,
-                    'job_method' => $job['methodName'],
-                    'jobs' => $jobs
-                )
+                array($this, 'handleJob')
             );
         }
 
@@ -407,8 +419,15 @@ class GearmanExecute extends AbstractGearmanService
      *
      * @return mixed
      */
-    public function handleJob(\GearmanJob $job, $context)
+    public function handleJob(\GearmanJob $job)
     {
+
+        if(!isset($this->workersBucket[$job->functionName()])){
+            $context = false;
+        }else{
+            $context = $this->workersBucket[$job->functionName()];
+        }
+
         if (
             !is_array($context)
             || !array_key_exists('job_object_instance', $context)
