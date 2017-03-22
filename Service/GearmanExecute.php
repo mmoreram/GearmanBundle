@@ -417,12 +417,14 @@ class GearmanExecute extends AbstractGearmanService
      *
      * @return mixed
      */
-    public function handleJob(\GearmanJob $job)
+    public function handleJob(\GearmanJob $job, &$context = null)
     {
-        if (!isset($this->workersBucket[$job->functionName()])) {
-            $context = false;
-        } else {
-            $context = $this->workersBucket[$job->functionName()];
+        if (! $context) {
+            if (!isset($this->workersBucket[$job->functionName()])) {
+                $context = false;
+            } else {
+                $context = $this->workersBucket[$job->functionName()];
+            }
         }
 
         if (
