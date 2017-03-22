@@ -104,11 +104,12 @@ class GearmanExecuteTest extends WebTestCase
         // Finalize worker mock by making it call our job object
         // This is normally handled by Gearman, but for test purpose we must simulate it
         $worker->method('work')->will($this->returnCallback(function() use ($service, $object){
-            $service->handleJob(new \GearmanJob(), array(
+            $context = array(
                 'job_object_instance' => $object,
                 'job_method' => 'myMethod',
                 'jobs' => array()
-            ));
+            );
+            $service->handleJob(new \GearmanJob(), $context);
             return true;
         }));
 
