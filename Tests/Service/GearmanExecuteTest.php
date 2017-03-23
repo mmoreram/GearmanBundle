@@ -62,7 +62,7 @@ class GearmanExecuteTest extends WebTestCase
                 'jobs' => array(
                     0 => array(
                         'callableName'             => "test",
-                        'methodName'               => "test",
+                        'methodName'               => "myMethod",
                         'realCallableName'         => "test",
                         'jobPrefix'                => NULL,
                         'realCallableNameNoPrefix' => "test",
@@ -103,12 +103,13 @@ class GearmanExecuteTest extends WebTestCase
 
         // Finalize worker mock by making it call our job object
         // This is normally handled by Gearman, but for test purpose we must simulate it
-        $worker->method('work')->will($this->returnCallback(function() use ($service, $object){
-            $service->handleJob(new \GearmanJob(), array(
-                'job_object_instance' => $object,
-                'job_method' => 'myMethod',
-                'jobs' => array()
-            ));
+        $job = $this->getMockBuilder('GearmanJob')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $job->method('functionName')->willReturn('test');
+
+        $worker->method('work')->will($this->returnCallback(function() use ($service, $object, $job){
+            $service->handleJob($job);
             return true;
         }));
 
