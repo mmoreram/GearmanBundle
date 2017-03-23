@@ -439,13 +439,18 @@ class GearmanClient extends AbstractGearmanService
     /**
      * Fetches the Status of a special Background Job.
      *
-     * @param string $idJob The job handle string
+     * @param string $idJob   The job handle string
+     * @param int    $timeout Time in milliseconds before considering gearman job
+     *                        won't ever respond (no workers running at all).
+     *                        Default value to -1 (infinite)
      *
      * @return JobStatus Job status
      */
-    public function getJobStatus($idJob)
+    public function getJobStatus($idJob, $timeout = -1)
     {
         $gearmanClient = $this->getNativeClient();
+        $gearmanClient->setTimeout($timeout);
+
         $this->assignServers($gearmanClient);
         $statusData = $gearmanClient->jobStatus($idJob);
 
