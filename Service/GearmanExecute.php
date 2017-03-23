@@ -394,15 +394,20 @@ class GearmanExecute extends AbstractGearmanService
      * Executes a worker given a workerName subscribing all his jobs inside and
      * given settings and annotations of worker and jobs
      *
-     * @param string $workerName Name of worker to be executed
+     * @param   string          $workerName  Name of worker to be executed
+     * @param   array           $options
+     * @param   \GearmanWorker  $gearmanWorker
+     *
+     * @throws  ServerConnectionException
+     * @throws  \Mmoreram\GearmanBundle\Exceptions\WorkerDoesNotExistException
      */
-    public function executeWorker($workerName, array $options = array())
+    public function executeWorker($workerName, array $options = array(), \GearmanWorker $gearmanWorker = null)
     {
         $worker = $this->getWorker($workerName);
 
         if (false !== $worker) {
 
-            $this->callJob($worker, $options);
+            $this->callJob($worker, $options, $gearmanWorker);
         }
     }
 
