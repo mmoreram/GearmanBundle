@@ -6,19 +6,19 @@ services:
     gearman.parser:
         class: "%gearman.parser.class%"
         arguments:
-            kernel: "@kernel"
-            annotations_reader: "@annotation_reader"
-            symfony_finder: "@gearman.external.symfony_finder"
-            gearman_bundles: "%gearman.bundles%"
-            gearman_servers: "%gearman.servers%"
-            gearman_default_settings: "%gearman.default.settings%"
+            - "@kernel"
+            - "@annotation_reader"
+            - "@gearman.external.symfony_finder"
+            - "%gearman.bundles%"
+            - "%gearman.servers%"
+            - "%gearman.default.settings%"
 
     gearman.cache.wrapper:
         class: "%gearman.cache.wrapper.class%"
         arguments:
-            gearman_parser: "@gearman.parser"
-            gearman_cache: "@doctrine_cache.providers.gearman_cache"
-            gearman_cache_id: "%gearman.cache.id%"
+            - "@gearman.parser"
+            - "@doctrine_cache.providers.gearman_cache"
+            - "%gearman.cache.id%"
         calls:
             - [load,  ["@doctrine_cache.providers.gearman_cache", "%gearman.cache.id%"]]
         tags:
@@ -28,13 +28,13 @@ services:
     gearman.describer:
         class: "%gearman.describer.class%"
         arguments:
-            kernel: "@kernel"
+            - "@kernel"
 
     gearman.abstract.service:
         abstract:  true
         arguments:
-            gearman_cache_wrapper: "@gearman.cache.wrapper"
-            default_settings: "%gearman.default.settings%"
+            - "@gearman.cache.wrapper"
+            - "%gearman.default.settings%"
 
     gearman.execute:
         class: "%gearman.execute.class%"
