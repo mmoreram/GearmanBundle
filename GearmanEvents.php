@@ -115,4 +115,13 @@ class GearmanEvents
      * @var string
      */
     const GEARMAN_WORK_EXECUTED = 'gearman.work.executed';
+
+    /**
+     * Sets a function to be called when a worker is starting a job.
+     *
+     * This will be fired when the worker start another work cycle.
+     *
+     * @var string
+     */
+    const GEARMAN_WORK_STARTING = 'gearman.work.starting';
 }

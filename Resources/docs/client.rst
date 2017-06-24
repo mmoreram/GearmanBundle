@@ -44,7 +44,7 @@ Request a job
 - doNormalJob: Call the job and wait for the result ( Only newest gearman versions )
 - doHighJob: Call the job and wait for the result on High Preference
 - doLowJob: Call the job and wait for the result on Low Preference
-- doBackroundJob: Call the job without waiting for the result.
+- doBackgroundJob: Call the job without waiting for the result.
     - It receives a job handle for the submitted job
 - doHighBackgroundJob: Call the job without waitting for the result on High Preference.
     - It receives a job handle for the submitted job
@@ -60,9 +60,9 @@ Tasks
 .. code-block:: php
 
     $gearman
-        ->addTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value1')
-        ->addLowTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value2')
-        ->addHighBackgroundTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value3')
+        ->addTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value1', $context1)
+        ->addLowTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value2', $context2)
+        ->addHighBackgroundTask('MmoreramerinoTestBundleServicesMyAcmeWorker~doSomething', 'value3', $context3)
         ->runTasks();
 
 - addTask: Adds a task to be run in parallel with other tasks

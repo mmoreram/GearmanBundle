@@ -1,34 +1,35 @@
-language: php
+sudo: required
+dist: trusty
 
+language: php
 php:
-    - 5.3
-    - 5.4
     - 5.5
     - 5.6
+    - 7.0
+    - 7.1
     - hhvm
 
 matrix:
     allow_failures:
         - php: hhvm
 
+install:
+  - sh -c "sudo apt-get -y install uuid-dev libgearman-dev gearman gearman-job-server"
 before_script:
-  - sh -c "sudo apt-get install uuid-dev"
-  - curl -L -o libevent-1.4.14b-stable.tar.gz https://github.com/downloads/libevent/libevent/libevent-1.4.14b-stable.tar.gz
-  - tar -xzf libevent-1.4.14b-stable.tar.gz
-  - sh -c "cd libevent-1.4.14b-stable && ./configure && make && sudo make install && cd .."
-  - curl -L -o gearmand-0.14.tar.gz https://launchpad.net/gearmand/1.0/0.14/+download/gearmand-0.14.tar.gz
-  - tar -xzf gearmand-0.14.tar.gz
-  - sh -c "cd gearmand-0.14 && ./configure && make && sudo make install && cd .."
-  - curl -L -o gearman-0.8.3.tgz http://pecl.php.net/get/gearman/0.8.3
-  - tar -xzf gearman-0.8.3.tgz
-  - sh -c "cd gearman-0.8.3 && phpize && ./configure && make && sudo make install && cd .."
+  - if [[ $TRAVIS_PHP_VERSION = 5.* ]]; then curl -L -o gearman.tgz http://pecl.php.net/get/gearman/1.1.2; fi;
+  - if [[ $TRAVIS_PHP_VERSION = 7.* ]]; then curl -L -o gearman.tgz https://github.com/wcgallego/pecl-gearman/archive/gearman-2.0.1.tar.gz; fi;
+  - tar -xzf gearman.tgz
+  - if [[ $TRAVIS_PHP_VERSION = 5.* ]]; then sh -c "cd gearman-1.1.2 && phpize && ./configure && make && sudo make install && cd .."; fi;
+  - if [[ $TRAVIS_PHP_VERSION = 7.* ]]; then sh -c "cd pecl-gearman-gearman-2.0.1 && phpize && ./configure && make && sudo make install && cd .."; fi;
   - echo "extension=gearman.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
   - composer install --prefer-source --no-interaction
 
 script:
-  - phpunit -c phpunit.xml.dist --coverage-clover=coverage.clover
+  - php vendor/bin/phpunit --coverage-clover=coverage.clover
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
 
 notifications:
     email: false
+
+

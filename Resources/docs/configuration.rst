@@ -60,6 +60,16 @@ config gearman cache, using doctrine cache.
           # If empty, 0 is defined by default
           iterations: 150
 
+          # Default amount of time in seconds required for the execution to run.
+          # This is useful if using a tool such as supervisor which may expect a command to run for a
+          # minimum period of time to be considered successful and avoid fatal termination.
+          # If empty, no minimum time is required
+          minimum_execution_time: null
+
+          # Default maximum amount of time in seconds for a worker to remain idle before terminating.
+          # If empty, the worker will never timeout
+          timeout: null
+
           # execute callbacks after operations using Kernel events
           callbacks: true
 
@@ -81,7 +91,7 @@ config gearman cache, using doctrine cache.
        # If annotations defined, will be full overwritten
        #
        # If servers empty, simple localhost server is defined by default
-       # If port empty, 4730 is defined by efault
+       # If port empty, 4730 is defined by default
        servers:
           localhost:
              host: 127.0.0.1
