@@ -4,4 +4,4 @@ services:
     # Externals
     #
     gearman.external.symfony_finder:
-        class: %gearman.external.symfony_finder.class%
+        class: "%gearman.external.symfony_finder.class%"
