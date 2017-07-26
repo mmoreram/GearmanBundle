@@ -7,6 +7,12 @@ methods in Symfony2 environment in a really simple and practical way.
 Job annotations always overwrite work annotations, and work annotations always
 overwrite environment settings.
 
+As of v3.1.0 `\GearmanJob` object passed to jobs is wrapped inside `\Mmoreram\GearmanBundle\Module\GearmanJobWrapper`
+object. GearmanJobWrapper provides all GearmanJobMethods and acts as proxy. This allows emission of Symfony kernel events
+on worker side when certain methods from GearmanJob would be called. If you are migrating your project from older version
+of GearmanBundle than v3.1.0 only change you has to do in your jobs declarations is to change argument type
+from `\GearmanJob` to `\Mmoreram\GearmanBundle\Module\GearmanJobWrapper`.
+
 .. code-block:: php
 
     <?php
