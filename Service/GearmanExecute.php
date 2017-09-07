@@ -434,6 +434,7 @@ class GearmanExecute extends AbstractGearmanService
         }
 
         $event = new GearmanWorkStartingEvent($context['jobs']);
+		$event->setJob($job);
         $this->eventDispatcher->dispatch(GearmanEvents::GEARMAN_WORK_STARTING, $event);
 
         $result = call_user_func_array(

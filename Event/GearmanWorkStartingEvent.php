@@ -28,6 +28,12 @@ class GearmanWorkStartingEvent extends Event
      * Gearman jobs running
      */
     protected $jobs;
+    /**
+     * @var \GearmanJob
+     *
+     * Gearman job
+     */
+    protected $job;
 
     /**
      * Construct method
@@ -47,5 +53,22 @@ class GearmanWorkStartingEvent extends Event
     public function getJobs()
     {
         return $this->jobs;
+    }
+
+    /**
+     * Manually set started job
+     * @param \GearmanJob $job
+     */
+    public function setJob(\GearmanJob $job)
+    {
+        $this->job = $job;
+    }
+
+    /**
+     * @return \GearmanJob
+     */
+    public function getJob() : \GearmanJob
+    {
+        return $this->job;
     }
 }
