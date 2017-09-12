@@ -89,12 +89,17 @@ class GearmanExecute extends AbstractGearmanService
                 'minimum_execution_time' => null,
                 'timeout'                => null,
             ))
-            ->setAllowedTypes(array(
-                'iterations'             => array('null', 'scalar'),
-                'minimum_execution_time' => array('null', 'scalar'),
-                'timeout'                => array('null', 'scalar'),
-            ))
         ;
+        foreach (
+            array(
+                'iterations' => array('null', 'scalar'),
+                'minimum_execution_time' => array('null', 'scalar'),
+                'timeout' => array('null', 'scalar')
+            ) as $option => $allowedTypes) {
+            $this->executeOptionsResolver->setAllowedTypes($option, $allowedTypes);
+        }
+
+
 
         $this->stopWorkSignalReceived = false;
 
