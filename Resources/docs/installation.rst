@@ -4,14 +4,14 @@ Installing/Configuring
 Tags
 ~~~~
 
--  Use last unstable version ( alias of ``dev-master`` ) to stay always
-   in last commit
+-  Use last unstable version (alias of ``dev-master``) to stay always
+   in sync with the last commit
 -  Use last stable version tag to stay in a stable release.
 -  |LatestUnstableVersion| |LatestStableVersion|
 
-.. note:: As long as Symfony2 versions 2.1 and 2.2 are not maintained anymore,
-          and as long as these branches had same code than master branch, they
-          all have been deleted
+.. note:: Since Symfony2 versions 2.1 and 2.2 are not maintained anymore,
+          and since these branches were in sync with master branch, they
+          both have been deleted
 
 Installing `Gearman`_
 ~~~~~~~~~~~~~~~~~~~~~
@@ -27,16 +27,16 @@ And start server
 
 .. code-block:: bash
 
-    $ service gearman-job-server start
+    $ sudo service gearman-job-server start
 
-Then you need to install **Gearman driver** using the following commands
+Then you need to install the **Gearman driver** using the following command - 
+you will find all available gearman versions in `Pear Repository`_
 
 .. code-block:: bash
 
     $ pecl install channel://pecl.php.net/gearman-X.X.X
 
-You will find all available gearman versions in `Pear Repository`_
-Finally you need to start php module
+Finally, you need to register the php module
 
 .. code-block:: bash
 
@@ -45,34 +45,28 @@ Finally you need to start php module
 Installing `GearmanBundle`_
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You have to add require line into you composer.json file
-
-.. code-block:: yml
-
-    "require": {
-       "php": ">=5.3.3",
-       "symfony/symfony": "2.4.*",
-
-       "mmoreram/gearman-bundle": "dev-master"
-    }
-
-Then you have to use composer to update your project dependencies
+Install composer if not already done:
 
 .. code-block:: bash
 
     $ curl -sS https://getcomposer.org/installer | php
-    $ php composer.phar update
 
-And register the bundle in your appkernel.php file
+You have to add this bundle as a project requirement:
+
+.. code-block:: bash
+
+    composer require mmoreram/gearman-bundle "dev-master"
+
+Finally, register both DoctrineCacheBundle & GearmanBundle in your app/AppKernel.php file:
 
 .. code-block:: php
 
-    return array(
+    $bundles = [
        // ...
        new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
        new Mmoreram\GearmanBundle\GearmanBundle(),
        // ...
-    );
+    ];
 
 .. _Gearman: http://gearman.org
 .. _Pear Repository: http://pecl.php.net/package/gearman
