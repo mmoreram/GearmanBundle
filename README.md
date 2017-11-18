@@ -22,6 +22,7 @@ them with us, don't hesitate to open a RFC issue or a Pull Request.
 
 Tags
 ----
+* Tags 4.1+ support Symfony 4.0
 * Use tags under 4.X for Symfony2.X versions.  4.X support Symfony 3.X+
 * Use last unstable version ( alias of `dev-master` ) to stay always in last commit
 * Use last stable version tag to stay in a stable release.
