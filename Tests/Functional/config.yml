@@ -7,3 +7,34 @@ doctrine_cache:
         gearman_cache:
             type: file_system
             namespace: doctrine_cache.ns.gearman
+
+services:
+    gearman.unique_job_identifier.test:
+        alias: gearman.unique_job_identifier
+        public: true
+
+    gearman.dispatcher.callbacks.test:
+        alias: gearman.dispatcher.callbacks
+        public: true
+
+    gearman.test:
+        alias: gearman
+        public: true
+
+    gearman.describer.test:
+        alias: gearman.describer
+        public: true
+
+    gearman.execute.test:
+        alias: gearman.execute
+        public: true
+
+    gearman.parser.test:
+        alias: gearman.parser
+        public: true
+
+    gearman.cache.wrapper.test:
+        alias: gearman.cache.wrapper
+        public: true
+
+

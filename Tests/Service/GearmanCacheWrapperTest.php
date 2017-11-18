@@ -33,7 +33,7 @@ class GearmanCacheWrapperTest extends WebTestCase
             '\Mmoreram\GearmanBundle\Service\GearmanCacheWrapper',
             static::$kernel
                 ->getContainer()
-                ->get('gearman.cache.wrapper')
+                ->get('gearman.cache.wrapper.test')
         );
     }
 }

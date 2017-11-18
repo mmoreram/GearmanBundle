@@ -32,7 +32,7 @@ class GearmanCallbacksDispatcherTest extends WebTestCase
             '\Mmoreram\GearmanBundle\Dispatcher\GearmanCallbacksDispatcher',
             static::$kernel
                 ->getContainer()
-                ->get('gearman.dispatcher.callbacks')
+                ->get('gearman.dispatcher.callbacks.test')
         );
     }
 }

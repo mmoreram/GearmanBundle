@@ -35,7 +35,7 @@ class GearmanExecuteTest extends WebTestCase
             '\Mmoreram\GearmanBundle\Service\GearmanExecute',
             static::$kernel
                 ->getContainer()
-                ->get('gearman.execute')
+                ->get('gearman.execute.test')
         );
     }
 
