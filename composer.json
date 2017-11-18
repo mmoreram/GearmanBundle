@@ -3,7 +3,7 @@
     "replace": {
         "mmoreramerino/gearman-bundle": "dev-master"
     },
-    "description": "Adds gearman support to your Symfony2 or Symfony3 project",
+    "description": "Adds gearman support to your Symfony2, Symfony3, Symfony4 project",
     "keywords": ["gearman"],
     "homepage": "https://github.com/mmoreram/GearmanBundle",
     "type": "symfony-bundle",
@@ -29,13 +29,13 @@
         "doctrine/doctrine-cache-bundle": "~1.0",
         "doctrine/common": "~2.2",
 
-        "symfony/dependency-injection": "~3.0",
-        "symfony/framework-bundle": "~3.0",
-        "symfony/http-kernel": "~3.0",
-        "symfony/console": "~3.0",
-        "symfony/config": "~3.0",
-        "symfony/finder": "~3.0",
-        "symfony/options-resolver": "~3.0"
+        "symfony/dependency-injection": "~3.0|^4.0",
+        "symfony/framework-bundle": "~3.0|^4.0",
+        "symfony/http-kernel": "~3.0|^4.0",
+        "symfony/console": "~3.0|^4.0",
+        "symfony/config": "~3.0|^4.0",
+        "symfony/finder": "~3.0|^4.0",
+        "symfony/options-resolver": "~3.0|^4.0"
     },
     "target-dir": "Mmoreram/GearmanBundle",
     "autoload": {
