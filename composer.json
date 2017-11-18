@@ -41,7 +41,7 @@
     "autoload": {
         "psr-0": { "Mmoreram\\GearmanBundle": "" }
     },
-    "minimum-stability": "stable", 
+    "minimum-stability": "beta", 
     "extra": {
         "branch-alias": {
             "dev-master": "4.0-dev"

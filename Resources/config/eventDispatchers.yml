@@ -10,4 +10,5 @@ services:
 
     gearman.dispatcher.callbacks:
         parent: gearman.dispatcher.abstract
+        public: true
         class: "%gearman.dispatcher.callbacks.class%"
