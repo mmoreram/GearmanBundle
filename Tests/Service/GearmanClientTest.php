@@ -33,7 +33,7 @@ class GearmanClientTest extends WebTestCase
             '\Mmoreram\GearmanBundle\Service\GearmanClient',
             static::$kernel
                 ->getContainer()
-                ->get('gearman.test')
+                ->get('gearman')
         );
     }
 }

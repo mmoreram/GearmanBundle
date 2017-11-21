@@ -3,7 +3,7 @@
     "replace": {
         "mmoreramerino/gearman-bundle": "dev-master"
     },
-    "description": "Adds gearman support to your Symfony2 or Symfony3 project",
+    "description": "Adds gearman support to your Symfony2, Symfony3 and Symfony4 project",
     "keywords": ["gearman"],
     "homepage": "https://github.com/mmoreram/GearmanBundle",
     "type": "symfony-bundle",
@@ -41,7 +41,7 @@
     "autoload": {
         "psr-0": { "Mmoreram\\GearmanBundle": "" }
     },
-    "minimum-stability": "beta",
+    "minimum-stability": "stable",
     "extra": {
         "branch-alias": {
             "dev-master": "4.0-dev"

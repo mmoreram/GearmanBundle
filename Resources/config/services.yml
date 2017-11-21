@@ -47,6 +47,7 @@ services:
     gearman:
         class: "%gearman.client.class%"
         parent: gearman.abstract.service
+        public: true
         calls:
             - [initTaskStructure, []]
             - [setDefaultServers, ["%gearman.servers%"]]

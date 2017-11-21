@@ -17,10 +17,6 @@ services:
         alias: gearman.dispatcher.callbacks
         public: true
 
-    gearman.test:
-        alias: gearman
-        public: true
-
     gearman.describer.test:
         alias: gearman.describer
         public: true
