@@ -34,7 +34,7 @@ class UniqueJobIdentifierGeneratorTest extends WebTestCase
             '\Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator',
             static::$kernel
                 ->getContainer()
-                ->get('gearman.unique_job_identifier.test')
+                ->get('gearman.unique_job_identifier')
         );
     }
 

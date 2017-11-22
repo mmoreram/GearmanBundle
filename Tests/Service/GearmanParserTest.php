@@ -86,7 +86,7 @@ class GearmanParserTest extends WebTestCase
             '\Mmoreram\GearmanBundle\Service\GearmanParser',
             static::$kernel
                 ->getContainer()
-                ->get('gearman.parser.test')
+                ->get('gearman.parser')
         );
     }
 

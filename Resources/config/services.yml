@@ -5,6 +5,7 @@ services:
     #
     gearman.parser:
         class: "%gearman.parser.class%"
+        public: true
         arguments:
             - "@kernel"
             - "@annotation_reader"
@@ -16,6 +17,7 @@ services:
 
     gearman.cache.wrapper:
         class: "%gearman.cache.wrapper.class%"
+        public: true
         arguments:
             - "@gearman.parser"
             - "@doctrine_cache.providers.gearman_cache"
@@ -28,17 +30,20 @@ services:
 
     gearman.describer:
         class: "%gearman.describer.class%"
+        public: true
         arguments:
             - "@kernel"
 
     gearman.abstract.service:
-        abstract:  true
+        abstract: true
+        public: true
         arguments:
             - "@gearman.cache.wrapper"
             - "%gearman.default.settings%"
 
     gearman.execute:
         class: "%gearman.execute.class%"
+        public: true
         parent: gearman.abstract.service
         calls:
             - [setContainer,  ["@service_container"]]
@@ -46,8 +51,8 @@ services:
 
     gearman:
         class: "%gearman.client.class%"
-        parent: gearman.abstract.service
         public: true
+        parent: gearman.abstract.service
         calls:
             - [initTaskStructure, []]
             - [setDefaultServers, ["%gearman.servers%"]]
