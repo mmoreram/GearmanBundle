@@ -41,6 +41,11 @@ config gearman cache, using doctrine cache.
                 - DependencyInjection
                 - Resources
 
+       # Resources - list of directories (relative to kernel root dir) which will be searched for workers
+       # This is useful if you don't have an "AppBundle"
+       resources:
+          Dir/With/Workers
+
        # default values
        # All these values will be used if are not overwritten in Workers or jobs
        defaults:

@@ -11,8 +11,14 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
+namespace Mmoreram\GearmanBundle\Tests\Functional;
+
+use Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle;
+use Mmoreram\GearmanBundle\GearmanBundle;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
+
 
 /**
  * AppKernel for testing
@@ -25,9 +31,9 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         return array(
-            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
-            new Mmoreram\GearmanBundle\GearmanBundle(),
+            new FrameworkBundle(),
+            new DoctrineCacheBundle(),
+            new GearmanBundle(),
         );
     }
 
