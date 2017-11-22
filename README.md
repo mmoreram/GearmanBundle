@@ -22,8 +22,9 @@ them with us, don't hesitate to open a RFC issue or a Pull Request.
 
 Tags
 ----
-* Tags 4.1+ support Symfony 4.0
-* Use tags under 4.X for Symfony2.X versions.  4.X support Symfony 3.X+
+* Symfony 4.0 is supported by tags 4.1+ (they still work with Symfony 3.X)
+* All 4.X tags support Symfony 3.X
+* Use tags lower than 4.X for Symfony 2.X versions 
 * Use last unstable version ( alias of `dev-master` ) to stay always in last commit
 * Use last stable version tag to stay in a stable release.
 * [![Latest Unstable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/unstable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)  [![Latest Stable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
