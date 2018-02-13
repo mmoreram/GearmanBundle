@@ -146,10 +146,12 @@ class GearmanParser
 
                 break;
             }
-
+            
             $bundleNamespace = $bundleSettings['name'];
-            $bundlePath = $kernelBundles[$bundleNamespace]->getPath();
+            $Bnames = explode("\\", $bundleNamespace);
 
+            $bundlePath = $kernelBundles[array_pop($Bnames)]->getPath();
+            
             if (!empty($bundleSettings['include'])) {
 
                 foreach ($bundleSettings['include'] as $include) {
