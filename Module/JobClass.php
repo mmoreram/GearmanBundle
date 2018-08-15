@@ -18,6 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Job class
