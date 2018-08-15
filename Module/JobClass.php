@@ -17,7 +17,6 @@ use ReflectionMethod;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
@@ -29,8 +28,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  */
 class JobClass implements ContainerAwareInterface
 {
-    use ContainerAwareTrait;
-    
     /**
      * @var string
      *
@@ -118,6 +115,11 @@ class JobClass implements ContainerAwareInterface
      * The prefix to be prepended to all job callable names.
      */
     private $jobPrefix;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /**
      * Construct method
@@ -280,5 +282,15 @@ class JobClass implements ContainerAwareInterface
             'servers'                  => $this->servers,
             'defaultMethod'            => $this->defaultMethod,
         );
+    }
+
+    /**
+     * Sets the container.
+     *
+     * @param ContainerInterface|null $container A ContainerInterface instance or null
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
     }
 }
