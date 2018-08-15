@@ -29,6 +29,8 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  */
 class JobClass implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+    
     /**
      * @var string
      *
