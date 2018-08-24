@@ -13,6 +13,7 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
+use Mmoreram\GearmanBundle\Module\GearmanJobWrapper;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -438,7 +439,7 @@ class GearmanExecute extends AbstractGearmanService
 
         $result = call_user_func_array(
             array($context['job_object_instance'], $context['job_method']),
-            array($job, $context)
+            array(new GearmanJobWrapper($this->eventDispatcher, $job), $context)
         );
 
         /**

@@ -124,4 +124,53 @@ class GearmanEvents
      * @var string
      */
     const GEARMAN_WORK_STARTING = 'gearman.work.starting';
+
+    /**
+     * Sets a function to be called when {@see \GearmanJob::sendComplete()} method is called from within job
+     * @var string
+     */
+    const GEARMAN_WORKER_JOB_COMPLETE = 'gearman.worker.job.complete';
+
+    /**
+     * Sets a function to be called when {@see \GearmanJob::sendFail()} method is called from within job
+     * @var string
+     */
+    const GEARMAN_WORKER_JOB_FAIL = 'gearman.worker.job.fail';
+
+    /**
+     * Sets a function to be called when {@see \GearmanJob::sendData()} method is called from within job
+     * @var string
+     */
+    const GEARMAN_WORKER_JOB_DATA = 'gearman.worker.job.data';
+
+    /**
+     * Sets a function to be called when {@see \GearmanJob::sendException()} method is called from within job
+     * @var string
+     */
+    const GEARMAN_WORKER_JOB_EXCEPTION = 'gearman.worker.job.exception';
+
+    /**
+     * Sets a function to be called when {@see \GearmanJob::setReturn()} method is called from within job
+     * @var string
+     */
+    const GEARMAN_WORKER_JOB_RETURN = 'gearman.worker.job.return';
+
+    /**
+     * Sets a function to be called when {@see \GearmanJob} object gets wrapped into {@see Mmoreram\GearmanBundle\Module\GearmanJobWrapper}
+     * to be passed to job. It is already known job exists. This event is dispatched after {@see self::GEARMAN_WORK_STARTING}
+     * but listeners are provided with \GearmanJob instance
+     */
+    const GEARMAN_WORKER_JOB_START = 'gearman.worker.job.start';
+
+    /**
+     * Sets a function to be called when {@see \GearmanJob::sendStatus()} method is called from within job
+     * @var string
+     */
+    const GEARMAN_WORKER_JOB_STATUS = 'gearman.worker.job.status';
+
+    /**
+     * Sets a function to be called when {@see \GearmanJob::sendWarning()} method is called from within job
+     * @var string
+     */
+    const GEARMAN_WORKER_JOB_WARNING = 'gearman.worker.job.warning';
 }
