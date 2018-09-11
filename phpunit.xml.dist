@@ -29,5 +29,6 @@
 
     <php>
         <server name="KERNEL_DIR" value="./Tests/Functional/" />
+        <server name="KERNEL_CLASS" value="Mmoreram\GearmanBundle\Tests\Functional\AppKernel" />
     </php>
 </phpunit>
