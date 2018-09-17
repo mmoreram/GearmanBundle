@@ -7,3 +7,6 @@ doctrine_cache:
         gearman_cache:
             type: file_system
             namespace: doctrine_cache.ns.gearman
+
+
+

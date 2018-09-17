@@ -4,6 +4,7 @@ services:
     # Generators
     #
     gearman.unique_job_identifier:
-        class: %gearman.unique_job_identifier.class%
+        class: "%gearman.unique_job_identifier.class%"
+        public: true
         arguments:
-            generate_unique_key: %gearman.default.settings.generate_unique_key%
+            - "%gearman.default.settings.generate_unique_key%"

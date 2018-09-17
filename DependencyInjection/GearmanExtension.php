@@ -49,6 +49,11 @@ class GearmanExtension extends Extension
         );
 
         $container->setParameter(
+            'gearman.resources',
+            $config['resources']
+        );
+
+        $container->setParameter(
             'gearman.servers',
             $config['servers']
         );

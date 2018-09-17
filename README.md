@@ -1,4 +1,4 @@
-GearmanBundle for Symfony2
+GearmanBundle for Symfony2, 3 and 4
 =====
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/cf3d97c6-e026-4489-8493-a3f4a1e75a68/mini.png)](https://insight.sensiolabs.com/projects/cf3d97c6-e026-4489-8493-a3f4a1e75a68)
 [![Build Status](https://travis-ci.org/mmoreram/GearmanBundle.png?branch=master)](https://travis-ci.org/mmoreram/GearmanBundle)
@@ -9,9 +9,10 @@ GearmanBundle for Symfony2
 [![License](https://poser.pugx.org/mmoreram/gearman-bundle/license.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
 [![Total Downloads](https://poser.pugx.org/mmoreram/gearman-bundle/downloads.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
 
-GearmanBundle is a bundle for Symfony2 intended to provide an easy way to 
+GearmanBundle is a bundle for Symfony2/3/4 intended to provide an easy way to 
 support developers who need to use job queues. For example: mail queues, Solr 
-generation queues or Database upload queues.
+generation queues or Database upload queues.  For Symfony Flex you can use [the recipe in the contributed
+repository](https://github.com/symfony/recipes-contrib) to get started quickly.
 
 Documentation
 -------------
@@ -23,7 +24,9 @@ them with us, don't hesitate to open a RFC issue or a Pull Request.
 
 Tags
 ----
-
+* Symfony 4.0 is supported by tags 4.1+ (they still work with Symfony 3.X)
+* All 4.X tags support Symfony 3.X
+* Use tags lower than 4.X for Symfony 2.X versions 
 * Use last unstable version ( alias of `dev-master` ) to stay always in last commit
 * Use last stable version tag to stay in a stable release.
 * [![Latest Unstable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/unstable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)  [![Latest Stable Version](https://poser.pugx.org/mmoreram/gearman-bundle/v/stable.png)](https://packagist.org/packages/mmoreram/gearman-bundle)

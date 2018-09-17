@@ -41,6 +41,11 @@ config gearman cache, using doctrine cache.
                 - DependencyInjection
                 - Resources
 
+       # Resources - list of directories (relative to kernel root dir) which will be searched for workers
+       # This is useful if you don't have an "AppBundle"
+       resources:
+          Dir/With/Workers
+
        # default values
        # All these values will be used if are not overwritten in Workers or jobs
        defaults:
@@ -98,25 +103,13 @@ config gearman cache, using doctrine cache.
              port: 4730
 
 In development mode you do not want to cache things over more than one
-request. An easy solution for this is to use the array provider in the dev
-environment ( Extracted from `DoctrineCacheBundle`_ documentation )
-
-.. code-block:: yml
-
-    #config.yml
-    doctrine_cache:
-        providers:
-            gearman_cache:
-                type: file_system
-                namespace: doctrine_cache.ns.gearman
-
-In development mode you do not want to cache things over more than one
 request. An easy solution for this is to use the array cache in the dev
 environment ( Extracted from `DoctrineCacheBundle`_ documentation )
 
 .. code-block:: yml
 
     #config_dev.yml
+    
     doctrine_cache:
         providers:
             gearman_cache:
