@@ -40,9 +40,6 @@ class Configuration implements ConfigurationInterface
             $rootNode = $treeBuilder->getRootNode();
         }
 
-
-        $rootNode = $treeBuilder->getRootNode();
-
         $rootNode
             ->children()
                 ->arrayNode('bundles')
