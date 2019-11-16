@@ -7,14 +7,8 @@ php:
     - 5.6
     - 7.0
     - 7.1
-    - hhvm
-
-matrix:
-    include:
-        - php: 7.1
-          env: DEPENDENCIES=beta
-    allow_failures:
-        - php: hhvm
+    - 7.2
+    - 7.3
 
 install:
   - sh -c "sudo apt-get -y install uuid-dev libgearman-dev gearman gearman-job-server"
