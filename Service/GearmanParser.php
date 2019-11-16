@@ -125,7 +125,15 @@ class GearmanParser
         $this->resources = $resources;
         $this->servers = $servers;
         $this->defaultSettings = $defaultSettings;
-        $this->rootDir = $this->kernel->getRootDir();
+
+        // Symfony 3.3+ compatibility, get kernel root dir
+        if(method_exists($this->kernel, 'getProjectDir')){
+            $r = new \ReflectionObject($this->kernel);
+            $this->rootDir = \dirname($r->getFileName());
+        } else {
+            $this->rootDir = $this->kernel->getRootDir();
+        }
+
     }
 
     /**

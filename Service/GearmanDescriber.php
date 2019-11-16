@@ -31,6 +31,13 @@ class GearmanDescriber
     private $kernel;
 
     /**
+     * Root kernel directory
+     *
+     * @var string
+     */
+    private $rootDir;
+
+    /**
      * Construct method
      *
      * @param KernelInterface $kernel Kernel
@@ -38,6 +45,14 @@ class GearmanDescriber
     public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
+
+        // Symfony 3.3+ compatibility, get kernel root dir
+        if(method_exists($this->kernel, 'getProjectDir')){
+            $r = new \ReflectionObject($this->kernel);
+            $this->rootDir = \dirname($r->getFileName());
+        } else {
+            $this->rootDir = $this->kernel->getRootDir();
+        }
     }
 
     /**
@@ -53,7 +68,7 @@ class GearmanDescriber
         /**
          * Commandline
          */
-        $script = $this->kernel->getRootDir() . '/console gearman:job:execute';
+        $script = $this->rootDir . '/console gearman:job:execute';
 
         /**
          * A job descriptions contains its worker description
@@ -109,7 +124,7 @@ class GearmanDescriber
         /**
          * Commandline
          */
-        $script = $this->kernel->getRootDir() . '/console gearman:worker:execute';
+        $script = $this->rootDir . '/console gearman:worker:execute';
 
         $output->writeln('');
         $output->writeln('<info>@Worker\className : ' . $worker['className'] . '</info>');
