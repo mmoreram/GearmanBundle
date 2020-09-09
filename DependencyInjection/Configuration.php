@@ -95,7 +95,7 @@ class Configuration implements ConfigurationInterface
                             ->defaultTrue()
                         ->end()
                         ->integerNode('memory_limit')
-                            ->defaultNull()
+                            ->defaultValue(0)
                         ->end()
                         ->integerNode('minimum_execution_time')
                             ->min(0)
