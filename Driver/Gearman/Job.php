@@ -72,4 +72,10 @@ class Job extends Annotation
      * Number of seconds the execution must run before being allowed to terminate
      */
     public $minimumExecutionTime;
+
+    /**
+     * Max mmemory usage by 1 worker.
+     * @var integer
+     */
+    public $memoryLimit;
 }

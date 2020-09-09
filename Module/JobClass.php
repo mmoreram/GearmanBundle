@@ -80,6 +80,12 @@ class JobClass implements ContainerAwareInterface
      * Number of iterations this job will be alive before die
      */
     private $iterations;
+    /**
+     * @var integer
+     *
+     * Max memory limit to break work
+     */
+    private $memoryLimit;
 
     /**
      * @var string
@@ -157,6 +163,7 @@ class JobClass implements ContainerAwareInterface
 
         $this->servers = $this->loadServers($jobAnnotation, $servers);
         $this->iterations = $this->loadIterations($jobAnnotation, $defaultSettings);
+        $this->memoryLimit = $this->loadMemoryLimit($jobAnnotation, $defaultSettings);
         $this->minimumExecutionTime = $this->loadMinimumExecutionTime($jobAnnotation, $defaultSettings);
         $this->timeout = $this->loadTimeout($jobAnnotation, $defaultSettings);
         $this->defaultMethod = $this->loadDefaultMethod($jobAnnotation, $defaultSettings);
@@ -205,6 +212,19 @@ class JobClass implements ContainerAwareInterface
         return is_null($jobAnnotation->iterations)
             ? (int) $defaultSettings['iterations']
             : (int) $jobAnnotation->iterations;
+    }
+
+    /**
+     * Load memory limit for an instance
+     * @param JobAnnotation $workAnnotation
+     * @param array $defaultSettings
+     * @return int|null
+     */
+    private function loadMemoryLimit(JobAnnotation $jobAnnotation, array $defaultSettings)
+    {
+        return is_null($jobAnnotation->memoryLimit)
+            ? (int)$defaultSettings['memory_limit']
+            : (int) $jobAnnotation->memoryLimit;
     }
 
     /**
@@ -281,6 +301,7 @@ class JobClass implements ContainerAwareInterface
             'timeout'                  => $this->timeout,
             'servers'                  => $this->servers,
             'defaultMethod'            => $this->defaultMethod,
+            'memoryLimit'              => $this->memoryLimit,
         );
     }
 

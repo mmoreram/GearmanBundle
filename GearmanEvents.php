@@ -124,4 +124,10 @@ class GearmanEvents
      * @var string
      */
     const GEARMAN_WORK_STARTING = 'gearman.work.starting';
+
+    /**
+     * Sets a function to be called when a worker break work by memory limit
+     * @var string
+     */
+    const GEARMAN_WORK_MEMORY_FAILED = 'gearman.work_memory_fail';
 }

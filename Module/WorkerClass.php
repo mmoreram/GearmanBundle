@@ -107,6 +107,11 @@ class WorkerClass
      * Timeout for idle job
      */
     private $timeout;
+    /**
+     * @var int|null
+     */
+    private $memoryLimit;
+
 
     /**
      * @var array
@@ -184,6 +189,7 @@ class WorkerClass
         $this->defaultMethod = $this->loadDefaultMethod($workAnnotation, $defaultSettings);
         $this->minimumExecutionTime = $this->loadMinimumExecutionTime($workAnnotation, $defaultSettings);
         $this->timeout = $this->loadTimeout($workAnnotation, $defaultSettings);
+        $this->memoryLimit = $this->loadMemoryLimit($workAnnotation, $defaultSettings);
         $this->jobCollection = $this->createJobCollection($reflectionClass, $reader);
     }
 
@@ -286,6 +292,19 @@ class WorkerClass
     }
 
     /**
+     * Load memory limit for an instance
+     * @param WorkAnnotation $workAnnotation
+     * @param array $defaultSettings
+     * @return int|null
+     */
+    private function loadMemoryLimit(WorkAnnotation $workAnnotation, array $defaultSettings)
+    {
+        return is_null($workAnnotation->memoryLimit)
+            ? (int) $defaultSettings['memory_limit']
+            : (int) $workAnnotation->memoryLimit;
+    }
+
+    /**
      * Creates job collection of worker
      *
      * @param ReflectionClass $reflectionClass Reflexion class
@@ -322,6 +341,7 @@ class WorkerClass
                         'method'               => $this->defaultMethod,
                         'minimumExecutionTime' => $this->minimumExecutionTime,
                         'timeout'              => $this->timeout,
+                        'memoryLimit'          => $this->memoryLimit,
                     ));
 
                     $jobCollection->add($job);
@@ -352,6 +372,7 @@ class WorkerClass
             'minimumExecutionTime' => $this->minimumExecutionTime,
             'timeout'              => $this->timeout,
             'jobs'                 => $this->jobCollection->toArray(),
+            'memoryLimit'          => $this->memoryLimit,
         );
     }
 

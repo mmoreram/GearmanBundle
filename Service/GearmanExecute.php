@@ -13,6 +13,7 @@
 
 namespace Mmoreram\GearmanBundle\Service;
 
+use Mmoreram\GearmanBundle\Event\GearmanWorkMemoryFailedEvent;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -86,13 +87,15 @@ class GearmanExecute extends AbstractGearmanService
         $this->executeOptionsResolver
             ->setDefaults(array(
                 'iterations'             => null,
+                'memoryLimit'             => null,
                 'minimum_execution_time' => null,
                 'timeout'                => null,
             ))
-	    ->setAllowedTypes('iterations', array('null', 'scalar'))
+	        ->setAllowedTypes('iterations', array('null', 'scalar'))
+            ->setAllowedTypes('memoryLimit', array('null', 'scalar'))
             ->setAllowedTypes('minimum_execution_time', array('null', 'scalar'))
             ->setAllowedTypes('timeout', array('null', 'scalar'));
-        
+
 
         $this->stopWorkSignalReceived = false;
 
@@ -192,12 +195,14 @@ class GearmanExecute extends AbstractGearmanService
             $gearmanWorker = new \GearmanWorker;
         }
 
+
         if (isset($worker['job'])) {
 
             $jobs = array($worker['job']);
             $iterations = $worker['job']['iterations'];
             $minimumExecutionTime = $worker['job']['minimumExecutionTime'];
             $timeout = $worker['job']['timeout'];
+            $memoryLimit = $worker['job']['memoryLimit'];
             $successes = $this->addServers($gearmanWorker, $worker['job']['servers']);
 
         } else {
@@ -206,12 +211,15 @@ class GearmanExecute extends AbstractGearmanService
             $iterations = $worker['iterations'];
             $minimumExecutionTime = $worker['minimumExecutionTime'];
             $timeout = $worker['timeout'];
+            $memoryLimit = $worker['memoryLimit'];
             $successes = $this->addServers($gearmanWorker, $worker['servers']);
         }
 
         $options = $this->executeOptionsResolver->resolve($options);
 
+
         $iterations           = $options['iterations']             ?: $iterations;
+        $memoryLimit          = $options['memoryLimit']            ?: $memoryLimit;
         $minimumExecutionTime = $options['minimum_execution_time'] ?: $minimumExecutionTime;
         $timeout              = $options['timeout']                ?: $timeout;
 
@@ -228,7 +236,7 @@ class GearmanExecute extends AbstractGearmanService
          * Start the timer before running the worker.
          */
         $time = time();
-        $this->runJob($gearmanWorker, $objInstance, $jobs, $iterations, $timeout);
+        $this->runJob($gearmanWorker, $objInstance, $jobs, $iterations, $timeout, $memoryLimit);
 
         /**
          * If there is a minimum expected duration, wait out the remaining period if there is any.
@@ -291,10 +299,11 @@ class GearmanExecute extends AbstractGearmanService
      * @param array          $jobs          Array of jobs to subscribe
      * @param integer        $iterations    Number of iterations
      * @param integer        $timeout       Timeout
+     * @param integer        $memoryLimit   Memory limit
      *
      * @return GearmanExecute self Object
      */
-    private function runJob(\GearmanWorker $gearmanWorker, $objInstance, array $jobs, $iterations, $timeout = null)
+    private function runJob(\GearmanWorker $gearmanWorker, $objInstance, array $jobs, $iterations, $timeout = null, $memoryLimit = null)
     {
         /**
          * Set the output of this instance, this should allow workers to use the console output.
@@ -354,6 +363,13 @@ class GearmanExecute extends AbstractGearmanService
              */
             if (!$alive && $iterations <= 0) {
 
+                break;
+            }
+
+            if($memoryLimit && memory_get_usage(true) > intval($memoryLimit))
+            {
+                $event = new GearmanWorkMemoryFailedEvent($jobs, $iterations, $memoryLimit, memory_get_usage(true));
+                $this->eventDispatcher->dispatch(GearmanEvents::GEARMAN_WORK_MEMORY_FAILED, $event);
                 break;
             }
         }

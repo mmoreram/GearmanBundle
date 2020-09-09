@@ -86,6 +86,8 @@ config gearman cache, using doctrine cache.
           # By default this variable is set as true
           workers_name_prepend_namespace: true
 
+          # Use this parameters to stop next iterations if memory usage greater than your limit
+          memory_limit: null
        # Server list where workers and clients will connect to
        # Each server must contain host and port
        # If annotations defined, will be full overwritten

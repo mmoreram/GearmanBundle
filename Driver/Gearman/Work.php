@@ -81,4 +81,10 @@ class Work extends Annotation
      * @var string
      */
     public $service = null;
+
+    /**
+     * Max memory usage by 1 worker.
+     * @var integer
+     */
+    public $memoryLimit;
 }
