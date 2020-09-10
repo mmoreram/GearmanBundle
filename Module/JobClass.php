@@ -223,7 +223,7 @@ class JobClass implements ContainerAwareInterface
     private function loadMemoryLimit(JobAnnotation $jobAnnotation, array $defaultSettings)
     {
         return is_null($jobAnnotation->memoryLimit)
-            ? (int)$defaultSettings['memory_limit']
+            ? (int)$defaultSettings['memoryLimit']
             : (int) $jobAnnotation->memoryLimit;
     }
 
