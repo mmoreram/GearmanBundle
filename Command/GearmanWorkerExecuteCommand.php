@@ -133,7 +133,14 @@ class GearmanWorkerExecuteCommand extends AbstractGearmanCommand
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'Override configured timeout'
-            );
+            )
+            ->addOption(
+                'memory-limit',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Override configured memory limit'
+            )
+        ;
     }
 
     /**
@@ -207,7 +214,8 @@ class GearmanWorkerExecuteCommand extends AbstractGearmanCommand
             ->executeWorker($worker, array(
                 'iterations'             => $input->getOption('iterations'),
                 'minimum_execution_time' => $input->getOption('minimum-execution-time'),
-                'timeout'                => $input->getOption('timeout')
+                'timeout'                => $input->getOption('timeout'),
+                'memoryLimit'            => $input->getOption('memory-limit')
             ));
     }
 }
