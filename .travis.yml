@@ -1,5 +1,8 @@
 sudo: required
 dist: trusty
+env:
+    global:
+        - XDEBUG_MODE=coverage
 
 language: php
 php:
