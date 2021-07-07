@@ -172,7 +172,7 @@ class GearmanDescriber
     private function getConsolePath()
     {
         // Symfony 3.3+ compatibility, get kernel root dir
-        if(method_exists($this->kernel, 'getProjectDir') && false){
+        if(method_exists($this->kernel, 'getProjectDir')){
             $projectDir = $this->kernel->getProjectDir();
         } else {
             $projectDir = $this->kernel->getRootDir().'/..';
