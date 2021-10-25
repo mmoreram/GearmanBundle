@@ -14,7 +14,6 @@
 namespace Mmoreram\GearmanBundle\Event\Abstracts;
 
 use GearmanTask;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * AbstractGearmanClientTaskEvent
