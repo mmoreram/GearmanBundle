@@ -25,6 +25,7 @@ use Mmoreram\GearmanBundle\Event\GearmanClientCallbackStatusEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackWarningEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackWorkloadEvent;
 use Mmoreram\GearmanBundle\GearmanEvents;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 
 /**
  * Gearman callbacks
@@ -96,9 +97,9 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
         if (!is_null($contextReference)) {
             $event->setContext($contextReference);
         }
-        $this->eventDispatcher->dispatch(
-            GearmanEvents::GEARMAN_CLIENT_CALLBACK_COMPLETE,
-            $event
+        $this->dispatch(
+            $event,
+            GearmanEvents::GEARMAN_CLIENT_CALLBACK_COMPLETE
         );
     }
 
@@ -112,9 +113,9 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
     public function assignFailCallback(GearmanTask $gearmanTask)
     {
         $event = new GearmanClientCallbackFailEvent($gearmanTask);
-        $this->eventDispatcher->dispatch(
-            GearmanEvents::GEARMAN_CLIENT_CALLBACK_FAIL,
-            $event
+        $this->dispatch(
+            $event,
+            GearmanEvents::GEARMAN_CLIENT_CALLBACK_FAIL
         );
     }
 
@@ -128,9 +129,9 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
     public function assignDataCallback(GearmanTask $gearmanTask)
     {
         $event = new GearmanClientCallbackDataEvent($gearmanTask);
-        $this->eventDispatcher->dispatch(
-            GearmanEvents::GEARMAN_CLIENT_CALLBACK_DATA,
-            $event
+        $this->dispatch(
+            $event,
+            GearmanEvents::GEARMAN_CLIENT_CALLBACK_DATA
         );
     }
 
@@ -144,9 +145,9 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
     public function assignCreatedCallback(GearmanTask $gearmanTask)
     {
         $event = new GearmanClientCallbackCreatedEvent($gearmanTask);
-        $this->eventDispatcher->dispatch(
-            GearmanEvents::GEARMAN_CLIENT_CALLBACK_CREATED,
-            $event
+        $this->dispatch(
+            $event,
+            GearmanEvents::GEARMAN_CLIENT_CALLBACK_CREATED
         );
     }
 
@@ -158,9 +159,9 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
     public function assignExceptionCallback(GearmanTask $gearmanTask)
     {
         $event = new GearmanClientCallbackExceptionEvent($gearmanTask);
-        $this->eventDispatcher->dispatch(
-            GearmanEvents::GEARMAN_CLIENT_CALLBACK_EXCEPTION,
-            $event
+        $this->dispatch(
+            $event,
+            GearmanEvents::GEARMAN_CLIENT_CALLBACK_EXCEPTION
         );
     }
 
@@ -174,9 +175,9 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
     public function assignStatusCallback(GearmanTask $gearmanTask)
     {
         $event = new GearmanClientCallbackStatusEvent($gearmanTask);
-        $this->eventDispatcher->dispatch(
-            GearmanEvents::GEARMAN_CLIENT_CALLBACK_STATUS,
-            $event
+        $this->dispatch(
+            $event,
+            GearmanEvents::GEARMAN_CLIENT_CALLBACK_STATUS
         );
     }
 
@@ -190,9 +191,9 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
     public function assignWarningCallback(GearmanTask $gearmanTask)
     {
         $event = new GearmanClientCallbackWarningEvent($gearmanTask);
-        $this->eventDispatcher->dispatch(
-            GearmanEvents::GEARMAN_CLIENT_CALLBACK_WARNING,
-            $event
+        $this->dispatch(
+            $event,
+            GearmanEvents::GEARMAN_CLIENT_CALLBACK_WARNING
         );
     }
 
@@ -206,9 +207,21 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
     public function assignWorkloadCallback(GearmanTask $gearmanTask)
     {
         $event = new GearmanClientCallbackWorkloadEvent($gearmanTask);
-        $this->eventDispatcher->dispatch(
-            GearmanEvents::GEARMAN_CLIENT_CALLBACK_WORKLOAD,
-            $event
+        $this->dispatch(
+            $event,
+            GearmanEvents::GEARMAN_CLIENT_CALLBACK_WORKLOAD
         );
+    }
+
+    private function dispatch($event, $eventName)
+    {
+        // LegacyEventDispatcherProxy exists in Symfony >= 4.3
+        if (class_exists(LegacyEventDispatcherProxy::class)) {
+            // New Symfony 4.3 EventDispatcher signature
+            $this->eventDispatcher->dispatch($event, $eventName);
+        } else {
+            // Old EventDispatcher signature
+            $this->eventDispatcher->dispatch($eventName, $event);
+        }
     }
 }

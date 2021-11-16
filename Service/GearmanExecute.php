@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Mmoreram\GearmanBundle\Command\Util\GearmanOutputAwareInterface;
 use Mmoreram\GearmanBundle\Event\GearmanWorkExecutedEvent;
 use Mmoreram\GearmanBundle\Event\GearmanWorkStartingEvent;
@@ -140,7 +140,7 @@ class GearmanExecute extends AbstractGearmanService
      */
     public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventDispatcher = $eventDispatcher;
+        $this->eventDispatcher = class_exists(LegacyEventDispatcherProxy::class) ? LegacyEventDispatcherProxy::decorate($eventDispatcher) : $eventDispatcher;
 
         return $this;
     }
@@ -341,7 +341,7 @@ class GearmanExecute extends AbstractGearmanService
             $iterations--;
 
             $event = new GearmanWorkExecutedEvent($jobs, $iterations, $gearmanWorker->returnCode());
-            $this->eventDispatcher->dispatch(GearmanEvents::GEARMAN_WORK_EXECUTED, $event);
+            $this->dispatch($event, GearmanEvents::GEARMAN_WORK_EXECUTED);
 
             if ($gearmanWorker->returnCode() != GEARMAN_SUCCESS) {
 
@@ -434,7 +434,7 @@ class GearmanExecute extends AbstractGearmanService
         }
 
         $event = new GearmanWorkStartingEvent($context['jobs']);
-        $this->eventDispatcher->dispatch(GearmanEvents::GEARMAN_WORK_STARTING, $event);
+        $this->dispatch($event, GearmanEvents::GEARMAN_WORK_STARTING);
 
         $result = call_user_func_array(
             array($context['job_object_instance'], $context['job_method']),
@@ -449,5 +449,17 @@ class GearmanExecute extends AbstractGearmanService
         settype($result, $type);
 
         return $result;
+    }
+
+    private function dispatch($event, $eventName)
+    {
+        // LegacyEventDispatcherProxy exists in Symfony >= 4.3
+        if (class_exists(LegacyEventDispatcherProxy::class)) {
+            // New Symfony 4.3 EventDispatcher signature
+            $this->eventDispatcher->dispatch($event, $eventName);
+        } else {
+            // Old EventDispatcher signature
+            $this->eventDispatcher->dispatch($eventName, $event);
+        }
     }
 }
