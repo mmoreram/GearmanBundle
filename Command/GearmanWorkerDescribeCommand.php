@@ -110,5 +110,7 @@ class GearmanWorkerDescribeCommand extends AbstractGearmanCommand
                 $output,
                 $worker
             );
+
+        return 0;
     }
 }

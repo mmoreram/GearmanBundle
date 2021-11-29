@@ -103,5 +103,7 @@ class GearmanJobDescribeCommand extends AbstractGearmanCommand
         $this
             ->gearmanDescriber
             ->describeJob($output, $job);
+
+        return 0;
     }
 }

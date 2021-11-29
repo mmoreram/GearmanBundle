@@ -166,7 +166,7 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
                 new ConfirmationQuestion('This will execute asked job?')
             )
         ) {
-            return;
+            return 0;
         }
 
         if (!$input->getOption('quiet')) {
@@ -212,5 +212,7 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
                 'minimum_execution_time' => $input->getOption('minimum-execution-time'),
                 'timeout'                => $input->getOption('timeout')
             ));
+
+        return 0;
     }
 }

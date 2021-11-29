@@ -72,7 +72,7 @@ class GearmanWorkerListCommand extends AbstractGearmanCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if ($input->getOption('quiet')) {
-            return;
+            return 0;
         }
 
         $workers = $this->gearmanClient->getWorkers();
@@ -98,5 +98,7 @@ class GearmanWorkerListCommand extends AbstractGearmanCommand
                 }
             }
         }
+
+        return 0;
     }
 }
