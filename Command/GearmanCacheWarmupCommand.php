@@ -88,5 +88,7 @@ class GearmanCacheWarmupCommand extends AbstractGearmanCommand
         $this
             ->gearmanCacheWrapper
             ->warmup('');
+
+        return 0;
     }
 }

@@ -14,6 +14,7 @@
 namespace Mmoreram\GearmanBundle\Dispatcher\Abstracts;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 
 /**
  * Gearman execute methods. All Worker methods
@@ -38,6 +39,6 @@ abstract class AbstractGearmanDispatcher
      */
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventDispatcher = $eventDispatcher;
+        $this->eventDispatcher = class_exists(LegacyEventDispatcherProxy::class) ? LegacyEventDispatcherProxy::decorate($eventDispatcher) : $eventDispatcher;
     }
 }

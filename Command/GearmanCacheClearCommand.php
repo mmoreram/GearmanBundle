@@ -84,5 +84,7 @@ class GearmanCacheClearCommand extends AbstractGearmanCommand
         $this
             ->gearmanCacheWrapper
             ->clear('');
+
+        return 0;
     }
 }
