@@ -26,7 +26,7 @@ class AppKernel extends Kernel
     /**
      * Only register GearmanBundle
      */
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         return [
             new FrameworkBundle(),
