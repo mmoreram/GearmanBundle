@@ -9,12 +9,12 @@ jobs:
         continue-on-error: ${{ matrix.experimental }}
         strategy:
             matrix:
-                php-version: ['7.2']
+                php-version: ['7.3']
                 symfony-version: ['4.4']
                 experimental: [false]
                 coverage: ['none']
                 include:
-                    - php-version: '7.2'
+                    - php-version: '7.3'
                       symfony-version: '4.4'
                       coverage: xdebug
                       experimental: false
