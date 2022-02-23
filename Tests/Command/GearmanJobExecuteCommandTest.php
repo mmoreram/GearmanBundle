@@ -93,7 +93,7 @@ class GearmanJobExecuteCommandTest extends TestCase
         $this->command = $this
             ->getMockBuilder('Mmoreram\GearmanBundle\Command\GearmanJobExecuteCommand')
             ->setMethods([
-                'getHelperSet'
+                'getHelperSet',
             ])
             ->getMock();
 
@@ -140,7 +140,7 @@ class GearmanJobExecuteCommandTest extends TestCase
             ->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanClient')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getJob'
+                'getJob',
             ])
             ->getMock();
 
@@ -148,7 +148,7 @@ class GearmanJobExecuteCommandTest extends TestCase
             ->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanDescriber')
             ->disableOriginalConstructor()
             ->setMethods([
-                'describeJob'
+                'describeJob',
             ])
             ->getMock();
 
@@ -156,7 +156,7 @@ class GearmanJobExecuteCommandTest extends TestCase
             ->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanExecute')
             ->disableOriginalConstructor()
             ->setMethods([
-                'executeJob'
+                'executeJob',
             ])
             ->getMock();
 
@@ -186,7 +186,7 @@ class GearmanJobExecuteCommandTest extends TestCase
             ->method('getOption')
             ->will($this->returnValueMap([
                 ['quiet', $quiet],
-                ['no-interaction', $noInteraction]
+                ['no-interaction', $noInteraction],
             ]));
 
         $this

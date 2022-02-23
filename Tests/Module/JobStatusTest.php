@@ -43,7 +43,7 @@ class JobStatusTest extends TestCase
             $known,
             $running,
             $completed,
-            $completionTotal
+            $completionTotal,
         ]);
 
         $this->assertEquals($jobStatus->isKnown(), $isKnown);
@@ -74,7 +74,7 @@ class JobStatusTest extends TestCase
                 0,
                 0,
                 0,
-                false
+                false,
             ],
 
             /**
@@ -90,7 +90,7 @@ class JobStatusTest extends TestCase
                 0,
                 10,
                 0,
-                false
+                false,
             ],
 
             /**
@@ -106,7 +106,7 @@ class JobStatusTest extends TestCase
                 5,
                 10,
                 0.5,
-                false
+                false,
             ],
 
             /**
@@ -122,7 +122,7 @@ class JobStatusTest extends TestCase
                 10,
                 10,
                 1,
-                true
+                true,
             ],
 
         ];

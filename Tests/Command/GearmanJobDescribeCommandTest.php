@@ -69,7 +69,7 @@ class GearmanJobDescribeCommandTest extends TestCase
             ->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanClient')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getJob'
+                'getJob',
             ])
             ->getMock();
 
@@ -82,7 +82,7 @@ class GearmanJobDescribeCommandTest extends TestCase
             ->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanDescriber')
             ->disableOriginalConstructor()
             ->setMethods([
-                'describeJob'
+                'describeJob',
             ])
             ->getMock();
 

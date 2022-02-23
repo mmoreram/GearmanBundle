@@ -71,9 +71,9 @@ class GearmanExecuteTest extends WebTestCase
                         'defaultMethod'            => "doBackground",
                         'minimumExecutionTime'     => null,
                         'timeout'                  => null,
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
         $wrapper = $this->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanCacheWrapper')
             ->disableOriginalConstructor()

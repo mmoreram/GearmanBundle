@@ -104,7 +104,7 @@ class GearmanWorkerListCommandTest extends TestCase
                 [
                     'className'    => '',
                     'callableName' => '',
-                    'jobs'         => []
+                    'jobs'         => [],
                 ],
             ]));
 
@@ -128,7 +128,7 @@ class GearmanWorkerListCommandTest extends TestCase
             ->expects($this->any())
             ->method('getOption')
             ->will($this->returnValueMap([
-                ['quiet', $quiet]
+                ['quiet', $quiet],
             ]));
 
         $this

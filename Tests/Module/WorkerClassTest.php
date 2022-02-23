@@ -118,7 +118,7 @@ class WorkerClassTest extends \PHPUnit\Framework\TestCase
             ->getMockBuilder('Doctrine\Common\Annotations\SimpleAnnotationReader')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getMethodAnnotations'
+                'getMethodAnnotations',
             ])
             ->getMock();
     }

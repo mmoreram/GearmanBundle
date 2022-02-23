@@ -205,7 +205,7 @@ class GearmanWorkerExecuteCommand extends AbstractGearmanCommand
             ->executeWorker($worker, [
                 'iterations'             => $input->getOption('iterations'),
                 'minimum_execution_time' => $input->getOption('minimum-execution-time'),
-                'timeout'                => $input->getOption('timeout')
+                'timeout'                => $input->getOption('timeout'),
             ]);
 
         return 0;

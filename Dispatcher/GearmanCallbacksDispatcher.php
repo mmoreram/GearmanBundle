@@ -45,42 +45,42 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
     {
         $gearmanClient->setCompleteCallback([
             $this,
-            'assignCompleteCallback'
+            'assignCompleteCallback',
         ]);
 
         $gearmanClient->setFailCallback([
             $this,
-            'assignFailCallback'
+            'assignFailCallback',
         ]);
 
         $gearmanClient->setDataCallback([
             $this,
-            'assignDataCallback'
+            'assignDataCallback',
         ]);
 
         $gearmanClient->setCreatedCallback([
             $this,
-            'assignCreatedCallback'
+            'assignCreatedCallback',
         ]);
 
         $gearmanClient->setExceptionCallback([
             $this,
-            'assignExceptionCallback'
+            'assignExceptionCallback',
         ]);
 
         $gearmanClient->setStatusCallback([
             $this,
-            'assignStatusCallback'
+            'assignStatusCallback',
         ]);
 
         $gearmanClient->setWarningCallback([
             $this,
-            'assignWarningCallback'
+            'assignWarningCallback',
         ]);
 
         $gearmanClient->setWorkloadCallback([
             $this,
-            'assignWorkloadCallback'
+            'assignWorkloadCallback',
         ]);
     }
 

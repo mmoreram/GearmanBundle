@@ -124,7 +124,7 @@ class GearmanCacheClearCommandTest extends TestCase
             ->expects($this->any())
             ->method('getOption')
             ->will($this->returnValueMap([
-                ['quiet', true]
+                ['quiet', true],
             ]));
 
         $this
@@ -150,7 +150,7 @@ class GearmanCacheClearCommandTest extends TestCase
             ->expects($this->any())
             ->method('getOption')
             ->will($this->returnValueMap([
-                ['quiet', false]
+                ['quiet', false],
             ]));
 
         $this

@@ -9,7 +9,6 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
 {
-
     private GearmanParser $gearmanParser;
     private CacheInterface $cache;
     private string $cacheId;

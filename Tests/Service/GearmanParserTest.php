@@ -69,7 +69,7 @@ class GearmanParserTest extends WebTestCase
             ->getMockBuilder('\Symfony\Component\HttpKernel\Bundle\Bundle')
             ->disableOriginalConstructor()
             ->setMethods([
-                'getPath'
+                'getPath',
             ])
             ->getMock();
     }
@@ -280,7 +280,7 @@ class GearmanParserTest extends WebTestCase
                 true,
                 [
                     'Controllers',
-                    'libs'
+                    'libs',
                 ],
                 [
                     'Services',
@@ -295,7 +295,7 @@ class GearmanParserTest extends WebTestCase
                     'Services',
                     'Workers',
                     'libs',
-                ]
+                ],
             ],
 
             // Testing loadNamespaceMap without Include and Exclude values
@@ -354,7 +354,7 @@ class GearmanParserTest extends WebTestCase
                 ],
                 [],
                 [],
-            ]
+            ],
         ];
     }
 }
