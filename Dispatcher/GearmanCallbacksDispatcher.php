@@ -215,13 +215,6 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
 
     private function dispatch($event, $eventName)
     {
-        // LegacyEventDispatcherProxy exists in Symfony >= 4.3
-        if (class_exists(LegacyEventDispatcherProxy::class)) {
-            // New Symfony 4.3 EventDispatcher signature
-            $this->eventDispatcher->dispatch($event, $eventName);
-        } else {
-            // Old EventDispatcher signature
-            $this->eventDispatcher->dispatch($eventName, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $eventName);
     }
 }
