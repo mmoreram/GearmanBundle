@@ -19,7 +19,6 @@ use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
-
 /**
  * AppKernel for testing
  */
@@ -30,11 +29,11 @@ class AppKernel extends Kernel
      */
     public function registerBundles()
     {
-        return array(
+        return [
             new FrameworkBundle(),
             new DoctrineCacheBundle(),
             new GearmanBundle(),
-        );
+        ];
     }
 
     /**

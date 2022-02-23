@@ -13,14 +13,14 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Module;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 use Mmoreram\GearmanBundle\Module\JobStatus;
 
 /**
  * Tests JobStatusTest class
  */
-class JobStatusTest extends PHPUnit_Framework_TestCase
+class JobStatusTest extends TestCase
 {
     /**
      * Testing job status
@@ -38,14 +38,13 @@ class JobStatusTest extends PHPUnit_Framework_TestCase
         $getCompletionTotal,
         $getCompletionPercent,
         $isFinished
-    )
-    {
-        $jobStatus = new JobStatus(array(
+    ) {
+        $jobStatus = new JobStatus([
             $known,
             $running,
             $completed,
             $completionTotal
-        ));
+        ]);
 
         $this->assertEquals($jobStatus->isKnown(), $isKnown);
         $this->assertEquals($jobStatus->isRunning(), $isRunning);
@@ -60,12 +59,12 @@ class JobStatusTest extends PHPUnit_Framework_TestCase
      */
     public function dataJobStatusNonExistant()
     {
-        return array(
+        return [
 
             /**
              * Testing when job does not exist
              */
-            array(
+            [
                 false,
                 false,
                 null,
@@ -76,12 +75,12 @@ class JobStatusTest extends PHPUnit_Framework_TestCase
                 0,
                 0,
                 false
-            ),
+            ],
 
             /**
              * Testing when job is started
              */
-            array(
+            [
                 true,
                 true,
                 0,
@@ -92,12 +91,12 @@ class JobStatusTest extends PHPUnit_Framework_TestCase
                 10,
                 0,
                 false
-            ),
+            ],
 
             /**
              * Testing when job is still running
              */
-            array(
+            [
                 true,
                 true,
                 5,
@@ -108,12 +107,12 @@ class JobStatusTest extends PHPUnit_Framework_TestCase
                 10,
                 0.5,
                 false
-            ),
+            ],
 
             /**
              * Testing when job is already finished
              */
-            array(
+            [
                 true,
                 false,
                 10,
@@ -124,8 +123,8 @@ class JobStatusTest extends PHPUnit_Framework_TestCase
                 10,
                 1,
                 true
-            ),
+            ],
 
-        );
+        ];
     }
 }

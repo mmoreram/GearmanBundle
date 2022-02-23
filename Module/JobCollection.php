@@ -27,7 +27,7 @@ class JobCollection
      *
      * All jobs from worker
      */
-    private $workerJobs = array();
+    private $workerJobs = [];
 
     /**
      * Adds into $workerJobs a Job instance
@@ -61,10 +61,9 @@ class JobCollection
      */
     public function toArray()
     {
-        $jobs = array();
+        $jobs = [];
 
         foreach ($this->workerJobs as $job) {
-
             $jobs[] = $job->toArray();
         }
 

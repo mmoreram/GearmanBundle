@@ -68,8 +68,7 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
         GearmanParser $gearmanParser,
         Cache $cache,
         $cacheId
-    )
-    {
+    ) {
         $this->gearmanParser = $gearmanParser;
         $this->cache = $cache;
         $this->cacheId = $cacheId;
@@ -131,7 +130,6 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
              * Cache contains gearman structure
              */
             $this->workerCollection = $cache->fetch($cacheId);
-
         } else {
 
             /**

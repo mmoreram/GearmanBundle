@@ -137,15 +137,11 @@ class GearmanDescriber
             $output->writeln('<info>@Worker\jobs</info>');
             $output->writeln('');
             foreach ($worker['jobs'] as $job) {
-
                 if ($job['jobPrefix']) {
-
                     $output->writeln('<comment>    # ' . $job['realCallableNameNoPrefix'] . ' with jobPrefix: ' . $job['jobPrefix'] . '</comment>');
                 } else {
-
                     $output->writeln('<comment>    # ' . $job['realCallableNameNoPrefix'] . ' </comment>');
                 }
-
             }
         }
 
@@ -172,17 +168,16 @@ class GearmanDescriber
     private function getConsolePath()
     {
         // Symfony 3.3+ compatibility, get kernel root dir
-        if(method_exists($this->kernel, 'getProjectDir')){
+        if (method_exists($this->kernel, 'getProjectDir')) {
             $projectDir = $this->kernel->getProjectDir();
         } else {
             $projectDir = $this->kernel->getRootDir().'/..';
         }
 
-        if(true === file_exists($projectDir.'/bin/console')){
+        if (true === file_exists($projectDir.'/bin/console')) {
             return realpath($projectDir. '/bin/console');
         } else {
             return realpath($projectDir. '/app/console');
         }
-
     }
 }

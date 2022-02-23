@@ -34,7 +34,7 @@ class WorkerClass
      *
      * Default description when is not defined
      */
-    const DEFAULT_DESCRIPTION = 'No description is defined';
+    public const DEFAULT_DESCRIPTION = 'No description is defined';
 
     /**
      * @var string
@@ -140,7 +140,6 @@ class WorkerClass
      */
     public function __construct(WorkAnnotation $workAnnotation, ReflectionClass $reflectionClass, Reader $reader, array $servers, array $defaultSettings)
     {
-
         $this->namespace = $reflectionClass->getNamespaceName();
 
         /**
@@ -175,7 +174,6 @@ class WorkerClass
         $this->service = $workAnnotation->service;
 
         if (isset($defaultSettings['job_prefix'])) {
-
             $this->jobPrefix = $defaultSettings['job_prefix'];
         }
 
@@ -204,10 +202,9 @@ class WorkerClass
          * If is configured some servers definition in the worker, overwrites
          */
         if ($workAnnotation->servers) {
-
             $servers = (is_array($workAnnotation->servers) && !isset($workAnnotation->servers['host']))
                 ? $workAnnotation->servers
-                : array($workAnnotation->servers);
+                : [$workAnnotation->servers];
         }
 
         return $servers;
@@ -295,13 +292,12 @@ class WorkerClass
      */
     private function createJobCollection(ReflectionClass $reflectionClass, Reader $reader)
     {
-        $jobCollection = new JobCollection;
+        $jobCollection = new JobCollection();
 
         /**
          * For each defined method, we parse it
          */
         foreach ($reflectionClass->getMethods() as $reflectionMethod) {
-
             $methodAnnotations = $reader->getMethodAnnotations($reflectionMethod);
 
             /**
@@ -316,13 +312,13 @@ class WorkerClass
                     /**
                      * Creates new Job
                      */
-                    $job = new Job($methodAnnotation, $reflectionMethod, $this->callableName, $this->servers, array(
+                    $job = new Job($methodAnnotation, $reflectionMethod, $this->callableName, $this->servers, [
                         'jobPrefix'            => $this->jobPrefix,
                         'iterations'           => $this->iterations,
                         'method'               => $this->defaultMethod,
                         'minimumExecutionTime' => $this->minimumExecutionTime,
                         'timeout'              => $this->timeout,
-                    ));
+                    ]);
 
                     $jobCollection->add($job);
                 }
@@ -339,7 +335,7 @@ class WorkerClass
      */
     public function toArray()
     {
-        return array(
+        return [
 
             'namespace'            => $this->namespace,
             'className'            => $this->className,
@@ -352,7 +348,6 @@ class WorkerClass
             'minimumExecutionTime' => $this->minimumExecutionTime,
             'timeout'              => $this->timeout,
             'jobs'                 => $this->jobCollection->toArray(),
-        );
+        ];
     }
-
 }

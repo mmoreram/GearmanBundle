@@ -24,7 +24,6 @@ use Mmoreram\GearmanBundle\Exceptions\Abstracts\AbstractGearmanException;
  */
 class WorkerNameTooLongException extends AbstractGearmanException
 {
-
     /**
      * Construction method
      *

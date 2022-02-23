@@ -22,7 +22,6 @@ use Mmoreram\GearmanBundle\GearmanEvents;
  */
 class GearmanExecuteTest extends WebTestCase
 {
-
     /**
      * Test service can be instanced through container
      */
@@ -48,34 +47,34 @@ class GearmanExecuteTest extends WebTestCase
         $worker->method('addServer')->willReturn(true);
 
         // Wrapper mock
-        $workers = array(
-            0 => array(
+        $workers = [
+            0 => [
                 'className'    => "Mmoreram\\GearmanBundle\\Tests\\Service\\Mocks\\SingleCleanFile",
                 'fileName'     => dirname(__FILE__) . '/Mocks/SingleCleanFile.php',
                 'callableName' => null,
                 'description'  => "test",
                 'service'      => false,
-                'servers'      => array(),
+                'servers'      => [],
                 'iterations'   => 1,
                 'timeout'      => null,
                 'minimumExecutionTime' => null,
-                'jobs' => array(
-                    0 => array(
+                'jobs' => [
+                    0 => [
                         'callableName'             => "test",
                         'methodName'               => "myMethod",
                         'realCallableName'         => "test",
-                        'jobPrefix'                => NULL,
+                        'jobPrefix'                => null,
                         'realCallableNameNoPrefix' => "test",
                         'description'              => "test",
                         'iterations'               => 1,
-                        'servers'                  => array(),
+                        'servers'                  => [],
                         'defaultMethod'            => "doBackground",
                         'minimumExecutionTime'     => null,
                         'timeout'                  => null,
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
         $wrapper = $this->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanCacheWrapper')
             ->disableOriginalConstructor()
             ->getMock();
@@ -87,15 +86,15 @@ class GearmanExecuteTest extends WebTestCase
         $executedFlag = false;
 
         $dispatcher = new \Symfony\Component\EventDispatcher\EventDispatcher();
-        $dispatcher->addListener(GearmanEvents::GEARMAN_WORK_STARTING, function() use (&$startingFlag){
+        $dispatcher->addListener(GearmanEvents::GEARMAN_WORK_STARTING, function () use (&$startingFlag) {
             $startingFlag = true;
         });
-        $dispatcher->addListener(GearmanEvents::GEARMAN_WORK_EXECUTED, function() use (&$executedFlag){
+        $dispatcher->addListener(GearmanEvents::GEARMAN_WORK_EXECUTED, function () use (&$executedFlag) {
             $executedFlag = true;
         });
 
         // Create the service under test
-        $service = new GearmanExecute($wrapper, array());
+        $service = new GearmanExecute($wrapper, []);
         $service->setEventDispatcher($dispatcher);
 
         // We need a job object, this part could be improved
@@ -108,13 +107,13 @@ class GearmanExecuteTest extends WebTestCase
             ->getMock();
         $job->method('functionName')->willReturn('test');
 
-        $worker->method('work')->will($this->returnCallback(function() use ($service, $object, $job){
+        $worker->method('work')->will($this->returnCallback(function () use ($service, $object, $job) {
             $service->handleJob($job);
             return true;
         }));
 
         // Execute a job :)
-        $service->executeJob('test', array(), $worker);
+        $service->executeJob('test', [], $worker);
 
         // Do we have the events ?
         $this->assertTrue($startingFlag);

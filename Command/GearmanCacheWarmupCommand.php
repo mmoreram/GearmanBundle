@@ -57,9 +57,9 @@ class GearmanCacheWarmupCommand extends AbstractGearmanCommand
     {
         $this
             ->setName('gearman:cache:warmup')
-            ->setAliases(array(
+            ->setAliases([
                 'cache:gearman:warmup'
-            ))
+            ])
             ->setDescription('Warms up gearman cache data');
     }
 

@@ -54,9 +54,9 @@ class GearmanCacheClearCommand extends AbstractGearmanCommand
     {
         $this
             ->setName('gearman:cache:clear')
-            ->setAliases(array(
+            ->setAliases([
                 'cache:gearman:clear'
-            ))
+            ])
             ->setDescription('Clears gearman cache data on current environment');
     }
 

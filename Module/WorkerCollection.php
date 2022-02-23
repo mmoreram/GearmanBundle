@@ -27,7 +27,7 @@ class WorkerCollection
      *
      * @var array
      */
-    private $workerClasses = array();
+    private $workerClasses = [];
 
     /**
      * Adds a Worker into $workerClasses
@@ -51,7 +51,7 @@ class WorkerCollection
      */
     public function toArray()
     {
-        $workersDumped = array();
+        $workersDumped = [];
 
         foreach ($this->workerClasses as $worker) {
             $workersDumped[] = $worker->toArray();

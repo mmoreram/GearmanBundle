@@ -170,7 +170,6 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
         }
 
         if (!$input->getOption('quiet')) {
-
             $output->writeln(sprintf(
                 '<info>[%s] loading...</info>',
                 date('Y-m-d H:i:s')
@@ -186,7 +185,6 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
             !$input->getOption('no-description') &&
             !$input->getOption('quiet')
         ) {
-
             $this
                 ->gearmanDescriber
                 ->describeJob(
@@ -197,7 +195,6 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
         }
 
         if (!$input->getOption('quiet')) {
-
             $output->writeln(sprintf(
                 '<info>[%s] loaded. Ctrl+C to break</info>',
                 date('Y-m-d H:i:s')
@@ -207,11 +204,11 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
         $this
             ->gearmanExecute
             ->setOutput($output)
-            ->executeJob($job, array(
+            ->executeJob($job, [
                 'iterations'             => $input->getOption('iterations'),
                 'minimum_execution_time' => $input->getOption('minimum-execution-time'),
                 'timeout'                => $input->getOption('timeout')
-            ));
+            ]);
 
         return 0;
     }

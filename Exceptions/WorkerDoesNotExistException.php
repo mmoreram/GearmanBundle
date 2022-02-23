@@ -22,5 +22,4 @@ use Mmoreram\GearmanBundle\Exceptions\Abstracts\AbstractGearmanException;
  */
 class WorkerDoesNotExistException extends AbstractGearmanException
 {
-
 }

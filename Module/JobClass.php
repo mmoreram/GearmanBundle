@@ -33,7 +33,7 @@ class JobClass implements ContainerAwareInterface
      *
      * Default description when is not defined
      */
-    const DEFAULT_DESCRIPTION = 'No description is defined';
+    public const DEFAULT_DESCRIPTION = 'No description is defined';
 
     /**
      * @var string
@@ -136,9 +136,7 @@ class JobClass implements ContainerAwareInterface
         $callableNameClass,
         array $servers,
         array $defaultSettings
-    )
-    {
-
+    ) {
         $this->callableName = is_null($jobAnnotation->name)
             ? $reflectionMethod->getName()
             : $jobAnnotation->name;
@@ -146,9 +144,8 @@ class JobClass implements ContainerAwareInterface
         $this->methodName = $reflectionMethod->getName();
         $this->realCallableNameNoPrefix = str_replace('\\', '', $callableNameClass . '~' . $this->callableName);
 
-        $this->jobPrefix = isset($defaultSettings['jobPrefix'])
-            ? $defaultSettings['jobPrefix']
-            : null;
+        $this->jobPrefix = $defaultSettings['jobPrefix']
+            ?? null;
 
         $this->realCallableName = $this->jobPrefix . $this->realCallableNameNoPrefix;
         $this->description = is_null($jobAnnotation->description)
@@ -180,10 +177,9 @@ class JobClass implements ContainerAwareInterface
          * If is configured some servers definition in the worker, overwrites
          */
         if ($jobAnnotation->servers) {
-
             $servers = (is_array($jobAnnotation->servers) && !isset($jobAnnotation->servers['host']))
                 ? $jobAnnotation->servers
-                : array($jobAnnotation->servers);
+                : [$jobAnnotation->servers];
         }
 
         return $servers;
@@ -268,7 +264,7 @@ class JobClass implements ContainerAwareInterface
      */
     public function toArray()
     {
-        return array(
+        return [
 
             'callableName'             => $this->callableName,
             'methodName'               => $this->methodName,
@@ -281,7 +277,7 @@ class JobClass implements ContainerAwareInterface
             'timeout'                  => $this->timeout,
             'servers'                  => $this->servers,
             'defaultMethod'            => $this->defaultMethod,
-        );
+        ];
     }
 
     /**

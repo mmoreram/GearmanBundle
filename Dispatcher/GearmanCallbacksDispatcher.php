@@ -43,45 +43,45 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
      */
     public function assignTaskCallbacks(\GearmanClient $gearmanClient)
     {
-        $gearmanClient->setCompleteCallback(array(
+        $gearmanClient->setCompleteCallback([
             $this,
             'assignCompleteCallback'
-        ));
+        ]);
 
-        $gearmanClient->setFailCallback(array(
+        $gearmanClient->setFailCallback([
             $this,
             'assignFailCallback'
-        ));
+        ]);
 
-        $gearmanClient->setDataCallback(array(
+        $gearmanClient->setDataCallback([
             $this,
             'assignDataCallback'
-        ));
+        ]);
 
-        $gearmanClient->setCreatedCallback(array(
+        $gearmanClient->setCreatedCallback([
             $this,
             'assignCreatedCallback'
-        ));
+        ]);
 
-        $gearmanClient->setExceptionCallback(array(
+        $gearmanClient->setExceptionCallback([
             $this,
             'assignExceptionCallback'
-        ));
+        ]);
 
-        $gearmanClient->setStatusCallback(array(
+        $gearmanClient->setStatusCallback([
             $this,
             'assignStatusCallback'
-        ));
+        ]);
 
-        $gearmanClient->setWarningCallback(array(
+        $gearmanClient->setWarningCallback([
             $this,
             'assignWarningCallback'
-        ));
+        ]);
 
-        $gearmanClient->setWorkloadCallback(array(
+        $gearmanClient->setWorkloadCallback([
             $this,
             'assignWorkloadCallback'
-        ));
+        ]);
     }
 
     /**

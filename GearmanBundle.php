@@ -30,11 +30,13 @@ class GearmanBundle extends Bundle
     {
         $kernel = $this->container->get('kernel');
 
-        AnnotationRegistry::registerFile($kernel
+        AnnotationRegistry::registerFile(
+            $kernel
             ->locateResource("@GearmanBundle/Driver/Gearman/Work.php")
         );
 
-        AnnotationRegistry::registerFile($kernel
+        AnnotationRegistry::registerFile(
+            $kernel
             ->locateResource("@GearmanBundle/Driver/Gearman/Job.php")
         );
     }

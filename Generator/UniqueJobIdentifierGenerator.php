@@ -67,8 +67,7 @@ class UniqueJobIdentifierGenerator
             : $unique;
 
         if (strlen($name . $unique) > 114) {
-
-            throw new WorkerNameTooLongException;
+            throw new WorkerNameTooLongException();
         }
 
         return $unique;

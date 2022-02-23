@@ -66,12 +66,12 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('servers')
                     ->performNoDeepMerging()
-                    ->defaultValue(array(
-                        'localhost' =>  array(
+                    ->defaultValue([
+                        'localhost' =>  [
                             'host'  =>  '127.0.0.1',
                             'port'  =>  '4730',
-                        ),
-                    ))
+                        ],
+                    ])
                     ->prototype('array')
                         ->children()
                             ->scalarNode('host')

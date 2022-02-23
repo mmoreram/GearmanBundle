@@ -57,7 +57,7 @@ class GearmanParserTest extends WebTestCase
     /**
      * Setup
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->gearmanParser = $this
             ->getMockBuilder('\Mmoreram\GearmanBundle\Service\GearmanParser')
@@ -68,9 +68,9 @@ class GearmanParserTest extends WebTestCase
         $this->bundleMock = $this
             ->getMockBuilder('\Symfony\Component\HttpKernel\Bundle\Bundle')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getPath'
-            ))
+            ])
             ->getMock();
     }
 
@@ -139,8 +139,8 @@ class GearmanParserTest extends WebTestCase
      */
     public function testParseNamespaceMapEmptyPaths()
     {
-        $paths = array();
-        $excludedPaths = array();
+        $paths = [];
+        $excludedPaths = [];
 
         /**
          * @var Reader $reader
@@ -156,9 +156,9 @@ class GearmanParserTest extends WebTestCase
         $finder = $this
             ->getMockBuilder('\Symfony\Component\Finder\Finder')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'files',
-            ))
+            ])
             ->getMock();
 
         $workerCollection = $this
@@ -176,16 +176,16 @@ class GearmanParserTest extends WebTestCase
         $this->gearmanParser = $this
             ->getMockBuilder('\Mmoreram\GearmanBundle\Service\GearmanParser')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'parseFiles',
-            ))
+            ])
             ->getMock();
 
-        $paths = array(
+        $paths = [
             dirname(__FILE__) . '/Mocks/',
 
-        );
-        $excludedPaths = array();
+        ];
+        $excludedPaths = [];
 
         $reader = $this
             ->getMockBuilder('\Doctrine\Common\Annotations\SimpleAnnotationReader')
@@ -204,7 +204,7 @@ class GearmanParserTest extends WebTestCase
             ->with(
                 $this->equalTo($finder),
                 $this->equalTo($reader),
-                $this->equalTo(new WorkerCollection)
+                $this->equalTo(new WorkerCollection())
             );
 
         $workerCollection = $this
@@ -227,19 +227,19 @@ class GearmanParserTest extends WebTestCase
             ->method('getPath')
             ->will($this->returnValue($this->bundlePath));
 
-        $this->kernelBundles = array(
+        $this->kernelBundles = [
 
             "FirstBundleName" => $this->bundleMock,
-        );
+        ];
 
-        list($paths, $excludedPaths) = $this->gearmanParser->loadBundleNamespaceMap($this->kernelBundles, array(
-            "FirstBundle" => array(
+        [$paths, $excludedPaths] = $this->gearmanParser->loadBundleNamespaceMap($this->kernelBundles, [
+            "FirstBundle" => [
                 "name"      =>  "FirstBundleName",
                 "active"    =>  $active,
                 "include"   =>  $include,
                 "ignore"    =>  $ignore,
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertEquals($paths, $expectedPaths);
         $this->assertEquals($excludedPaths, $expectedExcludedPaths);
@@ -252,10 +252,10 @@ class GearmanParserTest extends WebTestCase
     {
         $rootDir = '/app/kernel/root/directory';
 
-        $data = array(
+        $data = [
             '/Worker/' => $rootDir . '/Worker/',
             'Infrastructure/Gearman/Workers' => $rootDir . '/Infrastructure/Gearman/Workers/',
-        );
+        ];
 
         $this->gearmanParser = $this
             ->getMockBuilder('\Mmoreram\GearmanBundle\Service\GearmanParser')
@@ -273,89 +273,88 @@ class GearmanParserTest extends WebTestCase
      */
     public function loadBundleNamespaceMapDataProvider()
     {
-        return array(
+        return [
 
             // Testing loadNamespaceMap with includes and exclude values
-            array(
+            [
                 true,
-                array(
+                [
                     'Controllers',
                     'libs'
-                ),
-                array(
+                ],
+                [
                     'Services',
                     'Workers',
                     'libs',
-                ),
-                array(
+                ],
+                [
                     $this->bundlePath . '/Controllers/',
                     $this->bundlePath . '/libs/',
-                ),
-                array(
+                ],
+                [
                     'Services',
                     'Workers',
                     'libs',
-                )
-            ),
+                ]
+            ],
 
             // Testing loadNamespaceMap without Include and Exclude values
-            array(
+            [
                 true,
-                array(),
-                array(),
-                array(
+                [],
+                [],
+                [
                     $this->bundlePath . '/',
-                ),
-                array(),
-            ),
+                ],
+                [],
+            ],
 
             // Testing loadNamespaceMap with just exclude values
-            array(
+            [
                 true,
-                array(),
-                array(
+                [],
+                [
                     'Services',
                     'Workers',
-                ),
-                array(
+                ],
+                [
                     $this->bundlePath . '/',
-                ),
-                array(
+                ],
+                [
                     'Services',
                     'Workers',
-                ),
-            ),
+                ],
+            ],
 
             // Testing loadNamespaceMap with just Include values
-            array(
+            [
                 true,
-                array(
+                [
                     'Services',
                     'Workers',
-                ),
-                array(),
-                array(
+                ],
+                [],
+                [
                     $this->bundlePath . '/Services/',
                     $this->bundlePath . '/Workers/',
-                ),
-                array(),
-            ),
+                ],
+                [],
+            ],
 
             // Testing loadNamespaceMap with invalid bundle
-            array(
+            [
                 false,
-                array(
+                [
                     'Services',
                     'Workers',
-                ),
-                array(
+                ],
+                [
                     'Ignore',
                     'Tests',
-                ),
-                array(),
-                array(),
-            )
-        );
+                ],
+                [],
+                [],
+            ]
+        ];
     }
-
 }

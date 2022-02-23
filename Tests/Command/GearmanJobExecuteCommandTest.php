@@ -13,7 +13,7 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Command;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,7 +27,7 @@ use Mmoreram\GearmanBundle\Service\GearmanExecute;
 /**
  * Class GearmanJobExecuteCommandTest
  */
-class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
+class GearmanJobExecuteCommandTest extends TestCase
 {
     /**
      * @var GearmanJobExecuteCommand
@@ -88,23 +88,23 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
     /**
      * setup
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->command = $this
             ->getMockBuilder('Mmoreram\GearmanBundle\Command\GearmanJobExecuteCommand')
-            ->setMethods(array(
+            ->setMethods([
                 'getHelperSet'
-            ))
+            ])
             ->getMock();
 
         $this->questionHelper = $this
             ->getMockBuilder('Symfony\Component\Console\Helper\QuestionHelper')
-            ->setMethods(array('ask'))
+            ->setMethods(['ask'])
             ->getMock();
 
         $helperSet = $this
             ->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
-            ->setMethods(array('get'))
+            ->setMethods(['get'])
             ->getMock();
 
         $helperSet
@@ -121,43 +121,43 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
         $this->input = $this
             ->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $this->output = $this
             ->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $this->kernel = $this
             ->getMockBuilder('Symfony\Component\HttpKernel\KernelInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $this->gearmanClient = $this
             ->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanClient')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getJob'
-            ))
+            ])
             ->getMock();
 
         $this->gearmanDescriber = $this
             ->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanDescriber')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'describeJob'
-            ))
+            ])
             ->getMock();
 
         $this->gearmanExecute = $this
             ->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanExecute')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'executeJob'
-            ))
+            ])
             ->getMock();
 
         $this->kernel
@@ -179,16 +179,15 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
         $countDescriber,
         $countClient,
         $countExecute
-    )
-    {
+    ) {
         $this
             ->input
             ->expects($this->any())
             ->method('getOption')
-            ->will($this->returnValueMap(array(
-                array('quiet', $quiet),
-                array('no-interaction', $noInteraction)
-            )));
+            ->will($this->returnValueMap([
+                ['quiet', $quiet],
+                ['no-interaction', $noInteraction]
+            ]));
 
         $this
             ->questionHelper
@@ -211,7 +210,7 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
             ->gearmanClient
             ->expects($countClient)
             ->method('getJob')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this
             ->gearmanExecute
@@ -231,8 +230,8 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
      */
     public function dataQuietness()
     {
-        return array(
-            array(
+        return [
+            [
                 true,
                 true,
                 true,
@@ -240,8 +239,8 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
                 $this->never(),
                 $this->atLeastOnce(),
                 $this->atLeastOnce(),
-            ),
-            array(
+            ],
+            [
                 true,
                 true,
                 false,
@@ -249,8 +248,8 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
                 $this->never(),
                 $this->atLeastOnce(),
                 $this->atLeastOnce(),
-            ),
-            array(
+            ],
+            [
                 true,
                 false,
                 true,
@@ -258,8 +257,8 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
                 $this->never(),
                 $this->atLeastOnce(),
                 $this->atLeastOnce(),
-            ),
-            array(
+            ],
+            [
                 true,
                 false,
                 false,
@@ -267,8 +266,8 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
                 $this->never(),
                 $this->never(),
                 $this->never(),
-            ),
-            array(
+            ],
+            [
                 false,
                 true,
                 true,
@@ -276,8 +275,8 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
                 $this->atLeastOnce(),
                 $this->atLeastOnce(),
                 $this->atLeastOnce(),
-            ),
-            array(
+            ],
+            [
                 false,
                 true,
                 false,
@@ -285,8 +284,8 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
                 $this->atLeastOnce(),
                 $this->atLeastOnce(),
                 $this->atLeastOnce(),
-            ),
-            array(
+            ],
+            [
                 false,
                 false,
                 true,
@@ -294,8 +293,8 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
                 $this->atLeastOnce(),
                 $this->atLeastOnce(),
                 $this->atLeastOnce(),
-            ),
-            array(
+            ],
+            [
                 false,
                 false,
                 false,
@@ -303,7 +302,7 @@ class GearmanJobExecuteCommandTest extends PHPUnit_Framework_TestCase
                 $this->any(),
                 $this->never(),
                 $this->never(),
-            ),
-        );
+            ],
+        ];
     }
 }

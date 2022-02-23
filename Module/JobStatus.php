@@ -121,7 +121,6 @@ class JobStatus
         $percent = 0;
 
         if (($this->completed > 0) && ($this->completionTotal > 0)) {
-
             $percent = $this->completed / $this->completionTotal;
         }
 

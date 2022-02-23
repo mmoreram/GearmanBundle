@@ -13,7 +13,7 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Command;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -25,14 +25,14 @@ use Mmoreram\GearmanBundle\Service\GearmanDescriber;
 /**
  * Class GearmanJobDescribeCommandTest
  */
-class GearmanJobDescribeCommandTest extends PHPUnit_Framework_TestCase
+class GearmanJobDescribeCommandTest extends TestCase
 {
     /**
      * test run
      */
     public function testRun()
     {
-        $job = array('xxx');
+        $job = ['xxx'];
 
         /**
          * @var GearmanJobDescribeCommand $command
@@ -50,27 +50,27 @@ class GearmanJobDescribeCommandTest extends PHPUnit_Framework_TestCase
         $input = $this
             ->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $output = $this
             ->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $kernel = $this
             ->getMockBuilder('Symfony\Component\HttpKernel\KernelInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $gearmanClient = $this
             ->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanClient')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getJob'
-            ))
+            ])
             ->getMock();
 
         $gearmanClient
@@ -81,9 +81,9 @@ class GearmanJobDescribeCommandTest extends PHPUnit_Framework_TestCase
         $gearmanDescriber = $this
             ->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanDescriber')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'describeJob'
-            ))
+            ])
             ->getMock();
 
         $gearmanDescriber

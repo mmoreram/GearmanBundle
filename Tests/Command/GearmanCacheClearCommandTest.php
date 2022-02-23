@@ -13,7 +13,7 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Command;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -24,7 +24,7 @@ use Mmoreram\GearmanBundle\Service\GearmanCacheWrapper;
 /**
  * Class GearmanCacheClearCommandTest
  */
-class GearmanCacheClearCommandTest extends PHPUnit_Framework_TestCase
+class GearmanCacheClearCommandTest extends TestCase
 {
     /**
      * @var GearmanCacheClearCommand
@@ -64,7 +64,7 @@ class GearmanCacheClearCommandTest extends PHPUnit_Framework_TestCase
     /**
      * Set up method
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->command = $this
             ->getMockBuilder('Mmoreram\GearmanBundle\Command\GearmanCacheClearCommand')
@@ -74,27 +74,27 @@ class GearmanCacheClearCommandTest extends PHPUnit_Framework_TestCase
         $this->input = $this
             ->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $this->output = $this
             ->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $this->kernel = $this
             ->getMockBuilder('Symfony\Component\HttpKernel\KernelInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $this->gearmanCacheWrapper = $this
             ->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanCacheWrapper')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'clear',
-            ))
+            ])
             ->getMock();
 
         $this
@@ -123,9 +123,9 @@ class GearmanCacheClearCommandTest extends PHPUnit_Framework_TestCase
             ->input
             ->expects($this->any())
             ->method('getOption')
-            ->will($this->returnValueMap(array(
-                array('quiet', true)
-            )));
+            ->will($this->returnValueMap([
+                ['quiet', true]
+            ]));
 
         $this
             ->output
@@ -149,9 +149,9 @@ class GearmanCacheClearCommandTest extends PHPUnit_Framework_TestCase
             ->input
             ->expects($this->any())
             ->method('getOption')
-            ->will($this->returnValueMap(array(
-                array('quiet', false)
-            )));
+            ->will($this->returnValueMap([
+                ['quiet', false]
+            ]));
 
         $this
             ->output

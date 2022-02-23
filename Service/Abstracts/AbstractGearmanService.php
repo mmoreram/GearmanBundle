@@ -49,7 +49,6 @@ abstract class AbstractGearmanService
         $this->workers = $gearmanCacheWrapper->getWorkers();
 
         if (isset($defaultSettings['job_prefix'])) {
-
             $this->jobPrefix = $defaultSettings['job_prefix'];
         }
     }
@@ -69,13 +68,9 @@ abstract class AbstractGearmanService
         $jobName = $this->jobPrefix . $jobName;
 
         foreach ($this->workers as $worker) {
-
             if (is_array($worker['jobs'])) {
-
                 foreach ($worker['jobs'] as $job) {
-
                     if ($jobName === $job['realCallableName']) {
-
                         $worker['job'] = $job;
 
                         return $worker;
@@ -100,7 +95,6 @@ abstract class AbstractGearmanService
     public function getWorker($workerName)
     {
         foreach ($this->workers as $worker) {
-
             if ($workerName === $worker['callableName']) {
                 return $worker;
             }

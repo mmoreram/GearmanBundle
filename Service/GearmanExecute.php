@@ -84,27 +84,25 @@ class GearmanExecute extends AbstractGearmanService
 
         $this->executeOptionsResolver = new OptionsResolver();
         $this->executeOptionsResolver
-            ->setDefaults(array(
+            ->setDefaults([
                 'iterations'             => null,
                 'minimum_execution_time' => null,
                 'timeout'                => null,
-            ))
-	    ->setAllowedTypes('iterations', array('null', 'scalar'))
-            ->setAllowedTypes('minimum_execution_time', array('null', 'scalar'))
-            ->setAllowedTypes('timeout', array('null', 'scalar'));
-        
+            ])
+        ->setAllowedTypes('iterations', ['null', 'scalar'])
+            ->setAllowedTypes('minimum_execution_time', ['null', 'scalar'])
+            ->setAllowedTypes('timeout', ['null', 'scalar']);
+
 
         $this->stopWorkSignalReceived = false;
 
         /**
          * If the pcntl_signal exists, subscribe to the terminate and restart events for graceful worker stops.
          */
-        if(false !== function_exists('pcntl_signal'))
-        {
-            declare(ticks = 1);
-            pcntl_signal(SIGTERM, array($this,"handleSystemSignal"));
-            pcntl_signal(SIGHUP,  array($this,"handleSystemSignal"));
-
+        if (false !== function_exists('pcntl_signal')) {
+            declare(ticks=1);
+            pcntl_signal(SIGTERM, [$this,"handleSystemSignal"]);
+            pcntl_signal(SIGHUP, [$this,"handleSystemSignal"]);
         }
     }
 
@@ -166,7 +164,7 @@ class GearmanExecute extends AbstractGearmanService
      * @param array $options Array of options passed to the callback
      * @param \GearmanWorker $gearmanWorker Worker instance to use
      */
-    public function executeJob($jobName, array $options = array(), \GearmanWorker $gearmanWorker = null)
+    public function executeJob($jobName, array $options = [], \GearmanWorker $gearmanWorker = null)
     {
         $worker = $this->getJob($jobName);
 
@@ -186,22 +184,19 @@ class GearmanExecute extends AbstractGearmanService
      *
      * @return GearmanExecute self Object
      */
-    private function callJob(Array $worker, array $options = array(), \GearmanWorker $gearmanWorker = null)
+    private function callJob(array $worker, array $options = [], \GearmanWorker $gearmanWorker = null)
     {
-        if(is_null($gearmanWorker)) {
-            $gearmanWorker = new \GearmanWorker;
+        if (is_null($gearmanWorker)) {
+            $gearmanWorker = new \GearmanWorker();
         }
 
         if (isset($worker['job'])) {
-
-            $jobs = array($worker['job']);
+            $jobs = [$worker['job']];
             $iterations = $worker['job']['iterations'];
             $minimumExecutionTime = $worker['job']['minimumExecutionTime'];
             $timeout = $worker['job']['timeout'];
             $successes = $this->addServers($gearmanWorker, $worker['job']['servers']);
-
         } else {
-
             $jobs = $worker['jobs'];
             $iterations = $worker['iterations'];
             $minimumExecutionTime = $worker['minimumExecutionTime'];
@@ -211,9 +206,9 @@ class GearmanExecute extends AbstractGearmanService
 
         $options = $this->executeOptionsResolver->resolve($options);
 
-        $iterations           = $options['iterations']             ?: $iterations;
+        $iterations           = $options['iterations'] ?: $iterations;
         $minimumExecutionTime = $options['minimum_execution_time'] ?: $minimumExecutionTime;
-        $timeout              = $options['timeout']                ?: $timeout;
+        $timeout              = $options['timeout'] ?: $timeout;
 
         if (count($successes) < 1) {
             if ($minimumExecutionTime > 0) {
@@ -260,12 +255,9 @@ class GearmanExecute extends AbstractGearmanService
          * Otherwise we just create it with a simple new()
          */
         if ($worker['service']) {
-
             $objInstance = $this->container->get($worker['service']);
-
         } else {
-
-            $objInstance = new $worker['className'];
+            $objInstance = new $worker['className']();
 
             /**
              * If instance of given object is instanceof
@@ -275,7 +267,6 @@ class GearmanExecute extends AbstractGearmanService
              * @see https://github.com/mmoreram/gearman-bundle/pull/12
              */
             if ($objInstance instanceof ContainerAwareInterface) {
-
                 $objInstance->setContainer($this->container);
             }
         }
@@ -300,7 +291,7 @@ class GearmanExecute extends AbstractGearmanService
          * Set the output of this instance, this should allow workers to use the console output.
          */
         if ($objInstance instanceof GearmanOutputAwareInterface) {
-            $objInstance->setOutput($this->output ? : new NullOutput());
+            $objInstance->setOutput($this->output ?: new NullOutput());
         }
 
         /**
@@ -320,7 +311,7 @@ class GearmanExecute extends AbstractGearmanService
             ];
             $gearmanWorker->addFunction(
                 $job['realCallableName'],
-                array($this, 'handleJob')
+                [$this, 'handleJob']
             );
         }
 
@@ -337,14 +328,12 @@ class GearmanExecute extends AbstractGearmanService
          * Executes GearmanWorker with all jobs defined
          */
         while (false === $this->stopWorkSignalReceived && $gearmanWorker->work()) {
-
             $iterations--;
 
             $event = new GearmanWorkExecutedEvent($jobs, $iterations, $gearmanWorker->returnCode());
             $this->dispatch($event, GearmanEvents::GEARMAN_WORK_EXECUTED);
 
             if ($gearmanWorker->returnCode() != GEARMAN_SUCCESS) {
-
                 break;
             }
 
@@ -353,7 +342,6 @@ class GearmanExecute extends AbstractGearmanService
              * arrives to 0
              */
             if (!$alive && $iterations <= 0) {
-
                 break;
             }
         }
@@ -372,10 +360,9 @@ class GearmanExecute extends AbstractGearmanService
      */
     private function addServers(\GearmanWorker $gmworker, array $servers)
     {
-        $successes = array();
+        $successes = [];
 
         if (!empty($servers)) {
-
             foreach ($servers as $server) {
                 if (@$gmworker->addServer($server['host'], $server['port'])) {
                     $successes[] = $server;
@@ -383,7 +370,7 @@ class GearmanExecute extends AbstractGearmanService
             }
         } else {
             if (@$gmworker->addServer()) {
-                $successes[] = array('127.0.0.1', 4730);
+                $successes[] = ['127.0.0.1', 4730];
             }
         }
 
@@ -396,12 +383,11 @@ class GearmanExecute extends AbstractGearmanService
      *
      * @param string $workerName Name of worker to be executed
      */
-    public function executeWorker($workerName, array $options = array())
+    public function executeWorker($workerName, array $options = [])
     {
         $worker = $this->getWorker($workerName);
 
         if (false !== $worker) {
-
             $this->callJob($worker, $options);
         }
     }
@@ -437,8 +423,8 @@ class GearmanExecute extends AbstractGearmanService
         $this->dispatch($event, GearmanEvents::GEARMAN_WORK_STARTING);
 
         $result = call_user_func_array(
-            array($context['job_object_instance'], $context['job_method']),
-            array($job, $context)
+            [$context['job_object_instance'], $context['job_method']],
+            [$job, $context]
         );
 
         /**

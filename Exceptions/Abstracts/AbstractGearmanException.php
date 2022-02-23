@@ -20,5 +20,4 @@ use Exception;
  */
 abstract class AbstractGearmanException extends Exception
 {
-
 }
