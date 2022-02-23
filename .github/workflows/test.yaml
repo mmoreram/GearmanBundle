@@ -11,11 +11,17 @@ jobs:
             matrix:
                 php-version: ['7.2', '8.0', '8.1']
                 symfony-version: ['4.4']
+                experimental: [false]
                 coverage: ['none']
                 include:
                     - php-version: '7.2'
                       symfony-version: '4.4'
                       coverage: xdebug
+                    - php: "8.1"
+                      experimental: true
+                    - php: "8.1"
+                      experimental: true
+        continue-on-error: ${{ matrix.experimental }}
 
         steps:
             - name: Checkout
