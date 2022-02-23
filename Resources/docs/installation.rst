@@ -55,15 +55,14 @@ You have to add this bundle as a project requirement:
 
 .. code-block:: bash
 
-    composer require mmoreram/gearman-bundle "dev-master"
+    composer require mmoreram/gearman-bundle
 
-Finally, register both DoctrineCacheBundle & GearmanBundle in your app/AppKernel.php file:
+Finally, register GearmanBundle in your app/AppKernel.php file:
 
 .. code-block:: php
 
     $bundles = [
        // ...
-       new Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle(),
        new Mmoreram\GearmanBundle\GearmanBundle(),
        // ...
     ];

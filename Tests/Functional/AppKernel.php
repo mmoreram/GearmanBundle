@@ -13,7 +13,6 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Functional;
 
-use Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle;
 use Mmoreram\GearmanBundle\GearmanBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -31,7 +30,6 @@ class AppKernel extends Kernel
     {
         return [
             new FrameworkBundle(),
-            new DoctrineCacheBundle(),
             new GearmanBundle(),
         ];
     }

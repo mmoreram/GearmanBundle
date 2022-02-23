@@ -20,10 +20,8 @@ services:
         public: true
         arguments:
             - "@gearman.parser"
-            - "@doctrine_cache.providers.gearman_cache"
+            - "@gearman_cache"
             - "%gearman.cache.id%"
-        calls:
-            - [load,  ["@doctrine_cache.providers.gearman_cache", "%gearman.cache.id%"]]
         tags:
             - { name: kernel.cache_clearer }
             - { name: kernel.cache_warmer, priority: 0 }

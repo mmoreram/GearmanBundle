@@ -3,7 +3,7 @@
     "replace": {
         "mmoreramerino/gearman-bundle": "dev-master"
     },
-    "description": "Adds gearman support to your Symfony2, Symfony3 and Symfony4 project",
+    "description": "Adds gearman support to your and Symfony4, Symfony5 project",
     "keywords": ["gearman"],
     "homepage": "https://github.com/mmoreram/GearmanBundle",
     "type": "symfony-bundle",
@@ -23,10 +23,8 @@
         }
     ],
     "require": {
-        "php": "^7.3 || ^8.0",
+        "php": "^7.4 || ^8.0",
         "ext-gearman": "*",
-
-        "doctrine/doctrine-cache-bundle": "~1.0",
         "doctrine/common": "~2.2",
         "symfony/dependency-injection": "^4.0 || ^5.0 || ^6.0",
         "symfony/yaml": "^4.4 || ^5.0 || ^6.0",

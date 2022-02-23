@@ -1,12 +1,7 @@
 framework:
     secret: "shdhkajshdjhsjdjsahdkjas"
     test: true
-
-doctrine_cache:
-    providers:
-        gearman_cache:
-            type: file_system
-            namespace: doctrine_cache.ns.gearman
-
-
-
+    cache:
+        pools:
+            gearman_cache:
+                adapter: cache.adapter.array
