@@ -9,7 +9,7 @@ jobs:
         continue-on-error: ${{ matrix.experimental }}
         strategy:
             matrix:
-                php-version: ['7.4']
+                php-version: ['7.4','8.0','8.1']
                 symfony-version: ['4.4','5.4']
                 experimental: [false]
                 coverage: ['none']
