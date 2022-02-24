@@ -1,21 +1,9 @@
 <?php
 
-/**
- * Gearman Bundle for Symfony2
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Feel free to edit as you please, and have fun.
- *
- * @author Marc Morera <yuhu@mmoreram.com>
- */
-
 namespace Mmoreram\GearmanBundle\Dispatcher;
 
 use GearmanTask;
 
-use Mmoreram\GearmanBundle\Dispatcher\Abstracts\AbstractGearmanDispatcher;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackCompleteEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackCreatedEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackDataEvent;
@@ -25,15 +13,17 @@ use Mmoreram\GearmanBundle\Event\GearmanClientCallbackStatusEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackWarningEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackWorkloadEvent;
 use Mmoreram\GearmanBundle\GearmanEvents;
-use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-/**
- * Gearman callbacks
- *
- * @since 2.3.3
- */
-class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
+class GearmanCallbacksDispatcher
 {
+    protected EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher=$eventDispatcher;
+    }
+
     /**
      * Assign all GearmanClient callbacks as Symfony2 events
      *

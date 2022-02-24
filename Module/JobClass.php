@@ -1,16 +1,5 @@
 <?php
 
-/**
- * Gearman Bundle for Symfony2
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Feel free to edit as you please, and have fun.
- *
- * @author Marc Morera <yuhu@mmoreram.com>
- */
-
 namespace Mmoreram\GearmanBundle\Module;
 
 use ReflectionMethod;
@@ -19,20 +8,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
 
-/**
- * Job class
- *
- * This class provide all worker definition.
- *
- * @since 2.3.1
- */
 class JobClass implements ContainerAwareInterface
 {
-    /**
-     * @var string
-     *
-     * Default description when is not defined
-     */
     public const DEFAULT_DESCRIPTION = 'No description is defined';
 
     /**
@@ -257,12 +234,7 @@ class JobClass implements ContainerAwareInterface
             : (int) $jobAnnotation->timeout;
     }
 
-    /**
-     * Retrieve all Job data in cache format
-     *
-     * @return array
-     */
-    public function toArray()
+    public function toArray():array
     {
         return [
 
@@ -280,12 +252,7 @@ class JobClass implements ContainerAwareInterface
         ];
     }
 
-    /**
-     * Sets the container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     */
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(?ContainerInterface $container = null): void
     {
         $this->container = $container;
     }

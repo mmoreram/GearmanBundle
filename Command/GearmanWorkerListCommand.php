@@ -1,16 +1,5 @@
 <?php
 
-/**
- * Gearman Bundle for Symfony2
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Feel free to edit as you please, and have fun.
- *
- * @author Marc Morera <yuhu@mmoreram.com>
- */
-
 namespace Mmoreram\GearmanBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,37 +8,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Mmoreram\GearmanBundle\Command\Abstracts\AbstractGearmanCommand;
 use Mmoreram\GearmanBundle\Service\GearmanClient;
 
-/**
- * Gearman Job List Command class
- *
- * @since 2.3.1
- */
 class GearmanWorkerListCommand extends AbstractGearmanCommand
 {
-    /**
-     * @var GearmanClient
-     *
-     * Gearman client
-     */
-    protected $gearmanClient;
+    protected GearmanClient $gearmanClient;
 
-    /**
-     * Set gearman client
-     *
-     * @param GearmanClient $gearmanClient Gearman client
-     *
-     * @return GearmanJobDescribeCommand self Object
-     */
-    public function setGearmanClient(GearmanClient $gearmanClient)
+    public function setGearmanClient(GearmanClient $gearmanClient): self
     {
         $this->gearmanClient = $gearmanClient;
 
         return $this;
     }
 
-    /**
-     * Console Command configuration
-     */
     protected function configure()
     {
         parent::configure();
@@ -59,16 +28,6 @@ class GearmanWorkerListCommand extends AbstractGearmanCommand
             ->setDescription('List all Gearman Workers and their Jobs');
     }
 
-    /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     *
-     * @return integer 0 if everything went fine, or an error code
-     *
-     * @throws \LogicException When this abstract class is not implemented
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if ($input->getOption('quiet')) {
@@ -87,7 +46,9 @@ class GearmanWorkerListCommand extends AbstractGearmanCommand
                 foreach ($worker['jobs'] as $job) {
                     $output->writeln('<comment>  - #' . $it++ . '</comment>');
                     $output->writeln('<comment>      name: ' . $job['methodName'] . '</comment>');
-                    $output->writeln('<comment>      callablename:</comment><info> ' . $job['realCallableNameNoPrefix'] . '</info>');
+                    $output->writeln(
+                        '<comment>      callablename:</comment><info> ' . $job['realCallableNameNoPrefix'] . '</info>'
+                    );
 
                     if (false === is_null($job['jobPrefix'])) {
                         $output->writeln('<comment>      jobPrefix:</comment><info> ' . $job['jobPrefix'] . '</info>');

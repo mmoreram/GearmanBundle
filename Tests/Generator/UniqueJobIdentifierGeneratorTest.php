@@ -51,12 +51,6 @@ class UniqueJobIdentifierGeneratorTest extends WebTestCase
             'uniqueValue',
             'method'
         ));
-        $this->assertFalse($generator->generateUniqueKey(
-            'name',
-            'params',
-            false,
-            'method'
-        ));
         $this->assertNull($generator->generateUniqueKey(
             'name',
             'params',

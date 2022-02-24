@@ -1,19 +1,7 @@
 <?php
 
-/**
- * Gearman Bundle for Symfony2
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Feel free to edit as you please, and have fun.
- *
- * @author Marc Morera <yuhu@mmoreram.com>
- */
-
 namespace Mmoreram\GearmanBundle\Command;
 
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,86 +13,33 @@ use Mmoreram\GearmanBundle\Service\GearmanDescriber;
 use Mmoreram\GearmanBundle\Service\GearmanExecute;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-/**
- * Gearman Job Execute Command class
- *
- * @since 2.3.1
- */
 class GearmanJobExecuteCommand extends AbstractGearmanCommand
 {
-    /**
-     * @var GearmanClient
-     *
-     * Gearman client
-     */
-    protected $gearmanClient;
+    protected GearmanClient $gearmanClient;
+    protected GearmanDescriber $gearmanDescriber;
+    protected GearmanExecute $gearmanExecute;
 
-    /**
-     * @var GearmanDescriber
-     *
-     * GearmanDescriber
-     */
-    protected $gearmanDescriber;
-
-    /**
-     * @var GearmanExecute
-     *
-     * Gearman execute
-     */
-    protected $gearmanExecute;
-
-    /**
-     * @var QuestionHelper
-     *
-     * Question
-     */
-    protected $question;
-
-    /**
-     * Set gearman client
-     *
-     * @param GearmanClient $gearmanClient Gearman client
-     *
-     * @return GearmanJobExecuteCommand self Object
-     */
-    public function setGearmanClient(GearmanClient $gearmanClient)
+    public function setGearmanClient(GearmanClient $gearmanClient): self
     {
         $this->gearmanClient = $gearmanClient;
 
         return $this;
     }
 
-    /**
-     * set Gearman describer
-     *
-     * @param GearmanDescriber $gearmanDescriber GearmanDescriber
-     *
-     * @return GearmanJobExecuteCommand self Object
-     */
-    public function setGearmanDescriber(GearmanDescriber $gearmanDescriber)
+    public function setGearmanDescriber(GearmanDescriber $gearmanDescriber): self
     {
         $this->gearmanDescriber = $gearmanDescriber;
 
         return $this;
     }
 
-    /**
-     * set Gearman execute
-     *
-     * @param GearmanExecute $gearmanExecute GearmanExecute
-     *
-     * @return GearmanJobExecuteCommand self Object
-     */
-    public function setGearmanExecute(GearmanExecute $gearmanExecute)
+    public function setGearmanExecute(GearmanExecute $gearmanExecute): self
     {
         $this->gearmanExecute = $gearmanExecute;
 
         return $this;
     }
 
-    /**
-     * Console Command configuration
-     */
     protected function configure()
     {
         $this
@@ -141,21 +76,8 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
             );
     }
 
-    /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     *
-     * @return integer 0 if everything went fine, or an error code
-     *
-     * @throws \LogicException When this abstract class is not implemented
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /**
-         * @var QuestionHelper $question
-         */
         $question = $this->getHelperSet()->get('question');
 
         if (
@@ -170,10 +92,12 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
         }
 
         if (!$input->getOption('quiet')) {
-            $output->writeln(sprintf(
-                '<info>[%s] loading...</info>',
-                date('Y-m-d H:i:s')
-            ));
+            $output->writeln(
+                sprintf(
+                    '<info>[%s] loading...</info>',
+                    date('Y-m-d H:i:s')
+                )
+            );
         }
 
         $job = $input->getArgument('job');
@@ -195,19 +119,21 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
         }
 
         if (!$input->getOption('quiet')) {
-            $output->writeln(sprintf(
-                '<info>[%s] loaded. Ctrl+C to break</info>',
-                date('Y-m-d H:i:s')
-            ));
+            $output->writeln(
+                sprintf(
+                    '<info>[%s] loaded. Ctrl+C to break</info>',
+                    date('Y-m-d H:i:s')
+                )
+            );
         }
 
         $this
             ->gearmanExecute
             ->setOutput($output)
             ->executeJob($job, [
-                'iterations'             => $input->getOption('iterations'),
+                'iterations' => $input->getOption('iterations'),
                 'minimum_execution_time' => $input->getOption('minimum-execution-time'),
-                'timeout'                => $input->getOption('timeout'),
+                'timeout' => $input->getOption('timeout'),
             ]);
 
         return 0;
