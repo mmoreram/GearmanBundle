@@ -16,6 +16,7 @@ namespace Mmoreram\GearmanBundle\Service;
 use Doctrine\Common\Annotations\Reader;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
@@ -33,67 +34,39 @@ use Mmoreram\GearmanBundle\Module\WorkerCollection;
 class GearmanParser
 {
     /**
-     * @var array
+     * return array<string, BundleInterface>
      *
      * Bundles loaded by kernel
      */
-    private $kernelBundles;
+    private array $kernelBundles;
+    private KernelInterface $kernel;
+    private Reader $reader;
+    private Finder $finder;
 
     /**
-     * @var KernelInterface
-     *
-     * Kernel object
-     */
-    private $kernel;
-
-    /**
-     * @var Reader
-     *
-     * Annotation Reader
-     */
-    private $reader;
-
-    /**
-     * @var Finder
-     *
-     * Finder
-     */
-    private $finder;
-
-    /**
-     * @var array
-     *
      * Bundles available to perform search
      */
-    private $bundles;
+    private array $bundles;
 
     /**
-     * @var array
-     *
      * Namespaces paths to be searched
      */
-    private $resources;
+    private array $resources;
 
     /**
-     * @var array
-     *
      * Collection of servers to connect
      */
-    private $servers;
+    private array $servers;
 
     /**
-     * @var array
-     *
      * Default settings defined by user in config.yml
      */
-    private $defaultSettings;
+    private array $defaultSettings;
 
     /**
      * Root kernel directory
-     *
-     * @var string
      */
-    private $rootDir;
+    private string $rootDir;
 
     /**
      * Construct method
@@ -124,13 +97,8 @@ class GearmanParser
         $this->servers = $servers;
         $this->defaultSettings = $defaultSettings;
 
-        // Symfony 3.3+ compatibility, get kernel root dir
-        if (method_exists($this->kernel, 'getProjectDir')) {
-            $r = new \ReflectionObject($this->kernel);
-            $this->rootDir = \dirname($r->getFileName());
-        } else {
-            $this->rootDir = $this->kernel->getRootDir();
-        }
+        $r = new \ReflectionObject($this->kernel);
+        $this->rootDir = \dirname($r->getFileName());
     }
 
     /**

@@ -24,14 +24,7 @@ class GearmanCallbacksDispatcher
         $this->eventDispatcher=$eventDispatcher;
     }
 
-    /**
-     * Assign all GearmanClient callbacks as Symfony2 events
-     *
-     * @param \GearmanClient $gearmanClient Gearman client
-     *
-     * @return GearmanCallbacksDispatcher self Object
-     */
-    public function assignTaskCallbacks(\GearmanClient $gearmanClient)
+    public function assignTaskCallbacks(\GearmanClient $gearmanClient): self
     {
         $gearmanClient->setCompleteCallback([
             $this,
@@ -72,6 +65,8 @@ class GearmanCallbacksDispatcher
             $this,
             'assignWorkloadCallback',
         ]);
+
+        return $this;
     }
 
     /**

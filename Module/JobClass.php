@@ -13,71 +13,28 @@ class JobClass implements ContainerAwareInterface
     public const DEFAULT_DESCRIPTION = 'No description is defined';
 
     /**
-     * @var string
-     *
      * Callable name for this job
      * If is setted on annotations, this value will be used
      *  otherwise, natural method name will be used.
      */
-    private $callableName;
+    private string $callableName;
+    private string $methodName;
 
     /**
-     * @var string
-     *
-     * Method name
-     */
-    private $methodName;
-
-    /**
-     * @var string
-     *
      * RealCallable name for this job without the job prefix
-     *
      */
-    private $realCallableNameNoPrefix;
+    private string $realCallableNameNoPrefix;
 
     /**
-     * @var string
-     *
      * RealCallable name for this job
      * natural method name will be used.
      */
-    private $realCallableName;
-
-    /**
-     * @var string
-     *
-     * Description of Job
-     */
-    private $description;
-
-    /**
-     * @var integer
-     *
-     * Number of iterations this job will be alive before die
-     */
-    private $iterations;
-
-    /**
-     * @var string
-     *
-     * Default method this job will be call into Gearman client
-     */
-    private $defaultMethod;
-
-    /**
-     * @var int
-     *
-     * Job minimum execution time
-     */
-    private $minimumExecutionTime;
-
-    /**
-     * @var int
-     *
-     * Timeout for idle worker
-     */
-    private $timeout;
+    private string $realCallableName;
+    private string $description;
+    private int $iterations;
+    private string $defaultMethod;
+    private int $minimumExecutionTime;
+    private int $timeout;
 
     /**
      * @var array
@@ -85,55 +42,29 @@ class JobClass implements ContainerAwareInterface
      * Collection of servers to connect
      */
     private $servers;
+    private ?string $jobPrefix;
+    protected ?ContainerInterface $container;
 
-    /**
-     * @var string
-     *
-     * The prefix to be prepended to all job callable names.
-     */
-    private $jobPrefix;
-
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * Construct method
-     *
-     * @param JobAnnotation    $jobAnnotation     JobAnnotation class
-     * @param ReflectionMethod $reflectionMethod  ReflextionMethod class
-     * @param string           $callableNameClass Callable name class
-     * @param array            $servers           Array of servers defined for Worker
-     * @param array            $defaultSettings   Default settings for Worker
-     */
     public function __construct(
         JobAnnotation $jobAnnotation,
         ReflectionMethod $reflectionMethod,
-        $callableNameClass,
+        string $callableNameClass,
         array $servers,
         array $defaultSettings
     ) {
-        $this->callableName = is_null($jobAnnotation->name)
-            ? $reflectionMethod->getName()
-            : $jobAnnotation->name;
-
+        $this->callableName = $jobAnnotation->name ?? $reflectionMethod->getName();
         $this->methodName = $reflectionMethod->getName();
         $this->realCallableNameNoPrefix = str_replace('\\', '', $callableNameClass . '~' . $this->callableName);
 
-        $this->jobPrefix = $defaultSettings['jobPrefix']
-            ?? null;
+        $this->jobPrefix = $defaultSettings['jobPrefix'] ?? null;
 
         $this->realCallableName = $this->jobPrefix . $this->realCallableNameNoPrefix;
-        $this->description = is_null($jobAnnotation->description)
-            ? self::DEFAULT_DESCRIPTION
-            : $jobAnnotation->description;
-
+        $this->description = $jobAnnotation->description ?? self::DEFAULT_DESCRIPTION;
         $this->servers = $this->loadServers($jobAnnotation, $servers);
-        $this->iterations = $this->loadIterations($jobAnnotation, $defaultSettings);
-        $this->minimumExecutionTime = $this->loadMinimumExecutionTime($jobAnnotation, $defaultSettings);
-        $this->timeout = $this->loadTimeout($jobAnnotation, $defaultSettings);
-        $this->defaultMethod = $this->loadDefaultMethod($jobAnnotation, $defaultSettings);
+        $this->iterations = (int)($jobAnnotation->iterations ?? $defaultSettings['iterations']);
+        $this->defaultMethod = (string)($jobAnnotation->defaultMethod ?? $defaultSettings['method']);
+        $this->minimumExecutionTime = (int)($jobAnnotation->minimumExecutionTime ?? $defaultSettings['minimumExecutionTime']);
+        $this->timeout = (int)($jobAnnotation->timeout ?? $defaultSettings['timeout']);
     }
 
     /**
@@ -143,13 +74,12 @@ class JobClass implements ContainerAwareInterface
      * Otherwise is used servers set in Class
      *
      * @param JobAnnotation $jobAnnotation JobAnnotation class
-     * @param array         $servers       Array of servers defined for Worker
+     * @param array $servers Array of servers defined for Worker
      *
      * @return array Servers
      */
     private function loadServers(JobAnnotation $jobAnnotation, array $servers)
     {
-
         /**
          * If is configured some servers definition in the worker, overwrites
          */
@@ -162,97 +92,25 @@ class JobClass implements ContainerAwareInterface
         return $servers;
     }
 
-    /**
-     * Load iterations
-     *
-     * If iterations is defined in JobAnnotation, this one is used.
-     * Otherwise is used set in Class
-     *
-     * @param JobAnnotation $jobAnnotation   JobAnnotation class
-     * @param array         $defaultSettings Default settings for Worker
-     *
-     * @return integer Iteration
-     */
-    private function loadIterations(JobAnnotation $jobAnnotation, array $defaultSettings)
-    {
-        return is_null($jobAnnotation->iterations)
-            ? (int) $defaultSettings['iterations']
-            : (int) $jobAnnotation->iterations;
-    }
-
-    /**
-     * Load defaultMethod
-     *
-     * If defaultMethod is defined in JobAnnotation, this one is used.
-     * Otherwise is used set in Class
-     *
-     * @param JobAnnotation $jobAnnotation   JobAnnotation class
-     * @param array         $defaultSettings Default settings for Worker
-     *
-     * @return string Default method
-     */
-    private function loadDefaultMethod(JobAnnotation $jobAnnotation, array $defaultSettings)
-    {
-        return is_null($jobAnnotation->defaultMethod)
-            ? $defaultSettings['method']
-            : $jobAnnotation->defaultMethod;
-    }
-
-    /**
-     * Load minimumExecutionTime
-     *
-     * If minimumExecutionTime is defined in JobAnnotation, this one is used.
-     * Otherwise is used set in Class
-     *
-     * @param JobAnnotation $jobAnnotation
-     * @param array $defaultSettings
-     *
-     * @return int
-     */
-    private function loadMinimumExecutionTime(JobAnnotation $jobAnnotation, array $defaultSettings)
-    {
-        return is_null($jobAnnotation->minimumExecutionTime)
-            ? (int) $defaultSettings['minimumExecutionTime']
-            : (int) $jobAnnotation->minimumExecutionTime;
-    }
-
-    /**
-     * Load timeout
-     *
-     * If timeout is defined in JobAnnotation, this one is used.
-     * Otherwise is used set in Class
-     *
-     * @param JobAnnotation $jobAnnotation
-     * @param array $defaultSettings
-     *
-     * @return int
-     */
-    private function loadTimeout(JobAnnotation $jobAnnotation, array $defaultSettings)
-    {
-        return is_null($jobAnnotation->timeout)
-            ? (int) $defaultSettings['timeout']
-            : (int) $jobAnnotation->timeout;
-    }
-
-    public function toArray():array
+    public function toArray(): array
     {
         return [
 
-            'callableName'             => $this->callableName,
-            'methodName'               => $this->methodName,
-            'realCallableName'         => $this->realCallableName,
-            'jobPrefix'                => $this->jobPrefix,
+            'callableName' => $this->callableName,
+            'methodName' => $this->methodName,
+            'realCallableName' => $this->realCallableName,
+            'jobPrefix' => $this->jobPrefix,
             'realCallableNameNoPrefix' => $this->realCallableNameNoPrefix,
-            'description'              => $this->description,
-            'iterations'               => $this->iterations,
-            'minimumExecutionTime'     => $this->minimumExecutionTime,
-            'timeout'                  => $this->timeout,
-            'servers'                  => $this->servers,
-            'defaultMethod'            => $this->defaultMethod,
+            'description' => $this->description,
+            'iterations' => $this->iterations,
+            'minimumExecutionTime' => $this->minimumExecutionTime,
+            'timeout' => $this->timeout,
+            'servers' => $this->servers,
+            'defaultMethod' => $this->defaultMethod,
         ];
     }
 
-    public function setContainer(?ContainerInterface $container = null): void
+    public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
     }

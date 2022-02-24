@@ -13,7 +13,8 @@
 
 namespace Mmoreram\GearmanBundle\Event;
 
-use Mmoreram\GearmanBundle\Event\Abstracts\Event;
+
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * GearmanWorkStartingEvent

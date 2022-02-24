@@ -26,12 +26,8 @@ use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
  */
 class GearmanClient extends AbstractGearmanService
 {
-    /**
-     * @var \GearmanClient
-     *
-     * Gearman native client instance
-     */
-    protected $gearmanClient;
+
+    protected ?\GearmanClient $gearmanClient;
 
     /**
      * @var GearmanCallbacksDispatcher

@@ -108,7 +108,7 @@ class GearmanExecute extends AbstractGearmanService
 
     /**
      * Toggles that work should be stopped, we only subscribe to SIGTERM and SIGHUP
-     * @param int $signno Signal number
+     * @param int $signo Signal number
      */
     public function handleSystemSignal($signo)
     {
@@ -399,7 +399,6 @@ class GearmanExecute extends AbstractGearmanService
      * @see https://github.com/brianlmoon/GearmanManager/blob/ffc828dac2547aff76cb4962bb3fcc4f454ec8a2/GearmanPeclManager.php#L95-206
      *
      * @param \GearmanJob $job
-     * @param mixed $context
      *
      * @return mixed
      */
