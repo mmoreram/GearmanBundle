@@ -26,6 +26,11 @@ parameters:
     gearman.cache.wrapper.class: Mmoreram\GearmanBundle\Service\GearmanCacheWrapper
 
     #
+    # EventListeners
+    #
+    gearman.swiftmailer_email_sender.listener.class: Mmoreram\GearmanBundle\EventListener\SwiftmailerEmailSenderListener
+
+    #
     # Commands
     #
     gearman.command.cache_clear.class: Mmoreram\GearmanBundle\Command\GearmanCacheClearCommand
