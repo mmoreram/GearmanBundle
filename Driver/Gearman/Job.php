@@ -9,6 +9,10 @@ use Doctrine\Common\Annotations\Annotation;
  */
 class Job extends Annotation
 {
+    /**
+     * Method name to assign into job
+     */
+    public ?string $name;
 
     /**
      * Description of Job
