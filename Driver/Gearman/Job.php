@@ -13,12 +13,12 @@ class Job extends Annotation
     /**
      * Description of Job
      */
-    public ?string $description;
+    public ?string $description = null;
 
     /**
      * Number of iterations specified for this job
      */
-    public ?int $iterations;
+    public ?int $iterations = null;
 
     /**
      * Servers assigned for this job to be executed
@@ -30,10 +30,10 @@ class Job extends Annotation
     /**
      * Default method to call for this job
      */
-    public ?string $defaultMethod;
-    public ?int $timeout;
+    public ?string $defaultMethod = null;
+    public ?int $timeout = null;
     /**
      * Number of seconds the execution must run before being allowed to terminate
      */
-    public ?int $minimumExecutionTime;
+    public ?int $minimumExecutionTime = null;
 }

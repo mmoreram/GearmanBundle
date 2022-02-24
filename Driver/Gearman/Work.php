@@ -1,4 +1,5 @@
 <?php
+
 namespace Mmoreram\GearmanBundle\Driver\Gearman;
 
 use Doctrine\Common\Annotations\Annotation;
@@ -11,17 +12,17 @@ class Work extends Annotation
     /**
      * Name of worker
      */
-    public ?string $name;
+    public ?string $name = null;
 
     /**
      * Description of Worker
      */
-    public ?string $description;
+    public ?string $description = null;
 
     /**
      * Number of iterations specified for all jobs inside Work
      */
-    public ?int $iterations;
+    public ?int $iterations = null;
 
     /**
      * Servers assigned for all jobs of this work to be executed
@@ -33,17 +34,17 @@ class Work extends Annotation
     /**
      * Default method to call for all jobs inside this work
      */
-    public ?string $defaultMethod;
+    public ?string $defaultMethod = null;
 
     /**
      * Default timeout in seconds for worker idle time
      */
-    public ?int $timeout;
+    public ?int $timeout = null;
 
     /**
      * Default number of seconds the execution must run before being allowed to terminate
      */
-    public ?int $minimumExecutionTime;
+    public ?int $minimumExecutionTime = null;
 
     /**
      * Service typeof Class. If it's defined, object will be instanced throught
