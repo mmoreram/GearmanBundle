@@ -2,8 +2,6 @@
 
 namespace Mmoreram\GearmanBundle\Exceptions;
 
-use Exceptions\GearmanExceptionInterface;
-
 class WorkerNameTooLongException extends \LengthException implements GearmanExceptionInterface
 {
 

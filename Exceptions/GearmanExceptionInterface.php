@@ -1,6 +1,6 @@
 <?php
 
-namespace Exceptions;
+namespace Mmoreram\GearmanBundle\Exceptions;
 
 interface GearmanExceptionInterface extends \Throwable
 {
