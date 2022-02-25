@@ -19,3 +19,4 @@ parameters:
     ignoreErrors:
         - '#Call to an undefined method Symfony\\Component\\Console\\Helper\\HelperInterface::ask\(\)\.#'
         - '#Parameter \#1 \$callback of method GearmanClient::setCreatedCallback\(\) expects string, array<int, \$this\(Mmoreram\\GearmanBundle\\Dispatcher\\GearmanCallbacksDispatcher\)\|string> given\.#'
+        - '#Method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) invoked with 2 parameters, 1 required\.#'
