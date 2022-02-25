@@ -64,6 +64,9 @@ jobs:
               if: matrix.coverage != 'none'
               run: vendor/bin/phpunit --coverage-clover=coverage.clover
 
+            - name: Run PHPStan
+              run: vendor/bin/phpstan analyse
+
             - name: Upload Scrutinizer coverage
               if: matrix.coverage != 'none'
               continue-on-error: true

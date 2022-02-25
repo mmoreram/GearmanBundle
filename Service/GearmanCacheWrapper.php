@@ -58,6 +58,8 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
     public function warmUp($cacheDir)
     {
         $this->load();
+
+        return [];
     }
 
     /**

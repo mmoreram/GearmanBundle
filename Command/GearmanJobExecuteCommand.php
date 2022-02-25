@@ -2,6 +2,7 @@
 
 namespace Mmoreram\GearmanBundle\Command;
 
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -78,7 +79,8 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $question = $this->getHelperSet()->get('question');
+        /**@var QuestionHelper $question*/
+        $question =  $this->getHelper('question');
 
         if (
             !$input->getOption('no-interaction') &&
@@ -114,7 +116,6 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
                 ->describeJob(
                     $output,
                     $jobStructure,
-                    true
                 );
         }
 

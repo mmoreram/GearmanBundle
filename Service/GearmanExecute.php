@@ -48,12 +48,7 @@ class GearmanExecute extends AbstractGearmanService
      */
     protected $eventDispatcher;
 
-    /**
-     * @var OutputInterface
-     *
-     * Output instance
-     */
-    protected $output;
+    protected ?OutputInterface $output;
 
     /**
      * @var OptionsResolver
@@ -283,7 +278,6 @@ class GearmanExecute extends AbstractGearmanService
      * @param integer        $iterations    Number of iterations
      * @param integer        $timeout       Timeout
      *
-     * @return GearmanExecute self Object
      */
     private function runJob(\GearmanWorker $gearmanWorker, $objInstance, array $jobs, $iterations, $timeout = null)
     {
@@ -291,7 +285,7 @@ class GearmanExecute extends AbstractGearmanService
          * Set the output of this instance, this should allow workers to use the console output.
          */
         if ($objInstance instanceof GearmanOutputAwareInterface) {
-            $objInstance->setOutput($this->output ?: new NullOutput());
+            $objInstance->setOutput($this->output ?? new NullOutput());
         }
 
         /**
