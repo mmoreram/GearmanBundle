@@ -93,7 +93,7 @@ class GearmanJobExecuteCommandTest extends TestCase
         $this->command = $this
             ->getMockBuilder('Mmoreram\GearmanBundle\Command\GearmanJobExecuteCommand')
             ->setMethods([
-                'getHelperSet',
+                'getHelper',
             ])
             ->getMock();
 
@@ -102,21 +102,11 @@ class GearmanJobExecuteCommandTest extends TestCase
             ->setMethods(['ask'])
             ->getMock();
 
-        $helperSet = $this
-            ->getMockBuilder('Symfony\Component\Console\Helper\HelperSet')
-            ->setMethods(['get'])
-            ->getMock();
-
-        $helperSet
-            ->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($this->questionHelper));
-
         $this
             ->command
             ->expects($this->any())
-            ->method('getHelperSet')
-            ->will($this->returnValue($helperSet));
+            ->method('getHelper')
+            ->will($this->returnValue($this->questionHelper));
 
         $this->input = $this
             ->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
