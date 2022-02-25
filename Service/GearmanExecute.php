@@ -133,7 +133,7 @@ class GearmanExecute extends AbstractGearmanService
      */
     public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventDispatcher = class_exists(LegacyEventDispatcherProxy::class) ? LegacyEventDispatcherProxy::decorate($eventDispatcher) : $eventDispatcher;
+        $this->eventDispatcher = $eventDispatcher;
 
         return $this;
     }
