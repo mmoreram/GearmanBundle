@@ -7,19 +7,9 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class GearmanDescriber
 {
-    /**
-     * @var KernelInterface
-     *
-     * Kernel
-     */
-    private $kernel;
 
+    private KernelInterface $kernel;
 
-    /**
-     * Construct method
-     *
-     * @param KernelInterface $kernel Kernel
-     */
     public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;

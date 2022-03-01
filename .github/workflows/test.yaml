@@ -21,12 +21,9 @@ jobs:
                     - php: "8.1"
                       php-version: "8.0"
                       symfony-version: "6.0"
-                      experimental: true
                     - php: "8.1"
                       php-version: "8.1"
                       symfony-version: "6.0"
-                      experimental: true
-
         steps:
             - name: Checkout
               uses: actions/checkout@v2
