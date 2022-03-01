@@ -6,19 +6,16 @@ jobs:
     test:
         name: PHP ${{ matrix.php-version }} + Symfony ${{ matrix.symfony-version }}
         runs-on: ubuntu-18.04
-        continue-on-error: ${{ matrix.experimental }}
         strategy:
             matrix:
                 php-version: ['7.4','8.0','8.1']
                 symfony-version: ['4.4','5.4']
-                experimental: [false]
                 coverage: ['none']
                 include:
                     - php-version: '7.4'
                       symfony-version: '4.4'
                       coverage: xdebug
-                      experimental: false
-                    - php: "8.1"
+                    - php: "8.0"
                       php-version: "8.0"
                       symfony-version: "6.0"
                     - php: "8.1"
