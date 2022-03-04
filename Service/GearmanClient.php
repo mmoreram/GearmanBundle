@@ -24,10 +24,10 @@ use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
  *
  * @since 2.3.1
  */
-class GearmanClient extends AbstractGearmanService
+class GearmanClient extends AbstractGearmanService implements GearmanClientInterface
 {
 
-    protected ?\GearmanClient $gearmanClient;
+    protected ?\GearmanClient $gearmanClient=null;
 
     /**
      * @var GearmanCallbacksDispatcher
@@ -44,11 +44,9 @@ class GearmanClient extends AbstractGearmanService
     protected $servers = [];
 
     /**
-     * @var array
-     *
      * task structure to store all about called tasks
      */
-    protected $taskStructure = [];
+    protected array $taskStructure = [];
 
     /**
      * @var array
@@ -89,12 +87,7 @@ class GearmanClient extends AbstractGearmanService
         return $this->gearmanClient;
     }
 
-    /**
-     * Init tasks structure
-     *
-     * @return GearmanClient self Object
-     */
-    public function initTaskStructure()
+    protected function initTaskStructure():self
     {
         $this->taskStructure = [];
 

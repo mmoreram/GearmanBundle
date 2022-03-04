@@ -52,8 +52,10 @@ services:
         public: true
         parent: gearman.abstract.service
         calls:
-            - [initTaskStructure, []]
             - [setDefaultServers, ["%gearman.servers%"]]
             - [setGearmanCallbacksDispatcher, ["@gearman.dispatcher.callbacks"]]
             - [setUniqueJobIdentifierGenerator, ["@gearman.unique_job_identifier"]]
             - [setDefaultSettings, ["%gearman.default.settings%"]]
+
+    Mmoreram\GearmanBundle\Service\GearmanClientInterface:
+        alias: gearman
