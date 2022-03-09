@@ -22,5 +22,4 @@ use Mmoreram\GearmanBundle\Event\Abstracts\AbstractGearmanClientTaskEvent;
  */
 class GearmanClientCallbackExceptionEvent extends AbstractGearmanClientTaskEvent
 {
-
 }

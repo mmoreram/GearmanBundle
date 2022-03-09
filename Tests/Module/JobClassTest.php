@@ -13,7 +13,7 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Module;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
 use Mmoreram\GearmanBundle\Module\JobClass;
@@ -21,7 +21,7 @@ use Mmoreram\GearmanBundle\Module\JobClass;
 /**
  * Tests JobClassTest class
  */
-class JobClassTest extends PHPUnit_Framework_TestCase
+class JobClassTest extends TestCase
 {
     /**
      * @var JobAnnotation
@@ -56,19 +56,19 @@ class JobClassTest extends PHPUnit_Framework_TestCase
      *
      * Servers list
      */
-    private $servers = array(
-        array(
+    private $servers = [
+        [
             'host' => '192.168.1.1',
             'port' => '8080',
-        ),
-    );
+        ],
+    ];
 
     /**
      * @var array
      *
      * Default settings
      */
-    private $defaultSettings = array(
+    private $defaultSettings = [
         'method'                         => 'doHigh',
         'iterations'                     => 100,
         'minimumExecutionTime'           => null,
@@ -77,19 +77,19 @@ class JobClassTest extends PHPUnit_Framework_TestCase
         'jobPrefix'                      => null,
         'generate_unique_key'            => true,
         'workers_name_prepend_namespace' => true,
-    );
+    ];
 
     /**
      * Setup
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->reflectionMethod = $this
             ->getMockBuilder('\ReflectionMethod')
-            ->setConstructorArgs(array('\Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCleanFile', 'myMethod'))
-            ->setMethods(array(
+            ->setConstructorArgs(['\Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCleanFile', 'myMethod'])
+            ->setMethods([
                 'getName',
-            ))
+            ])
             ->getMock();
 
         $this->jobAnnotation = $this
@@ -117,12 +117,12 @@ class JobClassTest extends PHPUnit_Framework_TestCase
         $this->jobAnnotation->description = 'This is my own description';
         $this->jobAnnotation->iterations = 200;
         $this->jobAnnotation->defaultMethod = 'doHighBackground';
-        $this->jobAnnotation->servers = array(
-            array(
+        $this->jobAnnotation->servers = [
+            [
                 'host' => '10.0.0.2',
                 'port' => '80',
-            ),
-        );
+            ],
+        ];
 
         $jobClass = new JobClass(
             $this->jobAnnotation,
@@ -132,7 +132,7 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             $this->defaultSettings
         );
 
-        $this->assertEquals($jobClass->toArray(), array(
+        $this->assertEquals($jobClass->toArray(), [
 
             'callableName'             => $this->jobAnnotation->name,
             'methodName'               => $this->methodName,
@@ -145,7 +145,7 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             'timeout'                  => $this->jobAnnotation->timeout,
             'servers'                  => $this->jobAnnotation->servers,
             'defaultMethod'            => $this->jobAnnotation->defaultMethod,
-        ));
+        ]);
     }
 
     /**
@@ -171,7 +171,7 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             $this->defaultSettings
         );
 
-        $this->assertEquals($jobClass->toArray(), array(
+        $this->assertEquals($jobClass->toArray(), [
 
             'callableName'             => $this->methodName,
             'methodName'               => $this->methodName,
@@ -184,7 +184,7 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             'timeout'                  => $this->defaultSettings['timeout'],
             'servers'                  => $this->servers,
             'defaultMethod'            => $this->defaultSettings['method'],
-        ));
+        ]);
     }
 
     /**
@@ -198,10 +198,10 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             ->method('getName')
             ->will($this->returnValue($this->methodName));
 
-        $this->jobAnnotation->servers = array(
+        $this->jobAnnotation->servers = [
             'host' => '10.0.0.2',
             'port' => '80',
-        );
+        ];
 
         $jobClass = new JobClass(
             $this->jobAnnotation,
@@ -211,7 +211,7 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             $this->defaultSettings
         );
 
-        $this->assertEquals($jobClass->toArray(), array(
+        $this->assertEquals($jobClass->toArray(), [
 
             'callableName'             => $this->methodName,
             'methodName'               => $this->methodName,
@@ -222,9 +222,9 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             'iterations'               => $this->defaultSettings['iterations'],
             'minimumExecutionTime'     => $this->defaultSettings['minimumExecutionTime'],
             'timeout'                  => $this->defaultSettings['timeout'],
-            'servers'                  => array($this->jobAnnotation->servers),
+            'servers'                  => [$this->jobAnnotation->servers],
             'defaultMethod'            => $this->defaultSettings['method'],
-        ));
+        ]);
     }
 
     /**
@@ -238,10 +238,10 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             ->method('getName')
             ->will($this->returnValue($this->methodName));
 
-        $this->jobAnnotation->servers = array(
+        $this->jobAnnotation->servers = [
             'host' => '10.0.0.2',
             'port' => '80',
-        );
+        ];
 
         $settings = $this->defaultSettings;
         $settings['jobPrefix'] = 'test';
@@ -254,7 +254,7 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             $settings
         );
 
-        $this->assertEquals($jobClass->toArray(), array(
+        $this->assertEquals($jobClass->toArray(), [
 
             'callableName'             => $this->methodName,
             'methodName'               => $this->methodName,
@@ -265,8 +265,8 @@ class JobClassTest extends PHPUnit_Framework_TestCase
             'iterations'               => $this->defaultSettings['iterations'],
             'minimumExecutionTime'     => $this->defaultSettings['minimumExecutionTime'],
             'timeout'                  => $this->defaultSettings['timeout'],
-            'servers'                  => array($this->jobAnnotation->servers),
+            'servers'                  => [$this->jobAnnotation->servers],
             'defaultMethod'            => $this->defaultSettings['method'],
-        ));
+        ]);
     }
 }

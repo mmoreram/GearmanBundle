@@ -8,7 +8,7 @@ GearmanBundle for Symfony2, 3 and 4
 [![License](https://poser.pugx.org/mmoreram/gearman-bundle/license.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
 [![Total Downloads](https://poser.pugx.org/mmoreram/gearman-bundle/downloads.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
 
-GearmanBundle is a bundle for Symfony2/3/4 intended to provide an easy way to 
+GearmanBundle is a bundle for Symfony4/5/6 intended to provide an easy way to 
 support developers who need to use job queues. For example: mail queues, Solr 
 generation queues or Database upload queues.  For Symfony Flex you can use [the recipe in the contributed
 repository](https://github.com/symfony/recipes-contrib) to get started quickly.

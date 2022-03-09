@@ -20,7 +20,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class GearmanCacheWrapperTest extends WebTestCase
 {
-
     /**
      * Test service can be instanced through container
      */

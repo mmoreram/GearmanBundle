@@ -21,7 +21,7 @@ use Mmoreram\GearmanBundle\Module\WorkerClass;
 /**
  * Tests JobClassTest class
  */
-class WorkerClassTest extends \PHPUnit_Framework_TestCase
+class WorkerClassTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var WorkAnnotation
@@ -70,19 +70,19 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
      *
      * Servers list
      */
-    private $servers = array(
-        array(
+    private $servers = [
+        [
             'host'  =>  '192.168.1.1',
             'port'  =>  '8080',
-        ),
-    );
+        ],
+    ];
 
     /**
      * @var array
      *
      * Default settings
      */
-    private $defaultSettings = array(
+    private $defaultSettings = [
         'method'                         => 'doHigh',
         'iterations'                     => 100,
         'minimum_execution_time'         => null,
@@ -91,22 +91,22 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
         'jobPrefix'                      => null,
         'generate_unique_key'            => true,
         'workers_name_prepend_namespace' => true,
-    );
+    ];
 
     /**
      * Setup
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->reflectionClass = $this
             ->getMockBuilder('\ReflectionClass')
-            ->setConstructorArgs(array('\Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCleanFile'))
-            ->setMethods(array(
+            ->setConstructorArgs(['\Mmoreram\GearmanBundle\Tests\Service\Mocks\SingleCleanFile'])
+            ->setMethods([
                 'getName',
                 'getNamespaceName',
                 'getFileName',
                 'getMethods',
-            ))
+            ])
             ->getMock();
 
         $this->workAnnotation = $this
@@ -117,9 +117,9 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
         $this->reader = $this
             ->getMockBuilder('Doctrine\Common\Annotations\SimpleAnnotationReader')
             ->disableOriginalConstructor()
-            ->setMethods(array(
-                'getMethodAnnotations'
-            ))
+            ->setMethods([
+                'getMethodAnnotations',
+            ])
             ->getMock();
     }
 
@@ -154,7 +154,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             ->reflectionClass
             ->expects($this->once())
             ->method('getMethods')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this
             ->reader
@@ -166,12 +166,12 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
         $this->workAnnotation->iterations = 200;
         $this->workAnnotation->defaultMethod = 'doHighBackground';
         $this->workAnnotation->service = 'my.service';
-        $this->workAnnotation->servers = array(
-            array(
+        $this->workAnnotation->servers = [
+            [
                 'host'  =>  '10.0.0.2',
                 'port'  =>  '80',
-            ),
-        );
+            ],
+        ];
 
         $workerClass = new WorkerClass(
             $this->workAnnotation,
@@ -181,7 +181,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             $this->defaultSettings
         );
 
-        $this->assertEquals($workerClass->toArray(), array(
+        $this->assertEquals($workerClass->toArray(), [
 
             'namespace'             =>  $this->classNamespace,
             'className'             =>  $this->className,
@@ -193,8 +193,8 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             'iterations'            =>  $this->workAnnotation->iterations,
             'minimumExecutionTime'  =>  $this->workAnnotation->minimumExecutionTime,
             'timeout'               =>  $this->workAnnotation->timeout,
-            'jobs'                  =>  array(),
-        ));
+            'jobs'                  =>  [],
+        ]);
     }
 
     /**
@@ -228,7 +228,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             ->reflectionClass
             ->expects($this->once())
             ->method('getMethods')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this
             ->reader
@@ -243,7 +243,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             $this->defaultSettings
         );
 
-        $this->assertEquals($workerClass->toArray(), array(
+        $this->assertEquals($workerClass->toArray(), [
 
             'namespace'             =>  $this->classNamespace,
             'className'             =>  $this->className,
@@ -255,8 +255,8 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             'iterations'            =>  $this->defaultSettings['iterations'],
             'minimumExecutionTime'  =>  $this->defaultSettings['minimum_execution_time'],
             'timeout'               =>  $this->defaultSettings['timeout'],
-            'jobs'                  =>  array(),
-        ));
+            'jobs'                  =>  [],
+        ]);
     }
 
     /**
@@ -286,17 +286,17 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             ->reflectionClass
             ->expects($this->once())
             ->method('getMethods')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this
             ->reader
             ->expects($this->never())
             ->method('getMethodAnnotations');
 
-        $this->workAnnotation->servers = array(
+        $this->workAnnotation->servers = [
             'host'  =>  '10.0.0.2',
             'port'  =>  '80',
-        );
+        ];
 
         $workerClass = new WorkerClass(
             $this->workAnnotation,
@@ -306,7 +306,7 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             $this->defaultSettings
         );
 
-        $this->assertEquals($workerClass->toArray(), array(
+        $this->assertEquals($workerClass->toArray(), [
 
             'namespace'             =>  $this->classNamespace,
             'className'             =>  $this->className,
@@ -314,11 +314,11 @@ class WorkerClassTest extends \PHPUnit_Framework_TestCase
             'callableName'          =>  $this->className,
             'description'           =>  $workerClass::DEFAULT_DESCRIPTION,
             'service'               =>  null,
-            'servers'               =>  array($this->workAnnotation->servers),
+            'servers'               =>  [$this->workAnnotation->servers],
             'iterations'            =>  $this->defaultSettings['iterations'],
             'minimumExecutionTime'  =>  $this->defaultSettings['minimum_execution_time'],
             'timeout'               =>  $this->defaultSettings['timeout'],
-            'jobs'                  =>  array(),
-        ));
+            'jobs'                  =>  [],
+        ]);
     }
 }

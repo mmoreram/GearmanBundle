@@ -30,5 +30,4 @@ namespace Mmoreram\GearmanBundle\Tests\Service\Mocks;
  */
 class SingleCommentedFile
 {
-
 }

@@ -2,8 +2,8 @@ Configuration
 =============
 
 We must configure our Worker. Common definitions must be defined in
-config.yml file, setting values for all installed Workers. Also we must
-config gearman cache, using doctrine cache.
+config.yml and cache.yaml file, setting values for all installed Workers. Also we must
+config gearman cache, using symfony cache.
 
 .. note:: If ``iterations`` value is 0, worker will not kill itself never, so
           thread will be alive as long as needed. The reason to allow workers
@@ -12,12 +12,11 @@ config gearman cache, using doctrine cache.
 
 .. code-block:: yml
 
-    doctrine_cache:
-        providers:
-            gearman_cache:
-                type: file_system
-                namespace: doctrine_cache.ns.gearman
-
+    framework:
+        cache:
+            pools:
+                gearman_cache:
+                    adapter: cache.adapter.filesystem
     gearman:
        # Bundles will parsed searching workers
        bundles:
@@ -104,16 +103,16 @@ config gearman cache, using doctrine cache.
 
 In development mode you do not want to cache things over more than one
 request. An easy solution for this is to use the array cache in the dev
-environment ( Extracted from `DoctrineCacheBundle`_ documentation )
+environment
 
 .. code-block:: yml
 
-    #config_dev.yml
+    #cache.yaml
     
-    doctrine_cache:
-        providers:
-            gearman_cache:
-                type: array
-                namespace: doctrine_cache.ns.gearman
+    framework:
+        cache:
+            pools:
+                gearman_cache:
+                    adapter: cache.adapter.array
 
-.. _DoctrineCacheBundle: https://github.com/doctrine/DoctrineCacheBundle#cache-providers
+.. _SymfonyCache: https://symfony.com/doc/current/cache.html

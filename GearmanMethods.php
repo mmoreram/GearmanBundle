@@ -1,23 +1,7 @@
 <?php
 
-/**
- * Gearman Bundle for Symfony2
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Feel free to edit as you please, and have fun.
- *
- * @author Marc Morera <yuhu@mmoreram.com>
- */
-
 namespace Mmoreram\GearmanBundle;
 
-/**
- * Gearman available methods
- *
- * @since 2.3.1
- */
 class GearmanMethods
 {
     /**
@@ -30,7 +14,7 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_DO = 'do';
+    public const GEARMAN_METHOD_DO = 'do';
 
     /**
      * Gearman method doNormal
@@ -39,7 +23,7 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_DONORMAL = 'doNormal';
+    public const GEARMAN_METHOD_DONORMAL = 'doNormal';
 
     /**
      * Gearman method doLow
@@ -48,7 +32,7 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_DOLOW = 'doLow';
+    public const GEARMAN_METHOD_DOLOW = 'doLow';
 
     /**
      * Gearman method doHigh
@@ -57,7 +41,7 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_DOHIGH = 'doHigh';
+    public const GEARMAN_METHOD_DOHIGH = 'doHigh';
 
     /**
      * Gearman method doBackground
@@ -66,7 +50,7 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_DOBACKGROUND = 'doBackground';
+    public const GEARMAN_METHOD_DOBACKGROUND = 'doBackground';
 
     /**
      * Gearman method doLowBackgound
@@ -75,7 +59,7 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_DOLOWBACKGROUND = 'doLowBackground';
+    public const GEARMAN_METHOD_DOLOWBACKGROUND = 'doLowBackground';
 
     /**
      * Gearman method doHighBackground
@@ -84,7 +68,7 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_DOHIGHBACKGROUND = 'doHighBackground';
+    public const GEARMAN_METHOD_DOHIGHBACKGROUND = 'doHighBackground';
 
     /**
      * Tasks methods
@@ -97,7 +81,7 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_ADDTASK = 'addTask';
+    public const GEARMAN_METHOD_ADDTASK = 'addTask';
 
     /**
      * Gearman method addTaskLow
@@ -106,7 +90,7 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_ADDTASKLOW = 'addTaskLow';
+    public const GEARMAN_METHOD_ADDTASKLOW = 'addTaskLow';
 
     /**
      * Gearman method addTaskHigh
@@ -115,7 +99,7 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_ADDTASKHIGH = 'addTaskHigh';
+    public const GEARMAN_METHOD_ADDTASKHIGH = 'addTaskHigh';
 
     /**
      * Gearman method addTaskBackground
@@ -124,7 +108,7 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_ADDTASKBACKGROUND = 'addTaskBackground';
+    public const GEARMAN_METHOD_ADDTASKBACKGROUND = 'addTaskBackground';
 
     /**
      * Gearman method addTaskLowBackground
@@ -133,7 +117,7 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_ADDTASKLOWBACKGROUND = 'addTaskLowBackground';
+    public const GEARMAN_METHOD_ADDTASKLOWBACKGROUND = 'addTaskLowBackground';
 
     /**
      * Gearman method addTaskHighBackground
@@ -142,5 +126,5 @@ class GearmanMethods
      *
      * @var string
      */
-    const GEARMAN_METHOD_ADDTASKHIGHBACKGROUND = 'addTaskHighBackground';
+    public const GEARMAN_METHOD_ADDTASKHIGHBACKGROUND = 'addTaskHighBackground';
 }

@@ -13,12 +13,10 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Functional;
 
-use Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle;
 use Mmoreram\GearmanBundle\GearmanBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
-
 
 /**
  * AppKernel for testing
@@ -28,13 +26,12 @@ class AppKernel extends Kernel
     /**
      * Only register GearmanBundle
      */
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
-        return array(
+        return [
             new FrameworkBundle(),
-            new DoctrineCacheBundle(),
             new GearmanBundle(),
-        );
+        ];
     }
 
     /**

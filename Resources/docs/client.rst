@@ -1,13 +1,11 @@
 Client
 ======
 
-You can request a Job by using the gearman client.
+You can request the geamrna Client by using the Mmoreram\GearmanBundle\Service\GearmanClientInterface as it autowired.
 
 .. code-block:: php
 
-    $this
-        ->getContainer()
-        ->get('gearman');
+    public function __construct(GearmanClientInterface $gearmanClient)
 
 Servers
 ~~~~~~~

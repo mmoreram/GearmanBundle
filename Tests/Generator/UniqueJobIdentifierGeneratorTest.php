@@ -46,16 +46,22 @@ class UniqueJobIdentifierGeneratorTest extends WebTestCase
         $generator = new UniqueJobIdentifierGenerator(false);
 
         $this->assertEquals('uniqueValue', $generator->generateUniqueKey(
-            'name', 'params', 'uniqueValue', 'method'
-        ));
-        $this->assertFalse($generator->generateUniqueKey(
-            'name', 'params', false, 'method'
+            'name',
+            'params',
+            'uniqueValue',
+            'method'
         ));
         $this->assertNull($generator->generateUniqueKey(
-            'name', 'params', null, 'method'
+            'name',
+            'params',
+            null,
+            'method'
         ));
         $this->assertEquals('', $generator->generateUniqueKey(
-            'name', 'params', '', 'method'
+            'name',
+            'params',
+            '',
+            'method'
         ));
     }
 
@@ -68,16 +74,28 @@ class UniqueJobIdentifierGeneratorTest extends WebTestCase
         $unique = 'c1af4ce5c9773ce30d8cc6d1e0e7d699';
 
         $this->assertEquals('uniqueValue', $generator->generateUniqueKey(
-            'name', 'params', 'uniqueValue', 'method'
+            'name',
+            'params',
+            'uniqueValue',
+            'method'
         ));
         $this->assertEquals($unique, $generator->generateUniqueKey(
-            'name', 'params', false, 'method'
+            'name',
+            'params',
+            false,
+            'method'
         ));
         $this->assertEquals($unique, $generator->generateUniqueKey(
-            'name', 'params', null, 'method'
+            'name',
+            'params',
+            null,
+            'method'
         ));
         $this->assertEquals($unique, $generator->generateUniqueKey(
-            'name', 'params', '', 'method'
+            'name',
+            'params',
+            '',
+            'method'
         ));
     }
 }
