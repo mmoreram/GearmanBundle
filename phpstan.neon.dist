@@ -1,0 +1,22 @@
+includes:
+	- vendor/phpstan/phpstan-phpunit/extension.neon
+	- vendor/phpstan/phpstan-phpunit/rules.neon
+	- vendor/phpstan/phpstan-symfony/extension.neon
+	- vendor/phpstan/phpstan-symfony/rules.neon
+parameters:
+    level: 5
+    reportUnmatchedIgnoredErrors: false
+    paths:
+        - Command
+        - Dispatcher
+        - DependencyInjection
+        - Event
+        - Exceptions
+        - Generator
+        - Module
+        - Resources
+        - Service
+    ignoreErrors:
+        - '#Call to an undefined method Symfony\\Component\\Console\\Helper\\HelperInterface::ask\(\)\.#'
+        - '#Parameter \#1 \$callback of method GearmanClient::setCreatedCallback\(\) expects string, array<int, \$this\(Mmoreram\\GearmanBundle\\Dispatcher\\GearmanCallbacksDispatcher\)\|string> given\.#'
+        - '#Method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) invoked with 2 parameters, 1 required\.#'

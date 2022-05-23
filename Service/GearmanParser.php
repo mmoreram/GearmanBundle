@@ -16,6 +16,7 @@ namespace Mmoreram\GearmanBundle\Service;
 use Doctrine\Common\Annotations\Reader;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
@@ -32,69 +33,40 @@ use Mmoreram\GearmanBundle\Module\WorkerCollection;
  */
 class GearmanParser
 {
-
     /**
-     * @var array
+     * return array<string, BundleInterface>
      *
      * Bundles loaded by kernel
      */
-    private $kernelBundles;
+    private array $kernelBundles;
+    private KernelInterface $kernel;
+    private Reader $reader;
+    private Finder $finder;
 
     /**
-     * @var KernelInterface
-     *
-     * Kernel object
-     */
-    private $kernel;
-
-    /**
-     * @var Reader
-     *
-     * Annotation Reader
-     */
-    private $reader;
-
-    /**
-     * @var Finder
-     *
-     * Finder
-     */
-    private $finder;
-
-    /**
-     * @var array
-     *
      * Bundles available to perform search
      */
-    private $bundles;
+    private array $bundles;
 
     /**
-     * @var array
-     *
      * Namespaces paths to be searched
      */
-    private $resources;
+    private array $resources;
 
     /**
-     * @var array
-     *
      * Collection of servers to connect
      */
-    private $servers;
+    private array $servers;
 
     /**
-     * @var array
-     *
      * Default settings defined by user in config.yml
      */
-    private $defaultSettings;
+    private array $defaultSettings;
 
     /**
      * Root kernel directory
-     *
-     * @var string
      */
-    private $rootDir;
+    private string $rootDir;
 
     /**
      * Construct method
@@ -115,8 +87,7 @@ class GearmanParser
         array $resources,
         array $servers,
         array $defaultSettings
-    )
-    {
+    ) {
         $this->kernelBundles = $kernel->getBundles();
         $this->kernel = $kernel;
         $this->reader = $reader;
@@ -126,14 +97,8 @@ class GearmanParser
         $this->servers = $servers;
         $this->defaultSettings = $defaultSettings;
 
-        // Symfony 3.3+ compatibility, get kernel root dir
-        if(method_exists($this->kernel, 'getProjectDir')){
-            $r = new \ReflectionObject($this->kernel);
-            $this->rootDir = \dirname($r->getFileName());
-        } else {
-            $this->rootDir = $this->kernel->getRootDir();
-        }
-
+        $r = new \ReflectionObject($this->kernel);
+        $this->rootDir = \dirname($r->getFileName());
     }
 
     /**
@@ -143,7 +108,7 @@ class GearmanParser
      */
     public function load()
     {
-        list($paths, $excludedPaths) = $this->loadBundleNamespaceMap($this->kernelBundles, $this->bundles);
+        [$paths, $excludedPaths] = $this->loadBundleNamespaceMap($this->kernelBundles, $this->bundles);
         $paths = array_merge($paths, $this->loadResourceNamespaceMap($this->rootDir, $this->resources));
 
         return $this->parseNamespaceMap($this->finder, $this->reader, $paths, $excludedPaths);
@@ -161,16 +126,14 @@ class GearmanParser
      */
     public function loadBundleNamespaceMap(array $kernelBundles, array $bundles)
     {
-        $paths = array();
-        $excludedPaths = array();
+        $paths = [];
+        $excludedPaths = [];
 
         /**
          * Iteratinc all bundle settings
          */
         foreach ($bundles as $bundleSettings) {
-
             if (!$bundleSettings['active']) {
-
                 break;
             }
 
@@ -178,12 +141,9 @@ class GearmanParser
             $bundlePath = $kernelBundles[$bundleNamespace]->getPath();
 
             if (!empty($bundleSettings['include'])) {
-
                 foreach ($bundleSettings['include'] as $include) {
-
                     $paths[] = rtrim(rtrim($bundlePath, '/') . '/' . $include, '/') . '/';
                 }
-
             } else {
 
                 /**
@@ -193,15 +153,14 @@ class GearmanParser
             }
 
             foreach ($bundleSettings['ignore'] as $ignore) {
-
                 $excludedPaths[] = trim($ignore, '/');
             }
         }
 
-        return array(
+        return [
             $paths,
             $excludedPaths,
-        );
+        ];
     }
 
     /**
@@ -212,7 +171,7 @@ class GearmanParser
      */
     public function loadResourceNamespaceMap($rootDir, array $resources)
     {
-        return array_map(function($resource) use ($rootDir) {
+        return array_map(function ($resource) use ($rootDir) {
             return $rootDir . '/' . trim($resource, '/') . '/';
         }, $resources);
     }
@@ -235,12 +194,10 @@ class GearmanParser
         Reader $reader,
         array $paths,
         array $excludedPaths
-    )
-    {
-        $workerCollection = new WorkerCollection;
+    ) {
+        $workerCollection = new WorkerCollection();
 
         if (!empty($paths)) {
-
             $finder
                 ->files()
                 ->followLinks()
@@ -267,8 +224,7 @@ class GearmanParser
         Finder $finder,
         Reader $reader,
         WorkerCollection $workerCollection
-    )
-    {
+    ) {
 
         /**
          * Every file found is parsed

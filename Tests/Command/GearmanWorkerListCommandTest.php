@@ -13,7 +13,7 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Command;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -24,7 +24,7 @@ use Mmoreram\GearmanBundle\Service\GearmanClient;
 /**
  * Class GearmanWorkerListCommandTest
  */
-class GearmanWorkerListCommandTest extends PHPUnit_Framework_TestCase
+class GearmanWorkerListCommandTest extends TestCase
 {
     /**
      * @var GearmanWorkerListCommand
@@ -64,7 +64,7 @@ class GearmanWorkerListCommandTest extends PHPUnit_Framework_TestCase
     /**
      * setup
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->command = $this
             ->getMockBuilder('Mmoreram\GearmanBundle\Command\GearmanWorkerListCommand')
@@ -74,39 +74,39 @@ class GearmanWorkerListCommandTest extends PHPUnit_Framework_TestCase
         $this->input = $this
             ->getMockBuilder('Symfony\Component\Console\Input\InputInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $this->output = $this
             ->getMockBuilder('Symfony\Component\Console\Output\OutputInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $this->kernel = $this
             ->getMockBuilder('Symfony\Component\HttpKernel\KernelInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
 
         $this->gearmanClient = $this
             ->getMockBuilder('Mmoreram\GearmanBundle\Service\GearmanClient')
             ->disableOriginalConstructor()
-            ->setMethods(array(
+            ->setMethods([
                 'getWorkers',
-            ))
+            ])
             ->getMock();
 
         $this->gearmanClient
             ->expects($this->any())
             ->method('getWorkers')
-            ->will($this->returnValue(array(
-                array(
+            ->will($this->returnValue([
+                [
                     'className'    => '',
                     'callableName' => '',
-                    'jobs'         => array()
-                ),
-            )));
+                    'jobs'         => [],
+                ],
+            ]));
 
         $this->kernel
             ->expects($this->any())
@@ -122,15 +122,14 @@ class GearmanWorkerListCommandTest extends PHPUnit_Framework_TestCase
     public function testQuietness(
         $quiet,
         $countWriteln
-    )
-    {
+    ) {
         $this
             ->input
             ->expects($this->any())
             ->method('getOption')
-            ->will($this->returnValueMap(array(
-                array('quiet', $quiet)
-            )));
+            ->will($this->returnValueMap([
+                ['quiet', $quiet],
+            ]));
 
         $this
             ->output
@@ -148,15 +147,15 @@ class GearmanWorkerListCommandTest extends PHPUnit_Framework_TestCase
      */
     public function dataQuietness()
     {
-        return array(
-            array(
+        return [
+            [
                 true,
                 $this->never(),
-            ),
-            array(
+            ],
+            [
                 false,
                 $this->atLeastOnce(),
-            ),
-        );
+            ],
+        ];
     }
 }

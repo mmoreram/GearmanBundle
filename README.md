@@ -8,7 +8,7 @@ GearmanBundle for Symfony2, 3 and 4
 [![License](https://poser.pugx.org/mmoreram/gearman-bundle/license.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
 [![Total Downloads](https://poser.pugx.org/mmoreram/gearman-bundle/downloads.png)](https://packagist.org/packages/mmoreram/gearman-bundle)
 
-GearmanBundle is a bundle for Symfony2/3/4 intended to provide an easy way to 
+GearmanBundle is a bundle for Symfony4/5/6 intended to provide an easy way to 
 support developers who need to use job queues. For example: mail queues, Solr 
 generation queues or Database upload queues.  For Symfony Flex you can use [the recipe in the contributed
 repository](https://github.com/symfony/recipes-contrib) to get started quickly.
@@ -20,9 +20,27 @@ Check the documentation in [ReadTheDocs](http://gearmanbundle.readthedocs.org/).
 Some recipes will be written soon. If you have some ideas and you want to share
 them with us, don't hesitate to open a RFC issue or a Pull Request.
 
+Migration from 4 to 5:
+```
+    doctrine_cache:
+        providers:
+            gearman_cache:
+                type: file_system
+                namespace: doctrine_cache.ns.gearman
+```
+needs to be replaced with
+```
+
+    framework:
+        cache:
+            pools:
+                gearman_cache:
+                    adapter: cache.adapter.filesystem
+```
 
 Tags
 ----
+* Symfony 5/6 is supported by tags 5
 * Symfony 4.0 is supported by tags 4.1+ (they still work with Symfony 3.X)
 * All 4.X tags support Symfony 3.X
 * Use tags lower than 4.X for Symfony 2.X versions 

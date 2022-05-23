@@ -1,27 +1,9 @@
 <?php
-
-/**
- * Gearman Bundle for Symfony2
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Feel free to edit as you please, and have fun.
- *
- * @author Marc Morera <yuhu@mmoreram.com>
- */
-
 namespace Mmoreram\GearmanBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * This is the class that validates and merges configuration from your
- * app/config files
- *
- * @since 2.3.1
- */
 class Configuration implements ConfigurationInterface
 {
     /**
@@ -32,13 +14,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('gearman');
-
-        // Keep compatibility with symfony/config < 4.2
-        if (!method_exists($treeBuilder, 'getRootNode')) {
-            $rootNode = $treeBuilder->root('gearman');
-        } else {
-            $rootNode = $treeBuilder->getRootNode();
-        }
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
@@ -66,12 +42,12 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('servers')
                     ->performNoDeepMerging()
-                    ->defaultValue(array(
-                        'localhost' =>  array(
+                    ->defaultValue([
+                        'localhost' =>  [
                             'host'  =>  '127.0.0.1',
                             'port'  =>  '4730',
-                        ),
-                    ))
+                        ],
+                    ])
                     ->prototype('array')
                         ->children()
                             ->scalarNode('host')

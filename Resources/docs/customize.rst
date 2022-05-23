@@ -15,38 +15,14 @@ method, as folowing example.
 
     <?php
 
-    /**
-     * Gearman Bundle for Symfony2
-     *
-     * @author Marc Morera <yuhu@mmoreram.com>
-     * @since 2013
-     */
-
     namespace My\Custom\Namespace;
 
     use Mmoreram\GearmanBundle\Generator\UniqueJobIdentifierGenerator;
 
-    /**
-     * Gearman execute methods. All Worker methods
-     *
-     * @author Marc Morera <yuhu@mmoreram.com>
-     */
     class MyCustomUniqueJobIdentifierGenerator extends UniqueJobIdentifierGenerator
     {
 
-        /**
-         * Generate unique key if generateUniqueKey is enabled
-         *
-         * $this->generateUniqueKey can be used as is protected in parent class
-         *
-         * @param string $name   A GermanBundle registered function to be executed
-         * @param string $params Parameters to send to task as string
-         * @param string $unique unique ID used to identify a particular task
-         * @param string $method Method to perform
-         *
-         * @return string Generated Unique Key
-         */
-        public function generateUniqueKey($name, $params, $unique, $method)
+        public function generateUniqueKey(string $name, string $params, ?string $unique, ?string $method = null): ?string
         {
             /**
              * Custom generation

@@ -1,49 +1,28 @@
 <?php
 
-/**
- * Gearman Bundle for Symfony2
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Feel free to edit as you please, and have fun.
- *
- * @author Marc Morera <yuhu@mmoreram.com>
- */
-
 namespace Mmoreram\GearmanBundle\Driver\Gearman;
 
 use Doctrine\Common\Annotations\Annotation;
 
 /**
- * Gearman Work annotation driver
- *
- * @since 2.3.1
- *
  * @Annotation
  */
 class Work extends Annotation
 {
     /**
      * Name of worker
-     *
-     * @var integer
      */
-    public $name;
+    public ?string $name = null;
 
     /**
      * Description of Worker
-     *
-     * @var string
      */
-    public $description;
+    public ?string $description = null;
 
     /**
      * Number of iterations specified for all jobs inside Work
-     *
-     * @var integer
      */
-    public $iterations;
+    public ?int $iterations = null;
 
     /**
      * Servers assigned for all jobs of this work to be executed
@@ -54,31 +33,23 @@ class Work extends Annotation
 
     /**
      * Default method to call for all jobs inside this work
-     *
-     * @var string
      */
-    public $defaultMethod;
+    public ?string $defaultMethod = null;
 
     /**
      * Default timeout in seconds for worker idle time
-     *
-     * @var int
      */
-    public $timeout;
+    public ?int $timeout = null;
 
     /**
-     * @var int
-     *
      * Default number of seconds the execution must run before being allowed to terminate
      */
-    public $minimumExecutionTime;
+    public ?int $minimumExecutionTime = null;
 
     /**
      * Service typeof Class. If it's defined, object will be instanced throught
      * service dependence injection.
      * Otherwise, class will be instance with new() method
-     *
-     * @var string
      */
-    public $service = null;
+    public ?string $service = null;
 }

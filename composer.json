@@ -3,7 +3,7 @@
     "replace": {
         "mmoreramerino/gearman-bundle": "dev-master"
     },
-    "description": "Adds gearman support to your Symfony2, Symfony3 and Symfony4 project",
+    "description": "Adds gearman support to your and Symfony4, Symfony5 project",
     "keywords": ["gearman"],
     "homepage": "https://github.com/mmoreram/GearmanBundle",
     "type": "symfony-bundle",
@@ -23,19 +23,17 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
+        "php": "^7.4 || ^8.0",
         "ext-gearman": "*",
-
-        "doctrine/doctrine-cache-bundle": "~1.0",
-        "doctrine/common": "~2.2",
-
-        "symfony/dependency-injection": "~3.0|^4.0",
-        "symfony/framework-bundle": "~3.0|^4.0",
-        "symfony/http-kernel": "~3.0|^4.0",
-        "symfony/console": "~3.0|^4.0",
-        "symfony/config": "~3.0|^4.0",
-        "symfony/finder": "~3.0|^4.0",
-        "symfony/options-resolver": "~3.0|^4.0"
+        "doctrine/annotations": "^1.5",
+        "symfony/dependency-injection": "^4.0 || ^5.0 || ^6.0",
+        "symfony/yaml": "^4.4 || ^5.0 || ^6.0",
+        "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0",
+        "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0",
+        "symfony/console": "^4.4|| ^5.0 || ^6.0",
+        "symfony/config":"^4.4 || ^5.0 || ^6.0",
+        "symfony/finder": "^4.4 || ^5.0 || ^6.0",
+        "symfony/options-resolver":" ^4.4 || ^5.0 || ^6.0"
     },
     "target-dir": "Mmoreram/GearmanBundle",
     "autoload": {
@@ -48,6 +46,9 @@
         }
     },
     "require-dev": {
-        "phpunit/phpunit": ">=4.8 <6.0"
+        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^1.4",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpstan/phpstan-symfony": "^1.1"
     }
 }

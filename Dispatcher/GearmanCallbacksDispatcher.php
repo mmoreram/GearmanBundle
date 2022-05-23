@@ -1,21 +1,9 @@
 <?php
 
-/**
- * Gearman Bundle for Symfony2
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Feel free to edit as you please, and have fun.
- *
- * @author Marc Morera <yuhu@mmoreram.com>
- */
-
 namespace Mmoreram\GearmanBundle\Dispatcher;
 
 use GearmanTask;
 
-use Mmoreram\GearmanBundle\Dispatcher\Abstracts\AbstractGearmanDispatcher;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackCompleteEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackCreatedEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackDataEvent;
@@ -25,63 +13,60 @@ use Mmoreram\GearmanBundle\Event\GearmanClientCallbackStatusEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackWarningEvent;
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackWorkloadEvent;
 use Mmoreram\GearmanBundle\GearmanEvents;
-use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-/**
- * Gearman callbacks
- *
- * @since 2.3.3
- */
-class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
+class GearmanCallbacksDispatcher
 {
-    /**
-     * Assign all GearmanClient callbacks as Symfony2 events
-     *
-     * @param \GearmanClient $gearmanClient Gearman client
-     *
-     * @return GearmanCallbacksDispatcher self Object
-     */
-    public function assignTaskCallbacks(\GearmanClient $gearmanClient)
+    protected EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
-        $gearmanClient->setCompleteCallback(array(
-            $this,
-            'assignCompleteCallback'
-        ));
+        $this->eventDispatcher=$eventDispatcher;
+    }
 
-        $gearmanClient->setFailCallback(array(
+    public function assignTaskCallbacks(\GearmanClient $gearmanClient): self
+    {
+        $gearmanClient->setCompleteCallback([
             $this,
-            'assignFailCallback'
-        ));
+            'assignCompleteCallback',
+        ]);
 
-        $gearmanClient->setDataCallback(array(
+        $gearmanClient->setFailCallback([
             $this,
-            'assignDataCallback'
-        ));
+            'assignFailCallback',
+        ]);
 
-        $gearmanClient->setCreatedCallback(array(
+        $gearmanClient->setDataCallback([
             $this,
-            'assignCreatedCallback'
-        ));
+            'assignDataCallback',
+        ]);
 
-        $gearmanClient->setExceptionCallback(array(
+        $gearmanClient->setCreatedCallback([
             $this,
-            'assignExceptionCallback'
-        ));
+            'assignCreatedCallback',
+        ]);
 
-        $gearmanClient->setStatusCallback(array(
+        $gearmanClient->setExceptionCallback([
             $this,
-            'assignStatusCallback'
-        ));
+            'assignExceptionCallback',
+        ]);
 
-        $gearmanClient->setWarningCallback(array(
+        $gearmanClient->setStatusCallback([
             $this,
-            'assignWarningCallback'
-        ));
+            'assignStatusCallback',
+        ]);
 
-        $gearmanClient->setWorkloadCallback(array(
+        $gearmanClient->setWarningCallback([
             $this,
-            'assignWorkloadCallback'
-        ));
+            'assignWarningCallback',
+        ]);
+
+        $gearmanClient->setWorkloadCallback([
+            $this,
+            'assignWorkloadCallback',
+        ]);
+
+        return $this;
     }
 
     /**
@@ -215,13 +200,6 @@ class GearmanCallbacksDispatcher extends AbstractGearmanDispatcher
 
     private function dispatch($event, $eventName)
     {
-        // LegacyEventDispatcherProxy exists in Symfony >= 4.3
-        if (class_exists(LegacyEventDispatcherProxy::class)) {
-            // New Symfony 4.3 EventDispatcher signature
-            $this->eventDispatcher->dispatch($event, $eventName);
-        } else {
-            // Old EventDispatcher signature
-            $this->eventDispatcher->dispatch($eventName, $event);
-        }
+        $this->eventDispatcher->dispatch($event, $eventName);
     }
 }

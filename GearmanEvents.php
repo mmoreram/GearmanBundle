@@ -1,23 +1,7 @@
 <?php
 
-/**
- * Gearman Bundle for Symfony2
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Feel free to edit as you please, and have fun.
- *
- * @author Marc Morera <yuhu@mmoreram.com>
- */
-
 namespace Mmoreram\GearmanBundle;
 
-/**
- * Events dispatched by GearmanBundle
- *
- * @since 2.3.1
- */
 class GearmanEvents
 {
     /**
@@ -28,7 +12,7 @@ class GearmanEvents
      *
      * @var string
      */
-    const GEARMAN_CLIENT_CALLBACK_COMPLETE = 'gearman.client.callback.complete';
+    public const GEARMAN_CLIENT_CALLBACK_COMPLETE = 'gearman.client.callback.complete';
 
     /**
      * Sets the callback function to be used when a task does not complete
@@ -39,7 +23,7 @@ class GearmanEvents
      *
      * @var string
      */
-    const GEARMAN_CLIENT_CALLBACK_FAIL = 'gearman.client.callback.fail';
+    public const GEARMAN_CLIENT_CALLBACK_FAIL = 'gearman.client.callback.fail';
 
     /**
      * Sets the callback function for accepting data packets for a task
@@ -49,7 +33,7 @@ class GearmanEvents
      *
      * @var string
      */
-    const GEARMAN_CLIENT_CALLBACK_DATA = 'gearman.client.callback.data';
+    public const GEARMAN_CLIENT_CALLBACK_DATA = 'gearman.client.callback.data';
 
     /**
      * Sets a function to be called when a task is received and queued by the
@@ -60,7 +44,7 @@ class GearmanEvents
      *
      * @var string
      */
-    const GEARMAN_CLIENT_CALLBACK_CREATED = 'gearman.client.callback.created';
+    public const GEARMAN_CLIENT_CALLBACK_CREATED = 'gearman.client.callback.created';
 
     /**
      * Specifies a function to call when a worker for a task sends an exception
@@ -70,7 +54,7 @@ class GearmanEvents
      *
      * @var string
      */
-    const GEARMAN_CLIENT_CALLBACK_EXCEPTION = 'gearman.client.callback.exception';
+    public const GEARMAN_CLIENT_CALLBACK_EXCEPTION = 'gearman.client.callback.exception';
 
     /**
      * Sets a callback function used for getting updated status information from
@@ -81,7 +65,7 @@ class GearmanEvents
      *
      * @var string
      */
-    const GEARMAN_CLIENT_CALLBACK_STATUS = 'gearman.client.callback.status';
+    public const GEARMAN_CLIENT_CALLBACK_STATUS = 'gearman.client.callback.status';
 
     /**
      * Sets a function to be called when a worker sends a warning
@@ -91,7 +75,7 @@ class GearmanEvents
      *
      * @var string
      */
-    const GEARMAN_CLIENT_CALLBACK_WARNING = 'gearman.client.callback.warning';
+    public const GEARMAN_CLIENT_CALLBACK_WARNING = 'gearman.client.callback.warning';
 
     /**
      * Sets a function to be called when a worker needs to send back data prior
@@ -105,7 +89,7 @@ class GearmanEvents
      *
      * @var string
      */
-    const GEARMAN_CLIENT_CALLBACK_WORKLOAD = 'gearman.client.callback.workload';
+    public const GEARMAN_CLIENT_CALLBACK_WORKLOAD = 'gearman.client.callback.workload';
 
     /**
      * Sets a function to be called when a worker has completed a job.
@@ -114,7 +98,7 @@ class GearmanEvents
      *
      * @var string
      */
-    const GEARMAN_WORK_EXECUTED = 'gearman.work.executed';
+    public const GEARMAN_WORK_EXECUTED = 'gearman.work.executed';
 
     /**
      * Sets a function to be called when a worker is starting a job.
@@ -123,5 +107,5 @@ class GearmanEvents
      *
      * @var string
      */
-    const GEARMAN_WORK_STARTING = 'gearman.work.starting';
+    public const GEARMAN_WORK_STARTING = 'gearman.work.starting';
 }

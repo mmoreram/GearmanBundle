@@ -24,14 +24,10 @@ use Mmoreram\GearmanBundle\Service\Abstracts\AbstractGearmanService;
  *
  * @since 2.3.1
  */
-class GearmanClient extends AbstractGearmanService
+class GearmanClient extends AbstractGearmanService implements GearmanClientInterface
 {
-    /**
-     * @var \GearmanClient
-     *
-     * Gearman native client instance
-     */
-    protected $gearmanClient;
+
+    protected ?\GearmanClient $gearmanClient=null;
 
     /**
      * @var GearmanCallbacksDispatcher
@@ -45,14 +41,12 @@ class GearmanClient extends AbstractGearmanService
      *
      * Server set to define in what server must connect to
      */
-    protected $servers = array();
+    protected $servers = [];
 
     /**
-     * @var array
-     *
      * task structure to store all about called tasks
      */
-    protected $taskStructure = array();
+    protected array $taskStructure = [];
 
     /**
      * @var array
@@ -85,21 +79,17 @@ class GearmanClient extends AbstractGearmanService
     /**
      * @return \GearmanClient
      */
-    public function getNativeClient(){
-        if ($this->gearmanClient === null){
+    public function getNativeClient()
+    {
+        if ($this->gearmanClient === null) {
             $this->gearmanClient = new \GearmanClient();
         }
         return $this->gearmanClient;
     }
 
-    /**
-     * Init tasks structure
-     *
-     * @return GearmanClient self Object
-     */
-    public function initTaskStructure()
+    protected function initTaskStructure():self
     {
-        $this->taskStructure = array();
+        $this->taskStructure = [];
 
         return $this;
     }
@@ -187,10 +177,10 @@ class GearmanClient extends AbstractGearmanService
      */
     public function addServer($servername, $port = 4730)
     {
-        $this->servers[] = array(
+        $this->servers[] = [
             'host' => $servername,
             'port' => $port,
-        );
+        ];
 
         return $this;
     }
@@ -202,7 +192,7 @@ class GearmanClient extends AbstractGearmanService
      */
     public function clearServers()
     {
-        $this->servers = array();
+        $this->servers = [];
 
         return $this;
     }
@@ -269,7 +259,6 @@ class GearmanClient extends AbstractGearmanService
         $servers = $this->defaultServers;
 
         if (!empty($this->servers)) {
-
             $servers = $this->servers;
         }
 
@@ -277,7 +266,6 @@ class GearmanClient extends AbstractGearmanService
          * We include each server into gearman client
          */
         foreach ($servers as $server) {
-
             $gearmanClient->addServer($server['host'], $server['port']);
         }
 
@@ -618,14 +606,14 @@ class GearmanClient extends AbstractGearmanService
      */
     protected function enqueueTask($name, $params, &$context, $unique, $method)
     {
-        $contextReference = array('context' => &$context);
-        $task = array(
+        $contextReference = ['context' => &$context];
+        $task = [
             'name'    => $name,
             'params'  => $params,
             'context' => $contextReference,
             'unique'  => $this->uniqueJobIdentifierGenerator->generateUniqueKey($name, $params, $unique, $method),
             'method'  => $method,
-        );
+        ];
 
         $this->addTaskToStructure($task);
 
@@ -667,18 +655,15 @@ class GearmanClient extends AbstractGearmanService
         $this->assignServers($gearmanClient);
 
         if ($this->settings['callbacks']) {
-
             $this->gearmanCallbacksDispatcher->assignTaskCallbacks($gearmanClient);
         }
 
         foreach ($this->taskStructure as $task) {
-
             $type = $task['method'];
             $jobName = $task['name'];
             $worker = $this->getJob($jobName);
 
             if (false !== $worker) {
-
                 $gearmanClient->$type(
                     $worker['job']['realCallableName'],
                     $task['params'],
