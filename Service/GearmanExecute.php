@@ -90,22 +90,12 @@ class GearmanExecute extends AbstractGearmanService
 
 
         $this->stopWorkSignalReceived = false;
-
-        /**
-         * If the pcntl_signal exists, subscribe to the terminate and restart events for graceful worker stops.
-         */
-        if (false !== function_exists('pcntl_signal')) {
-            declare(ticks=1);
-            pcntl_signal(SIGTERM, [$this,"handleSystemSignal"]);
-            pcntl_signal(SIGHUP, [$this,"handleSystemSignal"]);
-        }
     }
 
     /**
-     * Toggles that work should be stopped, we only subscribe to SIGTERM and SIGHUP
-     * @param int $signo Signal number
+     * Toggles that work should be stopped, we only subscribe to SIGTERM,SIGINT and SIGHUP
      */
-    public function handleSystemSignal($signo)
+    public function handleSystemSignal(int $signo, mixed $siginfo): void
     {
         $this->stopWorkSignalReceived = true;
     }
