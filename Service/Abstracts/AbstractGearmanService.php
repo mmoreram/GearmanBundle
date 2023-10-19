@@ -39,7 +39,7 @@ abstract class AbstractGearmanService
         $this->workers = $gearmanCacheWrapper->getWorkers();
 
         if (isset($defaultSettings['job_prefix'])) {
-            $this->jobPrefix = $defaultSettings['job_prefix']??null;
+            $this->jobPrefix = $defaultSettings['job_prefix'];
         }
     }
 
