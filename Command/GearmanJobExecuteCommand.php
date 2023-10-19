@@ -79,15 +79,7 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (extension_loaded('pcntl') && function_exists('pcntl_async_signals')) {
-            pcntl_async_signals(true);
-
-            pcntl_signal(SIGTERM, [$this->gearmanExecute, 'handleSystemSignal']);
-            pcntl_signal(SIGINT, [$this->gearmanExecute, 'handleSystemSignal']);
-            pcntl_signal(SIGHUP, [$this->gearmanExecute, 'handleSystemSignal']);
-
-            pcntl_signal_dispatch();
-        }
+        $this->gearmanExecute->addSystemSignalListener();
 
         /**@var QuestionHelper $question*/
         $question =  $this->getHelper('question');

@@ -92,6 +92,19 @@ class GearmanExecute extends AbstractGearmanService
         $this->stopWorkSignalReceived = false;
     }
 
+    public function addSystemSignalListener(): void
+    {
+        if (extension_loaded('pcntl')) {
+            pcntl_async_signals(true);
+
+            pcntl_signal(SIGTERM, [$this, 'handleSystemSignal']);
+            pcntl_signal(SIGINT, [$this, 'handleSystemSignal']);
+            pcntl_signal(SIGHUP, [$this, 'handleSystemSignal']);
+
+            pcntl_signal_dispatch();
+        }
+    }
+
     /**
      * Toggles that work should be stopped, we only subscribe to SIGTERM,SIGINT and SIGHUP
      */
