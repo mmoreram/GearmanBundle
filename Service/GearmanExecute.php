@@ -108,7 +108,7 @@ class GearmanExecute extends AbstractGearmanService
     /**
      * Toggles that work should be stopped, we only subscribe to SIGTERM,SIGINT and SIGHUP
      */
-    public function handleSystemSignal(int $signo): void
+    public function handleSystemSignal(): void
     {
         $this->stopWorkSignalReceived = true;
     }
