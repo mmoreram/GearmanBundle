@@ -45,7 +45,13 @@ services:
         parent: gearman.abstract.service
         calls:
             - [setContainer,  ["@service_container"]]
-            - [setEventDispatcher, ["@event_dispatcher"]]
+
+    gearman.swiftmailer_email_sender.listener:
+        class: "%gearman.swiftmailer_email_sender.listener.class%"
+        calls:
+            - [setContainer,  ["@service_container"]]
+        tags:
+            - { name: kernel.event_subscriber }
 
     gearman:
         class: "%gearman.client.class%"
