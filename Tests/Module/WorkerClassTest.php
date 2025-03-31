@@ -13,7 +13,7 @@
 
 namespace Mmoreram\GearmanBundle\Tests\Module;
 
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use Doctrine\Common\Annotations\AnnotationReader;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Work as WorkAnnotation;
 use Mmoreram\GearmanBundle\Module\WorkerClass;
@@ -38,7 +38,7 @@ class WorkerClassTest extends \PHPUnit\Framework\TestCase
     private $reflectionClass;
 
     /**
-     * @var SimpleAnnotationReader
+     * @var AnnotationReader
      *
      * Reader
      */
@@ -115,7 +115,7 @@ class WorkerClassTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->reader = $this
-            ->getMockBuilder('Doctrine\Common\Annotations\SimpleAnnotationReader')
+            ->getMockBuilder('Doctrine\Common\Annotations\AnnotationReader')
             ->disableOriginalConstructor()
             ->setMethods([
                 'getMethodAnnotations',
