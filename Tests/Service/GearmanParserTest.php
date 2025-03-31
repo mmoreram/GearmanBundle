@@ -188,7 +188,7 @@ class GearmanParserTest extends WebTestCase
         $excludedPaths = [];
 
         $reader = $this
-            ->getMockBuilder('\Doctrine\Common\Annotations\SimpleAnnotationReader')
+            ->getMockBuilder('\Doctrine\Common\Annotations\AnnotationReader')
             ->setMethods(null)
             ->getMock();
 
