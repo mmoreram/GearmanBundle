@@ -172,6 +172,9 @@ class GearmanParser
     public function loadResourceNamespaceMap($rootDir, array $resources)
     {
         return array_map(function ($resource) use ($rootDir) {
+            if (substr($resource, 0, 1) === '/') {
+                return rtrim($resource, '/') . '/';
+            }
             return $rootDir . '/' . trim($resource, '/') . '/';
         }, $resources);
     }
