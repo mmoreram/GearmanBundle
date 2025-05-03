@@ -97,8 +97,12 @@ class GearmanParser
         $this->servers = $servers;
         $this->defaultSettings = $defaultSettings;
 
-        $r = new \ReflectionObject($this->kernel);
-        $this->rootDir = \dirname($r->getFileName());
+        if (method_exists($this->kernel, 'getProjectDir')) {
+            $this->rootDir = $this->kernel->getProjectDir().DIRECTORY_SEPARATOR.'src';
+        } else {
+            $r = new \ReflectionObject($this->kernel);
+            $this->rootDir = \dirname($r->getFileName());
+        }
     }
 
     /**
