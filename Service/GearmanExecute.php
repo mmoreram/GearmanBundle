@@ -262,9 +262,13 @@ class GearmanExecute extends AbstractGearmanService
              * ContainerAwareInterface, we inject full container by calling
              * container setter.
              *
+             * ContainerAwareInterface was removed in Symfony 7.0, so this
+             * only applies on Symfony < 7. Workers that need dependencies
+             * on Symfony 7+ must be defined as services.
+             *
              * @see https://github.com/mmoreram/gearman-bundle/pull/12
              */
-            if ($objInstance instanceof ContainerAwareInterface) {
+            if (interface_exists(ContainerAwareInterface::class) && $objInstance instanceof ContainerAwareInterface) {
                 $objInstance->setContainer($this->container);
             }
         }

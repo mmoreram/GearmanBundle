@@ -37,7 +37,7 @@ class AppKernel extends Kernel
     /**
      * Setup configuration file.
      */
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(dirname(__FILE__) . '/config.yml');
     }

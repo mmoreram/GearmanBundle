@@ -20,3 +20,5 @@ parameters:
         - '#Call to an undefined method Symfony\\Component\\Console\\Helper\\HelperInterface::ask\(\)\.#'
         - '#Parameter \#1 \$callback of method GearmanClient::setCreatedCallback\(\) expects string, array<int, \$this\(Mmoreram\\GearmanBundle\\Dispatcher\\GearmanCallbacksDispatcher\)\|string> given\.#'
         - '#Method Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface::dispatch\(\) invoked with 2 parameters, 1 required\.#'
+        # phpstan-symfony 1.x stubs do not understand the generic NodeBuilder<...> type returned by Symfony 7.4 config builders
+        - '#Call to method arrayNode\(\) on an unknown class Symfony\\Component\\Config\\Definition\\Builder\\NodeBuilder<#'

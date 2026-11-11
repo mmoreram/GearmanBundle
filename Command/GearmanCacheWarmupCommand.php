@@ -19,7 +19,7 @@ class GearmanCacheWarmupCommand extends AbstractGearmanCommand
         return $this;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('gearman:cache:warmup')
@@ -29,7 +29,7 @@ class GearmanCacheWarmupCommand extends AbstractGearmanCommand
             ->setDescription('Warms up gearman cache data');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (
             !$input->getOption('quiet')

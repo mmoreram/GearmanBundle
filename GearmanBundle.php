@@ -12,7 +12,7 @@ class GearmanBundle extends Bundle
     /**
      * Boots the Bundle.
      */
-    public function boot()
+    public function boot(): void
     {
         AnnotationRegistry::loadAnnotationClass(Work::class);
         AnnotationRegistry::loadAnnotationClass(Job::class);

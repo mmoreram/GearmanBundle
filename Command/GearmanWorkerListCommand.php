@@ -19,7 +19,7 @@ class GearmanWorkerListCommand extends AbstractGearmanCommand
         return $this;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -28,7 +28,7 @@ class GearmanWorkerListCommand extends AbstractGearmanCommand
             ->setDescription('List all Gearman Workers and their Jobs');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('quiet')) {
             return 0;

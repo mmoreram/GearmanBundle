@@ -41,7 +41,7 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
         return $this;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('gearman:job:execute')
@@ -77,7 +77,7 @@ class GearmanJobExecuteCommand extends AbstractGearmanCommand
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->gearmanExecute->addSystemSignalListener();
 
