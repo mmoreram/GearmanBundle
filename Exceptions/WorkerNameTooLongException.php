@@ -5,7 +5,7 @@ namespace Mmoreram\GearmanBundle\Exceptions;
 class WorkerNameTooLongException extends \LengthException implements GearmanExceptionInterface
 {
 
-    public function __construct(?string $message = null, int $code = 0, \Exception $previous = null)
+    public function __construct(?string $message = null, int $code = 0, ?\Exception $previous = null)
     {
         parent::__construct(
             $message ?? 'The function name + unique id cannot exceed 114 bytes.

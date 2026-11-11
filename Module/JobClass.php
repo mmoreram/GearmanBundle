@@ -110,7 +110,7 @@ class JobClass implements ContainerAwareInterface
         ];
     }
 
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(?ContainerInterface $container = null)
     {
         $this->container = $container;
     }

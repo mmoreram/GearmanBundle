@@ -41,8 +41,11 @@ class GearmanExecuteTest extends WebTestCase
     public function testDispatchingEventsOnJob()
     {
         // Worker mock
+        // Only mock the methods used by GearmanExecute: pecl/gearman >= 2.2 declares
+        // `true` return types that PHPUnit cannot mock on PHP < 8.2
         $worker = $this->getMockBuilder('\GearmanWorker')
             ->disableOriginalConstructor()
+            ->onlyMethods(['addServer', 'addFunction', 'work', 'returnCode'])
             ->getMock();
         $worker->method('addServer')->willReturn(true);
 
@@ -104,6 +107,7 @@ class GearmanExecuteTest extends WebTestCase
         // This is normally handled by Gearman, but for test purpose we must simulate it
         $job = $this->getMockBuilder('GearmanJob')
             ->disableOriginalConstructor()
+            ->onlyMethods(['functionName'])
             ->getMock();
         $job->method('functionName')->willReturn('test');
 

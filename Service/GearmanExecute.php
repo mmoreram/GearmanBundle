@@ -162,7 +162,7 @@ class GearmanExecute extends AbstractGearmanService
      * @param array $options Array of options passed to the callback
      * @param \GearmanWorker $gearmanWorker Worker instance to use
      */
-    public function executeJob($jobName, array $options = [], \GearmanWorker $gearmanWorker = null)
+    public function executeJob($jobName, array $options = [], ?\GearmanWorker $gearmanWorker = null)
     {
         $worker = $this->getJob($jobName);
 
@@ -182,7 +182,7 @@ class GearmanExecute extends AbstractGearmanService
      *
      * @return GearmanExecute self Object
      */
-    private function callJob(array $worker, array $options = [], \GearmanWorker $gearmanWorker = null)
+    private function callJob(array $worker, array $options = [], ?\GearmanWorker $gearmanWorker = null)
     {
         if (is_null($gearmanWorker)) {
             $gearmanWorker = new \GearmanWorker();
