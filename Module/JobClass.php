@@ -3,12 +3,11 @@
 namespace Mmoreram\GearmanBundle\Module;
 
 use ReflectionMethod;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Mmoreram\GearmanBundle\Driver\Gearman\Job as JobAnnotation;
 
-class JobClass implements ContainerAwareInterface
+class JobClass
 {
     public const DEFAULT_DESCRIPTION = 'No description is defined';
 
@@ -43,7 +42,7 @@ class JobClass implements ContainerAwareInterface
      */
     private $servers;
     private ?string $jobPrefix;
-    protected ?ContainerInterface $container;
+    protected ?ContainerInterface $container = null;
 
     public function __construct(
         JobAnnotation $jobAnnotation,

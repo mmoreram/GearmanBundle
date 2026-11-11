@@ -19,7 +19,7 @@ class GearmanCacheClearCommand extends AbstractGearmanCommand
         return $this;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('gearman:cache:clear')
@@ -29,7 +29,7 @@ class GearmanCacheClearCommand extends AbstractGearmanCommand
             ->setDescription('Clears gearman cache data on current environment');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (
             !$input->getOption('quiet')

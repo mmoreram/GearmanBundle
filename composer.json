@@ -3,7 +3,7 @@
     "replace": {
         "mmoreramerino/gearman-bundle": "dev-master"
     },
-    "description": "Adds gearman support to your and Symfony4, Symfony5 project",
+    "description": "Adds gearman support to your Symfony 4, 5, 6 and 7 projects",
     "keywords": ["gearman"],
     "homepage": "https://github.com/mmoreram/GearmanBundle",
     "type": "symfony-bundle",
@@ -26,14 +26,14 @@
         "php": "^7.4 || ^8.0",
         "ext-gearman": "*",
         "doctrine/annotations": "^1.5 || ^2.0",
-        "symfony/dependency-injection": "^4.0 || ^5.0 || ^6.0",
-        "symfony/yaml": "^4.4 || ^5.0 || ^6.0",
-        "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0",
-        "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0",
-        "symfony/console": "^4.4|| ^5.0 || ^6.0",
-        "symfony/config":"^4.4 || ^5.0 || ^6.0",
-        "symfony/finder": "^4.4 || ^5.0 || ^6.0",
-        "symfony/options-resolver":" ^4.4 || ^5.0 || ^6.0"
+        "symfony/dependency-injection": "^4.0 || ^5.0 || ^6.0 || ^7.0",
+        "symfony/yaml": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+        "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+        "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+        "symfony/console": "^4.4|| ^5.0 || ^6.0 || ^7.0",
+        "symfony/config":"^4.4 || ^5.0 || ^6.0 || ^7.0",
+        "symfony/finder": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+        "symfony/options-resolver":" ^4.4 || ^5.0 || ^6.0 || ^7.0"
     },
     "target-dir": "Mmoreram/GearmanBundle",
     "autoload": {

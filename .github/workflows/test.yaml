@@ -10,7 +10,7 @@ jobs:
             fail-fast: false
             matrix:
                 php-version: ['7.4','8.0','8.1','8.2','8.3','8.4','8.5']
-                symfony-version: ['4.4','5.4','6.4']
+                symfony-version: ['4.4','5.4','6.4','7.4']
                 coverage: ['none']
                 exclude:
                     # Symfony 6.4 requires PHP >= 8.1
@@ -18,6 +18,13 @@ jobs:
                       symfony-version: '6.4'
                     - php-version: '8.0'
                       symfony-version: '6.4'
+                    # Symfony 7.4 requires PHP >= 8.2
+                    - php-version: '7.4'
+                      symfony-version: '7.4'
+                    - php-version: '8.0'
+                      symfony-version: '7.4'
+                    - php-version: '8.1'
+                      symfony-version: '7.4'
                     # Symfony 4.4 is EOL and not maintained for PHP >= 8.2
                     - php-version: '8.2'
                       symfony-version: '4.4'

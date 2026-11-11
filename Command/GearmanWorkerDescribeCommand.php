@@ -31,7 +31,7 @@ class GearmanWorkerDescribeCommand extends AbstractGearmanCommand
         return $this;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -45,7 +45,7 @@ class GearmanWorkerDescribeCommand extends AbstractGearmanCommand
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $worker = $input->getArgument('worker');
         $worker = $this

@@ -50,12 +50,12 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
         return $this;
     }
 
-    public function clear($cacheDir)
+    public function clear($cacheDir): void
     {
         $this->cache->delete($this->cacheId);
     }
 
-    public function warmUp($cacheDir)
+    public function warmUp($cacheDir, $buildDir = null): array
     {
         $this->load();
 
@@ -74,7 +74,7 @@ class GearmanCacheWrapper implements CacheClearerInterface, CacheWarmerInterface
      *
      * @return Boolean true if the warmer is optional, false otherwise
      */
-    public function isOptional()
+    public function isOptional(): bool
     {
         return true;
     }
