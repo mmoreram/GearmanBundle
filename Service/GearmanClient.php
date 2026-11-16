@@ -663,14 +663,12 @@ class GearmanClient extends AbstractGearmanService implements GearmanClientInter
             $jobName = $task['name'];
             $worker = $this->getJob($jobName);
 
-            if (false !== $worker) {
-                $gearmanClient->$type(
-                    $worker['job']['realCallableName'],
-                    $task['params'],
-                    $task['context'],
-                    $task['unique']
-                );
-            }
+            $gearmanClient->$type(
+                $worker['job']['realCallableName'],
+                $task['params'],
+                $task['context'],
+                $task['unique']
+            );
         }
 
         $this->initTaskStructure();

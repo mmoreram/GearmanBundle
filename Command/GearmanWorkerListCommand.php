@@ -36,23 +36,21 @@ class GearmanWorkerListCommand extends AbstractGearmanCommand
 
         $workers = $this->gearmanClient->getWorkers();
 
-        if (is_array($workers)) {
-            $it = 1;
+        $it = 1;
 
-            foreach ($workers as $worker) {
-                $output->writeln('<comment>@Worker:  </comment><info>' . $worker['className'] . '</info>');
-                $output->writeln('<comment>callablename:  </comment><info>' . $worker['callableName'] . '</info>');
-                $output->writeln('<comment>Jobs:</comment>');
-                foreach ($worker['jobs'] as $job) {
-                    $output->writeln('<comment>  - #' . $it++ . '</comment>');
-                    $output->writeln('<comment>      name: ' . $job['methodName'] . '</comment>');
-                    $output->writeln(
-                        '<comment>      callablename:</comment><info> ' . $job['realCallableNameNoPrefix'] . '</info>'
-                    );
+        foreach ($workers as $worker) {
+            $output->writeln('<comment>@Worker:  </comment><info>' . $worker['className'] . '</info>');
+            $output->writeln('<comment>callablename:  </comment><info>' . $worker['callableName'] . '</info>');
+            $output->writeln('<comment>Jobs:</comment>');
+            foreach ($worker['jobs'] as $job) {
+                $output->writeln('<comment>  - #' . $it++ . '</comment>');
+                $output->writeln('<comment>      name: ' . $job['methodName'] . '</comment>');
+                $output->writeln(
+                    '<comment>      callablename:</comment><info> ' . $job['realCallableNameNoPrefix'] . '</info>'
+                );
 
-                    if (false === is_null($job['jobPrefix'])) {
-                        $output->writeln('<comment>      jobPrefix:</comment><info> ' . $job['jobPrefix'] . '</info>');
-                    }
+                if (false === is_null($job['jobPrefix'])) {
+                    $output->writeln('<comment>      jobPrefix:</comment><info> ' . $job['jobPrefix'] . '</info>');
                 }
             }
         }

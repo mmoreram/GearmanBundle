@@ -275,7 +275,7 @@ class GearmanParser
 
         preg_match('/\snamespace\s+(.+?);/s', file_get_contents($file), $match);
 
-        return    is_array($match) && isset($match[1])
+        return    isset($match[1])
                 ? $match[1] . '\\' . $filename
                 : false;
     }
