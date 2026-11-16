@@ -1,16 +1,16 @@
 # Upgrade from 5.1 to 5.2
 
-GearmanBundle 5.2 adds support for Symfony 7. Support for Symfony 4.4, 5.x and
-6.x is unchanged, and regular usage (configuration, worker annotations, the
-`gearman` client service and the console commands) needs no changes.
+GearmanBundle 5.2 adds support for Symfony 7 and 8. Support for Symfony 4.4,
+5.x and 6.x is unchanged, and regular usage (configuration, worker annotations,
+the `gearman` client service and the console commands) needs no changes.
 
 The points below only affect applications that extend or override bundle
 internals.
 
 ## Return types
 
-Symfony 7 declares return types on the methods the bundle implements, so the
-bundle now declares them too:
+Symfony 7 and 8 declare return types on the methods the bundle implements, so
+the bundle now declares them too:
 
 | Class | Method |
 |---|---|
@@ -26,8 +26,8 @@ same return type to your method (and the optional `$buildDir` argument to
 
 ## Annotation reader
 
-Symfony 7 no longer provides the `annotation_reader` service, so the
-`gearman.parser` service now uses its own reader,
+Since Symfony 7, FrameworkBundle no longer provides the `annotation_reader`
+service, so the `gearman.parser` service now uses its own reader,
 `gearman.external.annotation_reader` (a plain
 `Doctrine\Common\Annotations\AnnotationReader`).
 
@@ -42,6 +42,6 @@ instead. If you redefined `gearman.parser`, update its second argument.
 * `Module\JobClass` no longer implements it. Its `setContainer()` method is kept.
 * On Symfony 4.4 to 6.4, workers that are not services and implement
   `ContainerAwareInterface` still receive the container, as before.
-* On Symfony 7, the container is not injected into workers that are not
+* On Symfony 7 and 8, the container is not injected into workers that are not
   services. Define the worker as a service (the `service` option of the `@Work`
   annotation) and inject its dependencies instead.
