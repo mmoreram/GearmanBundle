@@ -15,3 +15,9 @@ gearman:
             port: 4730
     defaults:
         workers_name_prepend_namespace: false
+
+services:
+    # Records worker events of the worker process, see GearmanRoundTripTest
+    Mmoreram\GearmanBundle\Tests\Integration\Fixtures\EventRecorder:
+        tags:
+            - { name: kernel.event_subscriber }

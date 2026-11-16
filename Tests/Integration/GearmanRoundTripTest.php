@@ -14,17 +14,15 @@
 namespace Mmoreram\GearmanBundle\Tests\Integration;
 
 use Mmoreram\GearmanBundle\Event\GearmanClientCallbackCompleteEvent;
-use Mmoreram\GearmanBundle\Event\GearmanWorkExecutedEvent;
-use Mmoreram\GearmanBundle\Event\GearmanWorkStartingEvent;
 use Mmoreram\GearmanBundle\GearmanEvents;
 use Mmoreram\GearmanBundle\Service\GearmanClient;
-use Mmoreram\GearmanBundle\Service\GearmanExecute;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Sends jobs through the bundle client to a real gearmand server and processes
- * them with the bundle worker.
+ * them by running the gearman:worker:execute console command in a separate
+ * process (see bin/worker.php).
  *
  * Requires a gearmand server listening on 127.0.0.1:4730, otherwise the tests
  * are skipped (or fail when GEARMAN_INTEGRATION_REQUIRED is set, as in CI).
@@ -33,7 +31,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * Every test uses unique payloads and asserts on its own results only, so jobs
  * left in the queue by an earlier interrupted run do not affect the outcome:
- * workers drain the whole queue and exit once idle.
+ * workers drain the whole queue and exit once idle. A worker that does not
+ * exit in time is killed, so the tests never hang.
  *
  * @group integration
  */
@@ -44,6 +43,9 @@ class GearmanRoundTripTest extends TestCase
 
     /** Seconds a worker waits for a new job before exiting. */
     private const WORKER_IDLE_TIMEOUT = 2;
+
+    /** Seconds a worker process may take, beyond its idle timeout, to boot and exit. */
+    private const WORKER_EXIT_TIMEOUT = 15;
 
     /** Milliseconds a client waits for a result before giving up. */
     private const CLIENT_TIMEOUT = 20000;
@@ -58,6 +60,8 @@ class GearmanRoundTripTest extends TestCase
 
     /** @var string[] */
     private array $tempFiles = [];
+
+    private string $eventLog;
 
     public static function setUpBeforeClass(): void
     {
@@ -81,6 +85,7 @@ class GearmanRoundTripTest extends TestCase
     {
         $this->kernel = new IntegrationKernel('test', true);
         $this->kernel->boot();
+        $this->eventLog = $this->createTempFile();
     }
 
     protected function tearDown(): void
@@ -90,8 +95,10 @@ class GearmanRoundTripTest extends TestCase
             $dispatcher->removeListener($eventName, $listener);
         }
 
+        // Only reached for processes still running, e.g. when an assertion failed before waitForWorkerProcesses().
+        // SIGKILL, because the command handles SIGTERM by finishing the current work() call, which may block.
         foreach ($this->workerProcesses as $process) {
-            proc_terminate($process);
+            proc_terminate($process, 9);
             proc_close($process);
         }
 
@@ -120,7 +127,8 @@ class GearmanRoundTripTest extends TestCase
         $this->assertSame(GEARMAN_SUCCESS, $client->getReturnCode());
         $this->assertNotEmpty($handle);
 
-        $this->runWorkerInProcess();
+        $this->startWorkerProcess();
+        $this->waitForWorkerProcesses();
 
         $this->assertContains($token, file($file, FILE_IGNORE_NEW_LINES));
     }
@@ -139,43 +147,50 @@ class GearmanRoundTripTest extends TestCase
 
         $this->assertSame(GEARMAN_SUCCESS, $client->getReturnCode());
         $this->assertSame(strrev($token), $result);
+
+        $this->waitForWorkerProcesses();
     }
 
     /**
      * The worker dispatches gearman.work.starting before running a job and
-     * gearman.work.executed after it.
+     * gearman.work.executed after it, to subscribers registered in the
+     * container (see Fixtures\EventRecorder).
      */
     public function testWorkerDispatchesStartingAndExecutedEvents(): void
     {
         $file = $this->createTempFile();
         $token = uniqid('events-', true);
 
-        $starting = [];
-        $executed = [];
-        $this->listen(GearmanEvents::GEARMAN_WORK_STARTING, function (GearmanWorkStartingEvent $event) use (&$starting) {
-            $starting[] = $event;
-        });
-        $this->listen(GearmanEvents::GEARMAN_WORK_EXECUTED, function (GearmanWorkExecutedEvent $event) use (&$executed) {
-            $executed[] = $event;
-        });
-
         $this->getClient()->doBackgroundJob(
             'IntegrationWorker~record',
             json_encode(['file' => $file, 'token' => $token])
         );
 
-        $this->runWorkerInProcess();
+        $this->startWorkerProcess();
+        $this->waitForWorkerProcesses();
 
         $this->assertContains($token, file($file, FILE_IGNORE_NEW_LINES));
+
+        $events = array_map(
+            function (string $line) {
+                return json_decode($line, true);
+            },
+            file($this->eventLog, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
+        );
+        $starting = array_values(array_filter($events, function (array $event) {
+            return GearmanEvents::GEARMAN_WORK_STARTING === $event['event'];
+        }));
+        $executed = array_values(array_filter($events, function (array $event) {
+            return GearmanEvents::GEARMAN_WORK_EXECUTED === $event['event'];
+        }));
+
         $this->assertNotEmpty($starting, 'gearman.work.starting was not dispatched');
         $this->assertNotEmpty($executed, 'gearman.work.executed was not dispatched');
         $this->assertCount(count($starting), $executed);
-
-        $jobNames = array_column($starting[0]->getJobs(), 'realCallableName');
-        $this->assertContains('IntegrationWorker~record', $jobNames);
+        $this->assertContains('IntegrationWorker~record', $starting[0]['jobs']);
 
         foreach ($executed as $event) {
-            $this->assertSame(GEARMAN_SUCCESS, $event->getReturnCode());
+            $this->assertSame(GEARMAN_SUCCESS, $event['returnCode']);
         }
     }
 
@@ -205,6 +220,8 @@ class GearmanRoundTripTest extends TestCase
         $expected = array_map('strrev', $tokens);
         sort($expected);
         $this->assertSame($expected, $results);
+
+        $this->waitForWorkerProcesses();
     }
 
     private function getClient(): GearmanClient
@@ -224,32 +241,44 @@ class GearmanRoundTripTest extends TestCase
     }
 
     /**
-     * Runs the worker in this process until it has been idle for
-     * WORKER_IDLE_TIMEOUT seconds.
-     */
-    private function runWorkerInProcess(): void
-    {
-        /** @var GearmanExecute $execute */
-        $execute = $this->kernel->getContainer()->get('gearman.execute');
-        $execute->executeWorker('IntegrationWorker', [
-            'timeout' => self::WORKER_IDLE_TIMEOUT,
-        ]);
-    }
-
-    /**
-     * Starts the worker in a separate process, for jobs the client waits on.
-     * It exits once idle; tearDown() terminates it if it is still running.
+     * Starts the gearman:worker:execute command in a separate process. It
+     * drains the queue and exits once idle, see waitForWorkerProcesses().
      */
     private function startWorkerProcess(): void
     {
         $process = proc_open(
             [PHP_BINARY, __DIR__ . '/bin/worker.php', (string) self::WORKER_IDLE_TIMEOUT],
             [1 => ['file', '/dev/null', 'w'], 2 => STDERR],
-            $pipes
+            $pipes,
+            null,
+            array_merge(getenv(), ['GEARMAN_INTEGRATION_EVENT_LOG' => $this->eventLog])
         );
 
         $this->assertIsResource($process, 'Could not start the worker process');
         $this->workerProcesses[] = $process;
+    }
+
+    /**
+     * Waits for the worker processes to exit on their own once idle and
+     * asserts the command succeeded. A process still running after the
+     * deadline makes the test fail and is killed in tearDown().
+     */
+    private function waitForWorkerProcesses(): void
+    {
+        $deadline = time() + self::WORKER_IDLE_TIMEOUT + self::WORKER_EXIT_TIMEOUT;
+
+        foreach ($this->workerProcesses as $key => $process) {
+            while (($status = proc_get_status($process))['running'] && time() < $deadline) {
+                usleep(100000);
+            }
+
+            $this->assertFalse($status['running'], 'The worker process did not exit once idle');
+
+            proc_close($process);
+            unset($this->workerProcesses[$key]);
+
+            $this->assertSame(0, $status['exitcode'], 'The worker process failed');
+        }
     }
 
     private function createTempFile(): string
