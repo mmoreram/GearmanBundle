@@ -142,7 +142,6 @@ class GearmanRoundTripTest extends TestCase
         $token = uniqid('normal-', true);
 
         $client = $this->getClient();
-        $client->getNativeClient()->setTimeout(self::CLIENT_TIMEOUT);
         $result = $client->doNormalJob('IntegrationWorker~reverse', $token);
 
         $this->assertSame(GEARMAN_SUCCESS, $client->getReturnCode());
@@ -209,7 +208,6 @@ class GearmanRoundTripTest extends TestCase
         });
 
         $client = $this->getClient();
-        $client->getNativeClient()->setTimeout(self::CLIENT_TIMEOUT);
         foreach ($tokens as $token) {
             $client->addTask('IntegrationWorker~reverse', $token);
         }
@@ -224,9 +222,21 @@ class GearmanRoundTripTest extends TestCase
         $this->waitForWorkerProcesses();
     }
 
+    /**
+     * Returns the bundle client with a bounded wait on its native client, so
+     * a server that accepts connections but stops responding fails the test
+     * instead of hanging it.
+     *
+     * The bundle drops its native client after each job call or runTasks(),
+     * so call this right before every client call.
+     */
     private function getClient(): GearmanClient
     {
-        return $this->kernel->getContainer()->get('gearman');
+        /** @var GearmanClient $client */
+        $client = $this->kernel->getContainer()->get('gearman');
+        $client->getNativeClient()->setTimeout(self::CLIENT_TIMEOUT);
+
+        return $client;
     }
 
     private function getEventDispatcher(): EventDispatcherInterface
