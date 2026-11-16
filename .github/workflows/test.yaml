@@ -6,6 +6,9 @@ jobs:
     test:
         name: PHP ${{ matrix.php-version }} + Symfony ${{ matrix.symfony-version }}
         runs-on: ubuntu-22.04
+        env:
+            # Fail the integration tests instead of skipping them if gearmand is not reachable
+            GEARMAN_INTEGRATION_REQUIRED: 1
         strategy:
             fail-fast: false
             matrix:
@@ -60,6 +63,14 @@ jobs:
                   SYMFONY_REQUIRE: "${{ matrix.symfony-version }}.*"
                   # Every Symfony 4.4 release has security advisories (EOL); Composer blocks them by default
                   COMPOSER_POLICY_ADVISORIES_BLOCK: "${{ matrix.symfony-version == '4.4' && '0' || '1' }}"
+
+            # Integration tests (Tests/Integration) send and process jobs through a real gearmand server
+            - name: Start gearmand
+              run: |
+                  sudo apt-get update -q
+                  sudo apt-get install -y -q gearman-job-server
+                  sudo systemctl start gearman-job-server || sudo gearmand -d -L 127.0.0.1 -p 4730
+                  timeout 30 bash -c 'until nc -z 127.0.0.1 4730; do sleep 1; done'
 
             - name: Setup problem matchers for PHP
               run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"

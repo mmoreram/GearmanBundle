@@ -1,0 +1,17 @@
+framework:
+    secret: "integration"
+    test: true
+    cache:
+        pools:
+            gearman_cache:
+                adapter: cache.adapter.array
+
+gearman:
+    resources:
+        - Fixtures/Worker
+    servers:
+        localhost:
+            host: 127.0.0.1
+            port: 4730
+    defaults:
+        workers_name_prepend_namespace: false
