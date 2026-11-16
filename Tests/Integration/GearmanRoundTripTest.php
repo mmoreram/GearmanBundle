@@ -63,6 +63,9 @@ class GearmanRoundTripTest extends TestCase
 
     private string $eventLog;
 
+    /** Kernel cache dir of this run, shared with the worker processes. */
+    private static ?string $cacheDir = null;
+
     public static function setUpBeforeClass(): void
     {
         $socket = @fsockopen(self::HOST, self::PORT, $errno, $errstr, 1);
@@ -79,6 +82,33 @@ class GearmanRoundTripTest extends TestCase
         }
 
         fclose($socket);
+
+        // Fresh kernel cache per run: workers boot without debug, so they would otherwise reuse a container
+        // compiled from an older configuration and hide configuration regressions
+        self::$cacheDir = sys_get_temp_dir() . '/gearman-bundle-integration-' . bin2hex(random_bytes(8));
+        putenv('GEARMAN_INTEGRATION_CACHE_DIR=' . self::$cacheDir);
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        if (null === self::$cacheDir) {
+            return;
+        }
+
+        putenv('GEARMAN_INTEGRATION_CACHE_DIR');
+
+        if (is_dir(self::$cacheDir)) {
+            $files = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(self::$cacheDir, \FilesystemIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::CHILD_FIRST
+            );
+            foreach ($files as $file) {
+                $file->isDir() ? rmdir($file->getPathname()) : unlink($file->getPathname());
+            }
+            rmdir(self::$cacheDir);
+        }
+
+        self::$cacheDir = null;
     }
 
     protected function setUp(): void

@@ -40,11 +40,22 @@ class IntegrationKernel extends Kernel
 
     public function getCacheDir(): string
     {
-        return sys_get_temp_dir() . '/gearman-bundle-integration/cache/' . $this->environment;
+        return $this->getBaseDir() . '/cache/' . $this->environment;
     }
 
     public function getLogDir(): string
     {
-        return sys_get_temp_dir() . '/gearman-bundle-integration/logs';
+        return $this->getBaseDir() . '/logs';
+    }
+
+    /**
+     * GearmanRoundTripTest sets GEARMAN_INTEGRATION_CACHE_DIR to a fresh
+     * directory per run, shared with the worker processes, so a worker
+     * (booted without debug, hence without container freshness checks) never
+     * reuses a container compiled from an older configuration.
+     */
+    private function getBaseDir(): string
+    {
+        return getenv('GEARMAN_INTEGRATION_CACHE_DIR') ?: sys_get_temp_dir() . '/gearman-bundle-integration';
     }
 }
