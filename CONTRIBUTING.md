@@ -11,6 +11,11 @@ There is also a policy for contributing to this project. All pull request must
 be all explained step by step, to make us more understandable and easier to
 merge pull request. All new features must be tested with PHPUnit.
 
+The integration tests in `Tests/Integration` send and process jobs through a
+real gearmand server listening on `127.0.0.1:4730` (start one with
+`gearmand -d`). They are skipped when no server is reachable. Run only them
+with `vendor/bin/phpunit --group integration`.
+
 If you'd like to contribute, please read the [Contributing Code][1] part of the
 documentation. If you're submitting a pull request, please follow the guidelines
 in the [Submitting a Patch][2] section and use the [Pull Request Template][3].
