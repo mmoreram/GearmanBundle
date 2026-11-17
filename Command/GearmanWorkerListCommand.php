@@ -19,7 +19,7 @@ class GearmanWorkerListCommand extends AbstractGearmanCommand
         return $this;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -28,7 +28,7 @@ class GearmanWorkerListCommand extends AbstractGearmanCommand
             ->setDescription('List all Gearman Workers and their Jobs');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('quiet')) {
             return 0;
@@ -36,23 +36,21 @@ class GearmanWorkerListCommand extends AbstractGearmanCommand
 
         $workers = $this->gearmanClient->getWorkers();
 
-        if (is_array($workers)) {
-            $it = 1;
+        $it = 1;
 
-            foreach ($workers as $worker) {
-                $output->writeln('<comment>@Worker:  </comment><info>' . $worker['className'] . '</info>');
-                $output->writeln('<comment>callablename:  </comment><info>' . $worker['callableName'] . '</info>');
-                $output->writeln('<comment>Jobs:</comment>');
-                foreach ($worker['jobs'] as $job) {
-                    $output->writeln('<comment>  - #' . $it++ . '</comment>');
-                    $output->writeln('<comment>      name: ' . $job['methodName'] . '</comment>');
-                    $output->writeln(
-                        '<comment>      callablename:</comment><info> ' . $job['realCallableNameNoPrefix'] . '</info>'
-                    );
+        foreach ($workers as $worker) {
+            $output->writeln('<comment>@Worker:  </comment><info>' . $worker['className'] . '</info>');
+            $output->writeln('<comment>callablename:  </comment><info>' . $worker['callableName'] . '</info>');
+            $output->writeln('<comment>Jobs:</comment>');
+            foreach ($worker['jobs'] as $job) {
+                $output->writeln('<comment>  - #' . $it++ . '</comment>');
+                $output->writeln('<comment>      name: ' . $job['methodName'] . '</comment>');
+                $output->writeln(
+                    '<comment>      callablename:</comment><info> ' . $job['realCallableNameNoPrefix'] . '</info>'
+                );
 
-                    if (false === is_null($job['jobPrefix'])) {
-                        $output->writeln('<comment>      jobPrefix:</comment><info> ' . $job['jobPrefix'] . '</info>');
-                    }
+                if (false === is_null($job['jobPrefix'])) {
+                    $output->writeln('<comment>      jobPrefix:</comment><info> ' . $job['jobPrefix'] . '</info>');
                 }
             }
         }

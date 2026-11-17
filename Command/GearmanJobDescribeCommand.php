@@ -29,7 +29,7 @@ class GearmanJobDescribeCommand extends AbstractGearmanCommand
         return $this;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('gearman:job:describe')
@@ -41,7 +41,7 @@ class GearmanJobDescribeCommand extends AbstractGearmanCommand
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $job = $input->getArgument('job');
         $job = $this->gearmanClient->getJob($job);

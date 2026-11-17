@@ -13,7 +13,7 @@ jobs:
             fail-fast: false
             matrix:
                 php-version: ['7.4','8.0','8.1','8.2','8.3','8.4','8.5']
-                symfony-version: ['4.4','5.4','6.4']
+                symfony-version: ['4.4','5.4','6.4','7.4','8.1']
                 coverage: ['none']
                 exclude:
                     # Symfony 6.4 requires PHP >= 8.1
@@ -21,6 +21,24 @@ jobs:
                       symfony-version: '6.4'
                     - php-version: '8.0'
                       symfony-version: '6.4'
+                    # Symfony 7.4 requires PHP >= 8.2
+                    - php-version: '7.4'
+                      symfony-version: '7.4'
+                    - php-version: '8.0'
+                      symfony-version: '7.4'
+                    - php-version: '8.1'
+                      symfony-version: '7.4'
+                    # Symfony 8.1 requires PHP >= 8.4
+                    - php-version: '7.4'
+                      symfony-version: '8.1'
+                    - php-version: '8.0'
+                      symfony-version: '8.1'
+                    - php-version: '8.1'
+                      symfony-version: '8.1'
+                    - php-version: '8.2'
+                      symfony-version: '8.1'
+                    - php-version: '8.3'
+                      symfony-version: '8.1'
                     # Symfony 4.4 is EOL and not maintained for PHP >= 8.2
                     - php-version: '8.2'
                       symfony-version: '4.4'
@@ -67,9 +85,10 @@ jobs:
             # Integration tests (Tests/Integration) send and process jobs through a real gearmand server
             - name: Start gearmand
               run: |
-                  sudo apt-get update -q
-                  sudo apt-get install -y -q gearman-job-server
-                  sudo systemctl start gearman-job-server || sudo gearmand -d -L 127.0.0.1 -p 4730
+                  for i in 1 2 3; do sudo apt-get update -q && sudo apt-get install -y -q gearman-job-server && break; sleep 10; done
+                  # The package starts its own service on "localhost"; replace it with one bound explicitly to 127.0.0.1
+                  sudo systemctl stop gearman-job-server || true
+                  sudo gearmand -d -L 127.0.0.1 -p 4730
                   timeout 30 bash -c 'until nc -z 127.0.0.1 4730; do sleep 1; done'
 
             - name: Setup problem matchers for PHP

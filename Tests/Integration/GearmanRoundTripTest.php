@@ -164,6 +164,28 @@ class GearmanRoundTripTest extends TestCase
     }
 
     /**
+     * A malformed job left in the queue (e.g. queued by hand or by an
+     * interrupted run) is dropped by the worker, which still processes the
+     * next job and exits cleanly.
+     */
+    public function testMalformedLeftoverJobDoesNotBreakWorker(): void
+    {
+        $file = $this->createTempFile();
+        $token = uniqid('after-malformed-', true);
+
+        $this->getClient()->doBackgroundJob('IntegrationWorker~record', 'not json', uniqid('malformed-', true));
+        $this->getClient()->doBackgroundJob(
+            'IntegrationWorker~record',
+            json_encode(['file' => $file, 'token' => $token])
+        );
+
+        $this->startWorkerProcess();
+        $this->waitForWorkerProcesses();
+
+        $this->assertContains($token, file($file, FILE_IGNORE_NEW_LINES));
+    }
+
+    /**
      * A normal (blocking) job returns the worker result to the client.
      */
     public function testNormalJobReturnsWorkerResult(): void
@@ -216,7 +238,11 @@ class GearmanRoundTripTest extends TestCase
         $this->assertNotEmpty($starting, 'gearman.work.starting was not dispatched');
         $this->assertNotEmpty($executed, 'gearman.work.executed was not dispatched');
         $this->assertCount(count($starting), $executed);
-        $this->assertContains('IntegrationWorker~record', $starting[0]['jobs']);
+
+        // Both events carry every job the worker registered, not only the one that ran
+        foreach (array_merge($starting, $executed) as $event) {
+            $this->assertEqualsCanonicalizing(['IntegrationWorker~record', 'IntegrationWorker~reverse'], $event['jobs']);
+        }
 
         foreach ($executed as $event) {
             $this->assertSame(GEARMAN_SUCCESS, $event['returnCode']);
@@ -305,10 +331,11 @@ class GearmanRoundTripTest extends TestCase
      */
     private function waitForWorkerProcesses(): void
     {
-        $deadline = time() + self::WORKER_IDLE_TIMEOUT + self::WORKER_EXIT_TIMEOUT;
+        // Monotonic clock: a wall-clock jump (NTP sync, VM resume) must not shorten or stretch the wait
+        $deadline = hrtime(true) + (self::WORKER_IDLE_TIMEOUT + self::WORKER_EXIT_TIMEOUT) * 1000000000;
 
         foreach ($this->workerProcesses as $key => $process) {
-            while (($status = proc_get_status($process))['running'] && time() < $deadline) {
+            while (($status = proc_get_status($process))['running'] && hrtime(true) < $deadline) {
                 usleep(100000);
             }
 

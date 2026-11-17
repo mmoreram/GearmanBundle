@@ -19,7 +19,7 @@ class GearmanExtension extends Extension
      *
      * @api
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $configs = $this->processConfiguration($configuration, $configs);

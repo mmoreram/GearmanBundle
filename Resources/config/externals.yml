@@ -5,3 +5,8 @@ services:
     #
     gearman.external.symfony_finder:
         class: "%gearman.external.symfony_finder.class%"
+
+    # FrameworkBundle no longer provides the "annotation_reader" service since Symfony 7.0
+    gearman.external.annotation_reader:
+        class: "%gearman.external.annotation_reader.class%"
+        public: false
