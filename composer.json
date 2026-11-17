@@ -42,7 +42,7 @@
     "minimum-stability": "stable",
     "extra": {
         "branch-alias": {
-            "dev-master": "4.0-dev"
+            "dev-master": "5.x-dev"
         }
     },
     "require-dev": {
