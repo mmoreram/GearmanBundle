@@ -44,11 +44,18 @@ class IntegrationWorker
      * Writes the token of a JSON workload {"file": ..., "token": ...} into
      * the given file, to check background jobs are executed.
      *
+     * Malformed workloads (e.g. a job queued by hand) are dropped, so a stray
+     * job left in gearmand cannot crash the worker of a later test run.
+     *
      * @Gearman\Job(name="record", description="Record the workload token in a file")
      */
     public function record(\GearmanJob $job): bool
     {
         $workload = json_decode($job->workload(), true);
+
+        if (!is_array($workload) || empty($workload['file']) || !isset($workload['token'])) {
+            return false;
+        }
 
         file_put_contents($workload['file'], $workload['token'] . PHP_EOL, FILE_APPEND);
 

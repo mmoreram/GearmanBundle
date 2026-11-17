@@ -85,9 +85,10 @@ jobs:
             # Integration tests (Tests/Integration) send and process jobs through a real gearmand server
             - name: Start gearmand
               run: |
-                  sudo apt-get update -q
-                  sudo apt-get install -y -q gearman-job-server
-                  sudo systemctl start gearman-job-server || sudo gearmand -d -L 127.0.0.1 -p 4730
+                  for i in 1 2 3; do sudo apt-get update -q && sudo apt-get install -y -q gearman-job-server && break; sleep 10; done
+                  # The package starts its own service on "localhost"; replace it with one bound explicitly to 127.0.0.1
+                  sudo systemctl stop gearman-job-server || true
+                  sudo gearmand -d -L 127.0.0.1 -p 4730
                   timeout 30 bash -c 'until nc -z 127.0.0.1 4730; do sleep 1; done'
 
             - name: Setup problem matchers for PHP
